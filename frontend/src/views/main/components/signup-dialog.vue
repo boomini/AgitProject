@@ -2,17 +2,17 @@
   <el-dialog custom-class="signup-dialog" title="회원가입" v-model="state.dialogVisible" @close="handleClose" :destroy-on-close="true" :close-on-click-modal="false" :close-on-press-escape="false">
     <el-form :model="state.form" status-icon :rules="state.rules" ref="signupForm" :label-position="state.form.align">
       <el-form-item prop="id" label="아이디" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.id" autocomplete="off" style="width: 70%" :disabled="state.form.isValidatedId"></el-input>
+        <el-input v-model="state.form.id" autocomplete="off" style="width: 70%" :disabled="state.form.isValidatedId" id="id-input" placeholder="ID"></el-input>
         <el-button size="small" style="float: right; margin-top:5px;" @click="checkDup" :disabled="state.form.isValidatedId">중복 확인</el-button>
       </el-form-item>
       <el-form-item prop="password" label="비밀번호" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.password" autocomplete="off" show-password></el-input>
+        <el-input v-model="state.form.password" autocomplete="off" show-password placeholder="Password"></el-input>
       </el-form-item>
       <el-form-item prop="passwordConfirm" label="비밀번호 재확인" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.passwordConfirm" autocomplete="off" show-password></el-input>
+        <el-input v-model="state.form.passwordConfirm" autocomplete="off" show-password placeholder="Password Confirmation"></el-input>
       </el-form-item>
       <el-form-item prop="name" label="이름" :label-width="state.formLabelWidth" >
-        <el-input v-model="state.form.name" autocomplete="off"></el-input>
+        <el-input v-model="state.form.name" autocomplete="off" placeholder="Name"></el-input>
       </el-form-item>
       <el-form-item prop="birthDate" label="생년월일" :label-width="state.formLabelWidth" >
         <el-date-picker
@@ -20,14 +20,12 @@
           v-model="state.form.birthDate"
           type="date"
           value-format="YYYY-MM-DD"
-          placeholder="Pick a day"
-          :disabled-date="disabledDate"
-          :shortcuts="shortcuts"
+          placeholder="Birthday"
       >
       </el-date-picker>
       </el-form-item>
       <el-form-item prop="nickname" label="별명" :label-width="state.formLabelWidth" >
-        <el-input v-model="state.form.nickname" autocomplete="off"></el-input>
+        <el-input v-model="state.form.nickname" autocomplete="off" placeholder="Nickname"></el-input>
       </el-form-item>
       <el-form-item prop="agreement" style="margin: 0 auto 20px; width: 100%;" class="checkbox">
         <el-checkbox v-model="state.form.agreement">
@@ -44,8 +42,7 @@
 
     <template #footer>
       <span class="dialog-footer">
-
-        <el-button type="primary" @click="clickSignup">회원가입</el-button>
+        <el-button type="primary" @click="clickSignup" v-loading.fullscreen="loading">회원가입</el-button>
       </span>
     </template>
   </el-dialog>
@@ -114,6 +111,7 @@ export default {
     // 마운드 이후 바인딩 될 예정 - 컨텍스트에 노출시켜야함. <return>
     const signupForm = ref(null)
     const router = useRouter()
+    const loading = ref(false)
 
     // 비밀번호 확인 유효성 검사
     // 비밀번호(password)와 비밀번호 재확인(passwordConfirm)의 일치 유무 판별
@@ -134,6 +132,20 @@ export default {
       }
     }
 
+    const validateId = (rule, value) => {
+      console.log(value.length)
+      if (!value || !value.trim()) {
+        return new Error("아이디를 입력해주세요.")
+      } else if (!/^[a-zA-Z0-9]+$/.test(value)) {
+        return new Error("아이디는 영문 대 소문자, 숫자로만 구성할 수 있습니다.")
+      } else if (value.length < 5 || value.length > 16) {
+        return new Error("아이디의 길이는 5 ~ 16자 이내로 해주세요.")
+      } else {
+        state.form.isPossibleId = true
+        return true
+      }
+    }
+
     /*
       // Element UI Validator
       // rules의 객체 키 값과 form의 객체 키 값이 같아야 매칭되어 적용됨
@@ -141,20 +153,22 @@ export default {
     */
     const state = reactive({
       form: {
-        isValidatedId: false,
-        agreement: false,
+        isPossibleId: false, // id 규정에 맞는지 확인하는 변수. true가 된다면 중복검사를 받아도 된다는 의미.
+        isValidatedId: false, // 해당 id로 회원가입이 가능한지 확인하는 변수. true가 된다면 회원가입 가능, false면 이미 존재하는 id
+        agreement: false, // 약관에 동의했는지 확인하는 변수
         id: '',
         password: '',
         passwordConfirm: '',
         name: '',
         nickname: '',
         align: 'left',
-        birthDate: new Date(),
+        birthDate: '',
       },
       rules: {
         id: [
           { required: true, message: '아이디를 입력해주세요.', trigger: 'blur' },
-          { min: 5, max: 16, message: '아이디의 길이는 5 ~ 16자 이내로 해주세요.', trigger: 'change' },
+          // { min: 5, max: 16, message: '아이디의 길이는 5 ~ 16자 이내로 해주세요.', trigger: 'change' },
+          { validator: validateId, trigger: 'blur'}
         ],
         password: [
           { required: true, message: '비밀번호를 입력해주세요.', trigger: 'blur' },
@@ -168,6 +182,9 @@ export default {
           { required: true, message: '이름을 입력해주세요.', trigger: 'blur' },
           { min: 2, max: 10, message: '2 ~ 10자 이내로 해주세요.', trigger: 'change' },
           { pattern: /^[a-zA-zㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,10}$/, message: '한글과 영문 대 소문자를 사용하세요. (특수기호, 공백 사용 불가)'}
+        ],
+        birthDate: [
+          { required: true, message: '생년월일을 선택해주세요.', trigger: 'blur'}
         ],
         agreement: [
           { validator: validateAgree, message: '약관을 동의해주세요.'},
@@ -194,9 +211,9 @@ export default {
         })
       } else {
         signupForm.value.validate((valid) => {
-          console.log(valid)
           if (valid) {
             // 날짜는 년, 월, 일로 구분하여 대입
+            loading.value = true
             const arr = state.form.birthDate.split("-")
             const year = arr[0]
             const month = arr[1]
@@ -204,19 +221,21 @@ export default {
             store.dispatch('root/requestRegister', { userId: state.form.id, password: state.form.password, name: state.form.name, year: year, month: month, day: day, nickName: state.form.nickname })
             .then(function (result) {
               // console.log('로딩 스피너 넣으면 됨')
-              handleClose()
+              setTimeout(() => {
+                loading.value = false
+                swal({
+                  title: "회원가입 성공",
+                  text: "아지트의 일원이 되신 것을 축하합니다.",
+                  icon: "success",
+                  button: "확인",
+                });
+              }, 500)
+
               router.push({
                 name: 'home',
               })
-              swal({
-                title: "회원가입 성공",
-                text: "아지트의 회원이 되신 것을 축하합니다.",
-                icon: "success",
-                button: "확인",
-              });
-            })
-            .catch(function (err) {
-              alert(err)
+
+              handleClose()
             })
           } else {
             swal({
@@ -237,8 +256,9 @@ export default {
       state.form.name = ''
       state.form.nickname = ''
       state.form.agreement = false
-      state.form.birthDate = new Date()
+      state.form.birthDate = ''
       state.form.isValidatedId = false
+      state.form.isPossibleId = false
       emit('closeSignupDialog')
     }
 
@@ -248,28 +268,35 @@ export default {
     }
 
     const checkDup = function () {
-      if (state.form.id === '') {
-        console.log('아이디가 공란입니다.')
-      }
-      store.dispatch('root/checkDupId', { userId: state.form.id })
-      .then(res => {
-        state.form.isValidatedId = true
+      if (!state.form.isPossibleId) {
         swal({
-            title: "사용가능한 아이디입니다.",
-            icon: "success",
-            button: "확인",
-          });
-      })
-      .catch(err => {
-        swal({
-            title: "이미 존재하는 아이디입니다.",
+            title: "아이디를 확인해주세요.",
+            text: "5 ~ 16자 사이의 영문 대 소문자, 숫자로만 구성되어야 합니다.",
             icon: "error",
             button: "확인",
           });
-      })
+        state.form.isPossibleId = false
+      } else {
+        store.dispatch('root/checkDupId', { userId: state.form.id })
+        .then(res => {
+          state.form.isValidatedId = true
+          swal({
+              title: "사용가능한 아이디입니다.",
+              icon: "success",
+              button: "확인",
+            });
+        })
+        .catch(err => {
+          swal({
+              title: "이미 존재하는 아이디입니다.",
+              icon: "error",
+              button: "확인",
+            });
+        })
+      }
     }
 
-    return { signupForm, state, clickSignup, handleClose, clickCustomercenter, checkDup }
+    return { signupForm, state, clickSignup, handleClose, clickCustomercenter, checkDup, loading }
   }
 }
 </script>

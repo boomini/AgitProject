@@ -5,12 +5,12 @@
         <el-input v-model="state.form.id" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item prop="password" label="비밀번호" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.password" autocomplete="off" show-password></el-input>
+        <el-input v-model="state.form.password" autocomplete="off" show-password @keyup.enter="clickLogin"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click="handler">로그인</el-button>
+        <el-button type="primary" @click="clickLogin" v-loading.fullscreen="loading">로그인</el-button>
       </span>
     </template>
   </el-dialog>
@@ -69,6 +69,7 @@ export default {
     const loginForm = ref(null)
     const router = useRouter()
     const dialogVisible = ref(false)
+    const loading = ref(false) // 로딩 스피너를 보여줄 변수. true면 로딩화면을 사용자에게 보여줌.
 
     /*
       // Element UI Validator
@@ -84,10 +85,10 @@ export default {
       },
       rules: {
         id: [
-          { required: true, message: 'Please input ID', trigger: 'blur' }
+          { required: true, message: '아이디를 입력해주세요.', trigger: 'blur' }
         ],
         password: [
-          { required: true, message: 'Please input password', trigger: 'blur' }
+          { required: true, message: '비밀번호를 입력해주세요.', trigger: 'blur' }
         ]
       },
       dialogVisible: computed(() => props.open),
@@ -104,6 +105,7 @@ export default {
       loginForm.value.validate((valid) => {
         if (valid) {
           console.log('submit')
+          loading.value = true
           store.dispatch('root/requestLogin', { id: state.form.id, password: state.form.password })
           .then(function (result) {
             router.push({ name: 'home' })
@@ -111,14 +113,29 @@ export default {
 
             localStorage.setItem('JWT', result.data.accessToken)
             store.commit('root/setJWTToken', result.data.accessToken)
+
+            handleClose()
+          })
+          // 로딩 스피너를 바로 꺼버리면 사용자가 볼 수 없으므로
+          // 작업 중인 것을 볼 수 있도록 조금의 여유를 주고 로딩 스피너를 끔.
+          .then(() => {
+            setTimeout(() => {
+              loading.value = false
+            }, 500)
           })
           .catch(function (err) {
-            alert(err)
+            setTimeout(() => {
+              loading.value = false
+              swal({
+                title: "아이디 혹은 비밀번호가 틀렸습니다.",
+                text: "회원정보를 올바르게 입력했는지 확인해주세요.",
+                icon: "error",
+                button: "확인",
+              });
+            }, 500)
           })
-        } else {
-          alert('Validate error!')
         }
-      });
+      })
     }
 
     const handleClose = function () {
@@ -127,16 +144,7 @@ export default {
       emit('closeLoginDialog')
     }
 
-    const closeDialog = function () {
-      console.log('여기는 왔어요')
-      handleClose()
-    }
-
-    const handler = function () {
-      clickLogin()
-      closeDialog()
-    }
-    return { loginForm, state, clickLogin, handleClose, closeDialog, handler, dialogVisible }
+    return { loginForm, state, clickLogin, handleClose, dialogVisible, loading }
   }
 }
 </script>
