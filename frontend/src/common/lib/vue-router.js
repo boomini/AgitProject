@@ -3,6 +3,7 @@ import Home from '@/views/home/home'
 import ConferencesDetail from '@/views/conferences/conference-detail'
 import History from '@/views/history/history'
 import Customercenter from '@/views/customercenter/service-info'
+import Intro from '@/views/intro/intro'
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
@@ -13,6 +14,8 @@ function makeRoutesFromMenu () {
       return { path: fullMenu[key].path, name: key, component: History }
     } else if (key === 'customercenter') {
       return { path: fullMenu[key].path, name: key, component: Customercenter }
+    } else if (key === 'intro') {
+      return { path: fullMenu[key].path, name: key, component: Intro }
     } else { // menu.json 에 들어있는 로그아웃 메뉴
       return null
     }

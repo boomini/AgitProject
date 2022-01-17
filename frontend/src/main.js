@@ -8,6 +8,8 @@ import VueAxios from './common/lib/axios'
 import axios from './common/lib/axios'
 import i18n from './common/lib/i18n'
 import router from './common/lib/vue-router'
+import AOS from 'aos';
+import "aos/dist/aos.css";
 
 import 'element-plus/packages/theme-chalk/src/base.scss'
 
@@ -200,6 +202,7 @@ app.use(VueAxios, axios)
 app.use(store)
 app.use(i18n)
 app.use(router)
+app.use(AOS.init())
 
 components.forEach(component => {
   app.component(component.name, component)
