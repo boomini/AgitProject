@@ -54,8 +54,10 @@ export default {
     const store = useStore()
     const router = useRouter()
 
+
     const state = reactive({
       searchValue: null,
+      isLogin: computed(() => store.getters['root/getJWTToken']),
       menuItems: computed(() => {
         const MenuItems = store.getters['root/getMenus']
         let keys = Object.keys(MenuItems)
@@ -65,10 +67,12 @@ export default {
           menuObject.icon = MenuItems[keys[i]].icon
           menuObject.title = MenuItems[keys[i]].name
           menuArray.push(menuObject)
+          console.log(menuArray)
         }
         return menuArray
       }),
-      activeIndex: computed(() => store.getters['root/getActiveMenuIndex'])
+      activeIndex: computed(() => store.getters['root/getActiveMenuIndex']),
+
     })
 
     if (state.activeIndex === -1) {
@@ -78,11 +82,29 @@ export default {
 
     const menuSelect = function (param) {
       store.commit('root/setMenuActive', param)
+      // state.activeIndex = param
       const MenuItems = store.getters['root/getMenus']
       let keys = Object.keys(MenuItems)
+      // console.log(param)
       router.push({
         name: keys[param]
       })
+
+      if (state.activeIndex === 1 && state.isLogin === null) {
+        setTimeout(function() {
+          swal({
+            title: "로그인이 필요한 서비스입니다.",
+            text: "로그인 후 이용해주세요.",
+            icon: "error",
+            button: "돌아가기",
+          });
+          store.commit('root/setMenuActive', 0)
+          // state.activeIndex = 0
+          router.push({
+            name: keys[0]
+          })
+        }, 100)
+      }
     }
 
     return { state, menuSelect }
