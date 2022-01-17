@@ -19,5 +19,12 @@
     "path" : "/customercenter",
     "icon" : "el-icon-s-order",
     "children" : []
+  },
+  "intro" : {
+    "name" : "소개 페이지",
+    "hidden" : false,
+    "path" : "/intro",
+    "icon" : "el-icon-s-order",
+    "children" : []
   }
 }
