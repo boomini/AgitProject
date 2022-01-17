@@ -1,10 +1,9 @@
 <template>
   <el-dialog custom-class="signup-dialog" title="회원가입" v-model="state.dialogVisible" @close="handleClose" :destroy-on-close="true" :close-on-click-modal="false" :close-on-press-escape="false">
-    <!-- <marquee width="350px">멀리 떨어진 가족들과 추억을 나눠보세요!</marquee> -->
     <el-form :model="state.form" status-icon :rules="state.rules" ref="signupForm" :label-position="state.form.align">
       <el-form-item prop="id" label="아이디" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.id" autocomplete="off" style="width: 70%"></el-input>
-        <el-button size="small" style="float: right; margin-top:5px;" @click="checkDup">중복 확인</el-button>
+        <el-input v-model="state.form.id" autocomplete="off" style="width: 70%" :disabled="state.form.isValidatedId"></el-input>
+        <el-button size="small" style="float: right; margin-top:5px;" @click="checkDup" :disabled="state.form.isValidatedId">중복 확인</el-button>
       </el-form-item>
       <el-form-item prop="password" label="비밀번호" :label-width="state.formLabelWidth">
         <el-input v-model="state.form.password" autocomplete="off" show-password></el-input>
@@ -98,6 +97,7 @@
 <script>
 import { reactive, computed, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'signup-dialog',
@@ -113,6 +113,7 @@ export default {
     const store = useStore()
     // 마운드 이후 바인딩 될 예정 - 컨텍스트에 노출시켜야함. <return>
     const signupForm = ref(null)
+    const router = useRouter()
 
     // 비밀번호 확인 유효성 검사
     // 비밀번호(password)와 비밀번호 재확인(passwordConfirm)의 일치 유무 판별
@@ -124,6 +125,7 @@ export default {
       }
     }
 
+    // 약관 동의 유무 검사
     const validateAgree = (rule, value) => {
       if (!value) {
         return new Error("약관에 동의해주세요.")
@@ -139,6 +141,7 @@ export default {
     */
     const state = reactive({
       form: {
+        isValidatedId: false,
         agreement: false,
         id: '',
         password: '',
@@ -155,7 +158,6 @@ export default {
         ],
         password: [
           { required: true, message: '비밀번호를 입력해주세요.', trigger: 'blur' },
-          // { min: 5, max: 16, message: '5 ~ 16자 영문, 숫자, 특수문자를 혼합하여 사용해주세요.', trigger: 'change' },
           { pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{5,16}$/, message: '5 ~ 16자 영문, 숫자, 특수문자를 혼합하여 사용해주세요.'}
         ],
         passwordConfirm: [
@@ -184,33 +186,48 @@ export default {
 
     const clickSignup = function () {
       // 회원가입 클릭 시 validate 체크 후 그 결과 값에 따라, 로그인 API 호출 또는 경고창 표시
-      console.log(state.isAvailable)
-      signupForm.value.validate((valid) => {
-        console.log(valid)
-        if (valid) {
-          const arr = state.form.birthDate.split("-")
-          const year = arr[0]
-          const month = arr[1]
-          const day = arr[2]
-          console.log(year, month, day)
-          store.dispatch('root/requestRegister', { userId: state.form.id, password: state.form.password, name: state.form.name, year: year, month: month, day: day, nickName: state.form.nickname })
-          .then(function (result) {
-            console.log('로딩 스피너 넣으면 됨')
-            alert('accessToken: ' + result.data.accessToken)
-          })
-          .catch(function (err) {
-            alert(err)
-          })
-        } else {
-          // swal('필수 항목을 입력해주세요.')
-          swal({
-            title: "회원가입 실패",
-            text: "필수 항목을 입력해주세요.",
-            icon: "error",
-            button: "돌아가기",
-          });
-        }
-      });
+      if (!state.form.isValidatedId) {
+        swal({
+          title: '아이디 중복 확인을 해주세요.',
+          icon: 'error',
+          button: '확인'
+        })
+      } else {
+        signupForm.value.validate((valid) => {
+          console.log(valid)
+          if (valid) {
+            // 날짜는 년, 월, 일로 구분하여 대입
+            const arr = state.form.birthDate.split("-")
+            const year = arr[0]
+            const month = arr[1]
+            const day = arr[2]
+            store.dispatch('root/requestRegister', { userId: state.form.id, password: state.form.password, name: state.form.name, year: year, month: month, day: day, nickName: state.form.nickname })
+            .then(function (result) {
+              // console.log('로딩 스피너 넣으면 됨')
+              handleClose()
+              router.push({
+                name: 'home',
+              })
+              swal({
+                title: "회원가입 성공",
+                text: "아지트의 회원이 되신 것을 축하합니다.",
+                icon: "success",
+                button: "확인",
+              });
+            })
+            .catch(function (err) {
+              alert(err)
+            })
+          } else {
+            swal({
+              title: "회원가입 실패",
+              text: "필수 항목을 입력해주세요.",
+              icon: "error",
+              button: "돌아가기",
+            })
+          }
+        });
+      }
     }
 
     const handleClose = function () {
@@ -221,22 +238,34 @@ export default {
       state.form.nickname = ''
       state.form.agreement = false
       state.form.birthDate = new Date()
+      state.form.isValidatedId = false
       emit('closeSignupDialog')
     }
 
     const clickCustomercenter = function () {
       store.commit('root/setMenuActive', 2)
-      document.querySelector(".signup-dialog").style.visibility = "hidden"
+      handleClose()
     }
 
     const checkDup = function () {
-      store.dispatch('root/checkDupId', { id: state.form.id, password: state.form.password, name: state.form.name })
+      if (state.form.id === '') {
+        console.log('아이디가 공란입니다.')
+      }
+      store.dispatch('root/checkDupId', { userId: state.form.id })
       .then(res => {
-        console.log('아이디 확인')
-        console.log(res)
+        state.form.isValidatedId = true
+        swal({
+            title: "사용가능한 아이디입니다.",
+            icon: "success",
+            button: "확인",
+          });
       })
       .catch(err => {
-        console.log(err)
+        swal({
+            title: "이미 존재하는 아이디입니다.",
+            icon: "error",
+            button: "확인",
+          });
       })
     }
 

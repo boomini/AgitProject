@@ -13,9 +13,13 @@
             v-model="state.searchValue">
           </el-input>
         </div>
-        <div class="button-wrapper">
+        <div v-if="state.isLogin === null" class="button-wrapper">
           <el-button type="success" @click="clickSignup">회원가입</el-button>
           <el-button type="primary" @click="clickLogin">로그인</el-button>
+        </div>
+        <div v-else class="button-wrapper">
+          <el-button type="success" @click="clickProfile">마이 페이지</el-button>
+          <el-button type="primary" @click="clickLogout">로그아웃</el-button>
         </div>
       </div>
 
@@ -28,8 +32,14 @@
         <div class="mobile-sidebar">
           <div class="mobile-sidebar-tool-wrapper">
             <div class="logo-wrapper"><div class="ic ic-logo"/></div>
-            <el-button type="primary" class="mobile-sidebar-btn login-btn" @click="clickLogin">로그인</el-button>
-            <el-button class="mobile-sidebar-btn register-btn">회원가입</el-button>
+            <div v-if="state.isLogin === null">
+              <el-button type="primary" class="mobile-sidebar-btn login-btn" @click="clickLogin">로그인</el-button>
+              <el-button class="mobile-sidebar-btn register-btn" @click="clickSignup">회원가입</el-button>
+            </div>
+            <div v-else>
+              <el-button type="success" class="mobile-sidebar-btn login-btn" @click="clickProfile">마이 페이지</el-button>
+              <el-button type="primary" class="mobile-sidebar-btn register-btn" @click="clickLogout">로그아웃</el-button>
+            </div>
           </div>
           <el-menu
             :default-active="String(state.activeIndex)"
@@ -80,7 +90,8 @@ export default {
         }
         return menuArray
       }),
-      activeIndex: computed(() => store.getters['root/getActiveMenuIndex'])
+      activeIndex: computed(() => store.getters['root/getActiveMenuIndex']),
+      isLogin: computed(() => store.getters['root/getJWTToken'])
     })
 
     if (state.activeIndex === -1) {
@@ -90,11 +101,28 @@ export default {
 
     const menuSelect = function (param) {
       store.commit('root/setMenuActive', param)
+      // state.activeIndex = param
       const MenuItems = store.getters['root/getMenus']
       let keys = Object.keys(MenuItems)
       router.push({
         name: keys[param]
       })
+
+      if (state.activeIndex === 1 && state.isLogin === null) {
+        setTimeout(function() {
+          swal({
+            title: "로그인이 필요한 서비스입니다.",
+            text: "로그인 후 이용해주세요.",
+            icon: "error",
+            button: "돌아가기",
+          });
+          store.commit('root/setMenuActive', 0)
+          // state.activeIndex = 0
+          router.push({
+            name: keys[0]
+          })
+        }, 100)
+      }
     }
 
     const clickLogo = () => {
@@ -114,11 +142,38 @@ export default {
       emit('openSignupDialog')
     }
 
+    const clickLogout = function () {
+      swal({
+            title: "정상적으로 로그아웃 되었습니다.",
+            text: "다음에 또 이용해주세요.",
+            icon: "success",
+            button: "확인",
+          });
+      store.commit('root/setJWTTokenReset')
+      localStorage.removeItem('JWT')
+      store.commit('root/setMenuActive', 0)
+      router.push({
+        name: 'home',
+      })
+    }
+
+    const clickProfile = function () {
+      const token = store.getters['root/getJWTToken']
+      store.dispatch('root/getProfile', token)
+      .then(res => {
+        console.log('정보가져오기')
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
+
     const changeCollapse = () => {
       state.isCollapse = !state.isCollapse
     }
 
-    return { state, menuSelect, clickLogo, clickLogin, clickSignup, changeCollapse }
+    return { state, menuSelect, clickLogo, clickLogin, clickSignup, changeCollapse, clickLogout, clickProfile }
   }
 }
 </script>

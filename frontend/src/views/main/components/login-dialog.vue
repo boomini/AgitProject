@@ -106,10 +106,11 @@ export default {
           console.log('submit')
           store.dispatch('root/requestLogin', { id: state.form.id, password: state.form.password })
           .then(function (result) {
-            // alert('accessToken: ' + result.data.accessToken)
             router.push({ name: 'home' })
             store.commit('root/setMenuActive', 0)
+
             localStorage.setItem('JWT', result.data.accessToken)
+            store.commit('root/setJWTToken', result.data.accessToken)
           })
           .catch(function (err) {
             alert(err)

@@ -32,5 +32,6 @@ const IsDesktop = getIsDesktop()
 export default {
   isDesktopPlatform: IsDesktop,
   activeMenu: 'home',
-  menus: menuData
+  menus: menuData,
+  JWTToken: localStorage.getItem('JWT') // JWT Token을 저장해둠.
 }
