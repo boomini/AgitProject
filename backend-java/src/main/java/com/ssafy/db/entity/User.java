@@ -10,7 +10,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 유저 모델 정의.
@@ -37,7 +39,8 @@ public class User extends BaseEntity{
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String password;
 
-
+    @OneToMany(mappedBy = "user")
+    private List<Board> boards = new ArrayList<>();
 
 
 }

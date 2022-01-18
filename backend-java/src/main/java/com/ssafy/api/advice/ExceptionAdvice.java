@@ -16,11 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class ExceptionAdvice {
 
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ResponseEntity<? extends BaseResponseBody> defaultException(HttpServletRequest request, Exception e){
-        return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Error"));
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    protected ResponseEntity<? extends BaseResponseBody> defaultException(HttpServletRequest request, Exception e){
+//        return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Error"));
+//    }
 
     @ExceptionHandler(CUserDuplicateException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
