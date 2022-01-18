@@ -75,6 +75,7 @@ public class UserController {
 			@ApiResponse(code = 200, message = "사용할 수 있는 ID")
 	})
 	public ResponseEntity<? extends BaseResponseBody> validateId(@PathVariable("userId") String userId) {
+		System.out.println("확인?");
 		User user = userService.getUserByUserId(userId);
 		// 해당 아이디의 유저가 존재하지 않는다면 사용 가능한 ID
 		if (user == null) {
