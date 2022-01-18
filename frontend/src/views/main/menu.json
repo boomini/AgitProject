@@ -2,7 +2,7 @@
   "home" : {
     "name" : "홈",
     "hidden" : false,
-    "path" : "/",
+    "path" : "/home",
     "icon" : "el-icon-s-home",
     "children" : []
   },
@@ -23,7 +23,7 @@
   "intro" : {
     "name" : "소개 페이지",
     "hidden" : false,
-    "path" : "/intro",
+    "path" : "/",
     "icon" : "el-icon-s-order",
     "children" : []
   }

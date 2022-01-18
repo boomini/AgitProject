@@ -1,9 +1,10 @@
 <template>
-  <el-container class="main-wrapper">
+  <!-- <el-container class="main-wrapper">
     <main-header
       :height="`70px`"
       @openLoginDialog="onOpenLoginDialog"
       @openSignupDialog="onOpenSignupDialog"
+      style="position: fixed; top: 0; background-color: white;"
       />
     <el-container class="main-container">
       <el-aside class="hide-on-small" width="240px">
@@ -15,7 +16,25 @@
       </el-main>
     </el-container>
     <main-footer :height="`110px`"/>
-  </el-container>
+  </el-container> -->
+  <!-- <div class="main-wrapper"> -->
+    <main-header
+      :height="`70px`"
+      @openLoginDialog="onOpenLoginDialog"
+      @openSignupDialog="onOpenSignupDialog"
+      style="position:fixed; top: 0; background-color: white;"
+      />
+    <div class="main-container" style="position: fixed; top: 70px;">
+      <div class="hide-on-small" width="240px" style="height: 120%">
+        <main-sidebar
+          :width="`240px`"/>
+      </div>
+    </div>
+    <main-footer
+      :height="`80px`"
+      style="position:fixed; bottom: 0; width: 100%; background-color: white;"/>
+  <!-- </div> -->
+  <router-view style="margin-top: 100px; margin-left: 245px; height: calc(100% - 195px); width: 100%"></router-view>
   <login-dialog
     :open="loginDialogOpen"
     @closeLoginDialog="onCloseLoginDialog"/>
@@ -28,6 +47,7 @@
   @import './main.css';
   @import '../../common/css/common.css';
   @import '../../common/css/element-plus.css';
+
 
 </style>
 <script>
@@ -65,6 +85,6 @@ export default {
     onCloseSignupDialog () {
       this.signupDialogOpen = false
     }
-  }
+  },
 }
 </script>

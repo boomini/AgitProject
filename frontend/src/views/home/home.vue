@@ -60,6 +60,9 @@ export default {
           conferenceId: id
         }
       })
+      // router.push({
+      //   name: 'customercenter',
+      // })
     }
 
     return { state, load, clickConference }

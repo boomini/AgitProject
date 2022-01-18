@@ -46,3 +46,7 @@ body {
   font-weight: 400;
   src: url('../../assets/fonts/SpoqaHanSansNeo-Regular.ttf');
 }
+
+::-webkit-scrollbar {
+  display: none;
+}

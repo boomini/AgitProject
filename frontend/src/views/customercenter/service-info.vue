@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div style="width: calc(100% - 250px); max-width: 80%; height: calc(100% - 195px);">
     <h2 class="fw-bold">아지트 이용약관</h2>
     <div class="d-flex flex-column align-items-start py-2">
       <div class="text-start badge bg-primary text-wrap my-2">
@@ -88,10 +88,10 @@
         <p class="my-0" style="font-size:13px">“회원”은 “아이디” 및 “비밀번호”가 도용되거나 제3자가 사용하고 있음을 인지한 경우에는 이를 즉시 “회사”에 통지하고 “회사”의 안내에 따라야 합니다.</p>
       </div>
     </div>
-      <div>
-        <div class="fw-bold">[부칙]</div>
-        <div class="fw-bold">본 약관은 2022년 1월 12일부터 적용됩니다.</div>
-      </div>
+    <div style="padding-bottom: 120px;">
+      <div class="fw-bold">[부칙]</div>
+      <div class="fw-bold">본 약관은 2022년 1월 12일부터 적용됩니다.</div>
+    </div>
   </div>
 </template>
 

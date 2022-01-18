@@ -1,5 +1,8 @@
 <template>
-  {{ $route.params.conferenceId + '번 방 상세 보기 페이지' }}
+  <div>
+    {{ $route.params.conferenceId + '번 방 상세 보기 페이지' }}
+
+  </div>
 </template>
 <style>
 </style>
