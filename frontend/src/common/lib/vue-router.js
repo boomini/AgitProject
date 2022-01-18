@@ -4,6 +4,8 @@ import ConferencesDetail from '@/views/conferences/conference-detail'
 import History from '@/views/history/history'
 import Customercenter from '@/views/customercenter/service-info'
 import Intro from '@/views/intro/intro'
+import Schedule from '@/views/schedule/schedule'
+import Room from '@/views/room/room'
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
@@ -16,6 +18,10 @@ function makeRoutesFromMenu () {
       return { path: fullMenu[key].path, name: key, component: Customercenter }
     } else if (key === 'intro') {
       return { path: fullMenu[key].path, name: key, component: Intro }
+    } else if (key === 'schedule') {
+      return { path: fullMenu[key].path, name: key, component: Schedule }
+    } else if (key === 'room') {
+      return { path: fullMenu[key].path, name: key, component: Room, params: { roomId: fullMenu[key].params.roomId} }
     } else { // menu.json 에 들어있는 로그아웃 메뉴
       return null
     }
@@ -28,6 +34,13 @@ function makeRoutesFromMenu () {
     name: 'conference-detail',
     component: ConferencesDetail
   })
+
+  routes.push({
+    path: '/room/:roomId',
+    name: 'room-board',
+    component: Room
+  })
+
   return routes
 }
 

@@ -34,7 +34,10 @@
       :height="`80px`"
       style="position:fixed; bottom: 0; width: 100%; background-color: white;"/>
   <!-- </div> -->
-  <router-view style="margin-top: 100px; margin-left: 245px; height: calc(100% - 195px); width: 100%"></router-view>
+  <div style="position: absolute; top: 70px; left: 240px; width: 85%;">
+    <router-view ></router-view>
+
+  </div>
   <login-dialog
     :open="loginDialogOpen"
     @closeLoginDialog="onCloseLoginDialog"/>

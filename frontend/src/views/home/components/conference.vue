@@ -1,5 +1,5 @@
 <template>
-  <el-card :body-style="{ padding: '0px' }">
+  <el-card :body-style="{ padding: '0px' }" style="margin-bottom: 80px;">
     <div class="image-wrapper">
       <el-skeleton style="width: 100%">
         <template #template>

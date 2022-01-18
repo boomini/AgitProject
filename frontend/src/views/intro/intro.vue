@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="container">
     <div data-aos="fade-in">이거는</div>
     안녕하세요
 
@@ -141,6 +141,15 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+/* #container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 0;
+  margin-top: 0;
+  z-index: 10;
+  background-color: white;
+  width: 100%;
+} */
 </style>

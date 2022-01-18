@@ -12,6 +12,9 @@
         <el-menu-item v-for="(item, index) in state.menuItems" :key="index" :index="index.toString()">
           <i v-if="item.icon" :class="['ic', item.icon]"/>
           <span>{{ item.title }}</span>
+          <div v-if="index === 4" style="border-top: 1px solid #dcdfe6;"/>
+          <!-- <hr v-if="index === 4" style="color: black;"> -->
+          <!-- <hr v-if="index === 4" style="color: black"> -->
         </el-menu-item>
       </el-menu>
     </div>
@@ -67,7 +70,6 @@ export default {
           menuObject.icon = MenuItems[keys[i]].icon
           menuObject.title = MenuItems[keys[i]].name
           menuArray.push(menuObject)
-          console.log(menuArray)
         }
         return menuArray
       }),

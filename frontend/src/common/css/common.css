@@ -47,6 +47,6 @@ body {
   src: url('../../assets/fonts/SpoqaHanSansNeo-Regular.ttf');
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   display: none;
-}
+} */
