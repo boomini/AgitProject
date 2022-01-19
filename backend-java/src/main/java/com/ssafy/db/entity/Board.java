@@ -25,8 +25,13 @@ public class Board extends BaseEntity {
     @LastModifiedDate
     LocalDateTime updatedDate;
 
-//    @ManyToOne
-//    @JoinColumn(name = "USER_ID")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+
+    public void assignToUser(User user){
+        user.boards.add(this);
+        this.user = user;
+    }
+
 
 }
