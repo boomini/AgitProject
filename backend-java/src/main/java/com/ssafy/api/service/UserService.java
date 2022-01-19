@@ -1,8 +1,6 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.dto.UserDto;
-import com.ssafy.api.request.UserPatchPostReq;
-import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.db.entity.User;
 
 /**
