@@ -1,6 +1,8 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.advice.exception.CUserDuplicateException;
+import com.ssafy.api.advice.exception.CUserNotFoundException;
+import com.ssafy.api.dto.UserDto;
 import com.ssafy.api.request.UserPatchPostReq;
 import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.hibernate.exception.ConstraintViolationException;
@@ -38,7 +40,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Api(value = "유저 API", tags = {"User"})
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/user")
 public class UserController {
 	
 	@Autowired
@@ -49,39 +51,40 @@ public class UserController {
     @ApiResponses({
         @ApiResponse(code = 200, message = "성공"),
         @ApiResponse(code = 401, message = "인증 실패"),
-        @ApiResponse(code = 404, message = "사용자 중복"),
+        @ApiResponse(code = 1000, message = "사용자 중복"),
         @ApiResponse(code = 500, message = "서버 오류")
     })
 
 	public ResponseEntity<? extends BaseResponseBody> register (
-			@RequestBody @ApiParam(value="회원가입 정보", required = true) UserRegisterPostReq registerInfo) throws Exception {
+			@RequestBody @ApiParam(value="회원가입 정보", required = true) UserDto userDto) throws Exception {
 
 		//임의로 리턴된 User 인스턴스. 현재 코드는 회원 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
 		try {
-			User user = userService.createUser(registerInfo);
+			userService.createUser(userDto);
 		} catch (DataIntegrityViolationException e) {
 			//회원중복시 예외처리
-			throw new CUserDuplicateException("UserDuplicatedException", e);
+			throw new CUserDuplicateException();
 		}
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
-	// 아이디 중복 체크 메서드
+
 	@GetMapping("/{userId}")
-	@ApiOperation(value = "회원 본인 정보 조회", notes = "아이디 존재 유무를 응답한다.")
+	@ApiOperation(value = "아이디중복체크", notes = "아이디 존재 유무를 응답한다.")
 	@ApiResponses({
-			@ApiResponse(code = 409, message = "이미 존재하는 ID"),
+			@ApiResponse(code = 1000, message = "이미 존재하는 ID"),
 			@ApiResponse(code = 200, message = "사용할 수 있는 ID")
 	})
-	public ResponseEntity<? extends BaseResponseBody> validateId(@PathVariable("userId") String userId) {
+	public ResponseEntity<? extends BaseResponseBody> validateId(@ApiParam(value = "userId", required = true) @PathVariable("userId") String userId) {
 		User user = userService.getUserByUserId(userId);
-		// 해당 아이디의 유저가 존재하지 않는다면 사용 가능한 ID
-		if (user == null) {
-			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "사용할 수 있는 ID"));
-		}
 		// 아이디의 유저가 존재한다면 사용 불가능한 ID
-		return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 존재하는 ID 입니다."));
+		if (user != null) {
+			throw new CUserDuplicateException();
+		}
+
+		// 해당 아이디의 유저가 존재하지 않는다면 사용 가능한 ID
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "사용할 수 있는 ID"));
 	}
 	
 	@GetMapping("/me")
@@ -93,7 +96,7 @@ public class UserController {
         @ApiResponse(code = 500, message = "서버 오류")
     })
 
-	public ResponseEntity<UserRes> getUserInfo(@ApiIgnore Authentication authentication) {
+	public ResponseEntity<UserDto> getUserInfo(@ApiIgnore Authentication authentication) {
 		/**
 		 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
 		 * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
@@ -101,23 +104,28 @@ public class UserController {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		String userId = userDetails.getUsername();
 		User user = userService.getUserByUserId(userId);
+		UserDto userDto =  new UserDto(user);
 
-		return ResponseEntity.status(200).body(UserRes.of(user));
+		return ResponseEntity.status(200).body(userDto);
 	}
 
 
-	@PatchMapping("/{userId}")
-	public ResponseEntity<? extends  BaseResponseBody> updateUser(@PathVariable("userId") String userId,
-																  @RequestBody @ApiParam(value="회원 정보 수정", required = true)UserPatchPostReq userPatchPostReq){
-		User user = userService.updateUserByUserId(userId, userPatchPostReq);
-
+	@PatchMapping()
+	public ResponseEntity<? extends  BaseResponseBody> updateUser(@RequestBody @ApiParam(value="회원 정보 수정", required = true)UserDto userDto){
+		if(!userService.updateUserByUserId(userDto.getUserId(), userDto)){
+			//수정하고자 하는 회원이 없을때 예외처리
+			throw new CUserNotFoundException();
+		};
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
 
 	}
 
 	@DeleteMapping("/{userId}")
-	public ResponseEntity<? extends BaseResponseBody> deleteUser(@PathVariable("userId") String userId){
-		User user = userService.deleteUserByUserId(userId);
+	public ResponseEntity<? extends BaseResponseBody> deleteUser(@ApiParam(value = "userId", required = true) @PathVariable("userId") String userId){
+		if(!userService.deleteUserByUserId(userId)) {
+			//삭제하고자 하는 회원이 없을때 예외처리
+			throw new CUserNotFoundException();
+		}
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
 	}
 }
