@@ -1,6 +1,5 @@
 package com.ssafy.api.dto;
 
-import com.ssafy.api.response.UserRes;
 import com.ssafy.db.entity.Board;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.ApiModel;
