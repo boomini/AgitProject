@@ -3,9 +3,7 @@ package com.ssafy.api.controller;
 import com.ssafy.api.advice.exception.CUserDuplicateException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
 import com.ssafy.api.dto.UserDto;
-import com.ssafy.api.request.UserPatchPostReq;
-import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
-import org.hibernate.exception.ConstraintViolationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import com.ssafy.api.request.UserLoginPostReq;
-import com.ssafy.api.request.UserRegisterPostReq;
-import com.ssafy.api.response.UserLoginPostRes;
-import com.ssafy.api.response.UserRes;
+
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
