@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.dto.UserDto;
 import com.ssafy.api.request.UserPatchPostReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,43 +26,46 @@ public class UserServiceImpl implements UserService {
 	PasswordEncoder passwordEncoder;
 	
 	@Override
-	public User createUser(UserRegisterPostReq userRegisterInfo) {
-		User user = new User();
-		user.setUserId(userRegisterInfo.getUserId());
+	public boolean createUser(UserDto userDto){
 		// 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
-		user.setPassword(passwordEncoder.encode(userRegisterInfo.getPassword()));
-		user.setName(userRegisterInfo.getName());
-		user.setYear(userRegisterInfo.getYear());
-		user.setMonth(userRegisterInfo.getMonth());
-		user.setDay(userRegisterInfo.getDay());
-		user.setNickName(userRegisterInfo.getNickName());
-		return userRepository.save(user);
+		userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+		userRepository.save(userDto.toEntity()).getId();
+		return true;
 	}
 
 	@Override
 	public User getUserByUserId(String userId) {
 		// 디비에 유저 정보 조회 (userId 를 통한 조회).
 		User user = null;
+		UserDto userDto = null;
 		if(userRepositorySupport.findUserByUserId(userId).isPresent()) {
 			user = userRepositorySupport.findUserByUserId(userId).get();
 		}
+
 		return user;
 	}
 
-	public User updateUserByUserId(String userId, UserPatchPostReq userPatchPostReq){
-		User user = userRepositorySupport.findUserByUserId(userId).get();
-		user.setName(userPatchPostReq.getName());
-		user.setYear(userPatchPostReq.getYear());
-		user.setMonth(userPatchPostReq.getMonth());
-		user.setDay(userPatchPostReq.getDay());
-		user.setNickName(userPatchPostReq.getNickName());
-		return userRepository.save(user);
+	public boolean  updateUserByUserId(String userId, UserDto userDto){
+		User user = getUserByUserId(userId);
+		if(user==null){
+			//해당유저가 존재하지 않을때
+			return false;
+		}
+		user.setNickName(userDto.getNickName());
+		userRepository.save(user);
+		return true;
 	}
 
-	public User deleteUserByUserId(String userId){
-		User user = userRepositorySupport.findUserByUserId(userId).get();
+	public boolean deleteUserByUserId(String userId){
+		// 디비에 유저 정보 조회 (userId 를 통한 조회).
+		User user = getUserByUserId(userId);
+		if(user==null){
+			//해당유저가 존재하지 않을때.
+			return false;
+		}
+
 		userRepository.delete(user);
-		return user;
+		return true;
 	}
 
 
