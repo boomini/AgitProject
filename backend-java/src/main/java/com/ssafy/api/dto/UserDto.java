@@ -2,7 +2,6 @@ package com.ssafy.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ssafy.api.response.UserRes;
 import com.ssafy.db.entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
