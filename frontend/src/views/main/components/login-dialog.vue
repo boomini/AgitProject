@@ -106,7 +106,7 @@ export default {
         if (valid) {
           console.log('submit')
           loading.value = true
-          store.dispatch('root/requestLogin', { id: state.form.id, password: state.form.password })
+          store.dispatch('root/requestLogin', { userId: state.form.id, password: state.form.password })
           .then(function (result) {
             router.push({ name: 'home' })
             store.commit('root/setMenuActive', 0)
