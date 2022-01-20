@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@Table(name="article")
 @DynamicUpdate
 @EntityListeners(AuditingEntityListener.class)
 public class Article extends BaseEntity{

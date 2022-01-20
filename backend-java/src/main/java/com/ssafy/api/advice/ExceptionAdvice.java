@@ -1,12 +1,10 @@
 package com.ssafy.api.advice;
 
 import com.ssafy.api.advice.exception.CArticleNotFoundException;
-import com.ssafy.api.advice.exception.CBoardNotFoundException;
 import com.ssafy.api.advice.exception.CUserDuplicateException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
 import com.ssafy.common.model.response.BaseResponseBody;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,11 +41,6 @@ public class ExceptionAdvice {
         return ResponseEntity.status(1001).body(BaseResponseBody.of(1001, "해당 유저가 존재하지 않습니다."));
     }
 
-    @ExceptionHandler(CBoardNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    protected ResponseEntity<? extends BaseResponseBody> boardNotFoundException(HttpServletRequest request, CBoardNotFoundException e){
-        return ResponseEntity.status(401).body(BaseResponseBody.of(401, "해당 게시글이 존재하지 않습니다."));
-    }
 
     @ExceptionHandler(CArticleNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
