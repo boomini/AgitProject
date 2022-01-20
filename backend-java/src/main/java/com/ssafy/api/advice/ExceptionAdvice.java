@@ -1,5 +1,6 @@
 package com.ssafy.api.advice;
 
+import com.ssafy.api.advice.exception.CArticleNotFoundException;
 import com.ssafy.api.advice.exception.CBoardNotFoundException;
 import com.ssafy.api.advice.exception.CUserDuplicateException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
@@ -45,6 +46,12 @@ public class ExceptionAdvice {
     @ExceptionHandler(CBoardNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ResponseEntity<? extends BaseResponseBody> boardNotFoundException(HttpServletRequest request, CBoardNotFoundException e){
+        return ResponseEntity.status(401).body(BaseResponseBody.of(401, "해당 게시글이 존재하지 않습니다."));
+    }
+
+    @ExceptionHandler(CArticleNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ResponseEntity<? extends BaseResponseBody> articleNotFoundException(HttpServletRequest request, CArticleNotFoundException e){
         return ResponseEntity.status(401).body(BaseResponseBody.of(401, "해당 게시글이 존재하지 않습니다."));
     }
 }

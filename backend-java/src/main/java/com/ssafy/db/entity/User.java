@@ -45,6 +45,10 @@ public class User extends BaseEntity{
     @OneToMany(mappedBy = "user")
     private List<Board> boards = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Article> articles = new ArrayList<>();
+
+
     public User(){}
 
     @Builder
