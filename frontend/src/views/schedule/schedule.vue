@@ -1,6 +1,6 @@
 <template>
-  <div style="height: 50%">
-    하이
+  <div>
+    일정관리를 할 수 있는 구역입니다.
   </div>
 </template>
 

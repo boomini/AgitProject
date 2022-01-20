@@ -34,8 +34,8 @@
       :height="`80px`"
       style="position:fixed; bottom: 0; width: 100%; background-color: white;"/>
   <!-- </div> -->
-  <div style="position: absolute; top: 70px; left: 240px; width: 85%;">
-    <router-view ></router-view>
+  <div style="position: absolute; top: 90px; left: 260px; width: 80%;">
+    <router-view @openLoginDialog="onOpenLoginDialog" @openSignupDialog="onOpenSignupDialog"></router-view>
 
   </div>
   <login-dialog

@@ -110,6 +110,14 @@
           <a href="#" class="btn btn-primary">Go somewhere</a>
         </div>
       </div>
+
+      <div
+        data-aos="zoom-in"
+        style="width: 18rem; margin: 200px auto;"
+      >
+        <el-button @click="clickSignup">회원가입하러 가기</el-button>
+        <el-button @click="clickLogin">로그인하기</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -125,7 +133,7 @@ import 'aos/dist/aos.css';
 
 export default {
   name: 'Intro',
-  setup () {
+  setup (props, { emit }) {
     const store = useStore()
 
     // 페이지 진입시 불리는 훅
@@ -137,19 +145,29 @@ export default {
       store.commit('root/setMenuActiveMenuName', 'intro')
 
     })
+
+    const clickLogin = () => {
+      emit('openLoginDialog')
+    }
+
+    const clickSignup = () => {
+      emit('openSignupDialog')
+    }
+
+    return { clickLogin, clickSignup }
   }
 }
 </script>
 
 <style scoped>
-/* #container {
+#container {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: -90px;
+  left: -260px;
   margin-left: 0;
   margin-top: 0;
   z-index: 10;
   background-color: white;
-  width: 100%;
-} */
+  width: 125%;
+}
 </style>

@@ -34,7 +34,7 @@
     "icon" : "el-icon-calendar",
     "children" : []
   },
-  "room" : {
+  "room1" : {
     "name" : "1번 방",
     "params" : {
       "roomId" : "1"

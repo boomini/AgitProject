@@ -71,6 +71,7 @@ export default {
           menuObject.title = MenuItems[keys[i]].name
           menuArray.push(menuObject)
         }
+
         return menuArray
       }),
       activeIndex: computed(() => store.getters['root/getActiveMenuIndex']),
