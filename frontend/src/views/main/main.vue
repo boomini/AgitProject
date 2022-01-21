@@ -51,6 +51,8 @@
   @import '../../common/css/common.css';
   @import '../../common/css/element-plus.css';
 
+   *{font-family: 'Jua', sans-serif;}
+
 
 </style>
 <script>
