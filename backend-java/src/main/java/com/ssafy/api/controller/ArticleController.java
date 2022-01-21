@@ -45,6 +45,17 @@ public class ArticleController {
         return ResponseEntity.status(200).body(articleDtoList);
     }
 
+    @GetMapping("/{userId}")
+    @ApiOperation(value = "user가 작성한 전체 글 조회", notes = "user id 이용하여 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<List<ArticleDto>> getUsersArticleList(@ApiParam(value = "userId", required = true) @PathVariable("userId") String userId){
+        List<ArticleDto> articleDtoList = articleService.getUsersArticleList(userId);
+        System.out.println(articleDtoList);
+        return ResponseEntity.status(200).body(articleDtoList);
+    }
+
     @GetMapping("/{id}")
     @ApiOperation(value = "특정 게시글 조회", notes = "게시글 id 이용하여 조회")
     @ApiResponses({

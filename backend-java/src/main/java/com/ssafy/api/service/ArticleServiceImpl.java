@@ -19,10 +19,14 @@ public class ArticleServiceImpl implements ArticleService {
     ArticleRepository articleRepository;
 
     @Autowired
-    UserRepositorySupport userRepositorySupport;
+    ArticleRepositorySupport articleRepositorySupport;
+
 
     @Autowired
-    ArticleRepositorySupport articleRepositorySupport;
+    UserRepositorySupport userRepositorySupport;
+
+
+
 
 
     @Override
@@ -32,6 +36,18 @@ public class ArticleServiceImpl implements ArticleService {
         List<ArticleDto> articleDtoList = new ArrayList<>();
 
         for(Article article : articleList){
+            ArticleDto articleDto = new ArticleDto(article);
+            articleDtoList.add(articleDto);
+        }
+        return articleDtoList;
+    }
+
+    @Override
+    public List<ArticleDto> getUsersArticleList(String userId) {
+        List<ArticleDto> articleDtoList = new ArrayList<>();
+        User user = userRepositorySupport.findUserByUserId(userId).get();
+        List<Article> articles = user.getArticles();
+        for(Article article : articles){
             ArticleDto articleDto = new ArticleDto(article);
             articleDtoList.add(articleDto);
         }
