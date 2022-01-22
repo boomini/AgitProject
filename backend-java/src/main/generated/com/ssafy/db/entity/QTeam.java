@@ -30,8 +30,6 @@ public class QTeam extends EntityPathBase<Team> {
 
     public final StringPath teamDescription = createString("teamDescription");
 
-    public final NumberPath<Integer> teamId = createNumber("teamId", Integer.class);
-
     public final NumberPath<Integer> teamMember = createNumber("teamMember", Integer.class);
 
     public final StringPath teamName = createString("teamName");
