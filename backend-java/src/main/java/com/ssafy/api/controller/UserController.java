@@ -1,5 +1,6 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.advice.exception.CTokenForbiddenException;
 import com.ssafy.api.advice.exception.CUserDuplicateException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
 import com.ssafy.api.dto.UserDto;
@@ -91,15 +92,18 @@ public class UserController {
         @ApiResponse(code = 500, message = "서버 오류")
     })
 
-	public ResponseEntity<UserDto> getUserInfo(@ApiIgnore Authentication authentication) {
-		/**
-		 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
-		 * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
-		 */
-		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-		String userId = userDetails.getUsername();
-		User user = userService.getUserByUserId(userId);
-		UserDto userDto =  new UserDto(user);
+	public ResponseEntity<UserDto> getUserInfo(@ApiIgnore Authentication authentication){
+
+		UserDto userDto;
+		try{
+			SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+			String userId = userDetails.getUsername();
+			User user = userService.getUserByUserId(userId);
+			userDto =  new UserDto(user);
+		}catch(Exception e){
+			//잘못된 접근일때
+			throw new CTokenForbiddenException();
+		}
 
 		return ResponseEntity.status(200).body(userDto);
 	}
