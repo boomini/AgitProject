@@ -1,6 +1,10 @@
 package com.ssafy.api.advice;
 
+<<<<<<< HEAD
 import com.ssafy.api.advice.exception.CArticleNotFoundException;
+=======
+import com.ssafy.api.advice.exception.CTokenForbiddenException;
+>>>>>>> master
 import com.ssafy.api.advice.exception.CUserDuplicateException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -41,6 +45,11 @@ public class ExceptionAdvice {
         return ResponseEntity.status(1001).body(BaseResponseBody.of(1001, "해당 유저가 존재하지 않습니다."));
     }
 
+    @ExceptionHandler(CTokenForbiddenException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected ResponseEntity<? extends BaseResponseBody> tokenForbiddenException(HttpServletRequest request, CTokenForbiddenException e){
+        return ResponseEntity.status(1002).body(BaseResponseBody.of(1002, "잘못된 접근입니다."));
+    }
 
     @ExceptionHandler(CArticleNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
