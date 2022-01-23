@@ -1,6 +1,9 @@
 package com.ssafy.api.advice;
 
+
+import com.ssafy.api.advice.exception.CArticleNotFoundException;
 import com.ssafy.api.advice.exception.CTokenForbiddenException;
+
 import com.ssafy.api.advice.exception.CUserDuplicateException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -20,13 +23,8 @@ public class ExceptionAdvice {
 //    @ExceptionHandler(Exception.class)
 //    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 //    protected ResponseEntity<? extends BaseResponseBody> defaultException(HttpServletRequest request, Exception e){
-//        return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Error"));
+//        return ResponseEntity.status(500).body(BaseResponseBody.of(500, "서버 Error"));
 //    }
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ResponseEntity<? extends BaseResponseBody> defaultException(HttpServletRequest request, Exception e){
-        return ResponseEntity.status(500).body(BaseResponseBody.of(500, "서버 Error"));
-    }
 
 
     @ExceptionHandler(CUserDuplicateException.class)
@@ -47,4 +45,9 @@ public class ExceptionAdvice {
         return ResponseEntity.status(1002).body(BaseResponseBody.of(1002, "잘못된 접근입니다."));
     }
 
+    @ExceptionHandler(CArticleNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ResponseEntity<? extends BaseResponseBody> articleNotFoundException(HttpServletRequest request, CArticleNotFoundException e){
+        return ResponseEntity.status(401).body(BaseResponseBody.of(401, "해당 게시글이 존재하지 않습니다."));
+    }
 }

@@ -42,8 +42,16 @@ public class User extends BaseEntity{
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String password;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<Board> boards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Article> articles = new ArrayList<>();
+
+    public void addArticle(Article article){
+        this.articles.add(article);
+        if (article.getUser() != this){
+            article.setUser(this);
+        }
+    }
 
     public User(){}
 
