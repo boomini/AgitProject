@@ -54,7 +54,7 @@ public class AuthController {
 			// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
 			return ResponseEntity.ok(UserLoginDto.of(200, "Success", JwtTokenUtil.getToken(userId)));
 		}
-		// 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
+		// 유효하지 않는 패스워드인 경우, 로그인 실패로 응답
 		return ResponseEntity.status(401).body(UserLoginDto.of(401, "Invalid Password", null));
 	}
 }
