@@ -1,10 +1,9 @@
 package com.ssafy.api.advice;
 
-<<<<<<< HEAD
+
 import com.ssafy.api.advice.exception.CArticleNotFoundException;
-=======
 import com.ssafy.api.advice.exception.CTokenForbiddenException;
->>>>>>> master
+
 import com.ssafy.api.advice.exception.CUserDuplicateException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -24,13 +23,8 @@ public class ExceptionAdvice {
 //    @ExceptionHandler(Exception.class)
 //    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 //    protected ResponseEntity<? extends BaseResponseBody> defaultException(HttpServletRequest request, Exception e){
-//        return ResponseEntity.status(500).body(BaseResponseBody.of(500, "Error"));
+//        return ResponseEntity.status(500).body(BaseResponseBody.of(500, "서버 Error"));
 //    }
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    protected ResponseEntity<? extends BaseResponseBody> defaultException(HttpServletRequest request, Exception e){
-        return ResponseEntity.status(500).body(BaseResponseBody.of(500, "서버 Error"));
-    }
 
 
     @ExceptionHandler(CUserDuplicateException.class)

@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -21,11 +22,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
-<<<<<<< HEAD
     public final ListPath<Article, QArticle> articles = this.<Article, QArticle>createList("articles", Article.class, QArticle.class, PathInits.DIRECT2);
 
-=======
->>>>>>> master
     public final DateTimePath<java.time.LocalDateTime> cDate = createDateTime("cDate", java.time.LocalDateTime.class);
 
     public final NumberPath<Integer> day = createNumber("day", Integer.class);

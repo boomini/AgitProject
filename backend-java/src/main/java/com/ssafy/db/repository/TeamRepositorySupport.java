@@ -2,7 +2,6 @@ package com.ssafy.db.repository;
 
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.db.entity.QBoard;
 import com.ssafy.db.entity.QTeam;
 import com.ssafy.db.entity.Team;
 import org.springframework.beans.factory.annotation.Autowired;

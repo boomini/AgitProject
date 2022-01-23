@@ -32,6 +32,15 @@ public class Article extends BaseEntity{
     @JoinColumn(name = "USER_ID")
     private User user;
 
+
+    // 연관 관계 메소드
+    public void setUser(User user){
+        this.user = user;
+        if (!user.getArticles().contains(this)){
+            user.getArticles().add(this);
+        }
+    }
+
     public Article(){}
 
     @Builder
@@ -41,11 +50,6 @@ public class Article extends BaseEntity{
         this.content = content;
         // 작성자 id
         this.writer = writer;
-    }
-    // 연관 관계 메소드
-    public void setUser(User user){
-        this.user = user;
-        user.getArticles().add(this);
     }
 
 }
