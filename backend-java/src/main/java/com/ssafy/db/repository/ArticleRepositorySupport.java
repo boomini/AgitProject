@@ -34,7 +34,7 @@ public class ArticleRepositorySupport {
     // 특정 팀이 특정 달에 작성한 글
     public Optional<Long> findTeamsArticleCountByMonth(String cDate, String teamName){
         // LocalDate 객체를 yyyy-mm 형태의 String으로 변경
-        StringTemplate dateFormat = Expressions.stringTemplate("DATE_FORMAT({0}, {1})", qArticle.createdDate, ConstantImpl.create("%Y-%m"));
+        StringTemplate dateFormat = Expressions.stringTemplate("DATE_FORMAT({0}, {1})", qArticle.uploadDate, ConstantImpl.create("%Y-%m"));
         Long articleCount = jpaQueryFactory.select(qArticle).from(qArticle)
                 .where(dateFormat.eq(cDate), qArticle.teamName.eq(teamName)).fetchCount();
         if(articleCount == 0) return Optional.empty();
@@ -45,7 +45,7 @@ public class ArticleRepositorySupport {
     // 특정 팀이 특정 날짜에 작성한 글
     public Optional<List<Article>> findTeamsArticleListByDate(String cDate, String teamName){
         // LocalDate 객체를 yyyy-mm-dd 형태의 String으로 변경
-        StringTemplate dateFormat = Expressions.stringTemplate("DATE_FORMAT({0}, {1})", qArticle.createdDate, ConstantImpl.create("%Y-%m-%d"));
+        StringTemplate dateFormat = Expressions.stringTemplate("DATE_FORMAT({0}, {1})", qArticle.uploadDate, ConstantImpl.create("%Y-%m-%d"));
         List<Article> articles = jpaQueryFactory.select(qArticle).from(qArticle)
                 .where(dateFormat.eq(cDate), qArticle.teamName.eq(teamName)).fetch();
         if(articles.size() == 0) return Optional.empty();
@@ -55,7 +55,7 @@ public class ArticleRepositorySupport {
     // 특정 유저가 특정 날짜에 작성한 글
     public Optional<List<Article>> findUsersArticleListByDate(String cDate, String userId){
         // LocalDate 객체를 yyyy-mm-dd 형태의 String으로 변경
-        StringTemplate dateFormat = Expressions.stringTemplate("DATE_FORMAT({0}, {1})", qArticle.createdDate, ConstantImpl.create("%Y-%m-%d"));
+        StringTemplate dateFormat = Expressions.stringTemplate("DATE_FORMAT({0}, {1})", qArticle.uploadDate, ConstantImpl.create("%Y-%m-%d"));
         List<Article> articles = jpaQueryFactory.select(qArticle).from(qArticle)
                 .where(dateFormat.eq(cDate), qArticle.writer.eq(userId)).fetch();
         if(articles.size() == 0) return Optional.empty();

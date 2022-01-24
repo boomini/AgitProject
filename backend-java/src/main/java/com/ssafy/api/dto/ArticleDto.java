@@ -5,6 +5,7 @@ import com.ssafy.db.entity.Article;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,8 +19,11 @@ public class ArticleDto {
     String content;
     String writer;
     String teamName;
+    // yyyy-mm-dd 형식 스트링으로 받아옴
+    LocalDate uploadDate;
     LocalDateTime createdTime;
     LocalDateTime updatedDate;
+
 
     public Article toEntity(){
         Article build = Article.builder()
@@ -27,6 +31,7 @@ public class ArticleDto {
                 .content(content)
                 .writer(writer)
                 .teamName(teamName)
+                .uploadDate(uploadDate)
                 .build();
         return build;
     }
@@ -40,5 +45,6 @@ public class ArticleDto {
         this.teamName = article.getTeamName();
         this.createdTime = article.getCreatedDate();
         this.updatedDate = article.getUpdatedDate();
+        this.uploadDate = article.getUploadDate();
     }
 }

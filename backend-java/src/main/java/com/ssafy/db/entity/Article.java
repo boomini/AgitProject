@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,6 +24,9 @@ public class Article extends BaseEntity{
     String content;
     String writer;
     String teamName;
+    // 등록일
+    LocalDate uploadDate;
+
 
     @CreatedDate
     LocalDateTime createdDate;
@@ -55,7 +59,7 @@ public class Article extends BaseEntity{
     public Article(){}
 
     @Builder
-    public Article(Long id, String title, String content, String writer, String teamName){
+    public Article(Long id, String title, String content, String writer, String teamName, LocalDate uploadDate){
         this.id = id;
         this.title = title;
         this.content = content;
@@ -63,6 +67,7 @@ public class Article extends BaseEntity{
         this.writer = writer;
         // Team 이름
         this.teamName = teamName;
+        this.uploadDate = uploadDate;
     }
 
 }
