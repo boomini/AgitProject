@@ -51,6 +51,7 @@ public class ArticleRepositorySupport {
         if(articles.size() == 0) return Optional.empty();
         return Optional.ofNullable(articles);
     }
+
     // 특정 유저가 특정 날짜에 작성한 글
     public Optional<List<Article>> findUsersArticleListByDate(String cDate, String userId){
         // LocalDate 객체를 yyyy-mm-dd 형태의 String으로 변경
