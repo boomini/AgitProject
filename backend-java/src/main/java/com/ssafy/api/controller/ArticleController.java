@@ -56,20 +56,20 @@ public class ArticleController {
         return ResponseEntity.status(200).body(articleDtoList);
     }
 
-    @GetMapping("/{id}")
-    @ApiOperation(value = "특정 게시글 조회", notes = "게시글 id 이용하여 조회")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "성공"),
-    })
-    public ResponseEntity<ArticleDto> getArticleDetail(@ApiParam(value = "id", required = true) @PathVariable("id") Long id){
-        Article article = articleService.getArticleDetailById(id);
-        // 수정하려는 글이 없으면 예외 처리
-        if(article.getId() == null){
-            throw new CArticleNotFoundException();
-        }
-        ArticleDto articleDto = new ArticleDto(article);
-        return ResponseEntity.status(200).body(articleDto);
-    }
+//    @GetMapping("/{id}")
+//    @ApiOperation(value = "특정 게시글 조회", notes = "게시글 id 이용하여 조회")
+//    @ApiResponses({
+//            @ApiResponse(code = 200, message = "성공"),
+//    })
+//    public ResponseEntity<ArticleDto> getArticleDetail(@ApiParam(value = "id", required = true) @PathVariable("id") Long id){
+//        Article article = articleService.getArticleDetailById(id);
+//        // 수정하려는 글이 없으면 예외 처리
+//        if(article.getId() == null){
+//            throw new CArticleNotFoundException();
+//        }
+//        ArticleDto articleDto = new ArticleDto(article);
+//        return ResponseEntity.status(200).body(articleDto);
+//    }
 
     @PutMapping("/{id}")
     @ApiOperation(value = "게시글 수정", notes = "게시글 id 이용하여 조회 후 수정")
