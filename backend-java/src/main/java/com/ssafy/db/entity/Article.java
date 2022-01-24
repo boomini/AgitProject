@@ -22,6 +22,7 @@ public class Article extends BaseEntity{
     String title;
     String content;
     String writer;
+    String teamName;
 
     @CreatedDate
     LocalDateTime createdDate;
@@ -32,6 +33,9 @@ public class Article extends BaseEntity{
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
 
     // 연관 관계 메소드
     public void setUser(User user){
@@ -41,15 +45,24 @@ public class Article extends BaseEntity{
         }
     }
 
+    public void setTeam(Team team){
+        this.team = team;
+        if (!team.getArticles().contains(this)){
+            team.getArticles().add(this);
+        }
+    }
+
     public Article(){}
 
     @Builder
-    public Article(Long id, String title, String content, String writer){
+    public Article(Long id, String title, String content, String writer, String teamName){
         this.id = id;
         this.title = title;
         this.content = content;
-        // 작성자 id
+        // 작성자 아이디
         this.writer = writer;
+        // Team 이름
+        this.teamName = teamName;
     }
 
 }

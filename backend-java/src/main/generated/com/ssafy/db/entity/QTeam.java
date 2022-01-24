@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -20,6 +21,8 @@ public class QTeam extends EntityPathBase<Team> {
     public static final QTeam team = new QTeam("team");
 
     public final QBaseEntity _super = new QBaseEntity(this);
+
+    public final ListPath<Article, QArticle> articles = this.<Article, QArticle>createList("articles", Article.class, QArticle.class, PathInits.DIRECT2);
 
     //inherited
     public final NumberPath<Long> id = _super.id;

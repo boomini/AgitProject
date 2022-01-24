@@ -31,6 +31,10 @@ public class QArticle extends EntityPathBase<Article> {
     //inherited
     public final NumberPath<Long> id = _super.id;
 
+    public final QTeam team;
+
+    public final StringPath teamName = createString("teamName");
+
     public final StringPath title = createString("title");
 
     public final DateTimePath<java.time.LocalDateTime> updatedDate = createDateTime("updatedDate", java.time.LocalDateTime.class);
@@ -57,6 +61,7 @@ public class QArticle extends EntityPathBase<Article> {
 
     public QArticle(Class<? extends Article> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.team = inits.isInitialized("team") ? new QTeam(forProperty("team")) : null;
         this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
     }
 

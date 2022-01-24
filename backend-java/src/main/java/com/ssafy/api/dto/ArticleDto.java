@@ -17,6 +17,7 @@ public class ArticleDto {
     String title;
     String content;
     String writer;
+    String teamName;
     LocalDateTime createdTime;
     LocalDateTime updatedDate;
 
@@ -25,6 +26,7 @@ public class ArticleDto {
                 .title(title)
                 .content(content)
                 .writer(writer)
+                .teamName(teamName)
                 .build();
         return build;
     }
@@ -35,6 +37,7 @@ public class ArticleDto {
         this.title = article.getTitle();
         this.content = article.getContent();
         this.writer = article.getWriter();
+        this.teamName = article.getTeamName();
         this.createdTime = article.getCreatedDate();
         this.updatedDate = article.getUpdatedDate();
     }
