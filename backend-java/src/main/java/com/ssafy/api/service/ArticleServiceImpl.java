@@ -90,6 +90,12 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDtoList;
     }
 
+    @Override
+    public Long getTeamsArticleCountAtMonth(String cDate, String teamName) {
+        Long articleCount = articleRepositorySupport.findTeamsArticleCountByMonth(cDate, teamName).get();
+        return articleCount;
+    }
+
 
     @Override
     public Article addArticle(ArticleDto articleDto) {

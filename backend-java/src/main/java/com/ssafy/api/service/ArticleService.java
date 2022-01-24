@@ -17,6 +17,8 @@ public interface ArticleService {
     List<ArticleDto> getTeamsArticleList(String teamName);
     // 특정 team이 특정 날짜에 작성한 게시글 list
     List<ArticleDto> getTeamsArticleListAtDate(String cDate, String teamName);
+    // 특정 team이 특정 달에 작성한 게시글의 갯수
+    Long getTeamsArticleCountAtMonth(String cDate, String teamName);
 
     Article addArticle(ArticleDto articleDto);
     Article getArticleDetailById(Long id);

@@ -79,8 +79,8 @@ public class ArticleController {
     }
 
 
-    @GetMapping("/team/{teamName}/{date}")
-    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 글 조회", notes = "team name, date 이용하여 조회")
+    @GetMapping("/team/{teamName}/date/{date}")
+    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 글 조회", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
@@ -90,7 +90,16 @@ public class ArticleController {
         return ResponseEntity.status(200).body(articleDto);
     }
 
-
+    @GetMapping("/team/{teamName}/month/{month}")
+    @ApiOperation(value = "team에서 특정 달에 작성한 전체 글 갯수", notes = "team name, date(yyyy-mm) 이용하여 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<Long> getTeamsArticleCountAtMonth(@ApiParam(value = "teamName", required = true) @PathVariable("teamName") String teamName,
+                                                            @ApiParam(value = "month", required = true) @PathVariable("month") String cDate){
+        Long articleCount = articleService.getTeamsArticleCountAtMonth(cDate, teamName);
+        return ResponseEntity.status(200).body(articleCount);
+    }
 
 
     @GetMapping("/{id}")
