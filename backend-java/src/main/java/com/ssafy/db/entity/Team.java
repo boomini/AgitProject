@@ -35,6 +35,19 @@ public class Team extends BaseEntity{
 
     public Team(){}
 
+    @OneToMany(mappedBy = "team")
+    private List<Article> articles = new ArrayList<>();
+
+    // 관계 메서드
+    private void addArticle(Article article){
+        this.articles.add(article);
+        // 현재 article의 team FK 값이 this가 아니면 다시 세팅
+        if (article.getTeam() != this) {
+            article.setTeam(this);
+        }
+    }
+
+
     @Builder
     public Team(Long id, String teamName, String teamPassword, String teamDescription, String teamPicture, int teamMember, String teamBoss){
         this.id = id;
@@ -44,7 +57,6 @@ public class Team extends BaseEntity{
         this.teamPicture = teamPicture;
         this.teamMember = teamMember;
         this.teamBoss = teamBoss;
-
     }
 
 }

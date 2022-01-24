@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.dto.ArticleDto;
 import com.ssafy.db.entity.Article;
+import com.ssafy.db.entity.Team;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     UserRepositorySupport userRepositorySupport;
 
-
+    @Autowired
+    TeamRepositorySupport teamRepositorySupport;
 
 
 
@@ -55,10 +57,54 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<ArticleDto> getUsersArticleListAtDate(String cDate, String userId) {
+        List<ArticleDto> articleDtoList = new ArrayList<>();
+        List<Article> articles = articleRepositorySupport.findUsersArticleListByDate(cDate, userId).get();
+        for(Article article : articles){
+            ArticleDto articleDto = new ArticleDto(article);
+            articleDtoList.add(articleDto);
+        }
+        return articleDtoList;
+    }
+
+    @Override
+    public List<ArticleDto> getTeamsArticleList(String teamName) {
+        List<ArticleDto> articleDtoList = new ArrayList<>();
+        Team team = teamRepositorySupport.findTeamByTeamName(teamName).get();
+        List<Article> articles = team.getArticles();
+        for(Article article : articles){
+            ArticleDto articleDto = new ArticleDto(article);
+            articleDtoList.add(articleDto);
+        }
+        return articleDtoList;
+    }
+
+    @Override
+    public List<ArticleDto> getTeamsArticleListAtDate(String cDate, String teamName) {
+        List<ArticleDto> articleDtoList = new ArrayList<>();
+        List<Article> articles = articleRepositorySupport.findTeamsArticleListByDate(cDate, teamName).get();
+        for(Article article : articles){
+            ArticleDto articleDto = new ArticleDto(article);
+            articleDtoList.add(articleDto);
+        }
+        return articleDtoList;
+    }
+
+    @Override
+    public Long getTeamsArticleCountAtMonth(String cDate, String teamName) {
+        Long articleCount = articleRepositorySupport.findTeamsArticleCountByMonth(cDate, teamName).get();
+        return articleCount;
+    }
+
+
+    @Override
     public Article addArticle(ArticleDto articleDto) {
         Article article = articleDto.toEntity();
         Optional<User> user = userRepositorySupport.findUserByUserId(article.getWriter());
+        Optional<Team> team = teamRepositorySupport.findTeamByTeamName(article.getTeamName());
+        // user ,  team FK 값 입력
         article.setUser(user.get());
+        article.setTeam(team.get());
         return articleRepository.save(article);
     }
 

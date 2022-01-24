@@ -2,6 +2,7 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.advice.exception.CArticleNotFoundException;
 import com.ssafy.api.dto.ArticleDto;
+import com.ssafy.api.dto.TeamDto;
 import com.ssafy.api.service.ArticleService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Article;
@@ -19,6 +20,7 @@ public class ArticleController {
 
     @Autowired
     ArticleService articleService;
+
 
     @PostMapping()
     @ApiOperation(value = "게시글 작성", notes = "<strong>글 제목과 글 내용</strong>를 통해 회원가입 한다.")
@@ -45,31 +47,75 @@ public class ArticleController {
         return ResponseEntity.status(200).body(articleDtoList);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/writer/{userId}")
     @ApiOperation(value = "user가 작성한 전체 글 조회", notes = "user id 이용하여 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
     public ResponseEntity<List<ArticleDto>> getUsersArticleList(@ApiParam(value = "userId", required = true) @PathVariable("userId") String userId){
         List<ArticleDto> articleDtoList = articleService.getUsersArticleList(userId);
-        System.out.println(articleDtoList);
         return ResponseEntity.status(200).body(articleDtoList);
     }
 
-//    @GetMapping("/{id}")
-//    @ApiOperation(value = "특정 게시글 조회", notes = "게시글 id 이용하여 조회")
-//    @ApiResponses({
-//            @ApiResponse(code = 200, message = "성공"),
-//    })
-//    public ResponseEntity<ArticleDto> getArticleDetail(@ApiParam(value = "id", required = true) @PathVariable("id") Long id){
-//        Article article = articleService.getArticleDetailById(id);
-//        // 수정하려는 글이 없으면 예외 처리
-//        if(article.getId() == null){
-//            throw new CArticleNotFoundException();
-//        }
-//        ArticleDto articleDto = new ArticleDto(article);
-//        return ResponseEntity.status(200).body(articleDto);
-//    }
+    @GetMapping("/writer/{userId}/{date}")
+    @ApiOperation(value = "user가 특정 일자에 작성한 전체 글 조회", notes = "userId, date 이용하여 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<List<ArticleDto>> getUsersArticleListAtDate(@ApiParam(value = "userId", required = true) @PathVariable("userId") String userId,
+                                                                      @ApiParam(value = "date", required = true) @PathVariable("date") String cDate){
+        List<ArticleDto> articleDto = articleService.getUsersArticleListAtDate(cDate, userId);
+        return ResponseEntity.status(200).body(articleDto);
+    }
+
+    @GetMapping("/team/{teamName}")
+    @ApiOperation(value = "team에서 작성한 전체 글 조회", notes = "team name 이용하여 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<List<ArticleDto>> getTeamsArticleList(@ApiParam(value = "teamName", required = true) @PathVariable("teamName") String teamName){
+        List<ArticleDto> articleDto = articleService.getTeamsArticleList(teamName);
+        return ResponseEntity.status(200).body(articleDto);
+    }
+
+
+    @GetMapping("/team/{teamName}/date/{date}")
+    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 글 조회", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<List<ArticleDto>> getTeamsArticleListAtDate(@ApiParam(value = "teamName", required = true) @PathVariable("teamName") String teamName,
+                                                                      @ApiParam(value = "date", required = true) @PathVariable("date") String cDate){
+        List<ArticleDto> articleDto = articleService.getTeamsArticleListAtDate(cDate, teamName);
+        return ResponseEntity.status(200).body(articleDto);
+    }
+
+    @GetMapping("/team/{teamName}/month/{month}")
+    @ApiOperation(value = "team에서 특정 달에 작성한 전체 글 갯수", notes = "team name, date(yyyy-mm) 이용하여 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<Long> getTeamsArticleCountAtMonth(@ApiParam(value = "teamName", required = true) @PathVariable("teamName") String teamName,
+                                                            @ApiParam(value = "month", required = true) @PathVariable("month") String cDate){
+        Long articleCount = articleService.getTeamsArticleCountAtMonth(cDate, teamName);
+        return ResponseEntity.status(200).body(articleCount);
+    }
+
+
+    @GetMapping("/{id}")
+    @ApiOperation(value = "특정 게시글 조회", notes = "게시글 id 이용하여 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<ArticleDto> getArticleDetail(@ApiParam(value = "id", required = true) @PathVariable("id") Long id){
+        Article article = articleService.getArticleDetailById(id);
+        // 수정하려는 글이 없으면 예외 처리
+        if(article.getId() == null){
+            throw new CArticleNotFoundException();
+        }
+        ArticleDto articleDto = new ArticleDto(article);
+        return ResponseEntity.status(200).body(articleDto);
+    }
 
     @PutMapping("/{id}")
     @ApiOperation(value = "게시글 수정", notes = "게시글 id 이용하여 조회 후 수정")
