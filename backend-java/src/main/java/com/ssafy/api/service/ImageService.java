@@ -8,6 +8,6 @@ import java.util.List;
 public interface ImageService {
     Image addImage(ImageDto imageDto,String userId, Long teamId);
     List<ImageDto> getImageListById(Long teamId);
-
-    List<ImageDto> getImageListAtDateByTeamId(String uploadDate, Long teamId);
+//
+//    List<ImageDto> getImageListAtDateByTeamId(String uploadDate, Long teamId);
 }

@@ -58,6 +58,16 @@ public class Team extends BaseEntity{
         }
     }
 
+    @OneToMany(mappedBy = "team")
+    private List<Video> videos = new ArrayList<>();
+
+    private void addVideos(Video video){
+        this.videos.add(video);
+        if(video.getTeam() != this){
+            video.setTeam(this);
+        }
+    }
+
     @Builder
     public Team(Long id, String teamName, String teamPassword, String teamDescription, String teamPicture, int teamMember, String teamBoss){
         this.id = id;

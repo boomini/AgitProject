@@ -88,10 +88,10 @@ public class TeamController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<List<ArticleDto>> getTeamsArticleListAtDate(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId,
+    public ResponseEntity<List<ArticleDto>> getTeamsArticleListAtDate(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") String teamName,
                                                                       @ApiParam(value = "uploadDate", required = true) @PathVariable("uploadDate") String uploadDate){
-        List<ArticleDto> articleDto = articleService.getTeamsArticleListAtDate(uploadDate, teamId);
-        List<ImageDto> imageDto = imageService.getImageListAtDateByTeamId(uploadDate,teamId);
+        List<ArticleDto> articleDto = articleService.getTeamsArticleListAtDate(uploadDate, teamName);
+//        List<ImageDto> imageDto = imageService.getImageListAtDateByTeamId(uploadDate,teamName);
         return ResponseEntity.status(200).body(articleDto);
     }
 

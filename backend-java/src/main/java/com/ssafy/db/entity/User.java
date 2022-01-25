@@ -65,6 +65,16 @@ public class User extends BaseEntity{
         }
     }
 
+    @OneToMany(mappedBy = "user")
+    private List<Video> videos = new ArrayList<>();
+
+    private void addVideos(Video video){
+        this.videos.add(video);
+        if(video.getUser() != this){
+            video.setUser(this);
+        }
+    }
+
 
     public User(){}
 
