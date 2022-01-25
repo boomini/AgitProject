@@ -80,6 +80,17 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<ArticleDto> getArticleListById(Long teamId) {
+        List<ArticleDto> articleDtoList = new ArrayList<>();
+        Team team = teamRepositorySupport.findTeamByTeamId(teamId).get();
+        List<Article> articles = team.getArticles();
+        for(Article article : articles){
+            ArticleDto articleDto = new ArticleDto(article);
+            articleDtoList.add(articleDto);
+        }
+        return articleDtoList;
+    }
+    @Override
     public List<ArticleDto> getTeamsArticleListAtDate(String cDate, String teamName) {
         List<ArticleDto> articleDtoList = new ArrayList<>();
         List<Article> articles = articleRepositorySupport.findTeamsArticleListByDate(cDate, teamName).get();

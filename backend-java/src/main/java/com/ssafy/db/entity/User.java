@@ -55,6 +55,16 @@ public class User extends BaseEntity{
         }
     }
 
+    @OneToMany(mappedBy = "user")
+    private List<Image> images = new ArrayList<>();
+
+    public void addImage(Image image){
+        this.images.add(image);
+        if(image.getUser() != this){
+            image.setUser(this);
+        }
+    }
+
 
     public User(){}
 

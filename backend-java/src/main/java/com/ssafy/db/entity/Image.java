@@ -7,9 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -30,6 +28,29 @@ public class Image extends BaseEntity{
     LocalDateTime updateDate;
     LocalDate uploadDate;
 
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
+
+    public void setUser(User user){
+        this.user = user;
+        if(!user.getImages().contains(this)){
+            user.getImages().add(this);
+        }
+    }
+
+    public void setTeam(Team team){
+        this.team = team;
+        if(!team.getImages().contains(this)){
+            team.getImages().add(this);
+        }
+    }
+
+    public Image(){}
     @Builder
     public Image(Long id, String originalFileName, String filePath, String fileName, LocalDate uploadDate){
         this.id = id;

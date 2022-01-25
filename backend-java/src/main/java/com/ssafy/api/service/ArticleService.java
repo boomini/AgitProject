@@ -24,4 +24,7 @@ public interface ArticleService {
     Article getArticleDetailById(Long id);
     boolean updateArticleDetailById(Long id, ArticleDto articleDto);
     boolean deleteArticleDetailById(Long id);
+
+    // 특정 team이 작성한 게시글 list
+    List<ArticleDto> getArticleListById(Long teamId);
 }

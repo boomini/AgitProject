@@ -31,6 +31,8 @@ public class QUser extends EntityPathBase<User> {
     //inherited
     public final NumberPath<Long> id = _super.id;
 
+    public final ListPath<Image, QImage> images = this.<Image, QImage>createList("images", Image.class, QImage.class, PathInits.DIRECT2);
+
     public final NumberPath<Integer> month = createNumber("month", Integer.class);
 
     public final StringPath name = createString("name");

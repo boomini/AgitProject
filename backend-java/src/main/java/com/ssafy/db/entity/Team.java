@@ -48,6 +48,16 @@ public class Team extends BaseEntity{
     }
 
 
+    @OneToMany(mappedBy = "team")
+    private List<Image> images = new ArrayList<>();
+
+    private void addImage(Image image){
+        this.images.add(image);
+        if(image.getTeam() != this){
+            image.setTeam(this);
+        }
+    }
+
     @Builder
     public Team(Long id, String teamName, String teamPassword, String teamDescription, String teamPicture, int teamMember, String teamBoss){
         this.id = id;

@@ -27,6 +27,8 @@ public class QTeam extends EntityPathBase<Team> {
     //inherited
     public final NumberPath<Long> id = _super.id;
 
+    public final ListPath<Image, QImage> images = this.<Image, QImage>createList("images", Image.class, QImage.class, PathInits.DIRECT2);
+
     public final StringPath teamBoss = createString("teamBoss");
 
     public final DateTimePath<java.time.LocalDateTime> teamCdate = createDateTime("teamCdate", java.time.LocalDateTime.class);

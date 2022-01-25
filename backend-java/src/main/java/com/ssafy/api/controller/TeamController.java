@@ -2,9 +2,10 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.advice.exception.CUserDuplicateException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
-import com.ssafy.api.dto.TeamDto;
+import com.ssafy.api.dto.*;
 
-import com.ssafy.api.dto.UserDto;
+import com.ssafy.api.service.ArticleService;
+import com.ssafy.api.service.ImageService;
 import com.ssafy.api.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -27,6 +28,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.List;
+
 @Api(value = "팀 API", tags = {"Team"})
 @RestController
 @RequestMapping("/api/v1/team")
@@ -34,6 +37,12 @@ public class TeamController {
 
     @Autowired
     TeamService teamService;
+
+    @Autowired
+    ArticleService articleService;
+
+    @Autowired
+    ImageService imageService;
 
     @PostMapping()
     @ApiOperation(value = "팀생성", notes = "팀정보를 통해 팀 생성한다.")
@@ -57,6 +66,46 @@ public class TeamController {
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
+
+    @GetMapping("/{teamId}")
+    @ApiOperation(value = "team에서 작성한 전체 calendar", notes = "teamID 이용하여 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<BoardDto> getTeamsBoardList(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId){
+        BoardDto boardDto = new BoardDto();
+
+        List<ArticleDto> articleDtoList = articleService.getArticleListById(teamId);
+        List<ImageDto> imageDtoList = imageService.getImageListById(teamId);
+        boardDto.setArticleList(articleDtoList);
+        boardDto.setImageList(imageDtoList);
+        return ResponseEntity.status(200).body(boardDto);
+    }
+
+
+    @GetMapping("/{teamId}/{uploadDate}")
+    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 게시글 조회", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<List<ArticleDto>> getTeamsArticleListAtDate(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId,
+                                                                      @ApiParam(value = "uploadDate", required = true) @PathVariable("uploadDate") String uploadDate){
+        List<ArticleDto> articleDto = articleService.getTeamsArticleListAtDate(uploadDate, teamId);
+        List<ImageDto> imageDto = imageService.getImageListAtDateByTeamId(uploadDate,teamId);
+        return ResponseEntity.status(200).body(articleDto);
+    }
+
+    @GetMapping("/team/{teamName}/month/{month}")
+    @ApiOperation(value = "team에서 특정 달에 작성한 전체 글 갯수", notes = "team name, date(yyyy-mm) 이용하여 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<Long> getTeamsArticleCountAtMonth(@ApiParam(value = "teamName", required = true) @PathVariable("teamName") String teamName,
+                                                            @ApiParam(value = "month", required = true) @PathVariable("month") String cDate){
+        Long articleCount = articleService.getTeamsArticleCountAtMonth(cDate, teamName);
+        return ResponseEntity.status(200).body(articleCount);
+    }
+
 
 
 }

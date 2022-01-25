@@ -35,7 +35,7 @@ public class ImageController {
             @ApiResponse(code = 200, message = "성공"),
     })
     public ResponseEntity<? extends BaseResponseBody> addImage (
-           @RequestParam(value="upfile", required = true) MultipartFile[] files ,@RequestParam(value="uploadDate")String uploadDate,@RequestParam(value="userId")String userId) throws Exception {
+           @RequestParam(value="upfile", required = true) MultipartFile[] files ,@RequestParam(value="uploadDate")String uploadDate,@RequestParam(value="userId")String userId,@RequestParam(value="teamId")Long teamId) throws Exception {
 
 
         //System.out.println(servletContext.getRealPath("/resources/dist/img"));
@@ -67,7 +67,7 @@ public class ImageController {
                 System.out.println("원본 파일 이름 : "+ mfile.getOriginalFilename() + " 실제 저장 파일이름 : " + saveFileName);
                 mfile.transferTo(new File(folder, saveFileName));
             }
-            imageService.addImage(imageDto);
+            imageService.addImage(imageDto,userId,teamId);
         }
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }

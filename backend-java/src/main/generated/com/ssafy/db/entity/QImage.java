@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -16,6 +17,8 @@ import com.querydsl.core.types.Path;
 public class QImage extends EntityPathBase<Image> {
 
     private static final long serialVersionUID = 461747929L;
+
+    private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QImage image = new QImage("image");
 
@@ -32,20 +35,34 @@ public class QImage extends EntityPathBase<Image> {
 
     public final StringPath originalFileName = createString("originalFileName");
 
+    public final QTeam team;
+
     public final DateTimePath<java.time.LocalDateTime> updateDate = createDateTime("updateDate", java.time.LocalDateTime.class);
 
     public final DatePath<java.time.LocalDate> uploadDate = createDate("uploadDate", java.time.LocalDate.class);
 
+    public final QUser user;
+
     public QImage(String variable) {
-        super(Image.class, forVariable(variable));
+        this(Image.class, forVariable(variable), INITS);
     }
 
     public QImage(Path<? extends Image> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QImage(PathMetadata metadata) {
-        super(Image.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QImage(PathMetadata metadata, PathInits inits) {
+        this(Image.class, metadata, inits);
+    }
+
+    public QImage(Class<? extends Image> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.team = inits.isInitialized("team") ? new QTeam(forProperty("team")) : null;
+        this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
     }
 
 }
