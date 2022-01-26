@@ -24,14 +24,14 @@
     "name" : "소개 페이지",
     "hidden" : false,
     "path" : "/",
-    "icon" : "el-icon-umbrella",
+    "icon" : "el-icon-link",
     "children" : []
   },
   "schedule" : {
     "name" : "일정 관리",
     "hidden" : false,
     "path" : "/schedule",
-    "icon" : "el-icon-calendar",
+    "icon" : "el-icon-money",
     "children" : []
   },
   "room1" : {

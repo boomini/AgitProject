@@ -117,5 +117,5 @@ export default {
 </script>
 
 <style>
-  {font-family: 'Noto Sans KR', sans-serif;}
+
 </style>
