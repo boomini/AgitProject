@@ -68,36 +68,36 @@ public class ArticleController {
         return ResponseEntity.status(200).body(articleDto);
     }
 
-    @GetMapping("/team/{teamName}")
+    @GetMapping("/team/{teamId}")
     @ApiOperation(value = "team에서 작성한 전체 글 조회", notes = "team name 이용하여 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<List<ArticleDto>> getTeamsArticleList(@ApiParam(value = "teamName", required = true) @PathVariable("teamName") String teamName){
-        List<ArticleDto> articleDto = articleService.getTeamsArticleList(teamName);
+    public ResponseEntity<List<ArticleDto>> getTeamsArticleList(@ApiParam(value = "teamName", required = true) @PathVariable("teamId") Long teamId){
+        List<ArticleDto> articleDto = articleService.getTeamsArticleList(teamId);
         return ResponseEntity.status(200).body(articleDto);
     }
 
 
-    @GetMapping("/team/{teamName}/date/{date}")
+    @GetMapping("/team/{teamId}/date/{date}")
     @ApiOperation(value = "team에서 특정 일자에 작성한 전체 글 조회", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<List<ArticleDto>> getTeamsArticleListAtDate(@ApiParam(value = "teamName", required = true) @PathVariable("teamName") String teamName,
+    public ResponseEntity<List<ArticleDto>> getTeamsArticleListAtDate(@ApiParam(value = "teamName", required = true) @PathVariable("teamId") Long teamId,
                                                                       @ApiParam(value = "date", required = true) @PathVariable("date") String cDate){
-        List<ArticleDto> articleDto = articleService.getTeamsArticleListAtDate(cDate, teamName);
+        List<ArticleDto> articleDto = articleService.getTeamsArticleListAtDate(cDate, teamId);
         return ResponseEntity.status(200).body(articleDto);
     }
 
-    @GetMapping("/team/{teamName}/month/{month}")
+    @GetMapping("/team/{teamId}/month/{month}")
     @ApiOperation(value = "team에서 특정 달에 작성한 전체 글 갯수", notes = "team name, date(yyyy-mm) 이용하여 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<Long> getTeamsArticleCountAtMonth(@ApiParam(value = "teamName", required = true) @PathVariable("teamName") String teamName,
+    public ResponseEntity<Long> getTeamsArticleCountAtMonth(@ApiParam(value = "teamName", required = true) @PathVariable("teamId") Long teamId,
                                                             @ApiParam(value = "month", required = true) @PathVariable("month") String cDate){
-        Long articleCount = articleService.getTeamsArticleCountAtMonth(cDate, teamName);
+        Long articleCount = articleService.getTeamsArticleCountAtMonth(cDate, teamId);
         return ResponseEntity.status(200).body(articleCount);
     }
 

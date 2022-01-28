@@ -28,7 +28,9 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Api(value = "팀 API", tags = {"Team"})
 @RestController
@@ -88,24 +90,31 @@ public class TeamController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<List<ArticleDto>> getTeamsArticleListAtDate(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId,
+    public ResponseEntity<BoardDto> getTeamsArticleListAtDate(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId,
                                                                       @ApiParam(value = "uploadDate", required = true) @PathVariable("uploadDate") String uploadDate){
         List<ArticleDto> articleDto = articleService.getTeamsArticleListAtDate(uploadDate, teamId);
         List<ImageDto> imageDto = imageService.getImageListAtDateByTeamId(uploadDate,teamId);
-        return ResponseEntity.status(200).body(articleDto);
+        BoardDto boardDto = new BoardDto();
+        boardDto.setArticleList(articleDto);
+        boardDto.setImageList(imageDto);
+        boardDto.setTeamId(teamId);
+        return ResponseEntity.status(200).body(boardDto);
     }
 
-    @GetMapping("/team/{teamName}/month/{month}")
-    @ApiOperation(value = "team에서 특정 달에 작성한 전체 글 갯수", notes = "team name, date(yyyy-mm) 이용하여 조회")
+    @GetMapping("/{teamId}/count/{uploadDate}")
+    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 게시글 조회", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<Long> getTeamsArticleCountAtMonth(@ApiParam(value = "teamName", required = true) @PathVariable("teamName") String teamName,
-                                                            @ApiParam(value = "month", required = true) @PathVariable("month") String cDate){
-        Long articleCount = articleService.getTeamsArticleCountAtMonth(cDate, teamName);
-        return ResponseEntity.status(200).body(articleCount);
+    public ResponseEntity<Map<String, List<DayCountDto>>> getTeamsBoardCountListAtDate(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId,
+                                                                      @ApiParam(value = "uploadDate", required = true) @PathVariable("uploadDate") String uploadDate){
+
+        List<DayCountDto> imagecntList = imageService.getTeamImagesCountByMonth(uploadDate,teamId);
+        List<DayCountDto> articleList = articleService.getTeamArticleCountByMonth(uploadDate, teamId);
+        Map<String, List<DayCountDto>> responseEntity = new HashMap<String, List<DayCountDto>>();
+        responseEntity.put("imageCntList", imagecntList);
+        responseEntity.put("articleCntList", articleList);
+        return ResponseEntity.status(200).body(responseEntity);
     }
-
-
 
 }

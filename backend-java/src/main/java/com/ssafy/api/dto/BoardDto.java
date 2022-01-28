@@ -15,16 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @ApiModel("BoardDto")
 public class BoardDto {
-    String teamId;
+    Long teamId;
     List<ArticleDto> articleList = new ArrayList<>();
     List<ImageDto> imageList = new ArrayList<>();
     List<VideoDto> videoList = new ArrayList<>();
-
-    int articlecnt;
-    int imagecnt;
-    int videocnt;
-
-    int year;
-    int month;
-    int day;
 }

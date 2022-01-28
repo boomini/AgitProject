@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.dto.ArticleDto;
+import com.ssafy.api.dto.DayCountDto;
 import com.ssafy.db.entity.Article;
 import com.ssafy.db.entity.Team;
 import com.ssafy.db.entity.User;
@@ -68,9 +69,9 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleDto> getTeamsArticleList(String teamName) {
+    public List<ArticleDto> getTeamsArticleList(Long teamId) {
         List<ArticleDto> articleDtoList = new ArrayList<>();
-        Team team = teamRepositorySupport.findTeamByTeamName(teamName).get();
+        Team team = teamRepositorySupport.findTeamByTeamId(teamId).get();
         List<Article> articles = team.getArticles();
         for(Article article : articles){
             ArticleDto articleDto = new ArticleDto(article);
@@ -90,20 +91,29 @@ public class ArticleServiceImpl implements ArticleService {
         }
         return articleDtoList;
     }
+
     @Override
-    public List<ArticleDto> getTeamsArticleListAtDate(String cDate, String teamName) {
+    public List<DayCountDto> getTeamArticleCountByMonth(String uploadDate, Long teamId) {
+        List<DayCountDto> dayCountDtoList = articleRepositorySupport.findTeamArticleCountByMont(uploadDate, teamId).get();
+        return dayCountDtoList;
+    }
+
+    @Override
+    public List<ArticleDto> getTeamsArticleListAtDate(String cDate, Long teamId) {
         List<ArticleDto> articleDtoList = new ArrayList<>();
-        List<Article> articles = articleRepositorySupport.findTeamsArticleListByDate(cDate, teamName).get();
+        //Optional<List<Article>> articles = Optional.ofNullable(articleRepositorySupport.findTeamsArticleListByDate(cDate, teamId).get());
+        List<Article> articles = articleRepositorySupport.findTeamsArticleListByDate(cDate, teamId).get();
         for(Article article : articles){
             ArticleDto articleDto = new ArticleDto(article);
             articleDtoList.add(articleDto);
         }
+
         return articleDtoList;
     }
 
     @Override
-    public Long getTeamsArticleCountAtMonth(String cDate, String teamName) {
-        Long articleCount = articleRepositorySupport.findTeamsArticleCountByMonth(cDate, teamName).get();
+    public Long getTeamsArticleCountAtMonth(String cDate, Long teamId) {
+        Long articleCount = articleRepositorySupport.findTeamsArticleCountByMonth(cDate, teamId).get();
         return articleCount;
     }
 

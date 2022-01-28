@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.dto.DayCountDto;
 import com.ssafy.api.dto.ImageDto;
 import com.ssafy.db.entity.Image;
 import com.ssafy.db.entity.Team;
@@ -54,12 +55,22 @@ public class ImageServiceImpl implements ImageService{
         return imageDtoList;
     }
 
-//    @Override
-//    @Transactional
-//    public ImageDto getImage(Long id){
-//        Image image = imageRepository.findById(id).get();
-//
-//        ImageDto imageDto = ImageDto.builder()
-//                .id
-//    }
+    @Override
+    public List<ImageDto> getImageListAtDateByTeamId(String uploadDate, Long teamId) {
+        List<ImageDto> imageDtoList = new ArrayList<>();
+        List<Image> images = imageRepositorySupport.findTeamsImageListByDayte(uploadDate,teamId).get();
+        for(Image image : images){
+            ImageDto imageDto = new ImageDto(image);
+            imageDtoList.add(imageDto);
+        }
+        return imageDtoList;
+    }
+
+    //한달이미지 가져오기
+    @Override
+    public List<DayCountDto> getTeamImagesCountByMonth(String uploadDate, Long teamId){
+       List<DayCountDto> dayCountDtoList = imageRepositorySupport.findTeamImagesCountByMonth(uploadDate, teamId).get();
+       return dayCountDtoList;
+    }
+
 }
