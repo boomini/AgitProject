@@ -11,16 +11,16 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QImage is a Querydsl query type for Image
+ * QVideo is a Querydsl query type for Video
  */
 @Generated("com.querydsl.codegen.EntitySerializer")
-public class QImage extends EntityPathBase<Image> {
+public class QVideo extends EntityPathBase<Video> {
 
-    private static final long serialVersionUID = 461747929L;
+    private static final long serialVersionUID = 473637369L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QImage image = new QImage("image");
+    public static final QVideo video = new QVideo("video");
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
@@ -43,23 +43,23 @@ public class QImage extends EntityPathBase<Image> {
 
     public final QUser user;
 
-    public QImage(String variable) {
-        this(Image.class, forVariable(variable), INITS);
+    public QVideo(String variable) {
+        this(Video.class, forVariable(variable), INITS);
     }
 
-    public QImage(Path<? extends Image> path) {
+    public QVideo(Path<? extends Video> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QImage(PathMetadata metadata) {
+    public QVideo(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QImage(PathMetadata metadata, PathInits inits) {
-        this(Image.class, metadata, inits);
+    public QVideo(PathMetadata metadata, PathInits inits) {
+        this(Video.class, metadata, inits);
     }
 
-    public QImage(Class<? extends Image> type, PathMetadata metadata, PathInits inits) {
+    public QVideo(Class<? extends Video> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.team = inits.isInitialized("team") ? new QTeam(forProperty("team")) : null;
         this.user = inits.isInitialized("user") ? new QUser(forProperty("user"), inits.get("user")) : null;

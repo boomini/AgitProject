@@ -22,6 +22,7 @@ public class ImageDto {
     LocalDateTime createDate;
     LocalDateTime updateDate;
     LocalDate uploadDate;
+
     public Image toEntity(){
         Image build = Image.builder()
                 .originalFileName(originalFileName)

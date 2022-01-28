@@ -43,6 +43,8 @@ public class QTeam extends EntityPathBase<Team> {
 
     public final StringPath teamPicture = createString("teamPicture");
 
+    public final ListPath<Video, QVideo> videos = this.<Video, QVideo>createList("videos", Video.class, QVideo.class, PathInits.DIRECT2);
+
     public QTeam(String variable) {
         super(Team.class, forVariable(variable));
     }

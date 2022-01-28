@@ -15,4 +15,5 @@ public interface ImageService {
     List<ImageDto> getImageListAtDateByTeamId(String uploadDate, Long teamId);
     //특정 team이 특정 날짜에 작성한 게시글 List
     List<DayCountDto> getTeamImagesCountByMonth(String uploadDate, Long teamId);
+
 }

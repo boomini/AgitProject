@@ -90,6 +90,7 @@ public class TeamController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
+
     public ResponseEntity<BoardDto> getTeamsArticleListAtDate(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId,
                                                                       @ApiParam(value = "uploadDate", required = true) @PathVariable("uploadDate") String uploadDate){
         List<ArticleDto> articleDto = articleService.getTeamsArticleListAtDate(uploadDate, teamId);
@@ -99,6 +100,7 @@ public class TeamController {
         boardDto.setImageList(imageDto);
         boardDto.setTeamId(teamId);
         return ResponseEntity.status(200).body(boardDto);
+
     }
 
     @GetMapping("/{teamId}/count/{uploadDate}")

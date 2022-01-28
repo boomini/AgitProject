@@ -48,6 +48,7 @@ public class User extends BaseEntity{
     private List<Article> articles = new ArrayList<>();
     // 관계 메서드
 
+
     public void addArticle(Article article){
         this.articles.add(article);
         if (article.getUser() != this){
@@ -62,6 +63,16 @@ public class User extends BaseEntity{
         this.images.add(image);
         if(image.getUser() != this){
             image.setUser(this);
+        }
+    }
+
+    @OneToMany(mappedBy = "user")
+    private List<Video> videos = new ArrayList<>();
+
+    private void addVideos(Video video){
+        this.videos.add(video);
+        if(video.getUser() != this){
+            video.setUser(this);
         }
     }
 
