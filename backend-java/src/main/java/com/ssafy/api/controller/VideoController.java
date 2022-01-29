@@ -35,7 +35,7 @@ public class VideoController {
     @Autowired
     ServletContext servletContext;
     @PostMapping()
-    @ApiOperation(value="이미지 업로드", notes="이미지 업로드 api")
+    @ApiOperation(value="비디오 업로드", notes="비디오 업로드 api")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
