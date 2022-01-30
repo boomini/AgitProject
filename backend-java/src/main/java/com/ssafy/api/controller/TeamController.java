@@ -28,6 +28,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
@@ -61,11 +62,11 @@ public class TeamController {
     })
 
     public ResponseEntity<? extends BaseResponseBody> register (
-            @RequestBody @ApiParam(value="팀가입 정보", required = true) TeamDto teamDto) throws Exception {
+            @RequestBody @ApiParam(value="팀가입 정보", required = true) TeamDto teamDto, @RequestParam(value="userId", required = true) String userId) throws Exception {
 
         //임의로 리턴된 Team 인스턴스. 현재 코드는 팀 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
         try {
-            teamService.createTeam(teamDto);
+            teamService.createTeam(teamDto, userId);
         } catch (DataIntegrityViolationException e) {
             //회원중복시 예외처리
             throw new CUserDuplicateException();
