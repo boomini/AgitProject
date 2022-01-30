@@ -34,7 +34,7 @@ public class ImageRepositorySupport {
 
     //특정 팀이 특정 달에 작성한글
     public Optional<List<DayCountDto>> findTeamImagesCountByMonth(String uploadDate, Long teamId){
-        //LocalDate 객체를 yyyy-mm-dd 형태의 String으로 변경
+        //LocalDate 객체를 yyyy-mm 형태의 String으로 변경
         StringTemplate dateFormat = Expressions.stringTemplate("DATE_FORMAT({0}, {1})", qImage.uploadDate, ConstantImpl.create("%Y-%m"));
         List<DayCountDto> dayCountDtoList = jpaQueryFactory.select(
                 new QDayCountDto(qImage.count().as("count"),qImage.uploadDate)

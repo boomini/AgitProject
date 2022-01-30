@@ -7,6 +7,8 @@ import com.ssafy.api.dto.*;
 import com.ssafy.api.service.ArticleService;
 import com.ssafy.api.service.ImageService;
 import com.ssafy.api.service.TeamService;
+import com.ssafy.api.service.VideoService;
+import com.ssafy.db.entity.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +48,9 @@ public class TeamController {
     @Autowired
     ImageService imageService;
 
+    @Autowired
+    VideoService videoService;
+
     @PostMapping()
     @ApiOperation(value = "팀생성", notes = "팀정보를 통해 팀 생성한다.")
     @ApiResponses({
@@ -79,8 +84,10 @@ public class TeamController {
 
         List<ArticleDto> articleDtoList = articleService.getArticleListById(teamId);
         List<ImageDto> imageDtoList = imageService.getImageListById(teamId);
+        List<VideoDto> videoDtoList = videoService.getVideoListById(teamId);
         boardDto.setArticleList(articleDtoList);
         boardDto.setImageList(imageDtoList);
+        boardDto.setVideoList(videoDtoList);
         return ResponseEntity.status(200).body(boardDto);
     }
 
@@ -93,11 +100,14 @@ public class TeamController {
 
     public ResponseEntity<BoardDto> getTeamsArticleListAtDate(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId,
                                                                       @ApiParam(value = "uploadDate", required = true) @PathVariable("uploadDate") String uploadDate){
+
         List<ArticleDto> articleDto = articleService.getTeamsArticleListAtDate(uploadDate, teamId);
         List<ImageDto> imageDto = imageService.getImageListAtDateByTeamId(uploadDate,teamId);
+        List<VideoDto> videoDto = videoService.getVideoListAtDateByTeamId(uploadDate, teamId);
         BoardDto boardDto = new BoardDto();
         boardDto.setArticleList(articleDto);
         boardDto.setImageList(imageDto);
+        boardDto.setVideoList(videoDto);
         boardDto.setTeamId(teamId);
         return ResponseEntity.status(200).body(boardDto);
 
@@ -111,9 +121,11 @@ public class TeamController {
     public ResponseEntity<Map<String, List<DayCountDto>>> getTeamsBoardCountListAtDate(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId,
                                                                       @ApiParam(value = "uploadDate", required = true) @PathVariable("uploadDate") String uploadDate){
 
+        List<DayCountDto> videocntList = videoService.getTeamVideosCountByMonth(uploadDate, teamId);
         List<DayCountDto> imagecntList = imageService.getTeamImagesCountByMonth(uploadDate,teamId);
         List<DayCountDto> articleList = articleService.getTeamArticleCountByMonth(uploadDate, teamId);
         Map<String, List<DayCountDto>> responseEntity = new HashMap<String, List<DayCountDto>>();
+        responseEntity.put("videoCntList", videocntList);
         responseEntity.put("imageCntList", imagecntList);
         responseEntity.put("articleCntList", articleList);
         return ResponseEntity.status(200).body(responseEntity);
