@@ -21,7 +21,7 @@ function makeRoutesFromMenu () {
     } else if (key === 'schedule') {
       return { path: fullMenu[key].path, name: key, component: Schedule }
     } else if (key === 'room1') {
-      return { path: fullMenu[key].path, name: key, component: Room, params: { roomId: fullMenu[key].params.roomId} }
+      return { path: fullMenu[key].path, name: key, component: Room }
     } else { // menu.json 에 들어있는 로그아웃 메뉴
       return null
     }
