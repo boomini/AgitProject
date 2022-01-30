@@ -92,6 +92,17 @@ public class TeamController {
         return ResponseEntity.status(200).body(boardDto);
     }
 
+    @PostMapping("/{teamId}/user/{userId}")
+    @ApiOperation(value = "해당 팀에 특정 유저 추가", notes = "teamID, userId 이용하여 추가")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<? extends BaseResponseBody> addMember(@PathVariable("teamId") Long teamId, @PathVariable("userId") String userId){
+
+        teamService.addMember(teamId, userId);
+
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+    }
 
     @GetMapping("/{teamId}/{uploadDate}")
     @ApiOperation(value = "team에서 특정 일자에 작성한 전체 게시글 조회", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")

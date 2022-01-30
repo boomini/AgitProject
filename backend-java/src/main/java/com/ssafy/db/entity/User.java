@@ -76,8 +76,15 @@ public class User extends BaseEntity{
         }
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserTeam> userTeams = new ArrayList<>();
+
+    private void addUserTeams(UserTeam userTeam){
+        this.userTeams.add(userTeam);
+        if(userTeam.getUser() != this){
+            userTeam.setUser(this);
+        }
+    }
 
 
     public User(){}

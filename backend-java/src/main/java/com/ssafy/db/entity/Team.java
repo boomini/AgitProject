@@ -68,8 +68,15 @@ public class Team extends BaseEntity{
         }
     }
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "team", cascade = CascadeType.ALL)
     private List<UserTeam> userTeams = new ArrayList<>();
+
+    private void addUserTeams(UserTeam userTeam){
+        this.userTeams.add(userTeam);
+        if(userTeam.getTeam() != this){
+            userTeam.setTeam(this);
+        }
+    }
 
     @Builder
     public Team(Long id, String teamName, String teamPassword, String teamDescription, String teamPicture, int teamMember, String teamBoss){

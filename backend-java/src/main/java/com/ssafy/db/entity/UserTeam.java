@@ -3,10 +3,8 @@ package com.ssafy.db.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 
 @Entity
 @Getter
@@ -14,12 +12,27 @@ import javax.persistence.Table;
 @Table(name = "UserTeam")
 public class UserTeam extends BaseEntity{
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "TEAM_ID")
     private Team team;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_ID")
     private User user;
+
+
+    public void setTeam(Team team){
+        this.team = team;
+        if (!team.getUserTeams().contains(this)){
+            team.getUserTeams().add(this);
+        }
+    }
+
+    public void setUser(User user){
+        this.user = user;
+        if (!user.getUserTeams().contains(this)){
+            user.getUserTeams().add(this);
+        }
+    }
 
 }

@@ -5,4 +5,5 @@ import com.ssafy.db.entity.Team;
 
 public interface TeamService {
     boolean createTeam(TeamDto teamDto, String userId);
+    boolean addMember(Long teamId, String userId);
 }

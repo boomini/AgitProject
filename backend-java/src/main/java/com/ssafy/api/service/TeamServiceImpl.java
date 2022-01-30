@@ -35,18 +35,30 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public boolean createTeam(TeamDto teamDto, String userId) {
-        teamRepository.save(teamDto.toEntity()).getId();
-
         Optional<User> user = userRepositorySupport.findUserByUserId(userId);
         if (user == null){
             return false;
         }
-
         Team team = teamDto.toEntity();
-
+        System.out.println(team);
         UserTeam userTeam = new UserTeam();
         userTeam.setUser(user.get());
         userTeam.setTeam(team);
+        userTeamRepository.save(userTeam);  // 너 누가 마술 부리래
+        return true;
+    }
+
+    @Override
+    public boolean addMember(Long teamId, String userId) {
+        Optional<User> user = userRepositorySupport.findUserByUserId(userId);
+        Optional<Team> team = teamRepositorySupport.findTeamByTeamId(teamId);
+        if(user == null || team == null){
+            return false;
+        }
+        UserTeam userTeam = new UserTeam();
+        userTeam.setUser(user.get());
+        userTeam.setTeam(team.get());
+
         userTeamRepository.save(userTeam);
         return true;
     }
