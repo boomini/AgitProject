@@ -68,6 +68,10 @@ public class Team extends BaseEntity{
         }
     }
 
+    @OneToMany(mappedBy = "team")
+    private List<UserTeam> userTeams;
+
+
 
     @Builder
     public Team(Long id, String teamName, String teamPassword, String teamDescription, String teamPicture, int teamMember, String teamBoss){
