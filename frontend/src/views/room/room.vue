@@ -13,7 +13,7 @@
 
           <span>
             <div class="d-flex justify-content-between mb-2">
-              <el-button type="success" style="width: 100%" @click="createScheduleDialogOpen = true">일정 추가</el-button>
+              <el-button type="success" style="width: 100%" @click="state.createScheduleDialogOpen = true">일정 추가</el-button>
               <el-button type="warning" style="width: 100%">일정 수정</el-button>
             </div>
             <div>
@@ -87,12 +87,12 @@
       </div>
       <div style="text-align: center; margin-bottom: 1rem">
         <div>
-          <el-button style="width: 100%; margin-bottom: 0.5rem;" @click="inviteDialogOpen = true">
+          <el-button style="width: 100%; margin-bottom: 0.5rem;" @click="state.inviteDialogOpen = true">
             초대하기
           </el-button>
         </div>
         <div>
-          <el-button style="width: 100%">
+          <el-button style="width: 100%" @click="joinConference(1)">
             회의하기
           </el-button>
         </div>
@@ -100,97 +100,15 @@
     </div>
   </div>
 
-
   <!-- 초대코드 전송 다이얼로그 -->
-  <el-dialog
-    custom-class="invite-dialog"
-    v-model="inviteDialogOpen"
-    width="30%"
-  >
-    <template #title>
-      <span style="font-size: 20px; font-weight: bolder;">
-        초 대 하 기
-      </span>
-    </template>
-    <div class="d-flex flex-column justify-content-around" style="height: 150px;">
-      <div style="border: 1px solid black; background-color: black; border-radius: 5px; font-size: 20px; padding: 5px 1rem;">
-        여기에 안내 문구를 입력해주세요.
-      </div>
-      <div class="d-flex justify-content-between">
-        <div style="width: 100%" class="me-2">
-          <el-input placeholder="User@example.com" v-model="state.inputEmailId" clearable></el-input>
-
-          <!-- <div class="col-4">
-          </div>
-          <div class="col-1 text-center">
-            <span style="font-size: 20px;"> @ </span>
-          </div>
-
-
-
-          <div class="col-6">
-            <el-input v-model="state.inputEmailServer">
-              <template #append>
-                <el-select v-model="state.inputEmailServer" placeholder="Select" style="width: 110px">
-                  <el-option
-                    v-for="item in state.emailOptions"
-                    :key="item.label"
-                    :label="item.label"
-                    :value="item.value"
-                  >
-                  </el-option>
-                </el-select>
-              </template>
-            </el-input>
-          </div> -->
-
-
-
-
-        </div>
-
-        <el-button>초대코드 전송</el-button>
-      </div>
-
-    </div>
-    <!-- <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="inviteDialogOpen = false">Cancel</el-button>
-        <el-button type="primary" @click="inviteDialogOpen = false"
-          >Confirm</el-button
-        >
-      </span>
-    </template> -->
-  </el-dialog>
+  <invite-dialog
+    :open="state.inviteDialogOpen"
+    @closeInviteDialog="onCloseInviteDialog"/>
 
   <!-- 일정 추가 다이얼로그 -->
-  <el-dialog
-    custom-class="create-schedule-dialog"
-    v-model="createScheduleDialogOpen"
-    width="30%"
-  >
-
-    <!-- 타이틀 -->
-    <template #title>
-      <span style="font-size: 20px; font-weight: bolder; position: absolute; top: 2px; left: 20px;">
-        일 정 추 가
-      </span>
-    </template>
-
-
-    <div>
-      일정을 추가해보세요.
-
-    </div>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="inviteDialogOpen = false">Cancel</el-button>
-        <el-button type="primary" @click="inviteDialogOpen = false"
-          >Confirm</el-button
-        >
-      </span>
-    </template>
-  </el-dialog>
+  <create-schedule-dialog
+    :open="state.createScheduleDialogOpen"
+    @closeCreateScheduleDialog="onCloseCreateScheduleDialog"/>
 
   <!-- 게시글 클릭 시 나오는 세부화면 -->
   <el-drawer
@@ -216,21 +134,27 @@
       회의 메모
     </div>
   </el-drawer>
-
 </template>
 
 <script>
 import { ref, reactive, computed } from 'vue'
-import InviteDialog from './invite-dialog.vue'
+import { useRouter } from 'vue-router'
+import InviteDialog from './components/invite-dialog.vue'
+import CreateScheduleDialog from './components/create-schedule-dialog.vue'
 
 
 export default {
   name: 'room-board',
+  components: {
+    InviteDialog,
+    CreateScheduleDialog,
+  },
   setup() {
+    const router = useRouter()
     const drawer = ref(false)
     const calendar = ref()
-    const inviteDialogOpen = ref(false)
-    const createScheduleDialogOpen = ref(false)
+    // const inviteDialogOpen = ref(false)
+    // const createScheduleDialogOpen = ref(false)
 
     const clickOnDate = function (data) {
       const date = data.day.split('-')
@@ -246,6 +170,8 @@ export default {
     }
 
     const state = reactive({
+      createScheduleDialogOpen: false,
+      inviteDialogOpen: false,
       year : '',
       month : '',
       day : '',
@@ -281,60 +207,31 @@ export default {
       calendar.value.selectDate(val)
     }
 
-    return { clickOnDate, drawer, state, selectDate, calendar, inviteDialogOpen, createScheduleDialogOpen }
+    const onCloseInviteDialog = function () {
+      state.inviteDialogOpen = false
+    }
+
+    const onCloseCreateScheduleDialog = function () {
+      state.createScheduleDialogOpen = false
+    }
+
+    const joinConference = function (roomId) {
+      router.push({
+        name: 'conference-detail',
+        params: {
+          conferenceId: roomId
+        }
+      })
+    }
+
+    return { clickOnDate, drawer, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, joinConference }
   }
 }
 </script>
 
 <style>
-.invite-dialog {
-  width: 700px;
-  height: 300px;
-}
 
-.el-dialog {
-  border-radius: 15px;
-  border: 1px solid black;
-  width: 700px;
-  height: 550px;
-}
 
-.el-dialog > .el-dialog__header {
-  background-color: #abdfd4;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  border-bottom: 1px solid black;
-  height: 15px;
-  color: white;
-  text-shadow:
-    -1px -1px 0 black,
-    1px -1px 0 black,
-    -1px 1px 0 black,
-    1px 1px 0 black;
-}
-
-.el-dialog > .el-dialog__header > .el-dialog__headerbtn {
-  position: absolute;
-  top: 3px;
-  right: 20px;
-  padding: 0;
-  /* font-size: 16px; */
-  /* border: 1px solid red;
-  border-radius: 100%; */
-}
-
-.el-dialog > .el-dialog__header > .el-dialog__headerbtn > .el-dialog__close {
-  border: 1px solid #dd5a4e;
-  border-radius: 50%;
-  background-color: #ff6053;
-  color: black;
-  font-size: 10px;
-}
-
-.el-dialog > .el-dialog__header > .el-dialog__headerbtn > .el-dialog__close:hover {
-  color: white;
-  transition: 0.2s;
-}
 /* .el-calender .el-calendar-table {
   tran
 } */

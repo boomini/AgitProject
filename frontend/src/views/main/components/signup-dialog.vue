@@ -1,5 +1,13 @@
 <template>
-  <el-dialog custom-class="signup-dialog" title="회원가입" v-model="state.dialogVisible" @close="handleClose" :destroy-on-close="true" :close-on-click-modal="false" :close-on-press-escape="false" top="100px">
+  <el-dialog custom-class="signup-dialog" v-model="state.dialogVisible" @close="handleClose" :destroy-on-close="true" :close-on-click-modal="false" :close-on-press-escape="false" top="100px">
+    <!-- header -->
+    <template #title>
+      <span>
+        회 원 가 입
+      </span>
+    </template>
+
+    <!-- content -->
     <el-form :model="state.form" status-icon :rules="state.rules" ref="signupForm" :label-position="state.form.align">
       <el-form-item prop="id" label="아이디" :label-width="state.formLabelWidth">
         <el-input v-model="state.form.id" autocomplete="off" style="width: 70%" :disabled="state.form.isValidatedId" id="id-input" placeholder="ID"></el-input>
@@ -21,8 +29,8 @@
           type="date"
           value-format="YYYY-MM-DD"
           placeholder="Birthday"
-      >
-      </el-date-picker>
+        >
+        </el-date-picker>
       </el-form-item>
       <el-form-item prop="nickname" label="별명" :label-width="state.formLabelWidth" >
         <el-input v-model="state.form.nickname" autocomplete="off" placeholder="Nickname"></el-input>
@@ -39,7 +47,7 @@
       </el-form-item>
     </el-form>
 
-
+    <!-- footer -->
     <template #footer>
       <span class="dialog-footer">
         <el-button type="primary" @click="clickSignup" v-loading.fullscreen="loading">회원가입</el-button>
@@ -50,7 +58,7 @@
 <style>
 .signup-dialog {
   width: 500px !important;
-  height: 580px;
+  height: 550px;
 }
 .signup-dialog .checkbox .el-form-item__content {
   float: left;

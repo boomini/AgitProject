@@ -1,5 +1,13 @@
 <template>
-  <el-dialog custom-class="login-dialog" title="로그인" v-model="state.dialogVisible" @close="handleClose" :modal="state.form.modalStatus">
+  <el-dialog custom-class="login-dialog" v-model="state.dialogVisible" @close="handleClose" :modal="state.form.modalStatus">
+    <!-- header -->
+    <template #title>
+      <span>
+        로 그 인
+      </span>
+    </template>
+
+    <!-- cpntent -->
     <el-form :model="state.form" :rules="state.rules" ref="loginForm" :label-position="state.form.align">
       <el-form-item prop="id" label="아이디" :label-width="state.formLabelWidth" >
         <el-input v-model="state.form.id" autocomplete="off"></el-input>
@@ -8,6 +16,8 @@
         <el-input v-model="state.form.password" autocomplete="off" show-password @keyup.enter="clickLogin"></el-input>
       </el-form-item>
     </el-form>
+
+    <!-- footer -->
     <template #footer>
       <span class="dialog-footer">
         <el-button type="primary" @click="clickLogin" v-loading.fullscreen="loading">로그인</el-button>
@@ -18,7 +28,7 @@
 <style>
 .login-dialog {
   width: 400px !important;
-  height: 300px;
+  height: 280px;
 }
 .login-dialog .el-dialog__headerbtn {
   float: right;
@@ -68,7 +78,7 @@ export default {
     // 마운드 이후 바인딩 될 예정 - 컨텍스트에 노출시켜야함. <return>
     const loginForm = ref(null)
     const router = useRouter()
-    const dialogVisible = ref(false)
+    // const dialogVisible = ref(false)
     const loading = ref(false) // 로딩 스피너를 보여줄 변수. true면 로딩화면을 사용자에게 보여줌.
 
     /*
@@ -144,7 +154,7 @@ export default {
       emit('closeLoginDialog')
     }
 
-    return { loginForm, state, clickLogin, handleClose, dialogVisible, loading }
+    return { loginForm, state, clickLogin, handleClose, loading }
   }
 }
 </script>

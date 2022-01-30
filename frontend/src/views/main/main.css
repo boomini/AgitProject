@@ -37,9 +37,50 @@
 }
 
 .el-dialog {
+  border-radius: 15px;
+  border: 1px solid #808080;
   margin-top: 20vh;
-  /* position: absolute;
-  top: calc(50% - 70px);
-  left: calc(50% - 240px); */
-  /* transform: translateY(50%); */
+}
+
+.el-dialog > .el-dialog__header {
+  background-color: #abdfd4;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom: 1px solid #808080;
+  height: 15px;
+  color: white;
+  text-shadow:
+    -1px -1px 0 #808080,
+    1px -1px 0 #808080,
+    -1px 1px 0 #808080,
+    1px 1px 0 #808080;
+}
+
+.el-dialog > .el-dialog__header > span {
+  font-size: 20px;
+  font-weight: bolder;
+  position: absolute;
+  top: 2px;
+  left: 20px;
+
+}
+
+.el-dialog > .el-dialog__header > .el-dialog__headerbtn {
+  position: absolute;
+  top: 3px;
+  right: 20px;
+  padding: 0;
+}
+
+.el-dialog > .el-dialog__header > .el-dialog__headerbtn > .el-dialog__close {
+  border: 1px solid #dd5a4e;
+  border-radius: 50%;
+  background-color: #ff6053;
+  color: black;
+  font-size: 10px;
+}
+
+.el-dialog > .el-dialog__header > .el-dialog__headerbtn > .el-dialog__close:hover {
+  color: white;
+  transition: 0.2s;
 }
