@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -71,6 +72,21 @@ public class ImageServiceImpl implements ImageService{
     public List<DayCountDto> getTeamImagesCountByMonth(String uploadDate, Long teamId){
        List<DayCountDto> dayCountDtoList = imageRepositorySupport.findTeamImagesCountByMonth(uploadDate, teamId).get();
        return dayCountDtoList;
+    }
+
+    @Override
+    public boolean deleteNotice(Long no, String path) {
+        Image image = imageRepository.findById(no).get();
+        System.out.println(image);
+
+        if(image==null){
+            return false;
+        }
+        imageRepository.deleteById(no);
+        File file = new File(path + File.separator + image.getFilePath() + File.separator + image.getFileName());
+        System.out.println(file);
+        file.delete();
+        return true;
     }
 
 }

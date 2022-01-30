@@ -16,4 +16,5 @@ public interface ImageService {
     //특정 team이 특정 날짜에 작성한 게시글 List
     List<DayCountDto> getTeamImagesCountByMonth(String uploadDate, Long teamId);
 
+    boolean deleteNotice(Long no, String path);
 }
