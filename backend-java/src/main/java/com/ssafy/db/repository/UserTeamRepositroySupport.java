@@ -1,10 +1,7 @@
 package com.ssafy.db.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.db.entity.QUser;
-import com.ssafy.db.entity.QUserTeam;
-import com.ssafy.db.entity.Team;
-import com.ssafy.db.entity.User;
+import com.ssafy.db.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +15,7 @@ public class UserTeamRepositroySupport {
     private JPAQueryFactory jpaQueryFactory;
     QUserTeam qUserTeam = QUserTeam.userTeam;
     QUser qUser = QUser.user;
+    QTeam qTeam = QTeam.team;
 
     // 특정 유저가 가입된 팀 리스트
     public Optional<List<Long>> findTeamFKListByUserId(Long id){
@@ -48,5 +46,17 @@ public class UserTeamRepositroySupport {
                 .fetch();
 
         return Optional.ofNullable(userList);
+    }
+
+
+    public Optional<List<Team>> findTeamListByUserId(Long id){
+        List<Team> teamList = jpaQueryFactory.select(qTeam)
+                .from(qUserTeam)
+                .join(qTeam)
+                .on(qUserTeam.team.id.eq(qTeam.id))
+                .where(qUserTeam.user.id.eq(id))
+                .fetch();
+
+        return Optional.ofNullable(teamList);
     }
 }
