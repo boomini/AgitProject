@@ -143,4 +143,16 @@ public class TeamController {
         return ResponseEntity.status(200).body(responseEntity);
     }
 
+    @GetMapping("/{teamId}/users")
+    @ApiOperation(value = "team에 가입된 유저 목록", notes = "teamId를 통해 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<List<UserDto>> userListInTeam(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId){
+
+        List<UserDto> userDtoList = teamService.userListInTeam2(teamId);
+
+        return ResponseEntity.status(200).body(userDtoList);
+    }
+
 }
