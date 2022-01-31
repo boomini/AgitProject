@@ -3,6 +3,7 @@ package com.ssafy.api.controller;
 import com.ssafy.api.advice.exception.CTokenForbiddenException;
 import com.ssafy.api.advice.exception.CUserDuplicateException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
+import com.ssafy.api.dto.EventDto;
 import com.ssafy.api.dto.UserDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import retrofit2.http.Path;
 import springfox.documentation.annotations.ApiIgnore;
 
 
@@ -117,6 +119,13 @@ public class UserController {
 		};
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
 
+	}
+
+	@PostMapping("/event/{teamId}")
+	public ResponseEntity<? extends BaseResponseBody> addEvent(@RequestBody @ApiParam(value="기념일 등록", required = true) EventDto eventDto,
+															   @PathVariable("teamId") Long teamId){
+
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
 	}
 
 	@DeleteMapping("/{userId}")

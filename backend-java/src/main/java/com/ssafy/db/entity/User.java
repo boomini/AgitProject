@@ -86,6 +86,16 @@ public class User extends BaseEntity{
         }
     }
 
+    // 일정-유저 다대다 관계 보류
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<UserEvent> userEvents = new ArrayList<>();
+//
+//    private void addUserEvents(UserEvent userEvent){
+//        this.userEvents.add(userEvent);
+//        if(userEvent.getUser() != this){
+//            userEvent.setUser(this);
+//        }
+//    }
 
     public User(){}
 
