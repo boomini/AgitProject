@@ -138,13 +138,22 @@ public class UserController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
 	}
 
-	@GetMapping("/teamList/{userId}")
-	@ApiOperation(value = "유저가 가입된 팀 리스트", notes = "user PK값을 통햊 ㅗ회.")
+	@GetMapping("/teamList")
+	@ApiOperation(value = "유저가 가입된 팀 리스트", notes = "JWT 토큰을 통해 조회")
 	@ApiResponses({
 			@ApiResponse(code = 1000, message = "이미 존재하는 ID"),
 			@ApiResponse(code = 200, message = "사용할 수 있는 ID")
 	})
-	public ResponseEntity<List<TeamDto>> teamListUserJoined(@ApiParam(value = "userId", required = true) @PathVariable("userId") Long userId){
+	public ResponseEntity<List<TeamDto>> teamListUserJoined(@ApiIgnore Authentication authentication){
+
+		Long userId;
+		try{
+			SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+			userId = userDetails.getUser().getId();
+		}catch(Exception e){
+			//잘못된 접근일때
+			throw new CTokenForbiddenException();
+		}
 
 		List<TeamDto> teamDtoList = userService.getTeamListUserJoined(userId);
 
