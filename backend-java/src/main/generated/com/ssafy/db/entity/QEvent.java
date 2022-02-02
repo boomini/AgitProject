@@ -11,51 +11,53 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QBoard is a Querydsl query type for Board
+ * QEvent is a Querydsl query type for Event
  */
 @Generated("com.querydsl.codegen.EntitySerializer")
-public class QBoard extends EntityPathBase<Board> {
+public class QEvent extends EntityPathBase<Event> {
 
-    private static final long serialVersionUID = 455343204L;
+    private static final long serialVersionUID = 458326040L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QBoard board = new QBoard("board");
+    public static final QEvent event = new QEvent("event");
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
-    public final StringPath content = createString("content");
-
     public final DateTimePath<java.time.LocalDateTime> createdDate = createDateTime("createdDate", java.time.LocalDateTime.class);
+
+    public final StringPath eventContent = createString("eventContent");
+
+    public final DatePath<java.time.LocalDate> eventDate = createDate("eventDate", java.time.LocalDate.class);
+
+    public final StringPath eventTitle = createString("eventTitle");
 
     //inherited
     public final NumberPath<Long> id = _super.id;
 
-    public final StringPath title = createString("title");
+    public final QTeam team;
 
     public final DateTimePath<java.time.LocalDateTime> updatedDate = createDateTime("updatedDate", java.time.LocalDateTime.class);
 
-    public final QUser user;
-
-    public QBoard(String variable) {
-        this(Board.class, forVariable(variable), INITS);
+    public QEvent(String variable) {
+        this(Event.class, forVariable(variable), INITS);
     }
 
-    public QBoard(Path<? extends Board> path) {
+    public QEvent(Path<? extends Event> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QBoard(PathMetadata metadata) {
+    public QEvent(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QBoard(PathMetadata metadata, PathInits inits) {
-        this(Board.class, metadata, inits);
+    public QEvent(PathMetadata metadata, PathInits inits) {
+        this(Event.class, metadata, inits);
     }
 
-    public QBoard(Class<? extends Board> type, PathMetadata metadata, PathInits inits) {
+    public QEvent(Class<? extends Event> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
+        this.team = inits.isInitialized("team") ? new QTeam(forProperty("team")) : null;
     }
 
 }

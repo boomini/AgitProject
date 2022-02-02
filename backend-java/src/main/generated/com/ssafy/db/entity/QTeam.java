@@ -11,54 +11,54 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QUser is a Querydsl query type for User
+ * QTeam is a Querydsl query type for Team
  */
 @Generated("com.querydsl.codegen.EntitySerializer")
-public class QUser extends EntityPathBase<User> {
+public class QTeam extends EntityPathBase<Team> {
 
-    private static final long serialVersionUID = 846542477L;
+    private static final long serialVersionUID = 846499103L;
 
-    public static final QUser user = new QUser("user");
+    public static final QTeam team = new QTeam("team");
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
     public final ListPath<Article, QArticle> articles = this.<Article, QArticle>createList("articles", Article.class, QArticle.class, PathInits.DIRECT2);
 
-    public final DateTimePath<java.time.LocalDateTime> cDate = createDateTime("cDate", java.time.LocalDateTime.class);
-
-    public final NumberPath<Integer> day = createNumber("day", Integer.class);
+    public final ListPath<Event, QEvent> events = this.<Event, QEvent>createList("events", Event.class, QEvent.class, PathInits.DIRECT2);
 
     //inherited
     public final NumberPath<Long> id = _super.id;
 
     public final ListPath<Image, QImage> images = this.<Image, QImage>createList("images", Image.class, QImage.class, PathInits.DIRECT2);
 
-    public final NumberPath<Integer> month = createNumber("month", Integer.class);
+    public final StringPath teamBoss = createString("teamBoss");
 
-    public final StringPath name = createString("name");
+    public final DateTimePath<java.time.LocalDateTime> teamCdate = createDateTime("teamCdate", java.time.LocalDateTime.class);
 
-    public final StringPath nickName = createString("nickName");
+    public final StringPath teamDescription = createString("teamDescription");
 
-    public final StringPath password = createString("password");
+    public final NumberPath<Integer> teamMember = createNumber("teamMember", Integer.class);
 
-    public final StringPath userId = createString("userId");
+    public final StringPath teamName = createString("teamName");
+
+    public final StringPath teamPassword = createString("teamPassword");
+
+    public final StringPath teamPicture = createString("teamPicture");
 
     public final ListPath<UserTeam, QUserTeam> userTeams = this.<UserTeam, QUserTeam>createList("userTeams", UserTeam.class, QUserTeam.class, PathInits.DIRECT2);
 
     public final ListPath<Video, QVideo> videos = this.<Video, QVideo>createList("videos", Video.class, QVideo.class, PathInits.DIRECT2);
 
-    public final NumberPath<Integer> year = createNumber("year", Integer.class);
-
-    public QUser(String variable) {
-        super(User.class, forVariable(variable));
+    public QTeam(String variable) {
+        super(Team.class, forVariable(variable));
     }
 
-    public QUser(Path<? extends User> path) {
+    public QTeam(Path<? extends Team> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QUser(PathMetadata metadata) {
-        super(User.class, metadata);
+    public QTeam(PathMetadata metadata) {
+        super(Team.class, metadata);
     }
 
 }
