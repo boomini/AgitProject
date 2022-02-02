@@ -17,6 +17,7 @@ public class EventDto {
     Long id;
     String eventTitle;
     String eventContent;
+    String teamName;
 
     LocalDate eventDate;
     LocalDateTime createDate;

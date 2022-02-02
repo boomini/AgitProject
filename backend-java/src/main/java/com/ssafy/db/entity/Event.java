@@ -24,7 +24,7 @@ public class Event extends BaseEntity{
     @Column(columnDefinition="varchar(100)")
     String eventTitle;
     String eventContent;
-
+    String teamName;
     LocalDate eventDate;
 
     @CreatedDate
