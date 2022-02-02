@@ -24,7 +24,7 @@ public class Event extends BaseEntity{
     @Column(columnDefinition="varchar(100)")
     String eventTitle;
     String eventContent;
-
+    String teamName;
     LocalDate eventDate;
 
     @CreatedDate
@@ -44,25 +44,15 @@ public class Event extends BaseEntity{
         }
     }
 
-    // 일정-유저 다대다 관계 보류
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "event", cascade = CascadeType.ALL)
-//    private List<UserEvent> userEvents = new ArrayList<>();
-//
-//    private void addUserEvents(UserEvent userEvent){
-//        this.userEvents.add(userEvent);
-//        if(userEvent.getEvent() != this){
-//            userEvent.setEvent(this);
-//        }
-//    }
-
 
     public Event(){};
 
     @Builder
-    public Event(Long id, String eventTitle, String eventContent, LocalDate eventDate){
+    public Event(Long id, String eventTitle, String eventContent, String teamName, LocalDate eventDate){
         this.id = id;
         this.eventTitle = eventTitle;
         this.eventContent = eventContent;
+        this.teamName = teamName;
         this.eventDate = eventDate;
     }
 
