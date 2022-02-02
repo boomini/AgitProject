@@ -245,6 +245,10 @@ export default {
 
               handleClose()
             })
+            .catch(function (error) {
+              loading.value = false
+              console.log('회원가입 실패')
+            })
           } else {
             swal({
               title: "회원가입 실패",

@@ -35,8 +35,14 @@
             type="file"
             accept="image/*"
             multiple
+            @change="onInputImage"
+            ref="inputImage"
           />
         </el-form>
+      </div>
+      <div v-for="img in state.form.images" :key="img.name">
+        <!-- {{ img.preview }} -->
+        <img :src="img.preview" alt="" width=100>
       </div>
     </div>
 
@@ -65,11 +71,12 @@ export default {
 
   setup(props, { emit }) {
     const uploadImageForm = ref(null)
+    const inputImage = ref(null)
 
     const state = reactive({
       form: {
         align: 'left',
-        content: '',
+        images: [],
         schedule: '',
       },
       rules: {
@@ -91,10 +98,19 @@ export default {
 
     const uploadImage = function () {
       console.log('이미지등록')
+      for (let i = 0; i < inputImage.value.files.length; i++) {
+        // console.log(URL.createObjectURL(inputImage.value.files[i]))
+        console.log(state.form.images)
+        state.form.images.push({
+          file: inputImage.value.files[i],
+          preview: URL.createObjectURL(inputImage.value.files[i])
+        })
+
+      }
       handleClose()
     }
 
-    return { state, handleClose, uploadImageForm, uploadImage }
+    return { state, handleClose, uploadImageForm, inputImage, uploadImage }
   }
 }
 </script>

@@ -37,6 +37,14 @@ export function getProfile ({ state }, payload) {
 // 로그인한 유저가 소속된 방 정보 가져오기
 export function getTeamInfo ({ state }, payload) {
   console.log('getTeamInfo', state, payload)
-  const url = `/user/${payload.userId}/team`
+  const url = `/user/teamList/1`
   return $axios({ method: 'get', url: url })
+}
+
+// 방 생성하기
+export function registerTeam ({ state }, payload) {
+  console.log('registerTeam', state, payload)
+  const url = `/team?userId=${payload.userId}`
+  console.log(url)
+  return $axios({ method: 'post', url: url, body: payload.teamDto})
 }

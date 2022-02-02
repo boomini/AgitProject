@@ -129,14 +129,12 @@ export default {
             // 로그인한 유저가 가입한 팀 정보 가져오기
             store.dispatch('root/getTeamInfo', { userId: userId })
             .then(function (result) {
-              console.log(result)
-
               store.commit('root/setUserTeam', result.data)
+              // console.log('회원 팀정보 가져오기')
+              // console.log(result)
+              // console.log(store.getters['root/getTeams'])
+              // console.log('팀정보 가져오기 성공')
             })
-
-
-
-
 
             handleClose() // 로그인 모달 끄기
           })

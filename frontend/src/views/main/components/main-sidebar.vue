@@ -16,9 +16,7 @@
           <!-- <hr v-if="index === 4" style="color: black;"> -->
           <!-- <hr v-if="index === 4" style="color: black"> -->
         </el-menu-item>
-        <el-menu-item>
-          <el-button>방 생성 버튼</el-button>
-        </el-menu-item>
+        <el-button @click="registerTeam">방 생성 버튼</el-button>
       </el-menu>
     </div>
   </el-row>
@@ -46,6 +44,7 @@
 import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import jwt_decode from 'jwt-decode'
 
 export default {
   name: 'main-header',
@@ -76,9 +75,10 @@ export default {
         }
 
         const TeamItems = store.getters['root/getTeams']
-        console.log('11111111111111111')
-        console.log(TeamItems)
-        console.log(MenuItems)
+        console.log('유저가 가입한 팀 정보 라우터에 추가')
+        for (let i = 0; i < TeamItems.length; i++) {
+          // 내용 추가
+        }
 
         return menuArray
       }),
@@ -118,7 +118,31 @@ export default {
       }
     }
 
-    return { state, menuSelect }
+    // 방 생성하기
+    const registerTeam = function () {
+      const token = store.getters['root/getJWTToken']
+      const userId = jwt_decode(token).sub
+      const teamDto = {
+        'teamBoss': userId,
+        'teamDescription': '간단한 소개',
+        'teamMember': 0,
+        'teamPicture': '',
+        'teamName': '연습용 방',
+        'teamPassword': 'qwer1234!'
+      }
+
+      store.dispatch('root/registerTeam', { 'teamDto': teamDto, 'userId': userId })
+      .then(function (result) {
+        console.log('성공')
+        console.log(result)
+      })
+      .catch(function (error) {
+        console.log('실패')
+        console.log(error)
+      })
+    }
+
+    return { state, menuSelect, registerTeam }
   }
 }
 </script>
