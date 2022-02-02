@@ -4,6 +4,7 @@ package com.ssafy.api.dto;
 import com.ssafy.db.entity.Event;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
+import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
