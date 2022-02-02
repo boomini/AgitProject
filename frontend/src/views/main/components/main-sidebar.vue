@@ -16,6 +16,9 @@
           <!-- <hr v-if="index === 4" style="color: black;"> -->
           <!-- <hr v-if="index === 4" style="color: black"> -->
         </el-menu-item>
+        <el-menu-item>
+          <el-button>방 생성 버튼</el-button>
+        </el-menu-item>
       </el-menu>
     </div>
   </el-row>
@@ -71,6 +74,11 @@ export default {
           menuObject.title = MenuItems[keys[i]].name
           menuArray.push(menuObject)
         }
+
+        const TeamItems = store.getters['root/getTeams']
+        console.log('11111111111111111')
+        console.log(TeamItems)
+        console.log(MenuItems)
 
         return menuArray
       }),

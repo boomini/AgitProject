@@ -1,7 +1,10 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.dto.TeamDto;
 import com.ssafy.api.dto.UserDto;
 
+import com.ssafy.db.entity.Team;
+import com.ssafy.db.repository.UserTeamRepositroySupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,6 +12,9 @@ import org.springframework.stereotype.Service;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.UserRepository;
 import com.ssafy.db.repository.UserRepositorySupport;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *	유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
@@ -23,7 +29,10 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+
+	@Autowired
+	UserTeamRepositroySupport userTeamRepositroySupport;
+
 	@Override
 	public boolean createUser(UserDto userDto){
 		// 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
@@ -65,6 +74,17 @@ public class UserServiceImpl implements UserService {
 
 		userRepository.delete(user);
 		return true;
+	}
+
+	@Override
+	public List<TeamDto> getTeamListUserJoined(Long userId) {
+		List<Team> teamList = userTeamRepositroySupport.findTeamListByUserId(userId).get();
+		List<TeamDto> teamDtoList = new ArrayList<>();
+		for(Team team : teamList){
+			TeamDto teamDto = new TeamDto(team);
+			teamDtoList.add(teamDto);
+		}
+		return teamDtoList;
 	}
 
 

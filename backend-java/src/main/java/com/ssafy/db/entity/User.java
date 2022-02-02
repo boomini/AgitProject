@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -42,8 +43,59 @@ public class User extends BaseEntity{
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String password;
 
-//    @OneToMany(mappedBy = "user")
-//    private List<Board> boards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Article> articles = new ArrayList<>();
+    // 관계 메서드
+
+
+    public void addArticle(Article article){
+        this.articles.add(article);
+        if (article.getUser() != this){
+            article.setUser(this);
+        }
+    }
+
+    @OneToMany(mappedBy = "user")
+    private List<Image> images = new ArrayList<>();
+
+    public void addImage(Image image){
+        this.images.add(image);
+        if(image.getUser() != this){
+            image.setUser(this);
+        }
+    }
+
+    @OneToMany(mappedBy = "user")
+    private List<Video> videos = new ArrayList<>();
+
+    private void addVideos(Video video){
+        this.videos.add(video);
+        if(video.getUser() != this){
+            video.setUser(this);
+        }
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserTeam> userTeams = new ArrayList<>();
+
+    private void addUserTeams(UserTeam userTeam){
+        this.userTeams.add(userTeam);
+        if(userTeam.getUser() != this){
+            userTeam.setUser(this);
+        }
+    }
+
+    // 일정-유저 다대다 관계 보류
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<UserEvent> userEvents = new ArrayList<>();
+//
+//    private void addUserEvents(UserEvent userEvent){
+//        this.userEvents.add(userEvent);
+//        if(userEvent.getUser() != this){
+//            userEvent.setUser(this);
+//        }
+//    }
 
     public User(){}
 

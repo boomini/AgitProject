@@ -33,3 +33,10 @@ export function getProfile ({ state }, payload) {
   const token = payload
   return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
 }
+
+// 로그인한 유저가 소속된 방 정보 가져오기
+export function getTeamInfo ({ state }, payload) {
+  console.log('getTeamInfo', state, payload)
+  const url = `/user/${payload.userId}/team`
+  return $axios({ method: 'get', url: url })
+}

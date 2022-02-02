@@ -13,10 +13,11 @@
 
           <span>
             <div class="d-flex justify-content-between mb-2">
-              <el-button type="success" style="width: 100%" @click="state.createScheduleDialogOpen = true">일정 추가</el-button>
-              <el-button type="warning" style="width: 100%">일정 수정</el-button>
+              <el-button type="success" @click="state.createScheduleDialogOpen = true">일정 추가</el-button>
+              <el-button type="warning" @click="state.uploadImageDialogOpen = true">사진 등록</el-button>
+              <el-button type="warning" @click="state.uploadVideoDialogOpen = true">동영상 등록</el-button>
             </div>
-            <div>
+            <div class="d-flex justify-content-between">
               <el-button size="small" @click="selectDate('prev-year')"
                 >&lt;&lt;</el-button
               >
@@ -110,6 +111,14 @@
     :open="state.createScheduleDialogOpen"
     @closeCreateScheduleDialog="onCloseCreateScheduleDialog"/>
 
+  <upload-image-dialog
+    :open="state.uploadImageDialogOpen"
+    @closeUploadImageDialog="onCloseUploadImageDialog"/>
+
+  <upload-video-dialog
+    :open="state.uploadVideoDialogOpen"
+    @closeUploadVideoDialog="onCloseUploadVideoDialog"/>
+
   <!-- 게시글 클릭 시 나오는 세부화면 -->
   <el-drawer
     v-model="drawer"
@@ -141,6 +150,8 @@ import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import InviteDialog from './components/invite-dialog.vue'
 import CreateScheduleDialog from './components/create-schedule-dialog.vue'
+import UploadImageDialog from './components/upload-image-dialog.vue'
+import UploadVideoDialog from './components/upload-video-dialog.vue'
 
 
 export default {
@@ -148,6 +159,8 @@ export default {
   components: {
     InviteDialog,
     CreateScheduleDialog,
+    UploadImageDialog,
+    UploadVideoDialog,
   },
   setup() {
     const router = useRouter()
@@ -171,6 +184,8 @@ export default {
 
     const state = reactive({
       createScheduleDialogOpen: false,
+      uploadImageDialogOpen: false,
+      uploadVideoDialogOpen: false,
       inviteDialogOpen: false,
       year : '',
       month : '',
@@ -215,6 +230,14 @@ export default {
       state.createScheduleDialogOpen = false
     }
 
+    const onCloseUploadImageDialog = function () {
+      state.uploadImageDialogOpen = false
+    }
+
+    const onCloseUploadVideoDialog = function () {
+      state.uploadVideoDialogOpen = false
+    }
+
     const joinConference = function (roomId) {
       router.push({
         name: 'conference-detail',
@@ -224,7 +247,7 @@ export default {
       })
     }
 
-    return { clickOnDate, drawer, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, joinConference }
+    return { clickOnDate, drawer, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, joinConference }
   }
 }
 </script>

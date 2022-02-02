@@ -1,7 +1,10 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.advice.exception.CTokenForbiddenException;
 import com.ssafy.api.advice.exception.CUserDuplicateException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
+import com.ssafy.api.dto.EventDto;
+import com.ssafy.api.dto.TeamDto;
 import com.ssafy.api.dto.UserDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +27,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import retrofit2.http.Path;
 import springfox.documentation.annotations.ApiIgnore;
 
-
+import java.util.List;
 
 
 /**
@@ -91,15 +95,18 @@ public class UserController {
         @ApiResponse(code = 500, message = "서버 오류")
     })
 
-	public ResponseEntity<UserDto> getUserInfo(@ApiIgnore Authentication authentication) {
-		/**
-		 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
-		 * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
-		 */
-		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-		String userId = userDetails.getUsername();
-		User user = userService.getUserByUserId(userId);
-		UserDto userDto =  new UserDto(user);
+	public ResponseEntity<UserDto> getUserInfo(@ApiIgnore Authentication authentication){
+
+		UserDto userDto;
+		try{
+			SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+			String userId = userDetails.getUsername();
+			User user = userService.getUserByUserId(userId);
+			userDto =  new UserDto(user);
+		}catch(Exception e){
+			//잘못된 접근일때
+			throw new CTokenForbiddenException();
+		}
 
 		return ResponseEntity.status(200).body(userDto);
 	}
@@ -115,6 +122,13 @@ public class UserController {
 
 	}
 
+	@PostMapping("/event/{teamId}")
+	public ResponseEntity<? extends BaseResponseBody> addEvent(@RequestBody @ApiParam(value="기념일 등록", required = true) EventDto eventDto,
+															   @PathVariable("teamId") Long teamId){
+
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+	}
+
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<? extends BaseResponseBody> deleteUser(@ApiParam(value = "userId", required = true) @PathVariable("userId") String userId){
 		if(!userService.deleteUserByUserId(userId)) {
@@ -122,5 +136,19 @@ public class UserController {
 			throw new CUserNotFoundException();
 		}
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+	}
+
+	@GetMapping("/teamList/{userId}")
+	@ApiOperation(value = "유저가 가입된 팀 리스트", notes = "user PK값을 통햊 ㅗ회.")
+	@ApiResponses({
+			@ApiResponse(code = 1000, message = "이미 존재하는 ID"),
+			@ApiResponse(code = 200, message = "사용할 수 있는 ID")
+	})
+	public ResponseEntity<List<TeamDto>> teamListUserJoined(@ApiParam(value = "userId", required = true) @PathVariable("userId") Long userId){
+
+		List<TeamDto> teamDtoList = userService.getTeamListUserJoined(userId);
+
+		return ResponseEntity.status(200).body(teamDtoList);
+
 	}
 }
