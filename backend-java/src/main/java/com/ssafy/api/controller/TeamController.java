@@ -105,7 +105,7 @@ public class TeamController {
     }
 
     @GetMapping("/{teamId}/{uploadDate}")
-    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 게시글 조회", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
+    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 게시글 조회 (일까지 들어감)", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
@@ -126,7 +126,7 @@ public class TeamController {
     }
 
     @GetMapping("/{teamId}/count/{uploadDate}")
-    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 게시글 조회", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
+    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 게시글 조회 count (한달치 전체를 확인해서 갯수만뽑아옴)", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
