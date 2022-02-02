@@ -48,10 +48,11 @@ public class Event extends BaseEntity{
     public Event(){};
 
     @Builder
-    public Event(Long id, String eventTitle, String eventContent, LocalDate eventDate){
+    public Event(Long id, String eventTitle, String eventContent, String teamName, LocalDate eventDate){
         this.id = id;
         this.eventTitle = eventTitle;
         this.eventContent = eventContent;
+        this.teamName = teamName;
         this.eventDate = eventDate;
     }
 

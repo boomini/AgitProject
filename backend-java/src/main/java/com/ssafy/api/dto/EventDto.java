@@ -28,6 +28,7 @@ public class EventDto {
                 .eventTitle(eventTitle)
                 .eventContent(eventContent)
                 .eventDate(eventDate)
+                .teamName(teamName)
                 .build();
         return build;
     }
@@ -37,6 +38,7 @@ public class EventDto {
         this.id = event.getId();
         this.eventTitle = event.getEventTitle();
         this.eventContent = event.getEventContent();
+        this.teamName = event.getTeamName();
         this.eventDate = event.getEventDate();
         this.createDate = event.getCreatedDate();
         this.updateDate = event.getUpdatedDate();
