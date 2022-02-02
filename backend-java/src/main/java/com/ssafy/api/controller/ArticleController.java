@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Api(value = "게시글 API", tags = {"Article"})
@@ -27,9 +28,15 @@ public class ArticleController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<? extends BaseResponseBody> addArticle (
-            @RequestBody @ApiParam(value="글 작성 정보", required = true) ArticleDto articleDto) throws Exception {
+    public ResponseEntity<? extends BaseResponseBody> addArticle (@RequestParam(value="title")String title, @RequestParam(value="content")String content,
+                                                                  @RequestParam(value="writer")String writer, @RequestParam(value="teamName")String teamName, @RequestParam(value="uploadDate")String uploadDate) throws Exception {
 
+        ArticleDto articleDto = new ArticleDto();
+        articleDto.setTitle(title);
+        articleDto.setContent(content);
+        articleDto.setWriter(writer);
+        articleDto.setTeamName(teamName);
+        articleDto.setUploadDate(LocalDate.parse(uploadDate));
         
         Article article = articleService.addArticle(articleDto);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
