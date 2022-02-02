@@ -129,9 +129,18 @@ public class UserController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
 	}
 
-	@DeleteMapping("/{userId}")
-	public ResponseEntity<? extends BaseResponseBody> deleteUser(@ApiParam(value = "userId", required = true) @PathVariable("userId") String userId){
-		if(!userService.deleteUserByUserId(userId)) {
+	@DeleteMapping("/delete")
+	public ResponseEntity<? extends BaseResponseBody> deleteUser(@ApiIgnore Authentication authentication){
+		String userId;
+		try{
+			SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+			userId = userDetails.getUsername();
+		}catch(Exception e){
+			//잘못된 접근일때
+			throw new CTokenForbiddenException();
+		}
+
+		if(!userService.deleteUserByUserId(userId)){
 			//삭제하고자 하는 회원이 없을때 예외처리
 			throw new CUserNotFoundException();
 		}
