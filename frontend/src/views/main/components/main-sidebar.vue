@@ -76,10 +76,15 @@ export default {
 
         const TeamItems = store.getters['root/getTeams']
         console.log('유저가 가입한 팀 정보 라우터에 추가')
+        keys = Object.keys(TeamItems)
         for (let i = 0; i < TeamItems.length; i++) {
-          // 내용 추가
+          let menuObject = {}
+          menuObject.icon = TeamItems[keys[i]].teamPicture
+          menuObject.title = TeamItems[keys[i]].teamName
+          menuArray.push(menuObject)
         }
-
+        console.log('방 정보 리스트')
+        console.log(menuArray)
         return menuArray
       }),
       activeIndex: computed(() => store.getters['root/getActiveMenuIndex']),
