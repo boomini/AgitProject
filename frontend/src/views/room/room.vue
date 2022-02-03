@@ -111,10 +111,12 @@
     :open="state.createScheduleDialogOpen"
     @closeCreateScheduleDialog="onCloseCreateScheduleDialog"/>
 
+  <!-- 사진 추가 다이얼로그 -->
   <upload-image-dialog
     :open="state.uploadImageDialogOpen"
     @closeUploadImageDialog="onCloseUploadImageDialog"/>
 
+  <!-- 동영상 추가 다이얼로그 -->
   <upload-video-dialog
     :open="state.uploadVideoDialogOpen"
     @closeUploadVideoDialog="onCloseUploadVideoDialog"/>

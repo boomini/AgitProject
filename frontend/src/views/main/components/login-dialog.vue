@@ -132,10 +132,10 @@ export default {
             .then(function (result) {
               store.commit('root/setUserTeam', result.data)
               // console.l
-              // console.log('회원 팀정보 가져오기')
-              // console.log(result)
-              // console.log(store.getters['root/getTeams'])
-              // console.log('팀정보 가져오기 성공')
+              console.log('회원 팀정보 가져오기')
+              // console.log(result.data)
+              console.log(store.getters['root/getTeams'])
+              console.log('팀정보 가져오기 성공')
             })
 
             handleClose() // 로그인 모달 끄기

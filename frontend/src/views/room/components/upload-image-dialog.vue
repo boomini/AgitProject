@@ -35,7 +35,7 @@
             type="file"
             accept="image/*"
             multiple
-            @change="onInputImage"
+            @change="uploadImage"
             ref="inputImage"
           />
         </el-form>
@@ -107,7 +107,7 @@ export default {
         })
 
       }
-      handleClose()
+      // handleClose()
     }
 
     return { state, handleClose, uploadImageForm, inputImage, uploadImage }
