@@ -33,3 +33,15 @@ export function getProfile ({ state }, payload) {
   const token = payload
   return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
 }
+
+export function editProfile ({ state }, payload) {
+  // console.log('editProfile', state, payload)
+  console.log(payload)
+  const url = '/user'
+  const token = payload.token
+  const body = payload.body
+  console.log(body)
+  return $axios({ method: 'patch', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
+  // return $axios.patch(url, body)
+}
+

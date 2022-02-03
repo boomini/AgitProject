@@ -6,6 +6,7 @@ import Customercenter from '@/views/customercenter/service-info'
 import Intro from '@/views/intro/intro'
 import Schedule from '@/views/schedule/schedule'
 import Room from '@/views/room/room'
+import Profile from '@/views/profile/profile'
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
@@ -39,6 +40,12 @@ function makeRoutesFromMenu () {
     path: '/room/:roomId',
     name: 'room-board',
     component: Room
+  })
+
+  routes.push({
+    path: '/profile/profile',
+    name: 'Profile',
+    component: Profile
   })
 
   return routes
