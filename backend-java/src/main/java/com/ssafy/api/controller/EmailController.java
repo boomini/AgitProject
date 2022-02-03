@@ -36,4 +36,11 @@ public class EmailController {
         MailDto mailDto = emailService.createMailAndChangePassword(userEmail, userName);
         emailService.mailSend(mailDto);
     }
+
+    @PostMapping("/check/auth/sendEmail")
+    public @ResponseBody
+    void sendAuthEmail(String userEmail){
+        MailDto mailDto = emailService.sendAuthEmail(userEmail);
+        emailService.mailSend(mailDto);
+    }
 }

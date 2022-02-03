@@ -28,7 +28,7 @@ public class EmailServiceImpl implements EmailService{
     @Autowired
     JavaMailSender mailSender;
 
-    private static final String FROM_ADDRESS = "본인의 이메일 주소를 입력하세요!";
+    private static final String FROM_ADDRESS = "yhy0818@gmail.com";
 
     @Override
     public boolean userEmailCheck(String userId, String userName) {
@@ -45,8 +45,18 @@ public class EmailServiceImpl implements EmailService{
         MailDto dto = new MailDto();
         dto.setAddress(userEmail);
         dto.setTitle(userName+"님의 임시 비밀번호 안내 이메일");
-        dto.setMessage("임시 비밀번호 아낸 이메일 입니다."+ "[" + userName + "]" + "님의 임시 비밀 번호는" + str + "입니다.");
+        dto.setMessage("임시 비밀번호 안내 이메일 입니다."+ "[" + userName + "]" + "님의 임시 비밀 번호는" + str + "입니다.");
         updatePassword(str, userEmail);
+        return dto;
+    }
+
+    @Override
+    public MailDto sendAuthEmail(String userEmail) {
+        String str = getTempPassword();
+        MailDto dto = new MailDto();
+        dto.setAddress(userEmail);
+        dto.setTitle("인증코드 안내 이메일");
+        dto.setMessage("인증코드 안내 이메일 입니다." + "인증 코드는"+ "[" + str + "]" + "입니다.");
         return dto;
     }
 
@@ -81,8 +91,8 @@ public class EmailServiceImpl implements EmailService{
     public void mailSend(MailDto mailDto) {
         System.out.println("이메일 전송 완료!");
         SimpleMailMessage message = new SimpleMailMessage();
-        //message.setTo(mailDto.getAddress());
-        message.setTo("yunhy96@naver.com");
+        message.setTo(mailDto.getAddress());
+        //message.setTo("yunhy96@naver.com");
         message.setFrom(EmailServiceImpl.FROM_ADDRESS);
         message.setSubject(mailDto.getTitle());
         message.setText(mailDto.getMessage());
@@ -90,4 +100,6 @@ public class EmailServiceImpl implements EmailService{
 
         mailSender.send(message);
     }
+
+
 }

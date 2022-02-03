@@ -9,4 +9,6 @@ public interface EmailService {
     String getTempPassword();
 
     void mailSend(MailDto mailDto);
+
+    MailDto sendAuthEmail(String userEmail);
 }
