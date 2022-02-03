@@ -2,14 +2,14 @@
   <div id="container">
     <div class="hello">
       <!-- 회원가입, 로그인 버튼 -->
-      <div class="d-flex justify-content-end" style="margin-top:20px; margin-right: 200px;">
+      <div class="d-flex justify-content-end" style="margin-top:20px; margin-right: 250px;">
         <el-row :gutter="20">
           <!-- v-if문으로 수정 예정 -->
           <div v-if="state.isLogin === null" class="button-wrapper d-flex flex-row" style="position:fixed">
             <el-button @click="clickSignup" style="background-color:#112; color: white;">회원가입</el-button>
             <el-button @click="clickLogin " style="background-color:#112; color: white;">로그인</el-button>
           </div>
-          <div v-else class="button-wrapper">
+          <div v-else class="button-wrapper d-flex flex-row" style="position:fixed">
             <el-button @click="clickProfile" style="background-color:#112; color: white;">마이 페이지</el-button>
             <el-button @click="clickLogout" style="background-color:#112; color: white;">로그아웃</el-button>
           </div>
@@ -17,7 +17,7 @@
       <!-- 로고(네온사인) -->
       <br><br><br>
       </div>
-      <div class="logo" id="neon" style="width: 100%">
+      <div class="logo" id="neon" style="width: 100%; height: 35vh;">
         <b><span>a</span><span>g</span>i<span>t</span></b>
       </div>
       <br><br><br>
@@ -298,7 +298,7 @@ export default {
 #neon {
   background: #112;
   background-image: url("https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1");
-  background-size:cover;
+  /* background-size:cover; */
 }
 
 #final {
@@ -328,6 +328,7 @@ html,body{
   height: 250px;
   margin: auto;
   position: relative;
+  /* margin-top: 0px; */
   top: 0;
   left: 0;
   right: 0;
