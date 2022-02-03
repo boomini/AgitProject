@@ -14,7 +14,7 @@
             <el-button @click="clickLogout" style="background-color:#112; color: white;">로그아웃</el-button>
           </div>
          </el-row>
-      <!-- 로고(네온사인) -->
+      <!-- 로고(네온사인)!! -->
       <br><br><br>
       </div>
       <div class="logo" id="neon" style="width: 100%; height: 35vh;">
