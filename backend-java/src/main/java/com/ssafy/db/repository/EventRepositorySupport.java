@@ -26,7 +26,6 @@ public class EventRepositorySupport {
     QTeam qTeam = QTeam.team;
     QUserTeam qUserTeam = QUserTeam.userTeam;
 
-    // 특정 user에 관련된 모든 event 리스트  // 중복 제거
     public Optional<List<Event>> findEventsAllByUserID(Long id){
         List<Event> eventList = jpaQueryFactory.select(qEvent)
                 .from(qUserTeam)
@@ -41,6 +40,7 @@ public class EventRepositorySupport {
 
     }
 
+    // 특정 user에 관련된 모든 event 리스트  // 중복 제거
     public Optional<List<EventResDto>> findEventResAllByUserID(Long id){
         List<EventResDto> eventResDtoList = new ArrayList<>();
         List<Tuple> result = jpaQueryFactory.select(qEvent.eventTitle, qEvent.eventContent, qEvent.teamName, qEvent.eventDate)
