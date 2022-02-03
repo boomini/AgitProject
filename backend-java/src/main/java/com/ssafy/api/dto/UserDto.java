@@ -19,6 +19,7 @@ public class UserDto {
     String userId;
     String name;
     String nickName;
+    String email;
 
     LocalDate birthDay;
     LocalDateTime cDate;
@@ -31,16 +32,18 @@ public class UserDto {
                 .nickName(nickName)
                 .birthDay(birthDay)
                 .password(password)
+                .email(email)
                 .build();
         return build;
     }
 
     @Builder
-    public UserDto(Long id, String userId, String name, String nickName, LocalDate birthDay , LocalDateTime cDate, String password){
+    public UserDto(Long id, String userId, String name, String nickName, String email, LocalDate birthDay , LocalDateTime cDate, String password){
         this.id = id;
         this.userId = userId;
         this.name = name;
         this.nickName = nickName;
+        this.email = email;
         this.birthDay = birthDay;
         this.cDate = cDate;
         this.password = password;
@@ -52,6 +55,7 @@ public class UserDto {
         this.userId = user.getUserId();
         this.name = user.getName();
         this.nickName = user.getNickName();
+        this.email = user.getEmail();
         this.birthDay = user.getBirthDay();
         this.cDate = user.getCDate();
         this.password = user.getPassword();

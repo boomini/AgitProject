@@ -47,7 +47,7 @@ public class UserController {
 	UserService userService;
 	
 	@PostMapping()
-	@ApiOperation(value = "회원 가입", notes = "아이디, PW, 닉네임, 생일에 대한 정보를 필수로 전달 한다.")
+	@ApiOperation(value = "회원 가입", notes = "아이디, PW, 닉네임, 생일, 이메일에 대한 정보를 필수로 전달 한다.")
     @ApiResponses({
         @ApiResponse(code = 200, message = "성공"),
         @ApiResponse(code = 401, message = "인증 실패"),
@@ -55,12 +55,14 @@ public class UserController {
         @ApiResponse(code = 500, message = "서버 오류")
     })
 
-	public ResponseEntity<? extends BaseResponseBody> register (@RequestParam(value="userId") String userId, @RequestParam(value="nickName") String nickName,
+	public ResponseEntity<? extends BaseResponseBody> register (@RequestParam(value="userId") String userId, @RequestParam(value="name") String name, @RequestParam(value="nickName") String nickName, @RequestParam(value="email") String email,
 																@RequestParam(value="birthDay") String birthDay, @RequestParam(value="password") String password) throws Exception {
 		UserDto userDto = new UserDto();
 		userDto.setUserId(userId);
+		userDto.setName(name);
 		userDto.setPassword(password);
 		userDto.setNickName(nickName);
+		userDto.setEmail(email);
 		userDto.setBirthDay(LocalDate.parse(birthDay));
 		//임의로 리턴된 User 인스턴스. 현재 코드는 회원 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
 		try {
