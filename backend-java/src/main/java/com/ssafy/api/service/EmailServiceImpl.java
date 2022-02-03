@@ -25,7 +25,9 @@ public class EmailServiceImpl implements EmailService{
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    private JavaMailSender mailSender;
+    @Autowired
+    JavaMailSender mailSender;
+
     private static final String FROM_ADDRESS = "본인의 이메일 주소를 입력하세요!";
 
     @Override
@@ -50,12 +52,11 @@ public class EmailServiceImpl implements EmailService{
 
     @Override
     public void updatePassword(String str, String userId) {
-        User user = null;
+        User user = new User();
         String pw = passwordEncoder.encode(str);
         if(userRepositorySupport.findUserByUserId(userId).isPresent()) {
             user = userRepositorySupport.findUserByUserId(userId).get();
         }
-        long a = user.getId();
         user.setPassword(pw);
         userRepository.save(user);
 
@@ -80,10 +81,12 @@ public class EmailServiceImpl implements EmailService{
     public void mailSend(MailDto mailDto) {
         System.out.println("이메일 전송 완료!");
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(mailDto.getAddress());
+        //message.setTo(mailDto.getAddress());
+        message.setTo("yunhy96@naver.com");
         message.setFrom(EmailServiceImpl.FROM_ADDRESS);
         message.setSubject(mailDto.getTitle());
         message.setText(mailDto.getMessage());
+        System.out.println();
 
         mailSender.send(message);
     }
