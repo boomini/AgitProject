@@ -56,6 +56,7 @@
 
 </style>
 <script>
+//import LoginDialog from './components/login-dialog'
 import LoginDialog from './components/login-dialog'
 import SignupDialog from './components/signup-dialog'
 import MainHeader from './components/main-header'
@@ -72,7 +73,7 @@ export default {
     SignupDialog
   },
   data () {
-    return {
+     return {
       loginDialogOpen: false,
       signupDialogOpen: false,
     }

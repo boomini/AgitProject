@@ -33,3 +33,11 @@ export function getProfile ({ state }, payload) {
   const token = payload
   return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
 }
+
+//google토큰확인
+export function verifyToken ({state},payload){
+  console.log('verifyToken', state, payload)
+  const url='auth/token';
+  let body=payload;
+  return $axios.post(url,body)
+}

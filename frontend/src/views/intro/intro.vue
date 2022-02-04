@@ -214,7 +214,7 @@ export default {
   name: 'Intro',
   setup (props, { emit }) {
     const store = useStore()
-
+    const router = useRouter()
     const state = reactive({
       activeIndex: computed(() => store.getters['root/getActiveMenuIndex']),
       isLogin: computed(() => store.getters['root/getJWTToken'])
