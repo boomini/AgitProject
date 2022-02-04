@@ -76,7 +76,6 @@ public class ArticleRepositorySupport {
                 .groupBy(qArticle.uploadDate)
                 .fetch();
 
-        if(dayCountDtoList.size()==0) return Optional.empty();
         return Optional.ofNullable(dayCountDtoList);
     }
 }
