@@ -1,32 +1,32 @@
 <template>
   <div id="container">
-
-
     <div class="hello">
-
+      <!-- 회원가입, 로그인 버튼 -->
       <div class="d-flex flex-row-reverse" style="margin-top:20px; margin-right: 30px;">
         <el-row :gutter="20">
           <!-- v-if문으로 수정 예정 -->
           <div v-if="state.isLogin === null" class="button-wrapper">
-            <el-button type="success" @click="clickSignup">회원가입</el-button>
-            <el-button type="primary" @click="clickLogin">로그인</el-button>
+            <el-button @click="clickSignup" style="background-color:#112; color: white;">회원가입</el-button>
+            <el-button @click="clickLogin " style="background-color:#112; color: white;">로그인</el-button>
           </div>
           <div v-else class="button-wrapper">
-            <el-button type="success" @click="clickProfile">마이 페이지</el-button>
-            <el-button type="primary" @click="clickLogout">로그아웃</el-button>
+            <el-button @click="clickProfile" style="background-color:#112; color: white;">마이 페이지</el-button>
+            <el-button @click="clickLogout" style="background-color:#112; color: white;">로그아웃</el-button>
           </div>
-          <!-- <el-button @click="clickSignup" style="color: #32BEBE;">회원가입</el-button>
-          <el-button @click="clickLogin" style="color: #32BEBE;">로그인</el-button> -->
          </el-row>
+      <!-- 로고(네온사인) -->
+      <br><br><br>
       </div>
-      <div class="logo"><b><span>a</span><span>g</span>i<span>t</span></b></div>
+      <div class="logo" id="neon" style="width: 100%">
+        <b><span>a</span><span>g</span>i<span>t</span></b>
+      </div>
+      <br><br><br>
       <!-- card 1 -->
       <div
         data-aos="fade-left"
         class="card d-flex  flex-row border border-white"
-        style="width: 70%; height: 100%; margin-left: auto; margin-right: auto; margin-top: 30px; z-index: -1; padding-top: 0px"
+        style="width: 70%; height: 100%; margin-left: auto; margin-right: auto; margin-top: 30px; z-index: -1; padding-top: 0px;"
       >
-      <!-- 카드가 가운데로 오게 할려면 left margin 400px -->
         <img
           src="https://cdn.pixabay.com/photo/2019/09/02/15/58/family-4447538_960_720.jpg"
           class="card-img-top"
@@ -54,12 +54,25 @@
         style="width: 70%; height: 100%; margin-left: auto; margin-right: auto; margin-top: 150px; z-index: -1"
 
       >
-      <!-- 카드가 가운데로 오게 할려면 left margin 400px -->
         <div class="card-body" style="margin-right:100px">
           <h5 class="card-title" style="margin-top: 48%">한 눈에 보는 일정 관리 <i class="fas fa-book" style="color: #4646CD"></i></h5>
           <p class="card-text" style="color: #808080">
             나의 스케줄을 한 눈에 확인 해보세요.
           </p>
+          <div class="demo-collapse">
+            <el-collapse v-model="activeName" accordion>
+              <el-collapse-item title="누르면 실제 서비스 스샷" name="1">
+                <div>
+                  Consistent within interface: all elements should be consistent, such
+                  as: design style, icons and texts, position of elements, etc.
+                </div>
+                <div>
+                  Consistent within interface: all elements should be consistent, such
+                  as: design style, icons and texts, position of elements, etc.
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+          </div>
 
         </div>
         <img
@@ -79,7 +92,6 @@
         style="width: 70%; height: 100%; margin-left: auto; margin-right: auto; margin-top: 150px; z-index: -1"
 
       >
-      <!-- 카드가 가운데로 오게 할려면 left margin 400px -->
         <img
           src="https://cdn.pixabay.com/photo/2016/06/29/21/14/women-1487825_960_720.jpg"
           class="card-img-top"
@@ -91,6 +103,21 @@
           <p class="card-text" style="color: #808080; width:100%;">
             화상으로 반가운 얼굴들을 만날 수 있습니다.
           </p>
+          <div class="demo-collapse">
+            <el-collapse v-model="activeName" accordion>
+              <el-collapse-item title="누르면 실제 서비스 스샷" name="1">
+                <div>
+                  Consistent within interface: all elements should be consistent, such
+                  as: design style, icons and texts, position of elements, etc.
+                </div>
+                <div>
+                  Consistent within interface: all elements should be consistent, such
+                  as: design style, icons and texts, position of elements, etc.
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+          </div>
+
 
         </div>
       </div>
@@ -104,13 +131,26 @@
         style="width: 70%; height: 100%; margin-left: auto; margin-right: auto;  margin-top: 150px; z-index: -1"
 
       >
-      <!-- 카드가 가운데로 오게 할려면 left margin 400px -->
-
         <div class="card-body" style="margin-right:100px">
           <h5 class="card-title" style="margin-top: 48%">나만의 추억 앨범 <i class="fas fa-heart" style="color:red;"></i></h5>
           <p class="card-text" style="color: #808080">
             사진, 동영상, 일정 등을 앨범에 담아보세요.
           </p>
+
+          <div class="demo-collapse">
+            <el-collapse v-model="activeName" accordion>
+              <el-collapse-item title="누르면 실제 서비스 스샷" name="1">
+                <div>
+                  Consistent within interface: all elements should be consistent, such
+                  as: design style, icons and texts, position of elements, etc.
+                </div>
+                <div>
+                  Consistent within interface: all elements should be consistent, such
+                  as: design style, icons and texts, position of elements, etc.
+                </div>
+              </el-collapse-item>
+            </el-collapse>
+          </div>
 
         </div>
         <img
@@ -125,31 +165,34 @@
     <br><br><br><br>
 
 
-    <div
-      data-aos="zoom-in"
-      style="width: 18rem; margin: 100px auto;"
-      class="d-flex flex-column align-items-center"
-    >
-      <img
-          src="https://cdn.pixabay.com/photo/2019/11/18/06/43/flowers-4634053_960_720.png"
-          alt="..."
-          style="width:230%; height: 150%;"
-        />
-      <div style="position: absolute;">
-        <img :src="require(`@/assets/images/agit_logo.png`)" alt="logo image" style="width:90%; height: 90%; margin-left: 10%; margin-top: 65%">
-        <div style="width:90%; height: 90%; margin-left: 20%; margin-top: 12%">
-          <div v-if="state.isLogin === null" class="button-wrapper">
-            <el-button type="success" @click="clickSignup">회원가입</el-button>
-            <el-button type="primary" @click="clickLogin">로그인</el-button>
+    <div id="final">
+      <div
+        data-aos="zoom-out"
+        style="width: 18rem; margin: 100px auto;"
+        class="d-flex flex-column align-items-center"
+
+      >
+        <img
+            src="https://st.depositphotos.com/2086879/2449/i/450/depositphotos_24490551-stock-photo-old-paper.jpg"
+            alt="..."
+            class="my-4"
+          />
+        <div style="position: absolute;">
+          <div style="margin-top: 50px;">비밀스러운 공간</div>
+          <div style="width:90%; height: 90%; margin-left: 23%; margin-top: 12%">
+            <div v-if="state.isLogin === null" class="button-wrapper">
+              <el-button @click="clickSignup" style="background-color:white; color: #ffc107;">회원가입</el-button>
+              <el-button @click="clickLogin " style="background-color:white; color: #ffc107;">로그인</el-button>
+            </div>
+            <div v-else class="button-wrapper">
+              <el-button @click="clickProfile" style="background-color:white; color: #ffc107;">마이 페이지</el-button>
+              <el-button @click="clickLogout" style="background-color:white; color: #ffc107;">로그아웃</el-button>
+            </div>
           </div>
-          <div v-else class="button-wrapper">
-            <el-button type="success" @click="clickProfile">마이 페이지</el-button>
-            <el-button type="primary" @click="clickLogout">로그아웃</el-button>
-          </div>
+
+
         </div>
       </div>
-
-
     </div>
   </div>
 
@@ -222,6 +265,8 @@ export default {
       })
     }
 
+
+
     return { state, clickLogin, clickSignup, clickLogout, clickProfile }
   }
 }
@@ -237,7 +282,25 @@ export default {
   z-index: 10;
   background-color: white;
   width: 125%;
+  /* background: #112; */
+  /* background-image: url("https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1"); */
+  background-size:cover;
+}
+
+#neon {
   background: #112;
+  background-image: url("https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1");
+  background-size:cover;
+}
+
+#final {
+  background: #112;
+  background-image: url("https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1");
+  background-size:cover;
+}
+
+#invite {
+  background-image: url('http://www.public.asu.edu/~msimshau/GIT237/scroll.jpg');
   background-size:cover;
 }
 
