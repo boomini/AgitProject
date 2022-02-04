@@ -6,11 +6,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.tomcat.jni.Local;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,9 +35,14 @@ public class User extends BaseEntity{
     String userId;
     String name;
     String nickName;
-    int year;
-    int month;
-    int day;
+    String email;
+    //생일
+    LocalDate birthDay; 
+
+//    int year;
+//    int month;
+//    int day;
+    
     @CreatedDate
     LocalDateTime cDate;
 
@@ -100,15 +107,14 @@ public class User extends BaseEntity{
     public User(){}
 
     @Builder
-    public User(Long id, String userId, String name, String nickName, int year, int month, int day, String password){
+    public User(Long id, String userId, String name, String nickName, LocalDate birthDay, String password, String email){
         this.id = id;
         this.userId = userId;
         this.name = name;
+        this.birthDay = birthDay;
         this.nickName = nickName;
-        this.year = year;
-        this.month = month;
-        this.day = day;
         this.password = password;
+        this.email = email;
     }
 
 }

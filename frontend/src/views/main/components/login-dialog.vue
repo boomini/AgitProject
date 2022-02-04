@@ -1,16 +1,26 @@
 <template>
-  <el-dialog custom-class="login-dialog" title="로그인" v-model="state.dialogVisible" @close="handleClose" :modal="state.form.modalStatus">
+  <el-dialog custom-class="login-dialog" v-model="state.dialogVisible" @close="handleClose" :modal="state.form.modalStatus">
+    <!-- header -->
+    <template #title>
+      <span>
+        로 그 인
+      </span>
+    </template>
+
+    <!-- cpntent -->
     <el-form :model="state.form" :rules="state.rules" ref="loginForm" :label-position="state.form.align">
       <el-form-item prop="id" label="아이디" :label-width="state.formLabelWidth" >
         <el-input v-model="state.form.id" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item prop="password" label="비밀번호" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.password" autocomplete="off" show-password></el-input>
+        <el-input v-model="state.form.password" autocomplete="off" show-password @keyup.enter="clickLogin"></el-input>
       </el-form-item>
     </el-form>
+
+    <!-- footer -->
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click="handler">로그인</el-button>
+        <el-button type="primary" @click="clickLogin" v-loading.fullscreen="loading">로그인</el-button>
       </span>
     </template>
   </el-dialog>
@@ -18,7 +28,7 @@
 <style>
 .login-dialog {
   width: 400px !important;
-  height: 300px;
+  height: 280px;
 }
 .login-dialog .el-dialog__headerbtn {
   float: right;
@@ -68,7 +78,8 @@ export default {
     // 마운드 이후 바인딩 될 예정 - 컨텍스트에 노출시켜야함. <return>
     const loginForm = ref(null)
     const router = useRouter()
-    const dialogVisible = ref(false)
+    // const dialogVisible = ref(false)
+    const loading = ref(false) // 로딩 스피너를 보여줄 변수. true면 로딩화면을 사용자에게 보여줌.
 
     /*
       // Element UI Validator
@@ -84,10 +95,10 @@ export default {
       },
       rules: {
         id: [
-          { required: true, message: 'Please input ID', trigger: 'blur' }
+          { required: true, message: '아이디를 입력해주세요.', trigger: 'blur' }
         ],
         password: [
-          { required: true, message: 'Please input password', trigger: 'blur' }
+          { required: true, message: '비밀번호를 입력해주세요.', trigger: 'blur' }
         ]
       },
       dialogVisible: computed(() => props.open),
@@ -104,21 +115,51 @@ export default {
       loginForm.value.validate((valid) => {
         if (valid) {
           console.log('submit')
-          store.dispatch('root/requestLogin', { id: state.form.id, password: state.form.password })
+          loading.value = true
+          const userId = state.form.id
+          const userPw = state.form.password
+          store.dispatch('root/requestLogin', { userId: userId, password: userPw })
           .then(function (result) {
             router.push({ name: 'home' })
             store.commit('root/setMenuActive', 0)
 
             localStorage.setItem('JWT', result.data.accessToken)
             store.commit('root/setJWTToken', result.data.accessToken)
+
+            // 로그인한 유저가 가입한 팀 정보 가져오기
+            store.dispatch('root/getTeamInfo', { userId: userId })
+            .then(function (result) {
+              console.log(result)
+
+              store.commit('root/setUserTeam', result.data)
+            })
+
+
+
+
+
+            handleClose() // 로그인 모달 끄기
+          })
+          // 로딩 스피너를 바로 꺼버리면 사용자가 볼 수 없으므로
+          // 작업 중인 것을 볼 수 있도록 조금의 여유를 주고 로딩 스피너를 끔.
+          .then(() => {
+            setTimeout(() => {
+              loading.value = false
+            }, 500)
           })
           .catch(function (err) {
-            alert(err)
+            setTimeout(() => {
+              loading.value = false
+              swal({
+                title: "아이디 혹은 비밀번호가 틀렸습니다.",
+                text: "회원정보를 올바르게 입력했는지 확인해주세요.",
+                icon: "error",
+                button: "확인",
+              });
+            }, 500)
           })
-        } else {
-          alert('Validate error!')
         }
-      });
+      })
     }
 
     const handleClose = function () {
@@ -127,16 +168,7 @@ export default {
       emit('closeLoginDialog')
     }
 
-    const closeDialog = function () {
-      console.log('여기는 왔어요')
-      handleClose()
-    }
-
-    const handler = function () {
-      clickLogin()
-      closeDialog()
-    }
-    return { loginForm, state, clickLogin, handleClose, closeDialog, handler, dialogVisible }
+    return { loginForm, state, clickLogin, handleClose, loading }
   }
 }
 </script>

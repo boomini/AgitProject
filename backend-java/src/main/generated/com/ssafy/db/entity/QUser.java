@@ -24,16 +24,16 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<Article, QArticle> articles = this.<Article, QArticle>createList("articles", Article.class, QArticle.class, PathInits.DIRECT2);
 
+    public final DatePath<java.time.LocalDate> birthDay = createDate("birthDay", java.time.LocalDate.class);
+
     public final DateTimePath<java.time.LocalDateTime> cDate = createDateTime("cDate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Integer> day = createNumber("day", Integer.class);
+    public final StringPath email = createString("email");
 
     //inherited
     public final NumberPath<Long> id = _super.id;
 
     public final ListPath<Image, QImage> images = this.<Image, QImage>createList("images", Image.class, QImage.class, PathInits.DIRECT2);
-
-    public final NumberPath<Integer> month = createNumber("month", Integer.class);
 
     public final StringPath name = createString("name");
 
@@ -46,8 +46,6 @@ public class QUser extends EntityPathBase<User> {
     public final ListPath<UserTeam, QUserTeam> userTeams = this.<UserTeam, QUserTeam>createList("userTeams", UserTeam.class, QUserTeam.class, PathInits.DIRECT2);
 
     public final ListPath<Video, QVideo> videos = this.<Video, QVideo>createList("videos", Video.class, QVideo.class, PathInits.DIRECT2);
-
-    public final NumberPath<Integer> year = createNumber("year", Integer.class);
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));
