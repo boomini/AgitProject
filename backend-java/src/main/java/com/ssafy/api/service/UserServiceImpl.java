@@ -8,6 +8,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.ssafy.api.dto.TeamDto;
 import com.ssafy.api.dto.UserDto;
 
+import com.ssafy.db.entity.EmailType;
 import com.ssafy.db.entity.Team;
 import com.ssafy.db.repository.UserTeamRepositroySupport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,6 @@ public class UserServiceImpl implements UserService {
 	public User getUserByUserId(String userId) {
 		// 디비에 유저 정보 조회 (userId 를 통한 조회).
 		User user = null;
-		UserDto userDto = null;
 		if(userRepositorySupport.findUserByUserId(userId).isPresent()) {
 			user = userRepositorySupport.findUserByUserId(userId).get();
 		}
@@ -88,14 +88,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int tokenVerify(String idToken) {
+	public User tokenVerify(String idToken) {
 
 		System.out.println("idToken : " + idToken);
-
-//		GoogleIdTokenVerifier gitVerifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-//
-//				.setAudience(Collections.singletonList(idToken))
-//				.build();
 
 		GoogleIdTokenVerifier gitVerifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
 				.setIssuers(Arrays.asList("https://accounts.google.com", "accounts.google.com"))
@@ -111,7 +106,7 @@ public class UserServiceImpl implements UserService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		User user=null;
 		if (git == null) {
 			System.out.println("Google ID Token is invalid");
 		}else {
@@ -128,11 +123,15 @@ public class UserServiceImpl implements UserService {
 			String familyName = (String) payload.get("family_name");
 			String givenName = (String) payload.get("given_name");
 
-			System.out.println("email: " + email);
-			System.out.println("name: " + name);
-			System.out.println("locale: " + locale);
+			user.setUserId(email);
+			user.setName(name);
+			user.setEmailType(EmailType.Google);
+			user.setNickName(name);
+
+
+
 		}
-		return 0;
+		return user;
 	}
 	public List<TeamDto> getTeamListUserJoined(Long userId){
 			List<Team> teamList = userTeamRepositroySupport.findTeamListByUserId(userId).get();
