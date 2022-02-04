@@ -57,6 +57,7 @@ public class EmailServiceImpl implements EmailService{
         dto.setAddress(userEmail);
         dto.setTitle("인증코드 안내 이메일");
         dto.setMessage("인증코드 안내 이메일 입니다." + "인증 코드는"+ "[" + str + "]" + "입니다.");
+        dto.setStr(str);
         return dto;
     }
 

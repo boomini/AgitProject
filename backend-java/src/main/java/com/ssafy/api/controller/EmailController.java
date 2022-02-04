@@ -37,10 +37,18 @@ public class EmailController {
         emailService.mailSend(mailDto);
     }
 
-    @PostMapping("/check/auth/sendEmail")
-    public @ResponseBody
-    void sendAuthEmail(String userEmail){
+//    @GetMapping("/check/auth/sendEmail")
+//    public @ResponseBody
+//    void sendAuthEmail(String userEmail){
+//        MailDto mailDto = emailService.sendAuthEmail(userEmail);
+//        emailService.mailSend(mailDto);
+//
+//    }
+
+    @GetMapping("/check/auth/sendEmail")
+    public ResponseEntity<MailDto> sendAuthEmail(String userEmail){
         MailDto mailDto = emailService.sendAuthEmail(userEmail);
         emailService.mailSend(mailDto);
+    return ResponseEntity.status(200).body(mailDto);
     }
 }
