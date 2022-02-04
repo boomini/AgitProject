@@ -7,6 +7,7 @@ import com.ssafy.api.dto.EventDto;
 import com.ssafy.api.dto.TeamDto;
 import com.ssafy.api.dto.UserDto;
 
+import com.ssafy.db.entity.EmailType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -62,8 +63,8 @@ public class UserController {
 		userDto.setName(name);
 		userDto.setPassword(password);
 		userDto.setNickName(nickName);
-		userDto.setEmail(email);
 		userDto.setBirthDay(LocalDate.parse(birthDay));
+		userDto.setEmailType(EmailType.Local);
 		//임의로 리턴된 User 인스턴스. 현재 코드는 회원 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
 		try {
 			userService.createUser(userDto);

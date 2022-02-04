@@ -2,6 +2,7 @@ package com.ssafy.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ssafy.db.entity.EmailType;
 import com.ssafy.db.entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,8 +20,8 @@ public class UserDto {
     String userId;
     String name;
     String nickName;
-    String email;
 
+    EmailType emailType;
     LocalDate birthDay;
     LocalDateTime cDate;
     String password;
@@ -32,21 +33,21 @@ public class UserDto {
                 .nickName(nickName)
                 .birthDay(birthDay)
                 .password(password)
-                .email(email)
+                .emailType(emailType)
                 .build();
         return build;
     }
 
     @Builder
-    public UserDto(Long id, String userId, String name, String nickName, String email, LocalDate birthDay , LocalDateTime cDate, String password){
+    public UserDto(Long id, String userId, String name, String nickName, LocalDate birthDay , LocalDateTime cDate, String password, EmailType emailType){
         this.id = id;
         this.userId = userId;
         this.name = name;
         this.nickName = nickName;
-        this.email = email;
         this.birthDay = birthDay;
         this.cDate = cDate;
         this.password = password;
+        this.emailType = emailType;
     }
 
     @Builder
@@ -55,9 +56,9 @@ public class UserDto {
         this.userId = user.getUserId();
         this.name = user.getName();
         this.nickName = user.getNickName();
-        this.email = user.getEmail();
         this.birthDay = user.getBirthDay();
         this.cDate = user.getCDate();
         this.password = user.getPassword();
+        this.emailType = user.getEmailType();
     }
 }

@@ -16,6 +16,6 @@ public interface UserService {
 	boolean deleteUserByUserId(String userId);
 
 	//googleToken확인
-	int tokenVerify(String idToken);
+	User tokenVerify(String idToken);
 	List<TeamDto> getTeamListUserJoined(Long userId);
 }

@@ -35,9 +35,11 @@ public class User extends BaseEntity{
     String userId;
     String name;
     String nickName;
-    String email;
     //생일
-    LocalDate birthDay; 
+    LocalDate birthDay;
+
+    @Enumerated(EnumType.STRING)
+    private EmailType emailType;
 
 //    int year;
 //    int month;
@@ -107,14 +109,14 @@ public class User extends BaseEntity{
     public User(){}
 
     @Builder
-    public User(Long id, String userId, String name, String nickName, LocalDate birthDay, String password, String email){
+    public User(Long id, String userId, String name, String nickName, LocalDate birthDay, String password, EmailType emailType){
         this.id = id;
         this.userId = userId;
         this.name = name;
         this.birthDay = birthDay;
         this.nickName = nickName;
         this.password = password;
-        this.email = email;
+        this.emailType = emailType;
     }
 
 }
