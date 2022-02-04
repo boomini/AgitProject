@@ -28,7 +28,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final DateTimePath<java.time.LocalDateTime> cDate = createDateTime("cDate", java.time.LocalDateTime.class);
 
-    public final StringPath email = createString("email");
+    public final EnumPath<EmailType> emailType = createEnum("emailType", EmailType.class);
 
     //inherited
     public final NumberPath<Long> id = _super.id;

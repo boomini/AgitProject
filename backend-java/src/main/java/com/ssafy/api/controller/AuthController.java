@@ -66,7 +66,12 @@ public class AuthController {
 	public ResponseEntity<?> tokenVerify(@RequestBody UserLoginDto userLoginDto) {
 		//google에서 받은 idToken
 		System.out.println("RequestBody value : " + userLoginDto.getAccessToken());
-		userService.tokenVerify(userLoginDto.getAccessToken());
+		User user = userService.tokenVerify(userLoginDto.getAccessToken());
+
+		//User user = userService.getUserByUserId(userId);
+		if(user==null){
+			UserDto userDto = new UserDto();
+		}
 		return null;
 	}
 }
