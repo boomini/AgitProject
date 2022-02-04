@@ -12,6 +12,12 @@
         <el-menu-item v-for="(item, index) in state.menuItems" :key="index" :index="index.toString()">
           <i v-if="item.icon" :class="['ic', item.icon]"/>
           <span>{{ item.title }}</span>
+          <div v-if="index === 4" style="border-top: 1px solid #dcdfe6;"/>
+          <!-- <hr v-if="index === 4" style="color: black;"> -->
+          <!-- <hr v-if="index === 4" style="color: black"> -->
+        </el-menu-item>
+        <el-menu-item>
+          <el-button>방 생성 버튼</el-button>
         </el-menu-item>
       </el-menu>
     </div>
@@ -67,8 +73,13 @@ export default {
           menuObject.icon = MenuItems[keys[i]].icon
           menuObject.title = MenuItems[keys[i]].name
           menuArray.push(menuObject)
-          console.log(menuArray)
         }
+
+        const TeamItems = store.getters['root/getTeams']
+        console.log('11111111111111111')
+        console.log(TeamItems)
+        console.log(MenuItems)
+
         return menuArray
       }),
       activeIndex: computed(() => store.getters['root/getActiveMenuIndex']),

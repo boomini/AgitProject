@@ -33,5 +33,6 @@ export default {
   isDesktopPlatform: IsDesktop,
   activeMenu: 'home',
   menus: menuData,
-  JWTToken: localStorage.getItem('JWT') // JWT Token을 저장해둠.
+  JWTToken: localStorage.getItem('JWT'), // JWT Token을 저장해둠.
+  userTeam: [],
 }

@@ -50,7 +50,7 @@ export default {
     })
 
     const load = function () {
-      state.count += 4
+      state.count += 0 // 4에서 수정함.
     }
 
     const clickConference = function (id) {
@@ -60,6 +60,9 @@ export default {
           conferenceId: id
         }
       })
+      // router.push({
+      //   name: 'customercenter',
+      // })
     }
 
     return { state, load, clickConference }

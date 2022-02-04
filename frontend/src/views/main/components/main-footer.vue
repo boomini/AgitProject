@@ -10,10 +10,10 @@
 <style>
 @media (max-width: 700px) {
   .main-footer {
-    height: 190px;
+    height: 80px;
   }
   .main-footer .contents {
-    line-height: 190px;
+    line-height: 80px;
     text-align: center;
     margin: 0 auto;
   }
@@ -21,10 +21,10 @@
 
 @media (min-width: 701px) {
   .main-footer {
-    height: 110px;
+    height: 80px;
   }
   .main-footer .contents {
-    line-height: 110px;
+    line-height: 80px;
     text-align: center;
     margin: 0 auto;
   }

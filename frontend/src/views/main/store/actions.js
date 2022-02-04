@@ -12,7 +12,7 @@ export function requestLogin ({ state }, payload) {
 // 회원가입 요청
 export function requestRegister ({ state }, payload) {
   console.log('requestRegister', state, payload)
-  const url = '/users'
+  const url = '/user'
   let body = payload
   return $axios.post(url, body)
 }
@@ -20,7 +20,7 @@ export function requestRegister ({ state }, payload) {
 // 중복 아이디 체크
 export function checkDupId ({ state }, payload) {
   console.log('checkDupId', state, payload.userId)
-  const url = `/users/${payload.userId}`
+  const url = `/user/${payload.userId}`
   console.log(url)
   // let body = payload
   return $axios.get(url)
@@ -29,7 +29,14 @@ export function checkDupId ({ state }, payload) {
 // 메인 페이지 정보 가져오기
 export function getProfile ({ state }, payload) {
   console.log('getProfile', state, payload)
-  const url = '/users/me'
+  const url = '/user/me'
   const token = payload
   return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
+}
+
+// 로그인한 유저가 소속된 방 정보 가져오기
+export function getTeamInfo ({ state }, payload) {
+  console.log('getTeamInfo', state, payload)
+  const url = `/user/${payload.userId}/team`
+  return $axios({ method: 'get', url: url })
 }

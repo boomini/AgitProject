@@ -18,3 +18,7 @@ export function setJWTToken (state, token) {
 export function setJWTTokenReset (state) {
   state.JWTToken = null
 }
+
+export function setUserTeam (state, team) {
+  state.userTeam = team
+}
