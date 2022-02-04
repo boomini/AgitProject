@@ -88,7 +88,6 @@ public class Team extends BaseEntity{
         }
     }
 
-
     @Builder
     public Team(Long id, String teamName, String teamPassword, String teamDescription, String teamPicture, int teamMember, String teamBoss){
         this.id = id;

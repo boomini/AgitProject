@@ -14,5 +14,8 @@ public interface UserService {
 	User getUserByUserId(String userId);
 	boolean updateUserByUserId(String userId, UserDto userDto);
 	boolean deleteUserByUserId(String userId);
+
+	//googleToken확인
+	int tokenVerify(String idToken);
 	List<TeamDto> getTeamListUserJoined(Long userId);
 }

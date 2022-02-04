@@ -1,5 +1,6 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.advice.exception.CTokenForbiddenException;
 import com.ssafy.api.advice.exception.CUserDuplicateException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
 import com.ssafy.api.dto.*;
@@ -53,7 +54,7 @@ public class TeamController {
     VideoService videoService;
 
     @PostMapping()
-    @ApiOperation(value = "팀생성", notes = "팀정보를 통해 팀 생성한다.")
+    @ApiOperation(value = "팀생성", notes = "팀정보를 통해 팀 생성한다. 로그인 해야 팀 생성 가능")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 401, message = "인증실패"),
@@ -62,14 +63,20 @@ public class TeamController {
     })
 
     public ResponseEntity<? extends BaseResponseBody> register (
-            @RequestBody @ApiParam(value="팀가입 정보", required = true) TeamDto teamDto, @RequestParam(value="userId", required = true) String userId) throws Exception {
+            @RequestBody @ApiParam(value="팀가입 정보", required = true) TeamDto teamDto, @ApiIgnore Authentication authentication) throws Exception {
 
-        //임의로 리턴된 Team 인스턴스. 현재 코드는 팀 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
-        try {
+        try{
+            SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+            String userId = userDetails.getUsername();
+            // 디폴트로 team Boss는 팀 생성자로 설정
+            teamDto.setTeamBoss(userId);
             teamService.createTeam(teamDto, userId);
-        } catch (DataIntegrityViolationException e) {
+        }catch (DataIntegrityViolationException e) {
             //회원중복시 예외처리
             throw new CUserDuplicateException();
+        } catch(Exception e){
+            //잘못된 접근일때
+            throw new CTokenForbiddenException();
         }
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
@@ -105,7 +112,7 @@ public class TeamController {
     }
 
     @GetMapping("/{teamId}/{uploadDate}")
-    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 게시글 조회", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
+    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 게시글 조회 (일까지 들어감)", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
@@ -126,7 +133,7 @@ public class TeamController {
     }
 
     @GetMapping("/{teamId}/count/{uploadDate}")
-    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 게시글 조회", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
+    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 게시글 조회 count (한달치 전체를 확인해서 갯수만뽑아옴)", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })

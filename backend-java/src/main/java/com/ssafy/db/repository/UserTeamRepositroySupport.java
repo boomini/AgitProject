@@ -5,6 +5,7 @@ import com.ssafy.db.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +19,7 @@ public class UserTeamRepositroySupport {
     QTeam qTeam = QTeam.team;
 
     // 특정 유저가 가입된 팀 리스트
-    public Optional<List<Long>> findTeamFKListByUserId(Long id){
+    public Optional<List<Long>> findTeamFKListByUserId(Long id) {
         List<Long> teamFKList = jpaQueryFactory.select(qUserTeam.team.id)
                 .from(qUserTeam)
                 .where(qUserTeam.user.id.eq(id))
@@ -28,7 +29,7 @@ public class UserTeamRepositroySupport {
     }
 
     // 특정 팀에 가입된 유저 리스트
-    public Optional<List<Long>> findUserFKListByTeamId(Long id){
+    public Optional<List<Long>> findUserFKListByTeamId(Long id) {
         List<Long> userFKList = jpaQueryFactory.select(qUserTeam.user.id)
                 .from(qUserTeam)
                 .where(qUserTeam.team.id.eq(id))
@@ -37,7 +38,8 @@ public class UserTeamRepositroySupport {
         return Optional.ofNullable(userFKList);
     }
 
-    public Optional<List<User>> findUserListByTeamId(Long id){
+    // 특정 유저가 가입된 팀 리스트
+    public Optional<List<User>> findUserListByTeamId(Long id) {
         List<User> userList = jpaQueryFactory.select(qUser)
                 .from(qUserTeam)
                 .join(qUser)
@@ -48,8 +50,8 @@ public class UserTeamRepositroySupport {
         return Optional.ofNullable(userList);
     }
 
-
-    public Optional<List<Team>> findTeamListByUserId(Long id){
+    // 특정 팀에 가입된 유저 리스트
+    public Optional<List<Team>> findTeamListByUserId(Long id) {
         List<Team> teamList = jpaQueryFactory.select(qTeam)
                 .from(qUserTeam)
                 .join(qTeam)
@@ -58,5 +60,6 @@ public class UserTeamRepositroySupport {
                 .fetch();
 
         return Optional.ofNullable(teamList);
-    }g
+    }
+    // 특정 유저와 관련된 모든 유저들
 }

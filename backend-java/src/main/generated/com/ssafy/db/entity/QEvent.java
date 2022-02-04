@@ -37,6 +37,8 @@ public class QEvent extends EntityPathBase<Event> {
 
     public final QTeam team;
 
+    public final StringPath teamName = createString("teamName");
+
     public final DateTimePath<java.time.LocalDateTime> updatedDate = createDateTime("updatedDate", java.time.LocalDateTime.class);
 
     public QEvent(String variable) {
