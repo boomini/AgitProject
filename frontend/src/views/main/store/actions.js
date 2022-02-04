@@ -34,9 +34,35 @@ export function getProfile ({ state }, payload) {
   return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
 }
 
-// 로그인한 유저가 소속된 방 정보 가져오기
+// 로그인한 유저가 소속된 팀 정보 가져오기
 export function getTeamInfo ({ state }, payload) {
   console.log('getTeamInfo', state, payload)
-  const url = `/user/${payload.userId}/team`
-  return $axios({ method: 'get', url: url })
+  const url = '/user/teamList'
+  const token = payload
+  return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
 }
+
+// 팀 생성하기
+export function registerTeam ({ state }, payload) {
+  console.log('registerTeam', state, payload)
+  const url = `/team?userId=${payload.userId}`
+  const teamDto = payload.teamDto
+  const token = payload.token
+  return $axios({ method: 'post', url: url, data: teamDto, headers: { Authorization: `Bearer ${token}`}})
+}
+
+// 특정 팀 정보 가져오기
+export function getTeamDetail ({ state }, payload) {
+  console.log('getTeamDetail', state, payload)
+}
+export function editProfile ({ state }, payload) {
+  // console.log('editProfile', state, payload)
+  // console.log(payload)
+  const url = '/user'
+  const token = payload.token
+  const body = payload.body
+  // console.log(body)
+  return $axios({ method: 'patch', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
+  // return $axios.patch(url, body)
+}
+

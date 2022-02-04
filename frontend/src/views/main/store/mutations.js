@@ -20,5 +20,5 @@ export function setJWTTokenReset (state) {
 }
 
 export function setUserTeam (state, team) {
-  state.userTeam = team
+  state.userTeams = team
 }

@@ -163,6 +163,9 @@ export default {
       .then(res => {
         console.log('정보가져오기')
         console.log(res)
+        router.push({
+        name: 'Profile',
+      })
       })
       .catch(err => {
         console.log(err)

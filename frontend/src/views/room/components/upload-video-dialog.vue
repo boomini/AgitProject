@@ -30,11 +30,12 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item prop="content" label="내용">
-            <el-input
-              type="file"
-            >
-            </el-input>
           </el-form-item>
+          <input
+            type="file"
+            accept="video/*"
+            multiple
+          >
         </el-form>
       </div>
     </div>
