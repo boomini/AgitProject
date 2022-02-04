@@ -80,10 +80,23 @@ export default {
         day: '',
         cdate: '1970-01-01'
       },
+      // info: null,
       nicknameDialogOpen : false,
     })
 
-    onBeforeMount(() => {
+    // onBeforeMount(() => {
+    //   const token = store.getters['root/getJWTToken']
+    //   store.dispatch('root/getProfile', token)
+    //   .then(res => {
+    //     state.info = res.data
+    //     console.log(state.info)
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
+    // })
+
+    const takeProfile = function () {
       const token = store.getters['root/getJWTToken']
       store.dispatch('root/getProfile', token)
       .then(res => {
@@ -93,25 +106,13 @@ export default {
       .catch(err => {
         console.log(err)
       })
-    })
-
-    const takeProfile = function () {
-      // const token = store.getters['root/getJWTToken']
-      // store.dispatch('root/getProfile', token)
-      // .then(res => {
-      //   state.info = res.data
-      //   console.log(state.info)
-      // })
-      // .catch(err => {
-      //   console.log(err)
-      // })
     }
 
     const editNickname = (nickname) => {
       state.info.nickName = nickname.nickname
     }
 
-    // takeProfile()
+    takeProfile()
     // console.log(typeof(state.info))
 
     const activities = [

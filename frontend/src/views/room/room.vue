@@ -13,6 +13,7 @@
 
           <span>
             <div class="d-flex justify-content-between mb-2">
+              <el-button type="danger" @click="state.createArticleDialogOpen = true">게시글 작성</el-button>
               <el-button type="success" @click="state.createScheduleDialogOpen = true">일정 추가</el-button>
               <el-button type="warning" @click="state.uploadImageDialogOpen = true">사진 등록</el-button>
               <el-button type="warning" @click="state.uploadVideoDialogOpen = true">동영상 등록</el-button>
@@ -121,6 +122,11 @@
     :open="state.uploadVideoDialogOpen"
     @closeUploadVideoDialog="onCloseUploadVideoDialog"/>
 
+  <!-- 게시글 추가 다이얼로그 -->
+  <create-article-dialog
+    :open="state.createArticleDialogOpen"
+    @closeCreateArticleDialog="onCloseCreateArticleDialog"/>
+
   <!-- 게시글 클릭 시 나오는 세부화면 -->
   <el-drawer
     v-model="drawer"
@@ -150,8 +156,10 @@
 <script>
 import { ref, reactive, computed, onBeforeMount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 import InviteDialog from './components/invite-dialog.vue'
 import CreateScheduleDialog from './components/create-schedule-dialog.vue'
+import CreateArticleDialog from './components/create-article-dialog.vue'
 import UploadImageDialog from './components/upload-image-dialog.vue'
 import UploadVideoDialog from './components/upload-video-dialog.vue'
 
@@ -161,6 +169,7 @@ export default {
   components: {
     InviteDialog,
     CreateScheduleDialog,
+    CreateArticleDialog,
     UploadImageDialog,
     UploadVideoDialog,
   },
@@ -179,10 +188,11 @@ export default {
     }
   },
   setup() {
+    const store = useStore()
     const router = useRouter()
     const route = useRoute()
     const drawer = ref(false)
-    const calendar = ref()
+    const calendar = ref(new Date())
     // const inviteDialogOpen = ref(false)
     // const createScheduleDialogOpen = ref(false)
 
@@ -201,12 +211,17 @@ export default {
 
     const state = reactive({
       team: {
-        teamId: null,
+        teamId: '',
         teamName: '',
         teamDescription: '',
         teamPicture: '',
+        articleList: [],
+        imageList: [],
+        videoList: [],
+        uploadDate: ''
       },
       createScheduleDialogOpen: false,
+      createArticleDialogOpen: false,
       uploadImageDialogOpen: false,
       uploadVideoDialogOpen: false,
       inviteDialogOpen: false,
@@ -219,6 +234,8 @@ export default {
 
     const selectDate = (val) => {
       calendar.value.selectDate(val)
+      const date = calendar.value.date
+      state.team.uploadDate = `${date.$y}-${date.$M + 1}`
     }
 
     const onCloseInviteDialog = function () {
@@ -227,6 +244,10 @@ export default {
 
     const onCloseCreateScheduleDialog = function () {
       state.createScheduleDialogOpen = false
+    }
+
+    const onCloseCreateArticleDialog = function () {
+      state.createArticleDialogOpen = false
     }
 
     const onCloseUploadImageDialog = function () {
@@ -251,13 +272,24 @@ export default {
       state.team.teamName = route.params.roomName
       state.team.teamDescription = route.params.roomDescription
       state.team.teamPicture = route.params.roomPicture
-      console.log(state.team.teamName)
+      const today = new Date()
+      state.team.uploadDate = `${today.getFullYear()}-${today.getMonth() + 1}`
 
       // 이번 달 달력 가져오기
-      // store.commit()
+      const payload = {
+        'teamId': state.team.teamId,
+        'uploadDate': state.team.uploadDate
+      }
+      store.dispatch('root/getCategoryCount', payload)
+      .then(function (result) {
+        console.log('성공')
+      })
+      .catch(function (error) {
+        console.log('실패')
+      })
     })
 
-    return { clickOnDate, drawer, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, joinConference }
+    return { clickOnDate, drawer, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, joinConference }
   }
 }
 </script>
