@@ -22,6 +22,9 @@
       <span class="dialog-footer">
         <el-button type="primary" @click="clickLogin" v-loading.fullscreen="loading">로그인</el-button>
       </span>
+      <div>
+        아아아아아아
+      </div>
     </template>
   </el-dialog>
 </template>

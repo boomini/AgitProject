@@ -51,10 +51,6 @@ export function registerTeam ({ state }, payload) {
   return $axios({ method: 'post', url: url, data: teamDto, headers: { Authorization: `Bearer ${token}`}})
 }
 
-// 특정 팀 정보 가져오기
-export function getTeamDetail ({ state }, payload) {
-  console.log('getTeamDetail', state, payload)
-}
 export function editProfile ({ state }, payload) {
   // console.log('editProfile', state, payload)
   // console.log(payload)
@@ -66,3 +62,9 @@ export function editProfile ({ state }, payload) {
   // return $axios.patch(url, body)
 }
 
+// 특정 달의 달력 개요 가져오기
+export function getCategoryCount({ state }, payload) {
+  const teamId = payload.teamId
+  const uploadDate = payload.uploadDate
+  const url = `/team/${teamId}`
+}

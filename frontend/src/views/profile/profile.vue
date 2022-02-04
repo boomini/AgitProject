@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="d-flex flex-row" style="max-width: 1200px; margin-left: 350px; margin-top: 50px;">
       <div class="d-flex justify-content-between" style="width: 100%">
         <div class="col-md-3">
@@ -46,18 +45,18 @@
 
 
 
-  <nickname-dialog
-    :open="state.nicknameDialogOpen"
-    :info="state.info"
-    @closeNicknameDialog="onCloseNicknameDialog"
-    @edit-nickname="editNickname"
-    />
+    <nickname-dialog
+      :open="state.nicknameDialogOpen"
+      :info="state.info"
+      @closeNicknameDialog="onCloseNicknameDialog"
+      @edit-nickname="editNickname"
+      />
   </div>
 </template>
 
 
 <script>
-import { reactive } from 'vue'
+import { reactive, onBeforeMount } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import NicknameDialog from './components/nickname-dialog.vue'
@@ -72,25 +71,47 @@ export default {
     const store = useStore()
     const router = useRouter()
     const state = reactive({
-      info: null,
+      info: {
+        name: '',
+        nickName: '',
+        userId: '',
+        year: '',
+        month: '',
+        day: '',
+        cdate: '1970-01-01'
+      },
       nicknameDialogOpen : false,
     })
-    const takeProfile = function () {
+
+    onBeforeMount(() => {
       const token = store.getters['root/getJWTToken']
       store.dispatch('root/getProfile', token)
       .then(res => {
         state.info = res.data
+        console.log(state.info)
       })
       .catch(err => {
         console.log(err)
       })
+    })
+
+    const takeProfile = function () {
+      // const token = store.getters['root/getJWTToken']
+      // store.dispatch('root/getProfile', token)
+      // .then(res => {
+      //   state.info = res.data
+      //   console.log(state.info)
+      // })
+      // .catch(err => {
+      //   console.log(err)
+      // })
     }
 
     const editNickname = (nickname) => {
       state.info.nickName = nickname.nickname
     }
 
-    takeProfile()
+    // takeProfile()
     // console.log(typeof(state.info))
 
     const activities = [
