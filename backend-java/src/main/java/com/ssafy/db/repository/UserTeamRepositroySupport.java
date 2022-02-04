@@ -58,5 +58,5 @@ public class UserTeamRepositroySupport {
                 .fetch();
 
         return Optional.ofNullable(teamList);
-    }
+    }g
 }
