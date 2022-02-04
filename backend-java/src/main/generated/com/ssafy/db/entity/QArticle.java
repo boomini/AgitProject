@@ -11,16 +11,16 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QBoard is a Querydsl query type for Board
+ * QArticle is a Querydsl query type for Article
  */
 @Generated("com.querydsl.codegen.EntitySerializer")
-public class QBoard extends EntityPathBase<Board> {
+public class QArticle extends EntityPathBase<Article> {
 
-    private static final long serialVersionUID = 455343204L;
+    private static final long serialVersionUID = -1286180108L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QBoard board = new QBoard("board");
+    public static final QArticle article = new QArticle("article");
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
@@ -31,30 +31,39 @@ public class QBoard extends EntityPathBase<Board> {
     //inherited
     public final NumberPath<Long> id = _super.id;
 
+    public final QTeam team;
+
+    public final StringPath teamName = createString("teamName");
+
     public final StringPath title = createString("title");
 
     public final DateTimePath<java.time.LocalDateTime> updatedDate = createDateTime("updatedDate", java.time.LocalDateTime.class);
 
+    public final DatePath<java.time.LocalDate> uploadDate = createDate("uploadDate", java.time.LocalDate.class);
+
     public final QUser user;
 
-    public QBoard(String variable) {
-        this(Board.class, forVariable(variable), INITS);
+    public final StringPath writer = createString("writer");
+
+    public QArticle(String variable) {
+        this(Article.class, forVariable(variable), INITS);
     }
 
-    public QBoard(Path<? extends Board> path) {
+    public QArticle(Path<? extends Article> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QBoard(PathMetadata metadata) {
+    public QArticle(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QBoard(PathMetadata metadata, PathInits inits) {
-        this(Board.class, metadata, inits);
+    public QArticle(PathMetadata metadata, PathInits inits) {
+        this(Article.class, metadata, inits);
     }
 
-    public QBoard(Class<? extends Board> type, PathMetadata metadata, PathInits inits) {
+    public QArticle(Class<? extends Article> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.team = inits.isInitialized("team") ? new QTeam(forProperty("team")) : null;
         this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
     }
 

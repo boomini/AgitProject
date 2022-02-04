@@ -5,10 +5,7 @@ import com.ssafy.api.dto.UserLoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -54,7 +51,29 @@ public class AuthController {
 			// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
 			return ResponseEntity.ok(UserLoginDto.of(200, "Success", JwtTokenUtil.getToken(userId)));
 		}
-		// 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
+		// 유효하지 않는 패스워드인 경우, 로그인 실패로 응답
 		return ResponseEntity.status(401).body(UserLoginDto.of(401, "Invalid Password", null));
+	}
+
+	@PostMapping("/token")
+	@ApiOperation(value = "Google OAuth 2.0 토큰", notes = "Google OAuth 2.0 토큰 확인")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공", response = UserLoginDto
+					.class),
+			@ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+	})
+	public ResponseEntity<UserLoginDto> tokenVerify(@RequestBody UserLoginDto userLoginDto) {
+		//google에서 받은 idToken
+		System.out.println("RequestBody value : " + userLoginDto.getAccessToken());
+		UserDto userDto = userService.tokenVerify(userLoginDto.getAccessToken());
+
+		User user = userService.getUserByUserId(userDto.getUserId());
+		if(user==null){
+			//회원가입 필요할때
+			userService.createUser(userDto);
+		}
+
+		return ResponseEntity.ok(UserLoginDto.of(200, "Success", JwtTokenUtil.getToken(userDto.getUserId())));
 	}
 }

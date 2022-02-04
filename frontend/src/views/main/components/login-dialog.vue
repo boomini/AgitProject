@@ -214,7 +214,9 @@ methods: {
         if (valid) {
           console.log('submit')
           loading.value = true
-          store.dispatch('root/requestLogin', { userId: state.form.id, password: state.form.password })
+          const userId = state.form.id
+          const userPw = state.form.password
+          store.dispatch('root/requestLogin', { userId: userId, password: userPw })
           .then(function (result) {
             router.push({ name: 'home' })
             store.commit('root/setMenuActive', 0)
@@ -222,7 +224,19 @@ methods: {
             localStorage.setItem('JWT', result.data.accessToken)
             store.commit('root/setJWTToken', result.data.accessToken)
 
-            handleClose()
+            // 로그인한 유저가 가입한 팀 정보 가져오기
+            store.dispatch('root/getTeamInfo', { userId: userId })
+            .then(function (result) {
+              console.log(result)
+
+              store.commit('root/setUserTeam', result.data)
+            })
+
+
+
+
+
+            handleClose() // 로그인 모달 끄기
           })
           // 로딩 스피너를 바로 꺼버리면 사용자가 볼 수 없으므로
           // 작업 중인 것을 볼 수 있도록 조금의 여유를 주고 로딩 스피너를 끔.
