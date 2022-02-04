@@ -1,5 +1,10 @@
 package com.ssafy.api.service;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.ssafy.api.dto.UserDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +14,11 @@ import org.springframework.stereotype.Service;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.UserRepository;
 import com.ssafy.db.repository.UserRepositorySupport;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  *	유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
@@ -23,7 +33,10 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+
+	private final NetHttpTransport transport = new NetHttpTransport();
+	private final JsonFactory jsonFactory = new GsonFactory();
+
 	@Override
 	public boolean createUser(UserDto userDto){
 		// 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
@@ -65,6 +78,54 @@ public class UserServiceImpl implements UserService {
 
 		userRepository.delete(user);
 		return true;
+	}
+
+	@Override
+	public int tokenVerify(String idToken) {
+
+		System.out.println("idToken : " + idToken);
+
+//		GoogleIdTokenVerifier gitVerifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+//
+//				.setAudience(Collections.singletonList(idToken))
+//				.build();
+
+		GoogleIdTokenVerifier gitVerifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+				.setIssuers(Arrays.asList("https://accounts.google.com", "accounts.google.com"))
+				.setAudience(Arrays.asList("1013528004085-99200t264rmtj2ef3m5ett7ogua9nuh6.apps.googleusercontent.com"))
+				.build();
+
+		GoogleIdToken git = null;
+
+		try {
+			git = gitVerifier.verify(idToken);
+		} catch (GeneralSecurityException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (git == null) {
+			System.out.println("Google ID Token is invalid");
+		}else {
+			GoogleIdToken.Payload payload = git.getPayload();
+
+			// Print user identifier & Get profile information from payload
+			String userId = payload.getSubject();
+			System.out.println("User ID: " + userId);
+			String email = payload.getEmail();
+			boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
+			String name = (String) payload.get("name");
+			String pictureUrl = (String) payload.get("picture");
+			String locale = (String) payload.get("locale");
+			String familyName = (String) payload.get("family_name");
+			String givenName = (String) payload.get("given_name");
+
+			System.out.println("email: " + email);
+			System.out.println("name: " + name);
+			System.out.println("locale: " + locale);
+		}
+		return 0;
 	}
 
 
