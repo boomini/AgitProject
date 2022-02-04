@@ -5,7 +5,11 @@
         <!-- 달력 헤더 부분 -->
         <template #header="{ date }">
           <span>
-            <h3>방 이름</h3>
+            <h3>{{ roomId + '번 팀 상세 보기 페이지' }}</h3>
+            <h3>{{ roomName + '번 팀 상세 보기 페이지' }}</h3>
+            <h3>{{ roomDescription + '번 팀 상세 보기 페이지' }}</h3>
+            <h3>{{ roomPicture + '번 팀 상세 보기 페이지' }}</h3>
+
             <div>간단한 방 소개</div>
           </span>
 
@@ -148,8 +152,8 @@
 </template>
 
 <script>
-import { ref, reactive, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, reactive, computed, onBeforeMount } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import InviteDialog from './components/invite-dialog.vue'
 import CreateScheduleDialog from './components/create-schedule-dialog.vue'
 import UploadImageDialog from './components/upload-image-dialog.vue'
@@ -164,8 +168,23 @@ export default {
     UploadImageDialog,
     UploadVideoDialog,
   },
+  props: {
+    roomId: {
+      type: Number,
+    },
+    roomName: {
+      type: String,
+    },
+    roomDescription: {
+      type: String,
+    },
+    roomPicture: {
+      type: String,
+    }
+  },
   setup() {
     const router = useRouter()
+    const route = useRoute()
     const drawer = ref(false)
     const calendar = ref()
     // const inviteDialogOpen = ref(false)
@@ -185,6 +204,12 @@ export default {
     }
 
     const state = reactive({
+      team: {
+        teamId: null,
+        teamName: '',
+        teamDescription: '',
+        teamPicture: '',
+      },
       createScheduleDialogOpen: false,
       uploadImageDialogOpen: false,
       uploadVideoDialogOpen: false,
@@ -194,30 +219,6 @@ export default {
       day : '',
       title : computed(() => `${state.year}년 ${state.month}월 ${state.day}일 게시판`),
       circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-      inputEmailId: '',
-      inputEmailServer: '',
-      emailOptions: [
-        {
-          label: '직접입력',
-          value: ''
-        },
-        {
-          label: '네이버',
-          value: 'naver.com'
-        },
-        {
-          label: '다음',
-          value: 'hanmail.com'
-        },
-        {
-          label: '구글',
-          value: 'google.com'
-        },
-        {
-          label: '야후',
-          value: 'yahoo.co.kr'
-        },
-        ]
     })
 
     const selectDate = (val) => {
@@ -248,6 +249,15 @@ export default {
         }
       })
     }
+
+    onBeforeMount(() => {
+      state.team.teamId = route.params.roomId
+      state.team.teamName = route.params.roomName
+      // store.commit('root/setMenuActiveMenuName', 'home')
+      console.log(state.team.teamId, state.team.teamName)
+      // 팀 정보 가져오기
+      // store.commit()
+    })
 
     return { clickOnDate, drawer, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, joinConference }
   }

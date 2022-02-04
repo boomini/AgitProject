@@ -100,21 +100,7 @@ export default {
         return menuArray
       }),
       activeIndex: computed(() => store.getters['root/getActiveMenuIndex']),
-      userTeams: computed(() => {
-        // const TeamItems = store.getters['root/getTeams']
-        // const TeamItems = store.state.root.userTeams
-        // console.log(TeamItems)
-        // console.log('팀 아이템')
-        // console.log(TeamItems[0])
-        // let keys = Object.keys(TeamItems)
-        // console.log(keys)
-        // let teamArray = []
-        // for (let i = 0; i < TeamItems.length; i++) {
-        //   teamArray.push(TeamItems[i])
-        // }
-
-        return store.state.root.userTeams
-      })
+      userTeams: computed(() => store.state.root.userTeams)
 
     })
 
@@ -125,16 +111,41 @@ export default {
 
     const menuSelect = function (param) {
       // store.commit('root/setMenuActive', param)
+      console.log('방 클릭')
       console.log(param)
       // state.activeIndex = param
       // const MenuItems = [store.getters['root/getMenus'], store.getters['root/getTeams']]
+      const getMenus = store.getters['root/getMenus']
+      const getTeams = store.getters['root/getTeams']
+      // console.log('방 정보')
+      // console.log(getMenus[0])
+      // console.log(getTeams)
       const MenuItems = store.getters['root/getMenus']
-      console.log(MenuItems)
-      let keys = Object.keys(MenuItems)
-      console.log(keys)
-      router.push({
-        name: keys[param]
-      })
+      // const MenuItems = Object.assign({}, getMenus, getTeams)
+      // console.log(MenuItems)
+      // let keys = Object.keys(MenuItems)
+      const commonMenuKeys = Object.keys(MenuItems)
+      if (param < commonMenuKeys.length) {
+        router.push({
+          name: commonMenuKeys[param]
+        })
+      } else {
+        const key = param - commonMenuKeys.length
+        const roomId = getTeams[key.toString()].id
+        const roomName = getTeams[key.toString()].teamName
+        const roomDescription = getTeams[key.toString()].teamDescription
+        const roomPicture = getTeams[key.toString()].teamPicture
+        // console.log(roomId)
+        router.push({
+          name: 'room-board',
+          params: {
+            roomId: roomId,
+            roomName: roomName,
+            roomDescription: roomDescription,
+            roomPicture: roomPicture,
+          },
+        })
+      }
 
       // if (state.activeIndex === 1 && state.isLogin === null) {
       //   setTimeout(function() {

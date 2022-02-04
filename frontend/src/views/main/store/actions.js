@@ -34,7 +34,7 @@ export function getProfile ({ state }, payload) {
   return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
 }
 
-// 로그인한 유저가 소속된 방 정보 가져오기
+// 로그인한 유저가 소속된 팀 정보 가져오기
 export function getTeamInfo ({ state }, payload) {
   console.log('getTeamInfo', state, payload)
   const url = '/user/teamList'
@@ -42,11 +42,16 @@ export function getTeamInfo ({ state }, payload) {
   return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
 }
 
-// 방 생성하기
+// 팀 생성하기
 export function registerTeam ({ state }, payload) {
   console.log('registerTeam', state, payload)
   const url = `/team?userId=${payload.userId}`
   const teamDto = payload.teamDto
   const token = payload.token
   return $axios({ method: 'post', url: url, data: teamDto, headers: { Authorization: `Bearer ${token}`}})
+}
+
+// 특정 팀 정보 가져오기
+export function getTeamDetail ({ state }, payload) {
+  console.log('getTeamDetail', state, payload)
 }

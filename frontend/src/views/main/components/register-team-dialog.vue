@@ -148,7 +148,7 @@ export default {
         })
       })
       .catch(function (error) {
-        console.log('실패')
+        alert('방 생성 실패')
         console.log(error)
       })
     }

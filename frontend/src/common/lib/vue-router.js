@@ -38,7 +38,8 @@ function makeRoutesFromMenu () {
   routes.push({
     path: '/room/:roomId',
     name: 'room-board',
-    component: Room
+    component: Room,
+    props: true,
   })
 
   return routes
