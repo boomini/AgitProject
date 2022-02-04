@@ -17,5 +17,5 @@ export function getJWTToken (state) {
 }
 
 export function getTeams (state) {
-  return state.userTeam
+  return state.userTeams
 }

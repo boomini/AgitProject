@@ -22,12 +22,14 @@
       :height="`70px`"
       @openLoginDialog="onOpenLoginDialog"
       @openSignupDialog="onOpenSignupDialog"
+
       style="position:fixed; top: 0; background-color: white;"
       />
     <div class="main-container" style="position: fixed; top: 70px;">
-      <div class="hide-on-small" width="240px" style="height: 120%">
+      <div class="hide-on-small" width="240px" style="height: calc(100vh - 150px)">
         <main-sidebar
-          :width="`240px`"/>
+          :width="`240px`"
+          @openRegisterTeamDialog="onOpenRegisterTeamDialog"/>
       </div>
     </div>
     <main-footer
@@ -35,7 +37,7 @@
       style="position:fixed; bottom: 0; width: 100%; background-color: white;"/>
   <!-- </div> -->
   <div style="position: absolute; top: 90px; left: 260px; width: 80%;">
-    <router-view @openLoginDialog="onOpenLoginDialog" @openSignupDialog="onOpenSignupDialog"></router-view>
+    <router-view @openLoginDialog="onOpenLoginDialog" @openSignupDialog="onOpenSignupDialog" @openRegisterTeamDialog="onOpenRegisterTeamDialog" :key="$route.fullPath"></router-view>
 
   </div>
   <login-dialog
@@ -44,6 +46,11 @@
   <signup-dialog
     :open="signupDialogOpen"
     @closeSignupDialog="onCloseSignupDialog"/>
+
+  <register-team-dialog
+    :open="registerTeamDialogOpen"
+    @closeRegisterTeamDialog="onCloseRegisterTeamDialog"/>
+
 </template>
 <style>
   @import "https://unpkg.com/element-plus@1.0.2-beta.44/lib/theme-chalk/index.css";
@@ -61,6 +68,8 @@ import SignupDialog from './components/signup-dialog'
 import MainHeader from './components/main-header'
 import MainSidebar from './components/main-sidebar'
 import MainFooter from './components/main-footer'
+import RegisterTeamDialog from './components/register-team-dialog'
+import { useStore } from 'vuex'
 
 export default {
   name: 'Main',
@@ -69,12 +78,14 @@ export default {
     MainSidebar,
     MainFooter,
     LoginDialog,
-    SignupDialog
+    SignupDialog,
+    RegisterTeamDialog,
   },
   data () {
     return {
       loginDialogOpen: false,
       signupDialogOpen: false,
+      registerTeamDialogOpen: false,
     }
   },
   methods: {
@@ -89,7 +100,24 @@ export default {
     },
     onCloseSignupDialog () {
       this.signupDialogOpen = false
+    },
+    onOpenRegisterTeamDialog () {
+      this.registerTeamDialogOpen = true
+    },
+    onCloseRegisterTeamDialog () {
+      this.registerTeamDialogOpen = false
     }
   },
+  created () {
+    // 이미 토큰이 있는 경우 방 정보 미리 불러오기
+    const store = useStore()
+    const token = localStorage.getItem('JWT')
+    if (token !== null) {
+      store.dispatch('root/getTeamInfo', token)
+      .then(function (result) {
+        store.commit('root/setUserTeam', result.data)
+      })
+    }
+  }
 }
 </script>
