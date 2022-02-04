@@ -77,8 +77,9 @@ public class ImageServiceImpl implements ImageService{
     @Override
     public boolean deleteNotice(Long no, String path) {
         Image image = imageRepository.findById(no).get();
-        System.out.println(image);
+        // System.out.println(image);
 
+        // 없으면 false 반환
         if(image==null){
             return false;
         }

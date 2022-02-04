@@ -3,6 +3,8 @@ package com.ssafy.api.controller;
 import com.ssafy.api.advice.exception.CTokenForbiddenException;
 import com.ssafy.api.advice.exception.CUserDuplicateException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
+import com.ssafy.api.dto.EventDto;
+import com.ssafy.api.dto.TeamDto;
 import com.ssafy.api.dto.UserDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +27,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import retrofit2.http.Path;
 import springfox.documentation.annotations.ApiIgnore;
 
-
+import java.util.List;
 
 
 /**
@@ -119,12 +122,51 @@ public class UserController {
 
 	}
 
-	@DeleteMapping("/{userId}")
-	public ResponseEntity<? extends BaseResponseBody> deleteUser(@ApiParam(value = "userId", required = true) @PathVariable("userId") String userId){
-		if(!userService.deleteUserByUserId(userId)) {
+	@PostMapping("/event/{teamId}")
+	public ResponseEntity<? extends BaseResponseBody> addEvent(@RequestBody @ApiParam(value="기념일 등록", required = true) EventDto eventDto,
+															   @PathVariable("teamId") Long teamId){
+
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+	}
+
+	@DeleteMapping("/delete")
+	public ResponseEntity<? extends BaseResponseBody> deleteUser(@ApiIgnore Authentication authentication){
+		String userId;
+		try{
+			SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+			userId = userDetails.getUsername();
+		}catch(Exception e){
+			//잘못된 접근일때
+			throw new CTokenForbiddenException();
+		}
+
+		if(!userService.deleteUserByUserId(userId)){
 			//삭제하고자 하는 회원이 없을때 예외처리
 			throw new CUserNotFoundException();
 		}
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+	}
+
+	@GetMapping("/teamList")
+	@ApiOperation(value = "유저가 가입된 팀 리스트", notes = "JWT 토큰을 통해 조회")
+	@ApiResponses({
+			@ApiResponse(code = 1000, message = "이미 존재하는 ID"),
+			@ApiResponse(code = 200, message = "사용할 수 있는 ID")
+	})
+	public ResponseEntity<List<TeamDto>> teamListUserJoined(@ApiIgnore Authentication authentication){
+
+		Long userId;
+		try{
+			SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+			userId = userDetails.getUser().getId();
+		}catch(Exception e){
+			//잘못된 접근일때
+			throw new CTokenForbiddenException();
+		}
+
+		List<TeamDto> teamDtoList = userService.getTeamListUserJoined(userId);
+
+		return ResponseEntity.status(200).body(teamDtoList);
+
 	}
 }

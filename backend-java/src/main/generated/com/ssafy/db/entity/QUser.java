@@ -43,6 +43,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath userId = createString("userId");
 
+    public final ListPath<UserTeam, QUserTeam> userTeams = this.<UserTeam, QUserTeam>createList("userTeams", UserTeam.class, QUserTeam.class, PathInits.DIRECT2);
+
     public final ListPath<Video, QVideo> videos = this.<Video, QVideo>createList("videos", Video.class, QVideo.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> year = createNumber("year", Integer.class);
