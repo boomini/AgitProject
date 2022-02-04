@@ -3,54 +3,28 @@
     <!-- header -->
     <template #title>
       <span>
-        인증
+        인 증
       </span>
     </template>
 
     <!-- content -->
     <el-form :model="state.form" status-icon :rules="state.rules" ref="signupForm" :label-position="state.form.align">
-      <el-form-item prop="id" label="아이디" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.id" autocomplete="off" style="width: 70%" :disabled="state.form.isValidatedId" id="id-input" placeholder="ID"></el-input>
-        <el-button size="small" style="float: right; margin-top:5px;" @click="checkDup" :disabled="state.form.isValidatedId">중복 확인</el-button>
+      <el-form-item prop="email" label="이메일" :label-width="state.formLabelWidth">
+        <el-input v-model="state.form.id" autocomplete="off" style="width: 70%" :disabled="state.form.isValidatedId" id="id-input" placeholder="이메일"></el-input>
+        <el-button size="small" style="float: right; margin-top:5px;" @click="checkDup" :disabled="state.form.isValidatedId">인증번호 보내기</el-button>
       </el-form-item>
-      <el-form-item prop="password" label="비밀번호" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.password" autocomplete="off" show-password placeholder="Password"></el-input>
+      <el-form-item prop="password" label="인증번호" :label-width="state.formLabelWidth">
+        <el-input v-model="state.form.password" autocomplete="off" show-password placeholder="인증번호"></el-input>
       </el-form-item>
-      <el-form-item prop="passwordConfirm" label="비밀번호 재확인" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.passwordConfirm" autocomplete="off" show-password placeholder="Password Confirmation"></el-input>
-      </el-form-item>
-      <el-form-item prop="name" label="이름" :label-width="state.formLabelWidth" >
-        <el-input v-model="state.form.name" autocomplete="off" placeholder="Name"></el-input>
-      </el-form-item>
-      <el-form-item prop="birthDate" label="생년월일" :label-width="state.formLabelWidth" >
-        <el-date-picker
-          style="width: 100%;"
-          v-model="state.form.birthDate"
-          type="date"
-          value-format="YYYY-MM-DD"
-          placeholder="Birthday"
-        >
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item prop="nickname" label="별명" :label-width="state.formLabelWidth" >
-        <el-input v-model="state.form.nickname" autocomplete="off" placeholder="Nickname"></el-input>
-      </el-form-item>
-      <el-form-item prop="agreement" style="margin: 0 auto 20px; width: 100%;" class="checkbox">
-        <el-checkbox v-model="state.form.agreement">
-          가입 시, 인프런의
-            <router-link to="/customercenter" @click="clickCustomercenter">이용약관</router-link>,
-            <!-- <a target="_blank" href="https://www.inflearn.com/policy/terms-of-service">이용약관</a>, -->
-            <a target="_blank" href="https://www.inflearn.com/policy/privacy">개인정보취급방침</a>
-          에 동의합니다
-        </el-checkbox>
-        <!-- <el-button type="text" center>가입 시, 가제의 이용약관 개인정보취급방침에 동의합니다.</el-button> -->
-      </el-form-item>
+
+
+
     </el-form>
 
     <!-- footer -->
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click="clickSignup" v-loading.fullscreen="loading">회원가입</el-button>
+        <el-button type="primary" @click="clickSignup" v-loading.fullscreen="loading">인증체크</el-button>
       </span>
     </template>
   </el-dialog>
@@ -99,3 +73,141 @@
 }
 
 </style>
+<script>
+import { reactive, computed, ref, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
+export default {
+  name: 'auth-dialog',
+
+  props: {
+    open: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  setup(props, { emit }) {
+    const store = useStore()
+    // 마운드 이후 바인딩 될 예정 - 컨텍스트에 노출시켜야함. <return>
+    const signupForm = ref(null)
+    const router = useRouter()
+    const loading = ref(false)
+    /*
+      // Element UI Validator
+      // rules의 객체 키 값과 form의 객체 키 값이 같아야 매칭되어 적용됨
+      //
+    */
+    const state = reactive({
+      form: {
+        id: '',
+        password: '',
+      },
+      dialogVisible: computed(() => props.open),
+      isAvailable: computed(function () {
+        return signupForm.value.validate((valid) => valid)
+      }),
+      formLabelWidth: '120px',
+    })
+
+    onMounted(() => {
+      // console.log(loginForm.value)
+    })
+
+    const clickSignup = function () {
+      // 회원가입 클릭 시 validate 체크 후 그 결과 값에 따라, 로그인 API 호출 또는 경고창 표시
+      if (!state.form.isValidatedId) {
+        swal({
+          title: '아이디 중복 확인을 해주세요.',
+          icon: 'error',
+          button: '확인'
+        })
+      } else {
+        signupForm.value.validate((valid) => {
+          if (valid) {
+            // 날짜는 년, 월, 일로 구분하여 대입
+            loading.value = true
+            const arr = state.form.birthDate.split("-")
+            const year = arr[0]
+            const month = arr[1]
+            const day = arr[2]
+            store.dispatch('root/requestRegister', { userId: state.form.id, password: state.form.password, name: state.form.name, year: year, month: month, day: day, nickName: state.form.nickname })
+            .then(function (result) {
+              // console.log('로딩 스피너 넣으면 됨')
+              setTimeout(() => {
+                loading.value = false
+                swal({
+                  title: "회원가입 성공",
+                  text: "아지트의 일원이 되신 것을 축하합니다.",
+                  icon: "success",
+                  button: "확인",
+                });
+              }, 500)
+
+              router.push({
+                name: 'home',
+              })
+
+              handleClose()
+            })
+            .catch(function (error) {
+              loading.value = false
+              console.log('회원가입 실패')
+            })
+          } else {
+            swal({
+              title: "회원가입 실패",
+              text: "필수 항목을 입력해주세요.",
+              icon: "error",
+              button: "돌아가기",
+            })
+          }
+        });
+      }
+    }
+
+    const handleClose = function () {
+      state.form.id = ''
+      state.form.password = ''
+      emit('closeAuthDialog')
+    }
+
+    const clickCustomercenter = function () {
+      store.commit('root/setMenuActive', 2)
+      handleClose()
+    }
+
+    const checkDup = function () {
+      if (!state.form.isPossibleId) {
+        swal({
+            title: "아이디를 확인해주세요.",
+            text: "5 ~ 16자 사이의 영문 대 소문자, 숫자로만 구성되어야 합니다.",
+            icon: "error",
+            button: "확인",
+          });
+        state.form.isPossibleId = false
+      } else {
+        store.dispatch('root/checkDupId', { userId: state.form.id })
+        .then(res => {
+          state.form.isValidatedId = true
+          swal({
+              title: "사용가능한 아이디입니다.",
+              icon: "success",
+              button: "확인",
+            });
+        })
+        .catch(err => {
+          swal({
+              title: "이미 존재하는 아이디입니다.",
+              icon: "error",
+              button: "확인",
+            });
+        })
+      }
+    }
+
+    return { signupForm, state, clickSignup, handleClose, clickCustomercenter, checkDup, loading }
+  }
+}
+</script>

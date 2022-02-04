@@ -21,6 +21,7 @@
     <main-header
       :height="`70px`"
       @openLoginDialog="onOpenLoginDialog"
+      @openAuthDialog="onOpenAuthDialog"
       @openSignupDialog="onOpenSignupDialog"
 
       style="position:fixed; top: 0; background-color: white;"
@@ -46,6 +47,9 @@
   <signup-dialog
     :open="signupDialogOpen"
     @closeSignupDialog="onCloseSignupDialog"/>
+  <auth-dialog
+    :open="authDialogOpen"
+    @closeAuthDialog="onCloseAuthDialog"/>
 
   <register-team-dialog
     :open="registerTeamDialogOpen"
@@ -65,6 +69,7 @@
 <script>
 import LoginDialog from './components/login-dialog'
 import SignupDialog from './components/signup-dialog'
+import AuthDialog from './components/auth-dialog.vue'
 import MainHeader from './components/main-header'
 import MainSidebar from './components/main-sidebar'
 import MainFooter from './components/main-footer'
@@ -80,11 +85,13 @@ export default {
     LoginDialog,
     SignupDialog,
     RegisterTeamDialog,
+    AuthDialog
   },
   data () {
     return {
       loginDialogOpen: false,
       signupDialogOpen: false,
+      authDialogOpen: false,
       registerTeamDialogOpen: false,
     }
   },
@@ -100,6 +107,12 @@ export default {
     },
     onCloseSignupDialog () {
       this.signupDialogOpen = false
+    },
+    onOpenAuthDialog  () {
+      this.authDialogOpen = true
+    },
+    onCloseAuthDialog () {
+      this.authDialogOpen = false
     },
     onOpenRegisterTeamDialog () {
       this.registerTeamDialogOpen = true
