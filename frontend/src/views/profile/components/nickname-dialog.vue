@@ -40,6 +40,7 @@ import { useRouter } from 'vue-router'
 
 export default {
   name: 'nickname-dialog',
+  emits: ['edit-nickname'],
   props: {
     open: {
       type: Boolean,
@@ -67,6 +68,9 @@ export default {
 
     const editNickname = function () {
       if (state.form.inputNickname) {
+        emit('edit-nickname', {
+          nickname: state.form.inputNickname,
+        })
         const token = store.getters['root/getJWTToken']
         // console.log(props.info.password)
         const body = {
@@ -90,7 +94,7 @@ export default {
                 });
               }, 500)
 
-              router.go(router.currentRoute)
+              // router.go(router.currentRoute)
 
 
               handleClose()

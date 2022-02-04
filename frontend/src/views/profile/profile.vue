@@ -50,6 +50,7 @@
     :open="state.nicknameDialogOpen"
     :info="state.info"
     @closeNicknameDialog="onCloseNicknameDialog"
+    @edit-nickname="editNickname"
     />
   </div>
 </template>
@@ -85,6 +86,10 @@ export default {
       })
     }
 
+    const editNickname = (nickname) => {
+      state.info.nickName = nickname.nickname
+    }
+
     takeProfile()
     // console.log(typeof(state.info))
 
@@ -114,7 +119,7 @@ export default {
 
 
 
-    return { store, router, takeProfile, state, activities, onCloseNicknameDialog}
+    return { store, router, takeProfile, state, activities, onCloseNicknameDialog, editNickname}
   }
 }
 </script>
