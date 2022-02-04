@@ -1,14 +1,11 @@
 package com.ssafy.api.service;
 
-<<<<<<< HEAD
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
-=======
 import com.ssafy.api.dto.TeamDto;
->>>>>>> 24961d304bd20dbc932734bcd5a373ea94bdfb18
 import com.ssafy.api.dto.UserDto;
 
 import com.ssafy.db.entity.Team;
@@ -21,15 +18,12 @@ import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.UserRepository;
 import com.ssafy.db.repository.UserRepositorySupport;
 
-<<<<<<< HEAD
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collections;
-=======
 import java.util.ArrayList;
 import java.util.List;
->>>>>>> 24961d304bd20dbc932734bcd5a373ea94bdfb18
 
 /**
  *	유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
@@ -45,13 +39,10 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
-<<<<<<< HEAD
 	private final NetHttpTransport transport = new NetHttpTransport();
 	private final JsonFactory jsonFactory = new GsonFactory();
-=======
 	@Autowired
 	UserTeamRepositroySupport userTeamRepositroySupport;
->>>>>>> 24961d304bd20dbc932734bcd5a373ea94bdfb18
 
 	@Override
 	public boolean createUser(UserDto userDto){
@@ -97,7 +88,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-<<<<<<< HEAD
 	public int tokenVerify(String idToken) {
 
 		System.out.println("idToken : " + idToken);
@@ -143,16 +133,16 @@ public class UserServiceImpl implements UserService {
 			System.out.println("locale: " + locale);
 		}
 		return 0;
-=======
-	public List<TeamDto> getTeamListUserJoined(Long userId) {
-		List<Team> teamList = userTeamRepositroySupport.findTeamListByUserId(userId).get();
-		List<TeamDto> teamDtoList = new ArrayList<>();
-		for(Team team : teamList){
-			TeamDto teamDto = new TeamDto(team);
-			teamDtoList.add(teamDto);
+	}
+	public List<TeamDto> getTeamListUserJoined(Long userId){
+			List<Team> teamList = userTeamRepositroySupport.findTeamListByUserId(userId).get();
+			List<TeamDto> teamDtoList = new ArrayList<>();
+			for (Team team : teamList) {
+				TeamDto teamDto = new TeamDto(team);
+				teamDtoList.add(teamDto);
+
 		}
 		return teamDtoList;
->>>>>>> 24961d304bd20dbc932734bcd5a373ea94bdfb18
 	}
 
 
