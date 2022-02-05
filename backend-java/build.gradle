@@ -125,6 +125,7 @@ processResources {
 ////[끝]
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -178,6 +179,9 @@ dependencies {
     implementation("io.springfox:springfox-data-rest:3.0.0")
     implementation("io.springfox:springfox-bean-validators:3.0.0")
     implementation("io.springfox:springfox-boot-starter:3.0.0")
+
+    //google oauth 인증
+    implementation group: 'com.google.api-client', name: 'google-api-client', version: '1.31.5'
 
     compile("javax.annotation:javax.annotation-api:1.2")
 
