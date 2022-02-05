@@ -112,9 +112,6 @@ export default {
       state.info.nickName = nickname.nickname
     }
 
-<<<<<<< HEAD
-    takeProfile()
-=======
     const deleteuserId = function () {
       const token = store.getters['root/getJWTToken']
       const body = {
@@ -147,7 +144,6 @@ export default {
     }
 
     // takeProfile()
->>>>>>> front
     // console.log(typeof(state.info))
 
     const activities = [
