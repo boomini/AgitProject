@@ -30,11 +30,8 @@
             <button @click="handleClickSignIn" class='easy-custom-btn kakao-btn'></button>
           </div>
         </div>
-
       </span>
-      <div>
-        아아아아아아
-      </div>
+
     </template>
   </el-dialog>
 </template>
@@ -105,7 +102,6 @@
 import { reactive, computed, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import $axios from 'axios';
 
 export default {
   name: 'login-dialog',
