@@ -63,9 +63,9 @@ export function editProfile ({ state }, payload) {
   // return $axios.patch(url, body)
 }
 
-// 채팅
+// 채팅 setIsChatPanel  store.commit('root/setMenuActive', 0)
 export function toggleChatPanel({state, commit}){
-  commit('setIsChatPanel', !state.isChatPanel);
+  commit('root/setIsChatPanel', !state.isChatPanel);
   if (state.isChatPanel === true){
     setTimeout(() => {
       var chatDiv = document.getElementById("chat-area");

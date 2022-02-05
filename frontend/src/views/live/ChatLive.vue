@@ -76,13 +76,13 @@ export default {
       if (this.currentMode === "") {
         this.chatHeight = "80vh"
       } else {
-        this.chatHeight="33vh"
+        this.chatHeight="40vh"
       }
     }
   },
   // 여기 연결 시켜야 함
   computed: {
-    ...mapState("", ["messages", "currentMode"]),
+
   },
   methods: {
     ...mapActions("", [

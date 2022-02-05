@@ -3,6 +3,7 @@ package com.ssafy.api.controller;
 import com.ssafy.api.advice.exception.CArticleNotFoundException;
 import com.ssafy.api.dto.ArticleDto;
 import com.ssafy.api.dto.TeamDto;
+import com.ssafy.api.dto.UserDto;
 import com.ssafy.api.service.ArticleService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Article;
@@ -28,16 +29,8 @@ public class ArticleController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<? extends BaseResponseBody> addArticle (@RequestParam(value="title")String title, @RequestParam(value="content")String content,
-                                                                  @RequestParam(value="writer")String writer, @RequestParam(value="teamName")String teamName, @RequestParam(value="uploadDate")String uploadDate) throws Exception {
+    public ResponseEntity<? extends BaseResponseBody> addArticle (@RequestBody @ApiParam(value="로그인 정보", required = true) ArticleDto articleDto) throws Exception {
 
-        ArticleDto articleDto = new ArticleDto();
-        articleDto.setTitle(title);
-        articleDto.setContent(content);
-        articleDto.setWriter(writer);
-        articleDto.setTeamName(teamName);
-        articleDto.setUploadDate(LocalDate.parse(uploadDate));
-        
         Article article = articleService.addArticle(articleDto);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
