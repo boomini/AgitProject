@@ -66,3 +66,30 @@ export function editProfile ({ state }, payload) {
   // return $axios.patch(url, body)
 }
 
+export function toggleChatPanel({state, commit}){
+  commit('setIsChatPanel', !state.isChatPanel);
+  if (state.isChatPanel === true){
+    setTimeout(() => {
+      var chatDiv = document.getElementById("chat-area");
+      chatDiv.scrollTo({
+        top: chatDiv.scrollHeight - chatDiv.clientHeight,
+        behavior: 'smooth'
+    })
+   }, 50);
+  }
+}
+
+export function sendMessage({state}, message){
+  var messageData = {
+    content: message,
+    secretName: state.secretName
+  }
+  state.session.signal({
+    type: 'chat',
+    data: JSON.stringify(messageData),
+    to: [],
+  })
+}
+
+
+

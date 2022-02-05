@@ -39,6 +39,9 @@
             <user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
           </div>
         </div>
+        <div>
+          <chat-live/>
+        </div>
       </div>
 		</div>
 	</div>
@@ -52,7 +55,9 @@ import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { OpenVidu } from 'openvidu-browser'
 import UserVideo from '@/views/live/UserVideo.vue'
+import ChatLive from '@/views/live/ChatLive.vue'
 import axios from 'axios'
+import moment from 'moment';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -61,6 +66,7 @@ export default {
 
   components: {
     UserVideo,
+    ChatLive,
   },
 
   setup () {
@@ -117,6 +123,20 @@ export default {
       state.session.on('exception', ({ exception }) => {
 				console.warn(exception)
 			})
+
+      state.session.on('signal:chat', (event) => {
+        let eventData = JSON.parse(event.data);
+        let data = new Object()
+        let time = new Date()
+        data.message = eventData.content;
+        if (state.currentMode === 'anonymous') {
+          data.sender = eventData.secretName;
+        } else {
+          data.sender = event.from.data.slice(15,-2);
+        }
+        data.time = moment(time).format('HH:mm')
+        store.commit('setMessages', data)
+      })
 
       getToken(state.mySessionId).then(token => {
 				state.session.connect(token, { clientData: state.myUserName })
