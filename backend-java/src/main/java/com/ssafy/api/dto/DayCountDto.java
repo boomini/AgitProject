@@ -14,12 +14,12 @@ import java.time.LocalDate;
 @ApiModel("DayCountDto")
 public class DayCountDto {
     Long count;
-    int uploadDate;
+    LocalDate uploadDate;
 
     @QueryProjection
     public DayCountDto(Long count, LocalDate uploadDate){
         this.count = count;
-        this.uploadDate = uploadDate.getDayOfMonth();
+        this.uploadDate = uploadDate;
     }
 
 }
