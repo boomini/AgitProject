@@ -34,6 +34,7 @@ export function getProfile ({ state }, payload) {
   return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
 }
 
+<<<<<<< HEAD
 // 로그인한 유저가 소속된 팀 정보 가져오기
 export function getTeamInfo ({ state }, payload) {
   console.log('getTeamInfo', state, payload)
@@ -104,4 +105,20 @@ export function deleteUser ({ state }, payload) {
   const body = payload.body
   console.log(body)
   return $axios({ method: 'delete', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
+=======
+
+//google토큰확인
+export function verifyToken ({state},payload){
+  console.log('verifyToken', state, payload)
+  const url='auth/token';
+  let body=payload;
+  return $axios.post(url,body)
+}
+// 로그인한 유저가 소속된 방 정보 가져오기
+export function getTeamInfo ({ state }, payload) {
+  console.log('getTeamInfo', state, payload)
+  const url = `/user/${payload.userId}/team`
+  return $axios({ method: 'get', url: url })
+
+>>>>>>> feature/oauth2
 }

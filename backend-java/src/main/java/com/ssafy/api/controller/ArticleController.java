@@ -29,7 +29,11 @@ public class ArticleController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
+<<<<<<< HEAD
     public ResponseEntity<? extends BaseResponseBody> addArticle (@RequestBody @ApiParam(value="로그인 정보", required = true) ArticleDto articleDto) throws Exception {
+=======
+    public ResponseEntity<? extends BaseResponseBody> addArticle (@RequestBody ArticleDto articleDto) throws Exception {
+>>>>>>> feature/oauth2
 
         Article article = articleService.addArticle(articleDto);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));

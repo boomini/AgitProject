@@ -63,15 +63,17 @@ public class AuthController {
 			@ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
 			@ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
 	})
-	public ResponseEntity<?> tokenVerify(@RequestBody UserLoginDto userLoginDto) {
+	public ResponseEntity<UserLoginDto> tokenVerify(@RequestBody UserLoginDto userLoginDto) {
 		//google에서 받은 idToken
 		System.out.println("RequestBody value : " + userLoginDto.getAccessToken());
-		User user = userService.tokenVerify(userLoginDto.getAccessToken());
+		UserDto userDto = userService.tokenVerify(userLoginDto.getAccessToken());
 
-		//User user = userService.getUserByUserId(userId);
+		User user = userService.getUserByUserId(userDto.getUserId());
 		if(user==null){
-			UserDto userDto = new UserDto();
+			//회원가입 필요할때
+			userService.createUser(userDto);
 		}
-		return null;
+
+		return ResponseEntity.ok(UserLoginDto.of(200, "Success", JwtTokenUtil.getToken(userDto.getUserId())));
 	}
 }
