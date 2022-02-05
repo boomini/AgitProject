@@ -273,7 +273,13 @@ export default {
       state.team.teamDescription = route.params.roomDescription
       state.team.teamPicture = route.params.roomPicture
       const today = new Date()
-      state.team.uploadDate = `${today.getFullYear()}-${today.getMonth() + 1}`
+      let month = today.getMonth() + 1
+      if (month < 10) {
+        month = `0${month}`
+      } else {
+        month = month.toString()
+      }
+      state.team.uploadDate = `${today.getFullYear()}-${month}`
 
       // 이번 달 달력 가져오기
       const payload = {
@@ -283,6 +289,7 @@ export default {
       store.dispatch('root/getCategoryCount', payload)
       .then(function (result) {
         console.log('성공')
+        console.log(result.data)
       })
       .catch(function (error) {
         console.log('실패')
