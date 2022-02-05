@@ -11,7 +11,7 @@
     <el-form :model="state.form" status-icon :rules="state.rules" ref="signupForm" :label-position="state.form.align">
       <el-form-item prop="email" label="이메일" :label-width="state.formLabelWidth">
         <el-input v-model="state.form.id" autocomplete="off" style="width: 70%" :disabled="state.form.isValidatedId" id="id-input" placeholder="이메일"></el-input>
-        <el-button size="small" style="float: right; margin-top:5px;" @click="checkDup" :disabled="state.form.isValidatedId">인증번호 보내기</el-button>
+        <el-button size="small" style="float: right; margin-top:5px;" @click="sendAuthEmail" :disabled="state.form.isValidatedId">인증번호 보내기</el-button>
       </el-form-item>
       <el-form-item prop="password" label="인증번호" :label-width="state.formLabelWidth">
         <el-input v-model="state.form.password" autocomplete="off" show-password placeholder="인증번호"></el-input>
@@ -178,36 +178,28 @@ export default {
       handleClose()
     }
 
-    const checkDup = function () {
-      if (!state.form.isPossibleId) {
-        swal({
-            title: "아이디를 확인해주세요.",
-            text: "5 ~ 16자 사이의 영문 대 소문자, 숫자로만 구성되어야 합니다.",
-            icon: "error",
-            button: "확인",
-          });
-        state.form.isPossibleId = false
-      } else {
-        store.dispatch('root/checkDupId', { userId: state.form.id })
+    const sendAuthEmail = function () {
+
+        store.dispatch('root/getAuthNumber', { userEmail: state.form.id })
         .then(res => {
           state.form.isValidatedId = true
           swal({
-              title: "사용가능한 아이디입니다.",
+              title: "인증번호를 성공적으로 보냈습니다.",
               icon: "success",
               button: "확인",
             });
         })
         .catch(err => {
           swal({
-              title: "이미 존재하는 아이디입니다.",
+              title: "인증번호 보내기 오류입니다.",
               icon: "error",
               button: "확인",
             });
         })
-      }
+
     }
 
-    return { signupForm, state, clickSignup, handleClose, clickCustomercenter, checkDup, loading }
+    return { signupForm, state, clickSignup, handleClose, clickCustomercenter, sendAuthEmail, loading }
   }
 }
 </script>

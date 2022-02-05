@@ -26,6 +26,15 @@ export function checkDupId ({ state }, payload) {
   return $axios.get(url)
 }
 
+// 이메일로 보낸 인증 번호 가져오기
+export function getAuthNumber ({ state }, payload) {
+  console.log('authNumber', state, payload)
+  const url = `/email/check/auth/sendEmail?userEmail=${payload.userEmail}`
+  console.log(url);
+  return $axios({method:'get', url: url})
+
+}
+
 // 메인 페이지 정보 가져오기
 export function getProfile ({ state }, payload) {
   console.log('getProfile', state, payload)
