@@ -5,12 +5,8 @@
         <!-- 달력 헤더 부분 -->
         <template #header="{ date }">
           <span>
-            <h3>{{ roomId + '번 팀 상세 보기 페이지' }}</h3>
-            <h3>{{ roomName + '번 팀 상세 보기 페이지' }}</h3>
-            <h3>{{ roomDescription + '번 팀 상세 보기 페이지' }}</h3>
-            <h3>{{ roomPicture + '번 팀 상세 보기 페이지' }}</h3>
-
-            <div>간단한 방 소개</div>
+            <h3>{{ roomName }}</h3>
+            <div>{{ roomDescription }}</div>
           </span>
 
           <h3>{{ date }}</h3>
@@ -253,9 +249,11 @@ export default {
     onBeforeMount(() => {
       state.team.teamId = route.params.roomId
       state.team.teamName = route.params.roomName
-      // store.commit('root/setMenuActiveMenuName', 'home')
-      console.log(state.team.teamId, state.team.teamName)
-      // 팀 정보 가져오기
+      state.team.teamDescription = route.params.roomDescription
+      state.team.teamPicture = route.params.roomPicture
+      console.log(state.team.teamName)
+
+      // 이번 달 달력 가져오기
       // store.commit()
     })
 
