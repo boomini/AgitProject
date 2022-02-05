@@ -59,7 +59,8 @@ export default {
   data() {
     return {
       message: "",
-      chatHeight: "33vh"
+      chatHeight: "33vh",
+      messages: []
     };
   },
   watch: {
