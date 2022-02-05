@@ -63,7 +63,7 @@ export function editProfile ({ state }, payload) {
   // return $axios.patch(url, body)
 }
 
-<<<<<<< HEAD
+// 채팅
 export function toggleChatPanel({state, commit}){
   commit('setIsChatPanel', !state.isChatPanel);
   if (state.isChatPanel === true){
@@ -76,7 +76,6 @@ export function toggleChatPanel({state, commit}){
    }, 50);
   }
 }
-
 export function sendMessage({state}, message){
   var messageData = {
     content: message,
@@ -90,8 +89,6 @@ export function sendMessage({state}, message){
 }
 
 
-
-=======
 // 특정 달의 달력 개요 가져오기
 export function getCategoryCount({ state }, payload) {
   const teamId = payload.teamId
@@ -108,4 +105,3 @@ export function deleteUser ({ state }, payload) {
   console.log(body)
   return $axios({ method: 'delete', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
 }
->>>>>>> front
