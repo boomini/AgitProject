@@ -14,7 +14,7 @@
             </div>
             <p>Birthday : {{ state.info.year}}년 {{ state.info.month}}월 {{ state.info.day}}일</p>
             <p class="card-text"><small class="text-muted">최초 가입일 : {{state.info.cdate.slice(2, 10)}} </small></p>
-            <el-button type="danger">회원 탈퇴</el-button>
+            <el-button type="danger" @click="deleteuserId">회원 탈퇴</el-button>
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@ export default {
       store.dispatch('root/getProfile', token)
       .then(res => {
         state.info = res.data
-        console.log(state.info)
+        // console.log(state.info)
       })
       .catch(err => {
         console.log(err)
@@ -109,6 +109,37 @@ export default {
 
     const editNickname = (nickname) => {
       state.info.nickName = nickname.nickname
+    }
+
+    const deleteuserId = function () {
+      const token = store.getters['root/getJWTToken']
+      const body = {
+        'userId': state.info.userId,
+      }
+      store.dispatch('root/deleteUser',{ 'body': body, 'token': token})
+      .then(res => {
+          setTimeout(() => {
+                swal({
+                  title: "회원탈퇴",
+                  text: "이용해주셔서 감사합니다.",
+                  icon: "success",
+                  button: "확인",
+                });
+              }, 500)
+
+              store.commit('root/setJWTTokenReset')
+              localStorage.removeItem('JWT')
+              store.commit('root/setMenuActive', 0)
+              router.push({
+                name: 'home',
+              })
+
+              // router.go(router.currentRoute)
+
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
 
     // takeProfile()
@@ -140,7 +171,7 @@ export default {
 
 
 
-    return { store, router, takeProfile, state, activities, onCloseNicknameDialog, editNickname}
+    return { store, router, takeProfile, state, activities, onCloseNicknameDialog, editNickname, deleteuserId}
   }
 }
 </script>

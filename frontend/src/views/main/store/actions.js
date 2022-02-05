@@ -52,6 +52,7 @@ export function registerTeam ({ state }, payload) {
   return $axios({ method: 'post', url: url, data: teamDto, headers: { Authorization: `Bearer ${token}`}})
 }
 
+// 닉네임 수정
 export function editProfile ({ state }, payload) {
   // console.log('editProfile', state, payload)
   // console.log(payload)
@@ -70,6 +71,7 @@ export function getCategoryCount({ state }, payload) {
   const url = `/team/${teamId}`
 }
 
+<<<<<<< HEAD
 //google토큰확인
 export function verifyToken ({state},payload){
   console.log('verifyToken', state, payload)
@@ -79,3 +81,14 @@ export function verifyToken ({state},payload){
 }
 
 
+=======
+// 회원탈퇴
+export function deleteUser ({ state }, payload) {
+  const userId = payload.body.userId
+  const url = '/user/delete'
+  const token = payload.token
+  const body = payload.body
+  console.log(body)
+  return $axios({ method: 'delete', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
+}
+>>>>>>> 840a9f704b30c8193016d07cd6ecff0a39d8536e
