@@ -51,6 +51,7 @@ export function registerTeam ({ state }, payload) {
   return $axios({ method: 'post', url: url, data: teamDto, headers: { Authorization: `Bearer ${token}`}})
 }
 
+// 닉네임 수정
 export function editProfile ({ state }, payload) {
   // console.log('editProfile', state, payload)
   // console.log(payload)
@@ -71,4 +72,14 @@ export function getCategoryCount({ state }, payload) {
     method: 'get',
     url: url
   })
+}
+
+// 회원탈퇴
+export function deleteUser ({ state }, payload) {
+  const userId = payload.body.userId
+  const url = '/user/delete'
+  const token = payload.token
+  const body = payload.body
+  console.log(body)
+  return $axios({ method: 'delete', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
 }
