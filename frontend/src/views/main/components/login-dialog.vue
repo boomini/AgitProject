@@ -30,8 +30,8 @@
             <button @click="handleClickSignIn" class='easy-custom-btn kakao-btn'></button>
           </div>
         </div>
-      </span>
 
+      </span>
     </template>
   </el-dialog>
 </template>
@@ -224,16 +224,16 @@ methods: {
             store.commit('root/setJWTToken', result.data.accessToken)
 
             // 로그인한 유저가 가입한 팀 정보 가져오기
-            const token = store.getters['root/getJWTToken']
-            store.dispatch('root/getTeamInfo', token)
+            store.dispatch('root/getTeamInfo', { userId: userId })
             .then(function (result) {
+              console.log(result)
+
               store.commit('root/setUserTeam', result.data)
-              // console.l
-              console.log('회원 팀정보 가져오기')
-              // console.log(result.data)
-              console.log(store.getters['root/getTeams'])
-              console.log('팀정보 가져오기 성공')
             })
+
+
+
+
 
             handleClose() // 로그인 모달 끄기
           })
