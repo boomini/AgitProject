@@ -129,3 +129,17 @@ export function createSchedule ({ state }, payload) {
   const token = payload.token
   return $axios({ method: 'post', url: url, data: body, headers: { Authorization: `Bearer ${token}`}})
 }
+
+// 게시글
+// 게시글 작성
+export function addArticle ({ state }, payload) {
+  console.log('게시글 작성 함수')
+  console.log(payload)
+  const url = '/article'
+  const body = payload.body
+  return $axios(({
+    method: 'post',
+    url: url,
+    data: body
+  }))
+}

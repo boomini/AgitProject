@@ -48,14 +48,14 @@
                 {{ data.day.split('-')[2] }}
               </span>
               <span class="col-9">
-                <span class="badge-box-test">
-                  <span class="badge-tag-test schedule">4</span>
+                <span v-if="data.day.toString() in state.dict.articleCntDict" class="badge-box-test">
+                  <span class="badge-tag-test schedule">{{ state.dict.articleCntDict[data.day.toString()] }}</span>
                 </span>
-                <span class="badge-box-test">
-                  <span class="badge-tag-test video">54</span>
+                <span v-if="data.day.toString() in state.dict.imageCntDict" class="badge-box-test">
+                  <span class="badge-tag-test video">{{ state.dict.imageCntDict[data.day.toString()] }}</span>
                 </span>
-                <span class="badge-box-test">
-                  <span class="badge-tag-test picture">554</span>
+                <span v-if="data.day.toString() in state.dict.videoCntDict" class="badge-box-test">
+                  <span class="badge-tag-test picture">{{ state.dict.videoCntDict[data.day.toString()] }}</span>
                 </span>
               </span>
             </div>
@@ -68,12 +68,12 @@
                   <span class="badge">4</span>
                 </div>
               </div> -->
-              <div v-show=" state.team.articleCntDict.get(data.day.toString())" class="badge-tag article">
+              <div v-show="data.day.toString() in state.dict.articleCntDict" class="badge-tag article">
                 <div class="ms-3">
                   게시글
                 </div>
                 <div class="me-3">
-                  <span class="badge">{{ state.team.articleCntDict.get(data.day.toString()) }}</span>
+                  <span class="badge">{{ state.dict.articleCntDict[data.day.toString()] }}</span>
                 </div>
               </div>
               <!-- <div v-if="parseInt(data.day.split('-').slice(2)[0], 10) <= 10 && !(data.type === 'prev-month' || data.type === 'next-month')" class="badge-tag picture">
@@ -151,6 +151,7 @@
   <!-- 게시글 추가 다이얼로그 -->
   <create-article-dialog
     :open="state.createArticleDialogOpen"
+    :info="state.team"
     @closeCreateArticleDialog="onCloseCreateArticleDialog"/>
 
   <!-- 게시글 클릭 시 나오는 세부화면 -->
@@ -236,10 +237,22 @@ export default {
     }
 
     function convertListToDict (list, dict) {
+      console.log('함수 실행')
+      console.log(dict)
+      console.log(list)
       for (let i = 0; i < list.length; i++) {
-        const count = list[i].count
+        let count = ''
+        const length = list[i].count
+        if (length >= 100) {
+          count = '99+'
+        } else {
+          count = length.toString()
+        }
         const uploadDate = list[i].uploadDate
-        dict.set(uploadDate.toString(), count)
+        console.log(count)
+        console.log(uploadDate)
+        dict[uploadDate] = count
+        console.log(dict)
       }
     }
 
@@ -263,10 +276,12 @@ export default {
         teamName: '',
         teamDescription: '',
         teamPicture: '',
-        articleCntDict: new Map(),
-        imageCntDict: new Map(),
-        videoCntDict: new Map(),
         uploadDate: ''
+      },
+      dict: {
+        articleCntDict: {},
+        imageCntDict: {},
+        videoCntDict: {},
       },
       createScheduleDialogOpen: false,
       createArticleDialogOpen: false,
@@ -356,13 +371,13 @@ export default {
       store.dispatch('root/getCategoryCount', payload)
       .then(function (result) {
         console.log('해당 달의 개요 가져오기 성공')
-        // json ->
-        convertListToDict(result.data.articleCntList, state.team.articleCntDict)
-        convertListToDict(result.data.imageCntList, state.team.imageCntDict)
-        convertListToDict(result.data.videoCntList, state.team.videoCntDict)
+        // json -> map
+        convertListToDict(result.data.articleCntList, state.dict.articleCntDict)
+        convertListToDict(result.data.imageCntList, state.dict.imageCntDict)
+        convertListToDict(result.data.videoCntList, state.dict.videoCntDict)
       })
       .catch(function (error) {
-        console.log('실패')
+        console.log('해당 달의 개요 가져오기 실패')
       })
     })
 
