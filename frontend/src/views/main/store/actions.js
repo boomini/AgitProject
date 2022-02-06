@@ -129,3 +129,17 @@ export function createSchedule ({ state }, payload) {
   const token = payload.token
   return $axios({ method: 'post', url: url, data: body, headers: { Authorization: `Bearer ${token}`}})
 }
+
+// 채팅
+export function sendMessage({state}, payload){
+  console.log(payload)
+  var messageData = {
+    content: payload.message,
+    secretName: state.secretName
+  }
+  state.session.signal({
+    type: 'chat',
+    data: JSON.stringify(messageData),
+    to: [],
+  })
+}

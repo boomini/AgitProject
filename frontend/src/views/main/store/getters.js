@@ -19,3 +19,11 @@ export function getJWTToken (state) {
 export function getTeams (state) {
   return state.userTeams
 }
+
+export function getMessages (state) {
+  return state.messages
+}
+
+export function getSecretName (state) {
+  return state.secretName
+}

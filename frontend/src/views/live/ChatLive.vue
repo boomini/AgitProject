@@ -1,30 +1,30 @@
 <template>
     <div class="chat-panel">
-    <div class="chat-box p-2 d-flex flex-column h-100">
-      <div class="header text-left">
+    <div class="chat-box p-2 d-flex flex-column">
+      <div class="header text-left d-flex justify-content-center align-items-center">
         <span class="title">
           채팅
         </span>
-        <button
-          class="btn close-btn"
+        <!-- <button
+          class="btn close-btn m-3"
           @click="toggleChatPanel"
         >
           <i class="fas fa-times"></i>
-        </button>
+        </button> -->
       </div>
       <!-- 채팅 내역 -->
       <div
         id="chat-area"
-        :height="chatHeight"
+        :height="state.form.chatHeight"
       >
         <div
           class="mt-2 text-left message"
-          v-for="(message, i) of messages"
+          v-for="(message, i) of state.messages"
           :key="i"
         >
           <div class="message-title">
             <span class="mr-2 message-header">{{ message.sender }}</span>
-            <span class="message-header">{{ message.time }}</span>
+            <span class="m-3 message-header">{{ message.time }}</span>
           </div>
           <div>
             {{ message.message }}
@@ -35,7 +35,7 @@
         <div class="col-10 px-1 py-0">
           <input
             class="text-box"
-            v-model="message"
+            v-model="state.form.message"
             @keyup.enter="clickSendMessage"
           >
         </div>
@@ -53,57 +53,53 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { reactive, computed, watch } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { OpenVidu } from 'openvidu-browser'
+
 export default {
   name: "ChatLive",
-  data() {
-    return {
+
+  setup(props, { emit }){
+  const store = useStore()
+  const router = useRouter()
+
+  const state = reactive({
+    form:{
       message: "",
-      chatHeight: "33vh",
-      messages: []
-    };
-  },
-  watch: {
-    messages() {
-      setTimeout(() => {
-        var chatDiv = document.getElementById("chat-area");
-        chatDiv.scrollTo({
-          top: chatDiv.scrollHeight - chatDiv.clientHeight,
-          behavior: 'smooth'
-        })
-      }, 50);
+      chatHeight: "30vh",
     },
-    currentMode() {
-      if (this.currentMode === "") {
-        this.chatHeight = "80vh"
-      } else {
-        this.chatHeight="40vh"
-      }
-    }
-  },
-  // 여기 연결 시켜야 함
-  computed: {
+    session: props.session,
+    messages: computed(() => store.getters['root/getMessages']),
+  })
 
-  },
-  methods: {
-    ...mapActions("", [
-      "toggleChatPanel",
-      "sendMessage",
-    ]),
-    clickSendMessage() {
-      // 공백이 없으면 메시지 전송
-      if (this.message.trim()) {
-        this.sendMessage(this.message)
-        this.message = ""
-      }
+  // watch(props.messages, setTimeout(() => {
+  //   var chatDiv = document.getElementById("chat-area");
+  //   chatDiv.scrollTo({
+  //     top: chatDiv.scrollHeight - chatDiv.clientHeight,
+  //     behavior: 'smooth'
+  //   });
+  // }, 50)
+  // )
+
+  const clickSendMessage = function (){
+    if (state.form.message.trim()){
+      emit("sendMessage", state.form.message)
+      state.form.message = ""
+     }
     }
-  },
-};
+
+    return {state, clickSendMessage}
+
+  }
+}
 </script>
-
 <style scoped>
 .chat-box {
-  height: 100%;
+  height: 500px;
+  border-radius: 3%;
+  background-color: rgb(223, 236, 236);
 }
 
 .header {
@@ -118,7 +114,7 @@ export default {
 }
 
 .text-box {
-  background-color: #D1D1D1;
+  background-color: #ffffff;
   width: 100%;
   border-radius: 20px;
   color: black;
@@ -133,7 +129,7 @@ export default {
   padding-left: 5%;
   font-family: 'Jua' !important;
   font-size: 1.0rem !important;
-  color: white;
+  color: black;
 }
 
 .header {
@@ -152,7 +148,7 @@ export default {
 }
 
 .message {
-  color: white;
+  color: black;
 }
 
 .send-btn {
@@ -184,5 +180,4 @@ export default {
   background-color: #37474F;
   height: 0;
 }
-
 </style>

@@ -36,6 +36,7 @@ export default {
   JWTToken: localStorage.getItem('JWT'), // JWT Token을 저장해둠.
   userTeams: [],
   isChatPanel: false,
-  message: [],
+  messages: [],
   secretName: null,
+  currentMode: 'anonymous',
 }
