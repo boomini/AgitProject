@@ -124,12 +124,12 @@ public class TeamController {
         List<ArticleDto> articleDto = articleService.getTeamsArticleListAtDate(uploadDate, teamId);
         List<ImageDto> imageDto = imageService.getImageListAtDateByTeamId(uploadDate,teamId);
         List<VideoDto> videoDto = videoService.getVideoListAtDateByTeamId(uploadDate, teamId);
-        List<EventDto> eventDto = eventService.getTeamEventListInDate(uploadDate, teamId);
+        List<EventResDto> eventResDto = eventService.getTeamEventListInDate(uploadDate, teamId);
         BoardDto boardDto = new BoardDto();
         boardDto.setArticleList(articleDto);
         boardDto.setImageList(imageDto);
         boardDto.setVideoList(videoDto);
-        boardDto.setEventList(eventDto);
+        boardDto.setEventResList(eventResDto);
         boardDto.setTeamId(teamId);
         return ResponseEntity.status(200).body(boardDto);
 

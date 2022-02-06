@@ -10,5 +10,5 @@ public interface EventService {
     boolean addTeamEvent(EventDto eventDto, Long teamId);
     List<EventResDto> getUserEventList(Long userId);
     List<EventResDto> getUserEventListInMonth(Long userId, LocalDate date);
-    List<EventDto> getTeamEventListInDate(String eventDate, Long teamId);
+    List<EventResDto> getTeamEventListInDate(String eventDate, Long teamId);
 }
