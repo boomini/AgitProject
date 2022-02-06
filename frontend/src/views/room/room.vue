@@ -286,6 +286,8 @@ export default {
         'teamId': state.team.teamId,
         'uploadDate': state.team.uploadDate
       }
+      console.log('여기 체크')
+      console.log(state.team.teamId)
       store.dispatch('root/getCategoryCount', payload)
       .then(function (result) {
         console.log('성공')
