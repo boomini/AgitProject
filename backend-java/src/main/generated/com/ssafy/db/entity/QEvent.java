@@ -26,14 +26,16 @@ public class QEvent extends EntityPathBase<Event> {
 
     public final DateTimePath<java.time.LocalDateTime> createdDate = createDateTime("createdDate", java.time.LocalDateTime.class);
 
-    public final StringPath eventContent = createString("eventContent");
+    public final DatePath<java.time.LocalDate> endDate = createDate("endDate", java.time.LocalDate.class);
 
-    public final DatePath<java.time.LocalDate> eventDate = createDate("eventDate", java.time.LocalDate.class);
+    public final StringPath eventContent = createString("eventContent");
 
     public final StringPath eventTitle = createString("eventTitle");
 
     //inherited
     public final NumberPath<Long> id = _super.id;
+
+    public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
 
     public final QTeam team;
 

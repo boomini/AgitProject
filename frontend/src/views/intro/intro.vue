@@ -5,8 +5,9 @@
       <div class="d-flex justify-content-end" style="margin-top:20px; margin-right: 250px;">
         <el-row :gutter="20">
           <!-- v-if문으로 수정 예정 -->
-          <div v-if="state.isLogin === null" class="button-wrapper d-flex flex-row" style="position:fixed">
+          <div v-if="state.isLogin === null" class="button-wrapper d-flex flex-row" style="position:fixed;right:200px">
             <el-button @click="clickSignup" style="background-color:#112; color: white;">회원가입</el-button>
+            <el-button @click="clickAuth" style="background-color:#112; color: white;">인증</el-button>
             <el-button @click="clickLogin " style="background-color:#112; color: white;">로그인</el-button>
           </div>
           <div v-else class="button-wrapper d-flex flex-row" style="position:fixed">
@@ -220,7 +221,7 @@ export default {
   name: 'Intro',
   setup (props, { emit }) {
     const store = useStore()
-
+    const router = useRouter()
     const state = reactive({
       activeIndex: computed(() => store.getters['root/getActiveMenuIndex']),
       isLogin: computed(() => store.getters['root/getJWTToken'])
@@ -242,6 +243,10 @@ export default {
 
     const clickSignup = () => {
       emit('openSignupDialog')
+    }
+
+    const clickAuth = () => {
+      emit('openAuthDialog')
     }
 
     const clickLogout = function () {
@@ -273,7 +278,7 @@ export default {
 
 
 
-    return { state, clickLogin, clickSignup, clickLogout, clickProfile }
+    return { state, clickLogin, clickSignup, clickAuth, clickLogout, clickProfile }
   }
 }
 </script>

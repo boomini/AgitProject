@@ -35,4 +35,7 @@ export default {
   menus: menuData,
   JWTToken: localStorage.getItem('JWT'), // JWT Token을 저장해둠.
   userTeams: [],
+  isChatPanel: false,
+  message: [],
+  secretName: null,
 }

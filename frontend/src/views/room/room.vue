@@ -5,11 +5,14 @@
         <!-- 달력 헤더 부분 -->
         <template #header="{ date }">
           <span>
-            <h3>{{ roomName }}</h3>
-            <div>{{ roomDescription }}</div>
+            <h3>{{ state.team.teamName }}</h3>
+            <div>{{ state.team.teamDescription }}</div>
           </span>
 
-          <h3>{{ date }}</h3>
+          <div>
+            <h3>{{ date }}</h3>
+
+          </div>
 
           <span>
             <div class="d-flex justify-content-between mb-2">
@@ -39,20 +42,41 @@
         <!-- 달력 날짜 부분 -->
         <template #dateCell="{ data }" >
           <div class="d-flex flex-column justify-content-between" style="height: 100%" @click="clickOnDate(data)">
-            <div>
+            <div class="row">
               <!-- {{ data }} -->
-              {{ parseInt(data.day.split('-').slice(2)[0], 10) }}
+              <span class="col-3">
+                {{ data.day.split('-')[2] }}
+              </span>
+              <span class="col-9">
+                <span class="badge-box-test">
+                  <span class="badge-tag-test schedule">4</span>
+                </span>
+                <span class="badge-box-test">
+                  <span class="badge-tag-test video">54</span>
+                </span>
+                <span class="badge-box-test">
+                  <span class="badge-tag-test picture">554</span>
+                </span>
+              </span>
             </div>
-            <div style="" class="badge-box">
-              <div v-if="data.type === 'current-month'" class="badge-tag schedule">
+            <div class="badge-box">
+              <!-- <div v-if="data.type === 'current-month'" class="badge-tag schedule">
                 <div class="ms-3">
                   일정
                 </div>
                 <div class="me-3">
                   <span class="badge">4</span>
                 </div>
+              </div> -->
+              <div v-show=" state.team.articleCntDict.get(data.day.toString())" class="badge-tag article">
+                <div class="ms-3">
+                  게시글
+                </div>
+                <div class="me-3">
+                  <span class="badge">{{ state.team.articleCntDict.get(data.day.toString()) }}</span>
+                </div>
               </div>
-              <div v-if="parseInt(data.day.split('-').slice(2)[0], 10) <= 10 && !(data.type === 'prev-month' || data.type === 'next-month')" class="badge-tag picture">
+              <!-- <div v-if="parseInt(data.day.split('-').slice(2)[0], 10) <= 10 && !(data.type === 'prev-month' || data.type === 'next-month')" class="badge-tag picture">
                 <div class="ms-3">
                   사진
                 </div>
@@ -67,7 +91,7 @@
                 <div class="me-3">
                   <span class="badge">4</span>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </template>
@@ -105,11 +129,13 @@
   <!-- 초대코드 전송 다이얼로그 -->
   <invite-dialog
     :open="state.inviteDialogOpen"
+    :info="state.team.teamId"
     @closeInviteDialog="onCloseInviteDialog"/>
 
   <!-- 일정 추가 다이얼로그 -->
   <create-schedule-dialog
     :open="state.createScheduleDialogOpen"
+    :info="state.team"
     @closeCreateScheduleDialog="onCloseCreateScheduleDialog"/>
 
   <!-- 사진 추가 다이얼로그 -->
@@ -173,28 +199,50 @@ export default {
     UploadImageDialog,
     UploadVideoDialog,
   },
-  props: {
-    roomId: {
-      type: Number,
-    },
-    roomName: {
-      type: String,
-    },
-    roomDescription: {
-      type: String,
-    },
-    roomPicture: {
-      type: String,
-    }
-  },
+  // props: {
+  //   roomId: {
+  //     type: Number,
+  //   },
+  //   roomName: {
+  //     type: String,
+  //   },
+  //   roomDescription: {
+  //     type: String,
+  //   },
+  //   roomPicture: {
+  //     type: String,
+  //   }
+  // },
+  // create(){
+  //   //console.log(this.roomId)
+  // },
   setup() {
     const store = useStore()
     const router = useRouter()
-    const route = useRoute()
+
     const drawer = ref(false)
-    const calendar = ref(new Date())
+
+    const calendar = ref()
+
     // const inviteDialogOpen = ref(false)
     // const createScheduleDialogOpen = ref(false)
+
+    function convertMonth (month) {
+      if (month < 10) {
+        return `0${month}`
+      } else {
+        return month.toString()
+      }
+    }
+
+    function convertListToDict (list, dict) {
+      for (let i = 0; i < list.length; i++) {
+        const count = list[i].count
+        const uploadDate = list[i].uploadDate
+        dict.set(uploadDate.toString(), count)
+      }
+    }
+
 
     const clickOnDate = function (data) {
       const date = data.day.split('-')
@@ -215,9 +263,9 @@ export default {
         teamName: '',
         teamDescription: '',
         teamPicture: '',
-        articleList: [],
-        imageList: [],
-        videoList: [],
+        articleCntDict: new Map(),
+        imageCntDict: new Map(),
+        videoCntDict: new Map(),
         uploadDate: ''
       },
       createScheduleDialogOpen: false,
@@ -228,6 +276,7 @@ export default {
       year : '',
       month : '',
       day : '',
+      token:'',
       title : computed(() => `${state.year}년 ${state.month}월 ${state.day}일 게시판`),
       circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
     })
@@ -235,7 +284,9 @@ export default {
     const selectDate = (val) => {
       calendar.value.selectDate(val)
       const date = calendar.value.date
-      state.team.uploadDate = `${date.$y}-${date.$M + 1}`
+      const year = date.$y
+      const month = convertMonth(date.$M + 1)
+      state.team.uploadDate = `${year}-${month}`
     }
 
     const onCloseInviteDialog = function () {
@@ -265,33 +316,50 @@ export default {
           conferenceId: roomId
         }
       })
+      // router.push({
+      //   name: 'Error',
+      // })
     }
 
     onBeforeMount(() => {
-      state.team.teamId = route.params.roomId
-      state.team.teamName = route.params.roomName
-      state.team.teamDescription = route.params.roomDescription
-      state.team.teamPicture = route.params.roomPicture
+
+      // state.team.teamId = route.params.roomId
+      // state.team.teamName = route.params.roomName
+      // state.team.teamDescription = route.params.roomDescription
+      // state.team.teamPicture = route.params.roomPicture
+      console.log(state.team.teamName)
+
+
+      let url = window.location.href;
+      state.team.teamId = url.split('/').reverse()[0];
+
+      store.dispatch('root/getTeamInfoDetail', state.team.teamId)
+      .then(function(result){
+        console.log(result.data);
+        state.team = result.data;
+        state.team.teamId = result.data.id;
+        console.log(state.team.teamId);
+        console.log(state.team.teamName)
+      })
+
       const today = new Date()
-      let month = today.getMonth() + 1
-      if (month < 10) {
-        month = `0${month}`
-      } else {
-        month = month.toString()
-      }
-      state.team.uploadDate = `${today.getFullYear()}-${month}`
+      const year = today.getFullYear()
+      const month = convertMonth(today.getMonth() + 1)
+      state.team.uploadDate = `${year}-${month}`
+
 
       // 이번 달 달력 가져오기
       const payload = {
         'teamId': state.team.teamId,
         'uploadDate': state.team.uploadDate
       }
-      console.log('여기 체크')
-      console.log(state.team.teamId)
       store.dispatch('root/getCategoryCount', payload)
       .then(function (result) {
-        console.log('성공')
-        console.log(result.data)
+        console.log('해당 달의 개요 가져오기 성공')
+        // json ->
+        convertListToDict(result.data.articleCntList, state.team.articleCntDict)
+        convertListToDict(result.data.imageCntList, state.team.imageCntDict)
+        convertListToDict(result.data.videoCntList, state.team.videoCntDict)
       })
       .catch(function (error) {
         console.log('실패')
@@ -321,7 +389,7 @@ export default {
 
 /* 달력 날짜 한 칸이 너무 작아서 높이 설정 */
 .el-calendar .el-calendar-table > tbody > tr > td .el-calendar-day{
-  height: 150px;
+  height: 180px;
 }
 
 /* 게시판 내에 존재하는 일정, 사진, 동영상 등의 뱃지 css */
@@ -336,6 +404,21 @@ export default {
   margin-bottom: 0.5rem;
   padding: 0;
 }
+.badge-tag-test {
+  font-size: 0.8rem;
+  border-radius: 10px;
+  color: white;
+  font-weight: bolder;
+  /* display: flex; */
+  /* justify-content: space-between; */
+  /* align-items: center; */
+  /* margin-bottom: 0.5rem; */
+  /* padding-left: 2px;
+  padding-right: 2px;
+  padding-top: 2px; */
+  padding: 0px 7px;
+  /* margin-right: 50px; */
+}
 
 .badge-tag .badge {
   margin: 0;
@@ -347,6 +430,12 @@ export default {
   width: 90%;
   margin: 0 auto;
   line-height: 150%;
+}
+.badge-box-test {
+  width: 90%;
+  margin: 0 auto;
+  line-height: 150%;
+  margin-right: 5px;
 }
 
 .badge-box .schedule {
@@ -362,5 +451,24 @@ export default {
 .badge-box .video {
   border: 1px solid #6b6b6bd5;
   background-color: #6b6b6bd5;
+}
+.badge-box-test .schedule {
+  border: 1px solid #ff6c7fd5;
+  background-color: #ff6c7fd5;
+}
+
+.badge-box-test .picture {
+  border: 1px solid #6c82ffd5;
+  background-color: #6c82ffd5;
+}
+
+.badge-box-test .video {
+  border: 1px solid #6b6b6bd5;
+  background-color: #6b6b6bd5;
+}
+
+.badge-box .article {
+  border: 1px solid #6ac7b3d5;
+  background-color: #6ac7b3d5;
 }
 </style>
