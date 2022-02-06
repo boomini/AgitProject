@@ -11,4 +11,5 @@ public interface EmailService {
     void mailSend(MailDto mailDto);
 
     MailDto sendAuthEmail(String userEmail);
+    MailDto sendTeamAddEmail(String userEmail,Long teamId);
 }

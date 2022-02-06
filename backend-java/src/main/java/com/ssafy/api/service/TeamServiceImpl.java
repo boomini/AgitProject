@@ -64,7 +64,7 @@ public class TeamServiceImpl implements TeamService{
         UserTeam userTeam = new UserTeam();
         userTeam.setUser(user.get());
         userTeam.setTeam(team.get());
-
+        userTeam.setState(1);
         userTeamRepository.save(userTeam);
         return true;
     }
@@ -94,6 +94,13 @@ public class TeamServiceImpl implements TeamService{
         }
 
         return userDtoList;
+    }
+
+    @Override
+    public TeamDto getTeamById(Long teamId) {
+        Optional<Team> team = teamRepositorySupport.findTeamByTeamId(teamId);
+        TeamDto teamDto = new TeamDto(team.get());
+        return teamDto;
     }
 
 }

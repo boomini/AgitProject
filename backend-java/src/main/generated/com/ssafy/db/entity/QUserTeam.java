@@ -27,6 +27,8 @@ public class QUserTeam extends EntityPathBase<UserTeam> {
     //inherited
     public final NumberPath<Long> id = _super.id;
 
+    public final NumberPath<Integer> state = createNumber("state", Integer.class);
+
     public final QTeam team;
 
     public final QUser user;

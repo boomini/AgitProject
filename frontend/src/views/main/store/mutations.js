@@ -22,3 +22,19 @@ export function setJWTTokenReset (state) {
 export function setUserTeam (state, team) {
   state.userTeams = team
 }
+
+export function setIsChatPanel(state, value){
+  state.isChatPanel = value;
+}
+
+export function setMessages(state, data){
+  state.messages.push(data);
+}
+
+export function clearMessages(state){
+  state.messages = [];
+}
+
+export function setSecretName(state, value){
+  state.scretName = value
+}
