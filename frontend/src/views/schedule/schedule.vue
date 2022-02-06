@@ -93,7 +93,7 @@
 
     <div style="margin-bottom: 100px; dispaly: flex; justify-content: center; align-items:center;" class="my-2">
       <el-carousel :interval="4000" type="card" height="200px" style=" z-index: -1" >
-        <el-carousel-item v-for="item in state.schedulelength" :key="item">
+        <el-carousel-item v-for="item in 4" :key="item">
           <h3>{{ item }}</h3>
         </el-carousel-item>
       </el-carousel>

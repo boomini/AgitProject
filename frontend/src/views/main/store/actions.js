@@ -75,16 +75,6 @@ export function getCategoryCount({ state }, payload) {
   })
 }
 
-// 회원탈퇴
-export function deleteUser ({ state }, payload) {
-  const userId = payload.body.userId
-  const url = '/user/delete'
-  const token = payload.token
-  const body = payload.body
-  console.log(body)
-  return $axios({ method: 'delete', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
-}
-
 //google토큰확인
 export function verifyToken ({state},payload){
   console.log('verifyToken', state, payload)
@@ -104,3 +94,23 @@ export function deleteUser ({ state }, payload) {
   return $axios({ method: 'delete', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
 }
 
+// 유저 한달 일정 가져오기
+export function getSchedule ({ state }, payload) {
+  // console.log('getTeamInfo', state, payload)
+  console.log(payload)
+  const url = 'event/user/month'
+  const token = payload
+  return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
+}
+
+// 스케줄 추가하기
+export function createSchedule ({ state }, payload) {
+  console.log(payload)
+  const teamId = payload.teamId
+  // const url = `/event/${teamId}`
+  const body = payload.body
+  const url = `/event/${teamId}`
+  // const url = `/event/${teamId}?eventContent=${body.eventContent}&eventTitle=${body.eventTitle}&eventDate=${body.eventDate}`
+  const token = payload.token
+  return $axios({ method: 'post', url: url, data: body, headers: { Authorization: `Bearer ${token}`}})
+}
