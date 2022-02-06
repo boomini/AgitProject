@@ -21,4 +21,11 @@ public class TeamRepositorySupport {
         if(team == null) return Optional.empty();
         return Optional.ofNullable(team);
     }
+
+    public Optional<Team> findTeamByTeamId(Long teamId){
+        Team team = jpaQueryFactory.select(qTeam).from(qTeam)
+                .where(qTeam.id.eq(teamId)).fetchOne();
+        if(team==null) return Optional.empty();
+        return Optional.ofNullable(team);
+    }
 }

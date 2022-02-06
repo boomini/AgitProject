@@ -163,6 +163,9 @@ export default {
       .then(res => {
         console.log('정보가져오기')
         console.log(res)
+        router.push({
+        name: 'Profile',
+      })
       })
       .catch(err => {
         console.log(err)
@@ -198,7 +201,7 @@ export default {
     height: 50px;
     background-size: contain;
     background-repeat: no-repeat;
-    background-image: url('../../../assets/images/ssafy-logo.png');
+    background-image: url('../../../assets/images/agit_logo.png');
   }
   .mobile-sidebar-wrapper {
     position: absolute;
@@ -237,7 +240,7 @@ export default {
     margin-top: 30px;
     background-size: contain;
     background-repeat: no-repeat;
-    background-image: url('../../../assets/images/ssafy-logo.png');
+    background-image: url('../../../assets/images/agit_logo.png');
   }
   .mobile-sidebar-wrapper .mobile-sidebar-backdrop {
     width: calc(100% - 260px); height: calc(100vh - 1px);
@@ -267,7 +270,7 @@ export default {
     height: 50px;
     background-size: contain;
     background-repeat: no-repeat;
-    background-image: url('../../../assets/images/ssafy-logo.png');
+    background-image: url('../../../assets/images/agit_logo.png');
   }
   .main-header .hide-on-small .tool-wrapper {
     width: 50%;
@@ -303,5 +306,45 @@ export default {
   .main-header .hide-on-small .tool-wrapper .search-field .el-input .el-input__prefix {
     top: 5px;
   }
+
+  .el-overlay {
+    background-color: white;
+    animation: unfoldIn 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+
+  /* .el-overlay .el-overlay-dialog {
+    background-color: white;
+  } */
+
+  /* .el-overlay .el-overlay-dialog .el-dialog {
+    초기 display: none 처럼 크기를 0 으로 하여 보여주지 않음
+    transform: scale(0);
+    0.5 초 동안 애니메이션을 실행, 단 0.8초 지연시켜 0.8초 후에 애니메이션을 실행
+    animation: zoomIn .5s .8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  } */
+
+
+  /* @keyframes unfoldIn {
+    0% {
+      transform: scaleX(0) scaleY(0.005);
+    }
+    50% {
+      0.5 초간 세로 크기는 작은상태로 가로 너비만 확대
+      transform: scaleX(1) scaleY(0.005);
+    }
+    100% {
+      0.5 초간 세로 크기를 확대
+      transform: scaleY(1) scaleX(1);
+    }
+  } */
+
+  /* @keyframes zoomIn {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  } */
 
 </style>

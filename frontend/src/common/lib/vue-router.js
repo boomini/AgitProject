@@ -3,6 +3,11 @@ import Home from '@/views/home/home'
 import ConferencesDetail from '@/views/conferences/conference-detail'
 import History from '@/views/history/history'
 import Customercenter from '@/views/customercenter/service-info'
+import Intro from '@/views/intro/intro'
+import Schedule from '@/views/schedule/schedule'
+import Room from '@/views/room/room'
+import Profile from '@/views/profile/profile'
+import Error from '@/views/error/error'
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
@@ -13,7 +18,13 @@ function makeRoutesFromMenu () {
       return { path: fullMenu[key].path, name: key, component: History }
     } else if (key === 'customercenter') {
       return { path: fullMenu[key].path, name: key, component: Customercenter }
-    } else { // menu.json 에 들어있는 로그아웃 메뉴
+    } else if (key === 'intro') {
+      return { path: fullMenu[key].path, name: key, component: Intro }
+    } else if (key === 'schedule') {
+      return { path: fullMenu[key].path, name: key, component: Schedule }
+    } else if (key === 'room1') {
+      return { path: fullMenu[key].path, name: key, component: Room }
+    }else { // menu.json 에 들어있는 로그아웃 메뉴
       return null
     }
   })
@@ -24,6 +35,25 @@ function makeRoutesFromMenu () {
     path: '/conferences/:conferenceId',
     name: 'conference-detail',
     component: ConferencesDetail
+  })
+
+  routes.push({
+    path: '/room/:roomId',
+    name: 'room-board',
+    component: Room,
+    props: true,
+  })
+
+  routes.push({
+    path: '/profile/profile',
+    name: 'Profile',
+    component: Profile
+  })
+
+  routes.push({
+    path: '/error/error',
+    name: 'Error',
+    component: Error
   })
   return routes
 }
