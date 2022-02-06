@@ -86,6 +86,16 @@ public class TeamController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
+    @GetMapping("/info/{teamId}")
+    @ApiOperation(value = "team정보가져오기", notes = "teamID 이용하여 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<TeamDto> getTeamInfo(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId){
+        TeamDto teamdto = teamService.getTeamById(teamId);
+        return ResponseEntity.status(200).body(teamdto);
+    }
+
     @GetMapping("/{teamId}")
     @ApiOperation(value = "team에서 작성한 전체 calendar", notes = "teamID 이용하여 조회")
     @ApiResponses({
@@ -105,7 +115,7 @@ public class TeamController {
 
     //추가된 회원에게 email을 전송하고
     //해당팀에 회원추가
-    @PostMapping("/{teamId}/{userId}")
+    @GetMapping("/{teamId}/{userId}")
     @ApiOperation(value = "해당 팀에 특정 유저 추가", notes = "teamID, userId 이용하여 추가")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),

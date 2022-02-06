@@ -96,4 +96,11 @@ public class TeamServiceImpl implements TeamService{
         return userDtoList;
     }
 
+    @Override
+    public TeamDto getTeamById(Long teamId) {
+        Optional<Team> team = teamRepositorySupport.findTeamByTeamId(teamId);
+        TeamDto teamDto = new TeamDto(team.get());
+        return teamDto;
+    }
+
 }
