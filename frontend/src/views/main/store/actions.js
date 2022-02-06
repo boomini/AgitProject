@@ -90,7 +90,6 @@ export function deleteUser ({ state }, payload) {
   return $axios({ method: 'delete', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
 }
 
-<<<<<<< HEAD
 // 유저 한달 일정 가져오기
 export function getSchedule ({ state }, payload) {
   // console.log('getTeamInfo', state, payload)
@@ -111,5 +110,3 @@ export function createSchedule ({ state }, payload) {
   const token = payload.token
   return $axios({ method: 'post', url: url, data: body, headers: { Authorization: `Bearer ${token}`}})
 }
-=======
->>>>>>> 605403db36668dd0e4aa4a913f51ccf8e3b6abeb
