@@ -134,6 +134,7 @@
   <!-- 일정 추가 다이얼로그 -->
   <create-schedule-dialog
     :open="state.createScheduleDialogOpen"
+    :info="state.team"
     @closeCreateScheduleDialog="onCloseCreateScheduleDialog"/>
 
   <!-- 사진 추가 다이얼로그 -->
@@ -319,6 +320,7 @@ export default {
       const year = today.getFullYear()
       const month = convertMonth(today.getMonth() + 1)
       state.team.uploadDate = `${year}-${month}`
+
 
       // 이번 달 달력 가져오기
       const payload = {

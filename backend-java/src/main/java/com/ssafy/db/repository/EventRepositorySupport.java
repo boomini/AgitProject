@@ -26,7 +26,6 @@ public class EventRepositorySupport {
     QTeam qTeam = QTeam.team;
     QUserTeam qUserTeam = QUserTeam.userTeam;
 
-    // 특정 user에 관련된 모든 event 리스트  // 중복 제거
     public Optional<List<Event>> findEventsAllByUserID(Long id){
         List<Event> eventList = jpaQueryFactory.select(qEvent)
                 .from(qUserTeam)
@@ -41,6 +40,7 @@ public class EventRepositorySupport {
 
     }
 
+    // 특정 user에 관련된 전체 event 리스트  // 중복 제거
     public Optional<List<EventResDto>> findEventResAllByUserID(Long id){
         List<EventResDto> eventResDtoList = new ArrayList<>();
         List<Tuple> result = jpaQueryFactory.select(qEvent.eventTitle, qEvent.eventContent, qEvent.teamName, qEvent.eventDate)
@@ -66,16 +66,41 @@ public class EventRepositorySupport {
 
             eventResDtoList.add(eventResDto);
         }
-
         return Optional.ofNullable(eventResDtoList);
-
     }
 
-//    select t.id, t.team_name, e.event_date, e.event_content
-//    from user_team ut
-//    join team t
-//    on ut.team_id = t.id
-//    join event e
-//    on e.team_id = t.id
-//    where ut.user_id = 1;
+    // 특정 user에 관련된 event중 특정 달에 해당하는 리스트  // 중복 제거
+    public Optional<List<EventResDto>> findEventResListByUserIdInMonth(Long id, int month){
+        List<EventResDto> eventResDtoList = new ArrayList<>();
+        List<Tuple> result = jpaQueryFactory.select(qEvent.eventTitle, qEvent.eventContent, qEvent.teamName, qEvent.eventDate)
+                .distinct()
+                .from(qUserTeam)
+                .join(qTeam)
+                .on(qUserTeam.team.id.eq(qTeam.id))
+                .join(qEvent)
+                .on(qEvent.team.id.eq(qTeam.id))
+                .where(qUserTeam.user.id.eq(id))
+                .groupBy(qEvent.eventDate)
+                .fetch();
+        for (Tuple tuple : result){
+            LocalDate nowDate = LocalDate.now();
+            LocalDate eventDate = tuple.get(qEvent.eventDate);
+            // 특정 달에만 해당하는 쿼리만 추가해서 반환
+            if (nowDate.getYear() == eventDate.getYear() && eventDate.getMonthValue() == month){
+                EventResDto eventResDto = new EventResDto();
+                eventResDto.setEventTitle(tuple.get(qEvent.eventTitle));
+                eventResDto.setEventContent(tuple.get(qEvent.eventContent));
+                eventResDto.setTeamName(tuple.get(qEvent.teamName));
+                eventResDto.setEventDate(eventDate);
+                // 남은 날짜 계산
+                Long dDay = nowDate.until(eventDate, ChronoUnit.DAYS);
+                eventResDto.setDDay(dDay);
+
+                eventResDtoList.add(eventResDto);
+            }
+        }
+        return Optional.ofNullable(eventResDtoList);
+    }
+
+
 }

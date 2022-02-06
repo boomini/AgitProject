@@ -2,11 +2,13 @@ package com.ssafy.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ssafy.db.entity.EmailType;
 import com.ssafy.db.entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Column;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,9 +20,9 @@ public class UserDto {
     String userId;
     String name;
     String nickName;
-    int year;
-    int month;
-    int day;
+
+    EmailType emailType;
+    LocalDate birthDay;
     LocalDateTime cDate;
     String password;
 
@@ -29,25 +31,23 @@ public class UserDto {
                 .userId(userId)
                 .name(name)
                 .nickName(nickName)
-                .year(year)
-                .month(month)
-                .day(day)
+                .birthDay(birthDay)
                 .password(password)
+                .emailType(emailType)
                 .build();
         return build;
     }
 
     @Builder
-    public UserDto(Long id, String userId, String name, String nickName, int year, int month, int day, LocalDateTime cDate, String password){
+    public UserDto(Long id, String userId, String name, String nickName, LocalDate birthDay , LocalDateTime cDate, String password, EmailType emailType){
         this.id = id;
         this.userId = userId;
         this.name = name;
         this.nickName = nickName;
-        this.year = year;
-        this.month = month;
-        this.day = day;
+        this.birthDay = birthDay;
         this.cDate = cDate;
         this.password = password;
+        this.emailType = emailType;
     }
 
     @Builder
@@ -56,10 +56,9 @@ public class UserDto {
         this.userId = user.getUserId();
         this.name = user.getName();
         this.nickName = user.getNickName();
-        this.year = user.getYear();
-        this.month = user.getMonth();
-        this.day = user.getDay();
+        this.birthDay = user.getBirthDay();
         this.cDate = user.getCDate();
         this.password = user.getPassword();
+        this.emailType = user.getEmailType();
     }
 }

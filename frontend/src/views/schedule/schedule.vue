@@ -93,7 +93,7 @@
 
     <div style="margin-bottom: 100px; dispaly: flex; justify-content: center; align-items:center;" class="my-2">
       <el-carousel :interval="4000" type="card" height="200px" style=" z-index: -1" >
-        <el-carousel-item v-for="item in 10" :key="item">
+        <el-carousel-item v-for="item in state.schedulelength" :key="item">
           <h3>{{ item }}</h3>
         </el-carousel-item>
       </el-carousel>
@@ -102,7 +102,9 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { reactive, ref, onBeforeMount } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 
 export default {
@@ -110,9 +112,30 @@ export default {
   setup() {
 
   const centerDialogVisible = ref(false)
+  const store = useStore()
+  const state = reactive({
+    info: null,
+    schedulelength: 0
+  })
+
+  onBeforeMount(() => {
+      const token = store.getters['root/getJWTToken']
+      store.dispatch('root/getSchedule', token)
+      // console.log(token)
+      .then(res => {
+        console.log(res.data.length)
+        console.log(res.data)
+        console.log('하이')
+        state.schedulelength = res.data.length
+        // console.log(state.info)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    })
 
 
-    return { centerDialogVisible }
+    return { centerDialogVisible, state }
   }
 }
 

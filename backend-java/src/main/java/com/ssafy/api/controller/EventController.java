@@ -56,39 +56,60 @@ public class EventController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
-    @PostMapping("/user")
-    @ApiOperation(value = "User와 연관된 모든 일정 조회", notes = "userId (PK값)를 통해 조회.")
+//    @GetMapping("/user")
+//    @ApiOperation(value = "User와 연관된 모든 일정 조회", notes = "userId (PK값)를 통해 조회.")
+//    @ApiResponses({
+//            @ApiResponse(code = 200, message = "성공"),
+//    })
+//    public ResponseEntity<List<EventDto>> getUsersEventList(@ApiIgnore Authentication authentication){
+//        List<EventDto> eventDtoList;
+//
+//        try{
+//            SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+//            Long userId = userDetails.getUser().getId();
+//            eventDtoList = eventService.getUsersEventList(userId);
+//        }catch(Exception e){
+//            //잘못된 접근일때
+//            throw new CTokenForbiddenException();
+//        }
+//
+//        return ResponseEntity.status(200).body(eventDtoList);
+//    }
+
+
+    @GetMapping("/user")
+    @ApiOperation(value = "User와 연관된 모든 일정 조회", notes = "JWT 토큰을 통해 조회.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<List<EventDto>> getUsersEventList(@ApiIgnore Authentication authentication){
-        List<EventDto> eventDtoList;
-
-        try{
-            SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-            Long userId = userDetails.getUser().getId();
-            eventDtoList = eventService.getUsersEventList(userId);
-        }catch(Exception e){
-            //잘못된 접근일때
-            throw new CTokenForbiddenException();
-        }
-
-        return ResponseEntity.status(200).body(eventDtoList);
-    }
-
-
-    @PostMapping("/user/test")
-    @ApiOperation(value = "User와 연관된 모든 일정 조회", notes = "userId (PK값)를 통해 조회.")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "성공"),
-    })
-    public ResponseEntity<List<EventResDto>> getUsersEventListTest(@ApiIgnore Authentication authentication){
+    public ResponseEntity<List<EventResDto>> getUsersEventList(@ApiIgnore Authentication authentication){
         List<EventResDto> eventResDtoList;
 
         try{
             SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
             Long userId = userDetails.getUser().getId();
-            eventResDtoList = eventService.getUserEventListTest(userId);
+            eventResDtoList = eventService.getUserEventList(userId);
+        }catch(Exception e){
+            //잘못된 접근일때
+            throw new CTokenForbiddenException();
+        }
+
+        return ResponseEntity.status(200).body(eventResDtoList);
+    }
+
+
+    @GetMapping("/user/month")
+    @ApiOperation(value = "User와 연관된 이번달 일정 조회", notes = "JWT 토큰을 통해 조회.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<List<EventResDto>> getUsersEventListInMonth(@ApiIgnore Authentication authentication){
+        List<EventResDto> eventResDtoList;
+        int month = LocalDate.now().getMonthValue();
+        try{
+            SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+            Long userId = userDetails.getUser().getId();
+            eventResDtoList = eventService.getUserEventListInMonth(userId, month);
         }catch(Exception e){
             //잘못된 접근일때
             throw new CTokenForbiddenException();
