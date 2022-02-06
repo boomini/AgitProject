@@ -70,9 +70,19 @@ public class EventServiceImpl implements EventService{
         return eventResDtoList;
     }
 
+
+
+
     @Override
     public List<EventResDto> getTeamEventListInDate(String eventDate, Long teamId) {
         List<EventResDto> eventResDtoList = eventRepositorySupport.findEventListByTeamInDate(eventDate, teamId).get();
+
+        return eventResDtoList;
+    }
+
+    @Override
+    public List<EventResDto> getTeamEventListInMonth(String eventDate, Long teamId) {
+        List<EventResDto> eventResDtoList = eventRepositorySupport.findEventListByTeamInMonth(eventDate, teamId).get();
 
         return eventResDtoList;
     }

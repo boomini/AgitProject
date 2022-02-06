@@ -43,7 +43,7 @@ public class EventController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<? extends BaseResponseBody> addTeamEvent(@RequestBody @ApiParam(value="일정 작성", required = true) EventDto eventDto, @PathVariable("teamId") Long teamId) throws Exception{
+    public ResponseEntity<? extends BaseResponseBody> addTeamEvent (@RequestBody @ApiParam(value="일정 작성", required = true) EventDto eventDto, @PathVariable("teamId") Long teamId) throws Exception{
         Team team = teamRepositorySupport.findTeamByTeamId(teamId).get();
         eventDto.setTeamName(team.getTeamName());
 

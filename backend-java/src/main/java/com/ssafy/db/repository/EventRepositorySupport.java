@@ -107,7 +107,29 @@ public class EventRepositorySupport {
         }
         return Optional.ofNullable(eventResDtoList);
     }
-    // 특정 달에 관련된 Team Event count (날짜별)
+    // 특정 달에 관련된 Team Event
+    public Optional<List<EventResDto>> findEventListByTeamInMonth(String eventDate, Long teamId){
+        StringTemplate startDateFormat = Expressions.stringTemplate("DATE_FORMAT({0}, {1})", qEvent.startDate, ConstantImpl.create("%Y-%m"));
+        StringTemplate endDateFormat = Expressions.stringTemplate("DATE_FORMAT({0}, {1})", qEvent.endDate, ConstantImpl.create("%Y-%m"));
+        List<Event> eventList = jpaQueryFactory.select(qEvent)
+                .from(qEvent)
+                .where(startDateFormat.eq(eventDate).or(endDateFormat.eq(eventDate)), qEvent.team.id.eq(teamId))
+                .fetch();
+
+        List<EventResDto> eventResDtoList = new ArrayList<>();
+        LocalDate now = LocalDate.now();
+        for (Event event : eventList){
+            EventResDto eventResDto = new EventResDto();
+            eventResDto.setEventTitle(event.getEventTitle());
+            eventResDto.setEventContent(event.getEventContent());
+            eventResDto.setTeamName(event.getTeamName());
+            eventResDto.setStartDate(event.getStartDate());
+            eventResDto.setEndDate(event.getEndDate());
+            eventResDto.setDDay(now.until(event.getEndDate(), ChronoUnit.DAYS));
+            eventResDtoList.add(eventResDto);
+        }
+        return Optional.ofNullable(eventResDtoList);
+    }
 
 
     // 특정 팀에 특정 일자에 관련된 Event

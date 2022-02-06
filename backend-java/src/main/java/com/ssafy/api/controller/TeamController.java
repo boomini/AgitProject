@@ -165,4 +165,17 @@ public class TeamController {
         return ResponseEntity.status(200).body(userDtoList);
     }
 
+    @GetMapping("/{teamId}/teamEvents/{reqDate}")
+    @ApiOperation(value = "요청 달에 관련된 Team Event들 ", notes = "teamId를 통해 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<List<EventResDto>> teamEventListInMonth(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId,
+                                                                  @ApiParam(value = "reqDate", required = true) @PathVariable("reqDate") String reqDate){
+
+        List<EventResDto> eventResDtoList = eventService.getTeamEventListInMonth(reqDate, teamId);
+
+        return ResponseEntity.status(200).body(eventResDtoList);
+
+    }
 }
