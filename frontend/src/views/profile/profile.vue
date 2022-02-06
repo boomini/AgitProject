@@ -88,7 +88,7 @@ export default {
       store.dispatch('root/getProfile', token)
       .then(res => {
         state.info = res.data
-        // console.log(state.info)
+        console.log(res)
       })
       .catch(err => {
         console.log(err)

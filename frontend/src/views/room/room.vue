@@ -110,6 +110,7 @@
   <!-- 일정 추가 다이얼로그 -->
   <create-schedule-dialog
     :open="state.createScheduleDialogOpen"
+    :info="state.team"
     @closeCreateScheduleDialog="onCloseCreateScheduleDialog"/>
 
   <!-- 사진 추가 다이얼로그 -->
@@ -245,15 +246,15 @@ export default {
     }
 
     const joinConference = function (roomId) {
-      // router.push({
-      //   name: 'conference-detail',
-      //   params: {
-      //     conferenceId: roomId
-      //   }
-      // })
       router.push({
-        name: 'Error',
+        name: 'conference-detail',
+        params: {
+          conferenceId: roomId
+        }
       })
+      // router.push({
+      //   name: 'Error',
+      // })
     }
 
     onBeforeMount(() => {
@@ -262,6 +263,7 @@ export default {
       // state.team.teamDescription = route.params.roomDescription
       // state.team.teamPicture = route.params.roomPicture
       console.log(state.team.teamName)
+
 
       let url = window.location.href;
       state.team.teamId = url.split('/').reverse()[0];
@@ -275,8 +277,7 @@ export default {
         console.log(state.team.teamName)
       })
 
-      //이번 달 달력 가져오기
-      //store.commit()
+
     })
 
     return { clickOnDate, drawer, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, joinConference }
