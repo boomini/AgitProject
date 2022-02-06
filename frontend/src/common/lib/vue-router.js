@@ -6,11 +6,8 @@ import Customercenter from '@/views/customercenter/service-info'
 import Intro from '@/views/intro/intro'
 import Schedule from '@/views/schedule/schedule'
 import Room from '@/views/room/room'
-<<<<<<< HEAD
 import Profile from '@/views/profile/profile'
-=======
 import Google from '@/views/main/components/google-login'
->>>>>>> feature/oauth2
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {

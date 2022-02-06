@@ -7,6 +7,8 @@ import com.ssafy.api.dto.*;
 
 import com.ssafy.api.service.*;
 import com.ssafy.db.entity.User;
+
+
 import com.ssafy.db.entity.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -56,6 +58,9 @@ public class TeamController {
 
     @Autowired
     EmailService emailService;
+
+    @Autowired
+    EventService eventService;
 
     @PostMapping()
     @ApiOperation(value = "팀생성", notes = "팀정보를 통해 팀 생성한다. 로그인 해야 팀 생성 가능")
@@ -145,10 +150,12 @@ public class TeamController {
         List<ArticleDto> articleDto = articleService.getTeamsArticleListAtDate(uploadDate, teamId);
         List<ImageDto> imageDto = imageService.getImageListAtDateByTeamId(uploadDate,teamId);
         List<VideoDto> videoDto = videoService.getVideoListAtDateByTeamId(uploadDate, teamId);
+        List<EventResDto> eventResDto = eventService.getTeamEventListInDate(uploadDate, teamId);
         BoardDto boardDto = new BoardDto();
         boardDto.setArticleList(articleDto);
         boardDto.setImageList(imageDto);
         boardDto.setVideoList(videoDto);
+        boardDto.setEventResList(eventResDto);
         boardDto.setTeamId(teamId);
         return ResponseEntity.status(200).body(boardDto);
 
@@ -184,4 +191,17 @@ public class TeamController {
         return ResponseEntity.status(200).body(userDtoList);
     }
 
+    @GetMapping("/{teamId}/teamEvents/{reqDate}")
+    @ApiOperation(value = "요청 달에 관련된 Team Event들 ", notes = "teamId를 통해 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<List<EventResDto>> teamEventListInMonth(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId,
+                                                                  @ApiParam(value = "reqDate", required = true) @PathVariable("reqDate") String reqDate){
+
+        List<EventResDto> eventResDtoList = eventService.getTeamEventListInMonth(reqDate, teamId);
+
+        return ResponseEntity.status(200).body(eventResDtoList);
+
+    }
 }
