@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EventService {
     boolean addTeamEvent(EventDto eventDto, Long teamId);
-    List<EventDto> getUsersEventList(Long userId);
-    List<EventResDto> getUserEventListTest(Long userId);
+    List<EventResDto> getUserEventList(Long userId);
+    List<EventResDto> getUserEventListInMonth(Long userId, int month);
 
 }

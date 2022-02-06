@@ -34,6 +34,7 @@ export function getProfile ({ state }, payload) {
   return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
 }
 
+
 // 로그인한 유저가 소속된 팀 정보 가져오기
 export function getTeamInfo ({ state }, payload) {
   console.log('getTeamInfo', state, payload)
@@ -70,6 +71,15 @@ export function getCategoryCount({ state }, payload) {
   const url = `/team/${teamId}`
 }
 
+//google토큰확인
+export function verifyToken ({state},payload){
+  console.log('verifyToken', state, payload)
+  const url='auth/token';
+  let body=payload;
+  return $axios.post(url,body)
+}
+
+
 // 회원탈퇴
 export function deleteUser ({ state }, payload) {
   const userId = payload.body.userId
@@ -80,6 +90,7 @@ export function deleteUser ({ state }, payload) {
   return $axios({ method: 'delete', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
 }
 
+<<<<<<< HEAD
 // 유저 한달 일정 가져오기
 export function getSchedule ({ state }, payload) {
   // console.log('getTeamInfo', state, payload)
@@ -100,3 +111,5 @@ export function createSchedule ({ state }, payload) {
   const token = payload.token
   return $axios({ method: 'post', url: url, data: body, headers: { Authorization: `Bearer ${token}`}})
 }
+=======
+>>>>>>> 605403db36668dd0e4aa4a913f51ccf8e3b6abeb
