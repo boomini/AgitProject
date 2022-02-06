@@ -7,7 +7,7 @@
         </div>
         <div class="col-md-9" style="margin-left: 0px;">
           <div class="card-body">
-            <h5 class="card-title" style="margin-bottom: 5%;">{{ state.info.name }}님의 프로필</h5>
+            <h5 class="card-title" style="margin-bottom: 5%;">{{ state.info.userId }}님의 프로필</h5>
             <p style="margin-bottom: 10px;">ID : {{ state.info.userId }}</p>
             <div style="margin-bottom: 10px;">
               <span>Nickname : {{ state.info.nickName }}</span> <el-button style=" min-height: 15px; padding: 10px; margin-left: 10px" @click="state.nicknameDialogOpen = true">수정하기</el-button>
@@ -40,11 +40,6 @@
       </el-carousel>
     </div>
 
-
-
-
-
-
     <nickname-dialog
       :open="state.nicknameDialogOpen"
       :info="state.info"
@@ -56,7 +51,7 @@
 
 
 <script>
-import { reactive, onBeforeMount } from 'vue'
+import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import NicknameDialog from './components/nickname-dialog.vue'
@@ -72,29 +67,18 @@ export default {
     const router = useRouter()
     const state = reactive({
       info: {
+        birthday: '',
         name: '',
         nickName: '',
         userId: '',
-        year: '',
-        month: '',
-        day: '',
-        cdate: '1970-01-01'
+        id: '',
+        cdate: '1970-01-01',
+        emailType: '',
+        password: ''
       },
       // info: null,
       nicknameDialogOpen : false,
     })
-
-    // onBeforeMount(() => {
-    //   const token = store.getters['root/getJWTToken']
-    //   store.dispatch('root/getProfile', token)
-    //   .then(res => {
-    //     state.info = res.data
-    //     console.log(state.info)
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
-    // })
 
     const takeProfile = function () {
       const token = store.getters['root/getJWTToken']
@@ -121,12 +105,14 @@ export default {
       .then(res => {
           setTimeout(() => {
                 swal({
-                  title: "회원탈퇴",
-                  text: "이용해주셔서 감사합니다.",
-                  icon: "success",
-                  button: "확인",
+                  title: '회원탈퇴',
+                  text: '이용해주셔서 감사합니다.',
+                  icon: 'success',
+                  button: '확인',
                 });
               }, 500)
+
+              console.log(res)
 
               store.commit('root/setJWTTokenReset')
               localStorage.removeItem('JWT')
@@ -143,7 +129,7 @@ export default {
         })
     }
 
-    // takeProfile()
+    takeProfile()
     // console.log(typeof(state.info))
 
     const activities = [
