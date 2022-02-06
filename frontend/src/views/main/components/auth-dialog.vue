@@ -24,7 +24,7 @@
     <!-- footer -->
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click="clickSignup" v-loading.fullscreen="loading">인증체크</el-button>
+        <el-button type="primary" @click="clickAuthup" v-loading.fullscreen="loading">인증체크</el-button>
       </span>
     </template>
   </el-dialog>
@@ -100,6 +100,9 @@ export default {
       //
     */
     const state = reactive({
+      auth: {
+
+      },
       form: {
         id: '',
         password: '',
@@ -115,11 +118,11 @@ export default {
       // console.log(loginForm.value)
     })
 
-    const clickSignup = function () {
-      // 회원가입 클릭 시 validate 체크 후 그 결과 값에 따라, 로그인 API 호출 또는 경고창 표시
+    const clickAuthup = function () {
+      // 인증 클릭 시 validate 체크 후 그 결과 값에 따라, 로그인 API 호출 또는 경고창 표시
       if (!state.form.isValidatedId) {
         swal({
-          title: '아이디 중복 확인을 해주세요.',
+          title: '다시 확인 해주세요.',
           icon: 'error',
           button: '확인'
         })
@@ -127,34 +130,22 @@ export default {
         signupForm.value.validate((valid) => {
           if (valid) {
             // 날짜는 년, 월, 일로 구분하여 대입
-            loading.value = true
-            const arr = state.form.birthDate.split("-")
-            const year = arr[0]
-            const month = arr[1]
-            const day = arr[2]
-            store.dispatch('root/requestRegister', { userId: state.form.id, password: state.form.password, name: state.form.name, year: year, month: month, day: day, nickName: state.form.nickname })
-            .then(function (result) {
-              // console.log('로딩 스피너 넣으면 됨')
+            loading.value = TextTrackCue
+            if(state.form.password==state.auth.str){
+              //모달 다음 페이지로 이동
+              console.log("인증 성공");
               setTimeout(() => {
                 loading.value = false
                 swal({
-                  title: "회원가입 성공",
-                  text: "아지트의 일원이 되신 것을 축하합니다.",
+                  title: "인증 성공",
+                  text: "회원가입을 진행해주세요.",
                   icon: "success",
                   button: "확인",
                 });
               }, 500)
+            }
 
-              router.push({
-                name: 'home',
-              })
 
-              handleClose()
-            })
-            .catch(function (error) {
-              loading.value = false
-              console.log('회원가입 실패')
-            })
           } else {
             swal({
               title: "회원가입 실패",
@@ -179,10 +170,10 @@ export default {
     }
 
     const sendAuthEmail = function () {
-
         store.dispatch('root/getAuthNumber', { userEmail: state.form.id })
         .then(res => {
           state.form.isValidatedId = true
+          state.auth = res.data;
           swal({
               title: "인증번호를 성공적으로 보냈습니다.",
               icon: "success",
@@ -199,7 +190,7 @@ export default {
 
     }
 
-    return { signupForm, state, clickSignup, handleClose, clickCustomercenter, sendAuthEmail, loading }
+    return { signupForm, state, clickAuthup, handleClose, clickCustomercenter, sendAuthEmail, loading }
   }
 }
 </script>
