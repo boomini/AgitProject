@@ -20,6 +20,9 @@ public class UserTeam extends BaseEntity{
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    //1 활성화, 0 비활성화
+    int state=0;
+
 
     public void setTeam(Team team){
         this.team = team;

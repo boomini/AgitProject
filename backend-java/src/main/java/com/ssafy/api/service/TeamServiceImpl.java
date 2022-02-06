@@ -64,7 +64,7 @@ public class TeamServiceImpl implements TeamService{
         UserTeam userTeam = new UserTeam();
         userTeam.setUser(user.get());
         userTeam.setTeam(team.get());
-
+        userTeam.setState(1);
         userTeamRepository.save(userTeam);
         return true;
     }

@@ -5,10 +5,8 @@ import com.ssafy.api.advice.exception.CUserDuplicateException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
 import com.ssafy.api.dto.*;
 
-import com.ssafy.api.service.ArticleService;
-import com.ssafy.api.service.ImageService;
-import com.ssafy.api.service.TeamService;
-import com.ssafy.api.service.VideoService;
+import com.ssafy.api.service.*;
+import com.ssafy.db.entity.User;
 import com.ssafy.db.entity.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -52,6 +50,12 @@ public class TeamController {
 
     @Autowired
     VideoService videoService;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    EmailService emailService;
 
     @PostMapping()
     @ApiOperation(value = "팀생성", notes = "팀정보를 통해 팀 생성한다. 로그인 해야 팀 생성 가능")
@@ -99,15 +103,23 @@ public class TeamController {
         return ResponseEntity.status(200).body(boardDto);
     }
 
-    @PostMapping("/{teamId}/user/{userId}")
+    //추가된 회원에게 email을 전송하고
+    //해당팀에 회원추가
+    @PostMapping("/{teamId}/{userId}")
     @ApiOperation(value = "해당 팀에 특정 유저 추가", notes = "teamID, userId 이용하여 추가")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
     public ResponseEntity<? extends BaseResponseBody> addMember(@PathVariable("teamId") Long teamId, @PathVariable("userId") String userId){
 
-        teamService.addMember(teamId, userId);
+        User user = userService.getUserByUserId(userId);
+        if(user==null){
+            throw new CUserNotFoundException();
+        }
 
+        teamService.addMember(teamId, userId);
+        MailDto mailDto = emailService.sendTeamAddEmail(userId,teamId);
+        emailService.mailSend(mailDto);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
