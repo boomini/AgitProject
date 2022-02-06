@@ -9,6 +9,8 @@ import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import java.time.LocalDate;
 import java.util.*;
 
 @Service("EventService")
@@ -62,10 +64,21 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public List<EventResDto> getUserEventListInMonth(Long userId, int month) {
-        List<EventResDto> eventResDtoList = eventRepositorySupport.findEventResListByUserIdInMonth(userId, month).get();
+    public List<EventResDto> getUserEventListInMonth(Long userId, LocalDate date) {
+        List<EventResDto> eventResDtoList = eventRepositorySupport.findEventResListByUserIdInMonth(userId, date).get();
 
         return eventResDtoList;
+    }
+
+    @Override
+    public List<EventDto> getTeamEventListInDate(String eventDate, Long teamId) {
+        List<Event> eventList = eventRepositorySupport.findEventListByTeamInDate(eventDate, teamId).get();
+        List<EventDto> eventDtoList = new ArrayList<>();
+        for (Event event : eventList){
+            EventDto eventDto = new EventDto(event);
+            eventDtoList.add(eventDto);
+        }
+        return eventDtoList;
     }
 
 

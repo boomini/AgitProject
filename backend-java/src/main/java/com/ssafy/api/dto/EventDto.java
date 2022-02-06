@@ -20,7 +20,8 @@ public class EventDto {
     String eventContent;
     String teamName;
 
-    LocalDate eventDate;
+    LocalDate startDate;
+    LocalDate endDate;
     LocalDateTime createDate;
     LocalDateTime updateDate;
 
@@ -28,7 +29,8 @@ public class EventDto {
         Event build = Event.builder()
                 .eventTitle(eventTitle)
                 .eventContent(eventContent)
-                .eventDate(eventDate)
+                .startDate(startDate)
+                .endDate(endDate)
                 .teamName(teamName)
                 .build();
         return build;
@@ -40,7 +42,8 @@ public class EventDto {
         this.eventTitle = event.getEventTitle();
         this.eventContent = event.getEventContent();
         this.teamName = event.getTeamName();
-        this.eventDate = event.getEventDate();
+        this.startDate = event.getStartDate();
+        this.endDate = event.getEndDate();
         this.createDate = event.getCreatedDate();
         this.updateDate = event.getUpdatedDate();
     }
