@@ -43,6 +43,13 @@ export function getTeamInfo ({ state }, payload) {
   return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
 }
 
+//해당팀 정보 가져오기
+export function getTeamInfoDetail ({ state }, payload) {
+  console.log('getTeamInfoDetail', state, payload)
+  const url = `/team/info/${payload}`
+  return $axios({ method: 'get', url: url})
+}
+
 // 팀 생성하기
 export function registerTeam ({ state }, payload) {
   console.log('registerTeam', state, payload)
@@ -90,3 +97,9 @@ export function deleteUser ({ state }, payload) {
   return $axios({ method: 'delete', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
 }
 
+//팀원초대하기
+export function addTeamMember ({ state }, payload) {
+  console.log('addTeamMember', state, payload)
+  const url = `/team/${payload.teamId}/${payload.userId}`
+  return $axios({ method: 'get', url: url})
+}

@@ -224,13 +224,12 @@ methods: {
             store.commit('root/setJWTToken', result.data.accessToken)
 
             // 로그인한 유저가 가입한 팀 정보 가져오기
-            store.dispatch('root/getTeamInfo', { userId: userId })
+            const token = store.getters['root/getJWTToken']
+            store.dispatch('root/getTeamInfo', token)
             .then(function (result) {
-              console.log(result)
-
               store.commit('root/setUserTeam', result.data)
+              console.log('회원 팀정보 가져오기')
             })
-
 
 
 
@@ -277,6 +276,14 @@ methods: {
 
             localStorage.setItem('JWT', result.data.accessToken)
             store.commit('root/setJWTToken', result.data.accessToken)
+
+            // 로그인한 유저가 가입한 팀 정보 가져오기
+            const token = store.getters['root/getJWTToken']
+            store.dispatch('root/getTeamInfo', token)
+            .then(function (result) {
+              store.commit('root/setUserTeam', result.data)
+              console.log('회원 팀정보 가져오기')
+            })
 
             handleClose()
           })

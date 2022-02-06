@@ -7,7 +7,7 @@ import Intro from '@/views/intro/intro'
 import Schedule from '@/views/schedule/schedule'
 import Room from '@/views/room/room'
 import Profile from '@/views/profile/profile'
-
+import Error from '@/views/error/error'
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
@@ -50,6 +50,11 @@ function makeRoutesFromMenu () {
     component: Profile
   })
 
+  routes.push({
+    path: '/error/error',
+    name: 'Error',
+    component: Error
+  })
   return routes
 }
 

@@ -5,8 +5,8 @@
         <!-- 달력 헤더 부분 -->
         <template #header="{ date }">
           <span>
-            <h3>{{ roomName }}</h3>
-            <div>{{ roomDescription }}</div>
+            <h3>{{ state.team.teamName }}</h3>
+            <div>{{ state.team.teamDescription }}</div>
           </span>
 
           <h3>{{ date }}</h3>
@@ -104,6 +104,7 @@
   <!-- 초대코드 전송 다이얼로그 -->
   <invite-dialog
     :open="state.inviteDialogOpen"
+    :info="state.team.teamId"
     @closeInviteDialog="onCloseInviteDialog"/>
 
   <!-- 일정 추가 다이얼로그 -->
@@ -150,6 +151,7 @@
 <script>
 import { ref, reactive, computed, onBeforeMount } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 import InviteDialog from './components/invite-dialog.vue'
 import CreateScheduleDialog from './components/create-schedule-dialog.vue'
 import UploadImageDialog from './components/upload-image-dialog.vue'
@@ -164,25 +166,29 @@ export default {
     UploadImageDialog,
     UploadVideoDialog,
   },
-  props: {
-    roomId: {
-      type: Number,
-    },
-    roomName: {
-      type: String,
-    },
-    roomDescription: {
-      type: String,
-    },
-    roomPicture: {
-      type: String,
-    }
-  },
+  // props: {
+  //   roomId: {
+  //     type: Number,
+  //   },
+  //   roomName: {
+  //     type: String,
+  //   },
+  //   roomDescription: {
+  //     type: String,
+  //   },
+  //   roomPicture: {
+  //     type: String,
+  //   }
+  // },
+  // create(){
+  //   //console.log(this.roomId)
+  // },
   setup() {
     const router = useRouter()
-    const route = useRoute()
+
     const drawer = ref(false)
     const calendar = ref()
+    const store = useStore()
     // const inviteDialogOpen = ref(false)
     // const createScheduleDialogOpen = ref(false)
 
@@ -201,7 +207,7 @@ export default {
 
     const state = reactive({
       team: {
-        teamId: null,
+        teamId: '',
         teamName: '',
         teamDescription: '',
         teamPicture: '',
@@ -213,6 +219,7 @@ export default {
       year : '',
       month : '',
       day : '',
+      token:'',
       title : computed(() => `${state.year}년 ${state.month}월 ${state.day}일 게시판`),
       circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
     })
@@ -238,23 +245,38 @@ export default {
     }
 
     const joinConference = function (roomId) {
+      // router.push({
+      //   name: 'conference-detail',
+      //   params: {
+      //     conferenceId: roomId
+      //   }
+      // })
       router.push({
-        name: 'conference-detail',
-        params: {
-          conferenceId: roomId
-        }
+        name: 'Error',
       })
     }
 
     onBeforeMount(() => {
-      state.team.teamId = route.params.roomId
-      state.team.teamName = route.params.roomName
-      state.team.teamDescription = route.params.roomDescription
-      state.team.teamPicture = route.params.roomPicture
+      // state.team.teamId = route.params.roomId
+      // state.team.teamName = route.params.roomName
+      // state.team.teamDescription = route.params.roomDescription
+      // state.team.teamPicture = route.params.roomPicture
       console.log(state.team.teamName)
 
-      // 이번 달 달력 가져오기
-      // store.commit()
+      let url = window.location.href;
+      state.team.teamId = url.split('/').reverse()[0];
+
+      store.dispatch('root/getTeamInfoDetail', state.team.teamId)
+      .then(function(result){
+        console.log(result.data);
+        state.team = result.data;
+        state.team.teamId = result.data.id;
+        console.log(state.team.teamId);
+        console.log(state.team.teamName)
+      })
+
+      //이번 달 달력 가져오기
+      //store.commit()
     })
 
     return { clickOnDate, drawer, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, joinConference }
