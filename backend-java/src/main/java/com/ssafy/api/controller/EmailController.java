@@ -1,7 +1,11 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.advice.exception.CUserNotFoundException;
 import com.ssafy.api.dto.MailDto;
 import com.ssafy.api.service.EmailService;
+import com.ssafy.api.service.TeamService;
+import com.ssafy.api.service.UserService;
+import com.ssafy.db.entity.User;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +21,12 @@ public class EmailController {
 
     @Autowired
     EmailService emailService;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    TeamService teamService;
     //이메일과 사람 이름의 일치여부를 check 하는 컨트롤러
     @GetMapping("/check/findPw")
     public @ResponseBody
@@ -37,10 +47,19 @@ public class EmailController {
         emailService.mailSend(mailDto);
     }
 
-    @PostMapping("/check/auth/sendEmail")
-    public @ResponseBody
-    void sendAuthEmail(String userEmail){
+//    @GetMapping("/check/auth/sendEmail")
+//    public @ResponseBody
+//    void sendAuthEmail(String userEmail){
+//        MailDto mailDto = emailService.sendAuthEmail(userEmail);
+//        emailService.mailSend(mailDto);
+//
+//    }
+
+    @GetMapping("/check/auth/sendEmail")
+    public ResponseEntity<MailDto> sendAuthEmail(String userEmail){
         MailDto mailDto = emailService.sendAuthEmail(userEmail);
         emailService.mailSend(mailDto);
+    return ResponseEntity.status(200).body(mailDto);
     }
+
 }

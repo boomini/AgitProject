@@ -24,22 +24,30 @@
 			</div>
 		</div>
 
-		<div id="session" v-if="state.session">
+		<div id="session" class="d-flex-row justify-content-between" v-if="state.session">
 			<div id="session-header">
 				<h1 id="session-title">{{ state.mySessionId }}</h1>
 				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
 			</div>
-			<div id="main-video" class="col-md-6">
-				<user-video :stream-manager="state.mainStreamManager"/>
-			</div>
-			<div id="video-container" class="col-md-6">
-				<user-video :stream-manager="state.publisher" @click="updateMainVideoStreamManager(state.publisher)"/>
-				<user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
-			</div>
+      <div class="d-flex">
+        <div>
+          <div id="main-video" class="col-md-6">
+            <user-video :stream-manager="state.mainStreamManager"/>
+          </div>
+          <div id="video-container" class="col-md-6">
+            <user-video :stream-manager="state.publisher" @click="updateMainVideoStreamManager(state.publisher)"/>
+            <user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+          </div>
+        </div>
+        <div>
+          <chat-live/>
+        </div>
+      </div>
 		</div>
 	</div>
 </template>
 <style>
+
 </style>
 <script>
 import { reactive, onMounted, onUnmounted } from 'vue'
@@ -47,7 +55,9 @@ import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { OpenVidu } from 'openvidu-browser'
 import UserVideo from '@/views/live/UserVideo.vue'
+import ChatLive from '@/views/live/ChatLive.vue'
 import axios from 'axios'
+import moment from 'moment';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -56,6 +66,7 @@ export default {
 
   components: {
     UserVideo,
+    ChatLive,
   },
 
   setup () {
@@ -112,6 +123,20 @@ export default {
       state.session.on('exception', ({ exception }) => {
 				console.warn(exception)
 			})
+
+      state.session.on('signal:chat', (event) => {
+        let eventData = JSON.parse(event.data);
+        let data = new Object()
+        let time = new Date()
+        data.message = eventData.content;
+        if (state.currentMode === 'anonymous') {
+          data.sender = eventData.secretName;
+        } else {
+          data.sender = event.from.data.slice(15,-2);
+        }
+        data.time = moment(time).format('HH:mm')
+        store.commit('setMessages', data)
+      })
 
       getToken(state.mySessionId).then(token => {
 				state.session.connect(token, { clientData: state.myUserName })

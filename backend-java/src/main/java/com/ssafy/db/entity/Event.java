@@ -3,6 +3,7 @@ package com.ssafy.db.entity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.tomcat.jni.Local;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,7 +26,9 @@ public class Event extends BaseEntity{
     String eventTitle;
     String eventContent;
     String teamName;
-    LocalDate eventDate;
+
+    LocalDate startDate;
+    LocalDate endDate;
 
     @CreatedDate
     LocalDateTime createdDate;
@@ -48,12 +51,13 @@ public class Event extends BaseEntity{
     public Event(){};
 
     @Builder
-    public Event(Long id, String eventTitle, String eventContent, String teamName, LocalDate eventDate){
+    public Event(Long id, String eventTitle, String eventContent, String teamName, LocalDate startDate, LocalDate endDate){
         this.id = id;
         this.eventTitle = eventTitle;
         this.eventContent = eventContent;
         this.teamName = teamName;
-        this.eventDate = eventDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
 }

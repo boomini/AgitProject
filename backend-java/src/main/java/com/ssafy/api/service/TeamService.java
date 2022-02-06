@@ -10,4 +10,6 @@ public interface TeamService {
     boolean addMember(Long teamId, String userId);
     List<UserDto> userListInTeam(Long teamId);
     List<UserDto> userListInTeam2(Long teamId);
+
+    TeamDto getTeamById(Long teamId);
 }

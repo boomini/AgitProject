@@ -57,6 +57,17 @@ public class EmailServiceImpl implements EmailService{
         dto.setAddress(userEmail);
         dto.setTitle("인증코드 안내 이메일");
         dto.setMessage("인증코드 안내 이메일 입니다." + "인증 코드는"+ "[" + str + "]" + "입니다.");
+        dto.setStr(str);
+        return dto;
+    }
+
+    @Override
+    public MailDto sendTeamAddEmail(String userEmail,Long teamId) {
+        MailDto dto = new MailDto();
+        String teamurl = "http://localhost:8083/room/"+teamId;
+        dto.setAddress(userEmail);
+        dto.setTitle("Agit 방추가 안내 이메일");
+        dto.setMessage("방추가 안내이메일 입니다. 해당 링크를 통해 접속 후 수락해주세요\n"+teamurl);
         return dto;
     }
 
@@ -93,7 +104,7 @@ public class EmailServiceImpl implements EmailService{
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mailDto.getAddress());
         //message.setTo("yunhy96@naver.com");
-        message.setFrom(EmailServiceImpl.FROM_ADDRESS);
+        //message.setFrom(EmailServiceImpl.FROM_ADDRESS);
         message.setSubject(mailDto.getTitle());
         message.setText(mailDto.getMessage());
         System.out.println();
