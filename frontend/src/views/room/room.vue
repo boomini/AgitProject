@@ -9,10 +9,14 @@
             <div>{{ state.team.teamDescription }}</div>
           </span>
 
-          <h3>{{ date }}</h3>
+          <div>
+            <h3>{{ date }}</h3>
+
+          </div>
 
           <span>
             <div class="d-flex justify-content-between mb-2">
+              <el-button type="danger" @click="state.createArticleDialogOpen = true">게시글 작성</el-button>
               <el-button type="success" @click="state.createScheduleDialogOpen = true">일정 추가</el-button>
               <el-button type="warning" @click="state.uploadImageDialogOpen = true">사진 등록</el-button>
               <el-button type="warning" @click="state.uploadVideoDialogOpen = true">동영상 등록</el-button>
@@ -38,20 +42,41 @@
         <!-- 달력 날짜 부분 -->
         <template #dateCell="{ data }" >
           <div class="d-flex flex-column justify-content-between" style="height: 100%" @click="clickOnDate(data)">
-            <div>
+            <div class="row">
               <!-- {{ data }} -->
-              {{ parseInt(data.day.split('-').slice(2)[0], 10) }}
+              <span class="col-3">
+                {{ data.day.split('-')[2] }}
+              </span>
+              <span class="col-9">
+                <span class="badge-box-test">
+                  <span class="badge-tag-test schedule">4</span>
+                </span>
+                <span class="badge-box-test">
+                  <span class="badge-tag-test video">54</span>
+                </span>
+                <span class="badge-box-test">
+                  <span class="badge-tag-test picture">554</span>
+                </span>
+              </span>
             </div>
-            <div style="" class="badge-box">
-              <div v-if="data.type === 'current-month'" class="badge-tag schedule">
+            <div class="badge-box">
+              <!-- <div v-if="data.type === 'current-month'" class="badge-tag schedule">
                 <div class="ms-3">
                   일정
                 </div>
                 <div class="me-3">
                   <span class="badge">4</span>
                 </div>
+              </div> -->
+              <div v-show=" state.team.articleCntDict.get(data.day.toString())" class="badge-tag article">
+                <div class="ms-3">
+                  게시글
+                </div>
+                <div class="me-3">
+                  <span class="badge">{{ state.team.articleCntDict.get(data.day.toString()) }}</span>
+                </div>
               </div>
-              <div v-if="parseInt(data.day.split('-').slice(2)[0], 10) <= 10 && !(data.type === 'prev-month' || data.type === 'next-month')" class="badge-tag picture">
+              <!-- <div v-if="parseInt(data.day.split('-').slice(2)[0], 10) <= 10 && !(data.type === 'prev-month' || data.type === 'next-month')" class="badge-tag picture">
                 <div class="ms-3">
                   사진
                 </div>
@@ -66,7 +91,7 @@
                 <div class="me-3">
                   <span class="badge">4</span>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </template>
@@ -123,6 +148,11 @@
     :open="state.uploadVideoDialogOpen"
     @closeUploadVideoDialog="onCloseUploadVideoDialog"/>
 
+  <!-- 게시글 추가 다이얼로그 -->
+  <create-article-dialog
+    :open="state.createArticleDialogOpen"
+    @closeCreateArticleDialog="onCloseCreateArticleDialog"/>
+
   <!-- 게시글 클릭 시 나오는 세부화면 -->
   <el-drawer
     v-model="drawer"
@@ -155,6 +185,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import InviteDialog from './components/invite-dialog.vue'
 import CreateScheduleDialog from './components/create-schedule-dialog.vue'
+import CreateArticleDialog from './components/create-article-dialog.vue'
 import UploadImageDialog from './components/upload-image-dialog.vue'
 import UploadVideoDialog from './components/upload-video-dialog.vue'
 
@@ -164,6 +195,7 @@ export default {
   components: {
     InviteDialog,
     CreateScheduleDialog,
+    CreateArticleDialog,
     UploadImageDialog,
     UploadVideoDialog,
   },
@@ -185,13 +217,32 @@ export default {
   //   //console.log(this.roomId)
   // },
   setup() {
+    const store = useStore()
     const router = useRouter()
 
     const drawer = ref(false)
+
     const calendar = ref()
-    const store = useStore()
+
     // const inviteDialogOpen = ref(false)
     // const createScheduleDialogOpen = ref(false)
+
+    function convertMonth (month) {
+      if (month < 10) {
+        return `0${month}`
+      } else {
+        return month.toString()
+      }
+    }
+
+    function convertListToDict (list, dict) {
+      for (let i = 0; i < list.length; i++) {
+        const count = list[i].count
+        const uploadDate = list[i].uploadDate
+        dict.set(uploadDate.toString(), count)
+      }
+    }
+
 
     const clickOnDate = function (data) {
       const date = data.day.split('-')
@@ -212,8 +263,13 @@ export default {
         teamName: '',
         teamDescription: '',
         teamPicture: '',
+        articleCntDict: new Map(),
+        imageCntDict: new Map(),
+        videoCntDict: new Map(),
+        uploadDate: ''
       },
       createScheduleDialogOpen: false,
+      createArticleDialogOpen: false,
       uploadImageDialogOpen: false,
       uploadVideoDialogOpen: false,
       inviteDialogOpen: false,
@@ -227,6 +283,10 @@ export default {
 
     const selectDate = (val) => {
       calendar.value.selectDate(val)
+      const date = calendar.value.date
+      const year = date.$y
+      const month = convertMonth(date.$M + 1)
+      state.team.uploadDate = `${year}-${month}`
     }
 
     const onCloseInviteDialog = function () {
@@ -235,6 +295,10 @@ export default {
 
     const onCloseCreateScheduleDialog = function () {
       state.createScheduleDialogOpen = false
+    }
+
+    const onCloseCreateArticleDialog = function () {
+      state.createArticleDialogOpen = false
     }
 
     const onCloseUploadImageDialog = function () {
@@ -258,6 +322,7 @@ export default {
     }
 
     onBeforeMount(() => {
+
       // state.team.teamId = route.params.roomId
       // state.team.teamName = route.params.roomName
       // state.team.teamDescription = route.params.roomDescription
@@ -277,10 +342,32 @@ export default {
         console.log(state.team.teamName)
       })
 
+      const today = new Date()
+      const year = today.getFullYear()
+      const month = convertMonth(today.getMonth() + 1)
+      state.team.uploadDate = `${year}-${month}`
 
+
+      // 이번 달 달력 가져오기
+      const payload = {
+        'teamId': state.team.teamId,
+        'uploadDate': state.team.uploadDate
+      }
+
+      store.dispatch('root/getCategoryCount', payload)
+      .then(function (result) {
+        console.log('해당 달의 개요 가져오기 성공')
+        // json ->
+        convertListToDict(result.data.articleCntList, state.team.articleCntDict)
+        convertListToDict(result.data.imageCntList, state.team.imageCntDict)
+        convertListToDict(result.data.videoCntList, state.team.videoCntDict)
+      })
+      .catch(function (error) {
+        console.log('실패')
+      })
     })
 
-    return { clickOnDate, drawer, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, joinConference }
+    return { clickOnDate, drawer, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, joinConference }
   }
 }
 </script>
@@ -303,7 +390,7 @@ export default {
 
 /* 달력 날짜 한 칸이 너무 작아서 높이 설정 */
 .el-calendar .el-calendar-table > tbody > tr > td .el-calendar-day{
-  height: 150px;
+  height: 180px;
 }
 
 /* 게시판 내에 존재하는 일정, 사진, 동영상 등의 뱃지 css */
@@ -318,6 +405,21 @@ export default {
   margin-bottom: 0.5rem;
   padding: 0;
 }
+.badge-tag-test {
+  font-size: 0.8rem;
+  border-radius: 10px;
+  color: white;
+  font-weight: bolder;
+  /* display: flex; */
+  /* justify-content: space-between; */
+  /* align-items: center; */
+  /* margin-bottom: 0.5rem; */
+  /* padding-left: 2px;
+  padding-right: 2px;
+  padding-top: 2px; */
+  padding: 0px 7px;
+  /* margin-right: 50px; */
+}
 
 .badge-tag .badge {
   margin: 0;
@@ -329,6 +431,12 @@ export default {
   width: 90%;
   margin: 0 auto;
   line-height: 150%;
+}
+.badge-box-test {
+  width: 90%;
+  margin: 0 auto;
+  line-height: 150%;
+  margin-right: 5px;
 }
 
 .badge-box .schedule {
@@ -344,5 +452,24 @@ export default {
 .badge-box .video {
   border: 1px solid #6b6b6bd5;
   background-color: #6b6b6bd5;
+}
+.badge-box-test .schedule {
+  border: 1px solid #ff6c7fd5;
+  background-color: #ff6c7fd5;
+}
+
+.badge-box-test .picture {
+  border: 1px solid #6c82ffd5;
+  background-color: #6c82ffd5;
+}
+
+.badge-box-test .video {
+  border: 1px solid #6b6b6bd5;
+  background-color: #6b6b6bd5;
+}
+
+.badge-box .article {
+  border: 1px solid #6ac7b3d5;
+  background-color: #6ac7b3d5;
 }
 </style>

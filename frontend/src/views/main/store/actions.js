@@ -73,9 +73,13 @@ export function editProfile ({ state }, payload) {
 
 // 특정 달의 달력 개요 가져오기
 export function getCategoryCount({ state }, payload) {
-  const teamId = payload.teamId
+  const teamId = parseInt(payload.teamId)
   const uploadDate = payload.uploadDate
-  const url = `/team/${teamId}`
+  const url = `/team/${teamId}/count/${uploadDate}`
+  return $axios({
+    method: 'get',
+    url: url
+  })
 }
 
 //google토큰확인
@@ -104,6 +108,7 @@ export function addTeamMember ({ state }, payload) {
   const url = `/team/${payload.teamId}/${payload.userId}`
   return $axios({ method: 'get', url: url})
 }
+
 // 유저 한달 일정 가져오기
 export function getSchedule ({ state }, payload) {
   // console.log('getTeamInfo', state, payload)
