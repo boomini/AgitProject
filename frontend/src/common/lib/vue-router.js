@@ -8,6 +8,7 @@ import Schedule from '@/views/schedule/schedule'
 import Room from '@/views/room/room'
 import Profile from '@/views/profile/profile'
 import Error from '@/views/error/error'
+import RoomConfirm from '@/views/room/roomConfirm'
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
@@ -54,6 +55,13 @@ function makeRoutesFromMenu () {
     path: '/error/error',
     name: 'Error',
     component: Error
+  })
+
+  routes.push({
+    path: '/room/confirm/:roomId',
+    name:'RoomConfirm',
+    component: RoomConfirm,
+    props: true
   })
   return routes
 }
