@@ -120,7 +120,7 @@ public class TeamController {
 
     //추가된 회원에게 email을 전송하고
     //해당팀에 회원추가
-    @GetMapping("/{teamId}/{userId}")
+    @GetMapping("/{teamId}/member/{userId}")
     @ApiOperation(value = "해당 팀에 특정 유저 추가", notes = "teamID, userId 이용하여 추가")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),

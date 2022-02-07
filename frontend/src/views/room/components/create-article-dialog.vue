@@ -122,6 +122,13 @@ export default {
       store.dispatch('root/addArticle', payload)
       .then(function (result) {
         console.log('게시글 등록 성공')
+        emit('createArticle')
+        swal({
+          title: "게시글 등록",
+          text: "게시글이 등록되었습니다.",
+          icon: "success",
+          button: "확인",
+        })
       })
       .catch(function (error) {
         console.log('게시글 등록 실패')
