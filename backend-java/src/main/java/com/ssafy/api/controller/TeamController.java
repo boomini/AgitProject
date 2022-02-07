@@ -2,6 +2,7 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.advice.exception.CTokenForbiddenException;
 import com.ssafy.api.advice.exception.CUserDuplicateException;
+import com.ssafy.api.advice.exception.CUserInactiveException;
 import com.ssafy.api.advice.exception.CUserNotFoundException;
 import com.ssafy.api.dto.*;
 
@@ -9,6 +10,7 @@ import com.ssafy.api.service.*;
 import com.ssafy.db.entity.User;
 
 
+import com.ssafy.db.entity.UserTeam;
 import com.ssafy.db.entity.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -30,11 +32,13 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.web.multipart.MultipartFile;
+import retrofit2.http.Path;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Api(value = "팀 API", tags = {"Team"})
 @RestController
@@ -91,6 +95,36 @@ public class TeamController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
+    @GetMapping("/check/{teamId}")
+    @ApiOperation(value = "회원 팀 가입여부 확인", notes = "회원이 팀에 어떤 상태인지를 확인한다. 0 : 비활성화 1: 활성화 2: 접근불가")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+            @ApiResponse(code = 401, message = "인증실패"),
+            @ApiResponse(code = 1000, message = "팀 중복"),
+            @ApiResponse(code = 500, message = "서버 오류")
+    })
+
+    public ResponseEntity<? extends BaseResponseBody> checkTeamMember (
+            @PathVariable @ApiParam(value="팀가입 정보", required = true) Long teamId, @ApiIgnore Authentication authentication) throws Exception {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String userId = userDetails.getUsername();
+
+        //해당 유저가 team에 포함되어있는지 확인
+        Optional<UserTeam> userTeam = teamService.getTeamMemberState(teamId, userId);
+        if(userTeam.isEmpty()){
+            System.out.println("접근불가한 User");
+            throw new CTokenForbiddenException();
+            //return ResponseEntity.status(1002).body(BaseResponseBody.of(1002, "접근불가한 User"));
+        }
+        //활성화 상태 확인
+        if(userTeam.get().getState()==0){
+            System.out.println("비활성화 상태");
+            throw new CUserInactiveException();
+        }
+        System.out.println("활성화상태");
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
     @GetMapping("/info/{teamId}")
     @ApiOperation(value = "team정보가져오기", notes = "teamID 이용하여 조회")
     @ApiResponses({
@@ -120,7 +154,7 @@ public class TeamController {
 
     //추가된 회원에게 email을 전송하고
     //해당팀에 회원추가
-    @GetMapping("/{teamId}/{userId}")
+    @GetMapping("/{teamId}/member/{userId}")
     @ApiOperation(value = "해당 팀에 특정 유저 추가", notes = "teamID, userId 이용하여 추가")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),

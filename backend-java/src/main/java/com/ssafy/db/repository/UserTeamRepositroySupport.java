@@ -61,5 +61,16 @@ public class UserTeamRepositroySupport {
 
         return Optional.ofNullable(teamList);
     }
+
+    //팀유저 상태확인
+    public Optional<UserTeam> findTeamUserStateByTeamIdAndUserId(Long teamId, Long userId) {
+        UserTeam userTeam = jpaQueryFactory.select(qUserTeam)
+                .from(qUserTeam)
+                .where(qUserTeam.user.id.eq(userId)
+                        .and (qUserTeam.team.id.eq(teamId)))
+                .fetchOne();
+        
+        return Optional.ofNullable(userTeam);
+    }
     // 특정 유저와 관련된 모든 유저들
 }

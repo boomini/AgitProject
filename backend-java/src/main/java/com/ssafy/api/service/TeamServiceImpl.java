@@ -6,15 +6,11 @@ import com.ssafy.api.dto.UserDto;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.entity.UserTeam;
 import com.ssafy.db.repository.*;
-import org.checkerframework.checker.nullness.Opt;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.db.entity.Team;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +60,7 @@ public class TeamServiceImpl implements TeamService{
         UserTeam userTeam = new UserTeam();
         userTeam.setUser(user.get());
         userTeam.setTeam(team.get());
-        userTeam.setState(1);
+        userTeam.setState(0);
         userTeamRepository.save(userTeam);
         return true;
     }
@@ -101,6 +97,18 @@ public class TeamServiceImpl implements TeamService{
         Optional<Team> team = teamRepositorySupport.findTeamByTeamId(teamId);
         TeamDto teamDto = new TeamDto(team.get());
         return teamDto;
+    }
+
+    @Override
+    public Optional<UserTeam> getTeamMemberState(Long teamId, String userId) {
+        Optional<User> user = userRepositorySupport.findUserByUserId(userId);
+        Optional<UserTeam> userTeam = null;
+        if (user == null){
+            return null;
+        }else{
+            userTeam = userTeamRepositroySupport.findTeamUserStateByTeamIdAndUserId(teamId, user.get().getId());
+        }
+        return userTeam;
     }
 
 }
