@@ -27,7 +27,7 @@
       <div id="session" class="d-flex-row justify-content-between" v-if="state.session">
         <div id="session-header">
           <h1 id="session-title">{{ state.mySessionId }}</h1>
-          <input class="btn btn-large btn-danger my-3" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
+          <input class="btn btn-large btn-danger my-3" type="button" id="buttonLeaveSession" @click="closeSession()" value="Leave session">
         </div>
         <div class="d-flex">
             <!-- <div id="main-video" class="col-3 mx-3">
