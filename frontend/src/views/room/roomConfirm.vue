@@ -1,16 +1,103 @@
 <template class="errorbody container">
         <div class='c'>
-            <div class='_404'>405</div>
+            <div class='_404'>Agit 초대장</div>
             <hr>
-            <div class='_1'>Failed to Access</div>
-            <div class='_2'>You are not allowed to access this page</div>
-            <a class='btn' href='/'>Go to Main</a>
+            <div class='_2'> {{state.team.teamName}}에서 </div>
+            <div class='_2'> {{state.team.teamBoss}} 님이 당신을 초대합니다. </div>
+            <div class='_2'>초대에 응하시겠습니까?</div>
+            <a class='btn' @click = "clickacceptbtn()">수락</a>
+            <a class='btn' @click = "clickrejectbtn()">거절</a>
         </div>
 </template>
 
 <script>
+import {onBeforeMount, reactive,computed} from 'vue'
+import { useRoute, useRouter} from 'vue-router'
+import { useStore } from 'vuex'
 export default {
+props:{
+  roomId:{
+    type: Number,
+  }
+},
+setup() {
+  const store = useStore()
+  const route = useRoute();
+  const router = useRouter();
+  const state = reactive({
+      team: {
+        teamName: '',
+        teamBoss: '',
+      },
+      isLogin: computed(() => store.getters['root/getJWTToken'])
+    })
+  const getTeamDetail = function(){
+      store.dispatch('root/getTeamInfoDetail', route.params.roomId)
+      .then(function(result){
+        console.log(result.data);
+        state.team = result.data;
+        console.log(state.team.teamName);
+        console.log(state.team.teamBoss);
+      })
+    }
 
+  const clickrejectbtn = function(){
+    console.log('check');
+    store.dispatch('root/rejectTeamMember', {teamId: route.params.roomId, token:state.isLogin} )
+      .then(function(result){
+        console.log(result.data);
+        console.log(result);
+        setTimeout(() => {
+                swal({
+                  title: "초대거절",
+                  text: "초대를 거절하였습니다.",
+                  icon: "success",
+                  button: "확인",
+                });
+              }, 500)
+        router.push({
+          name: 'intro'
+      })
+      }).catch(function(err){
+        console.log(err.response)
+
+      })
+
+  }
+
+  const clickacceptbtn = function(){
+    console.log('check');
+    store.dispatch('root/confirmTeamMember', {teamId: route.params.roomId, token:state.isLogin} )
+      .then(function(result){
+        console.log(result.data);
+        console.log(result);
+        setTimeout(() => {
+                swal({
+                  title: "초대승인",
+                  text: "초대를 승인하였습니다.",
+                  icon: "success",
+                  button: "확인",
+                });
+              }, 500)
+        router.push({
+          name: 'room-board',
+          params: {
+            roomId: route.params.roomId,
+          },
+      })
+      }).catch(function(err){
+        console.log(err.response)
+
+      })
+  }
+
+    onBeforeMount(()=>{
+      console.log(route.params.roomId);
+      getTeamDetail();
+    })
+
+    return {getTeamDetail, state,clickacceptbtn,clickrejectbtn};
+  }
 }
 </script>
 
@@ -31,11 +118,11 @@ export default {
                 margin:100px auto;
             }
             ._404{
-                font-size: 220px;
+                font-size: 80px;
                 position: relative;
                 display: inline-block;
                 z-index: 2;
-                height: 250px;
+                height: 120px;
                 letter-spacing: 15px;
             }
             ._1{
