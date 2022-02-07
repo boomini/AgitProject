@@ -7,6 +7,7 @@
 </div>
 </template>
 
+
 <script>
 import OvVideo from '@/views/live/OvVideo.vue';
 

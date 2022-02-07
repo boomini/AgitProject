@@ -1,59 +1,67 @@
 <template>
-  <div>
-    {{ $route.params.conferenceId + '번 방 상세 보기 페이지' }}
-
-  </div>
-  <div id="main-container">
-		<div id="join" v-if="!state.session">
-			<div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div>
-			<div id="join-dialog" class="jumbotron vertical-center">
-				<h1>Join a video session</h1>
-				<div class="form-group">
-					<p>
-						<label>Participant</label>
-						<input v-model="state.myUserName" class="form-control" type="text" required>
-					</p>
-					<p>
-						<label>Session</label>
-						<input v-model="state.mySessionId" class="form-control" type="text" required>
-					</p>
-					<p class="text-center">
-						<button class="btn btn-lg btn-success" @click="joinSession()">Join!</button>
-					</p>
-				</div>
-			</div>
-		</div>
-
-		<div id="session" class="d-flex-row justify-content-between" v-if="state.session">
-			<div id="session-header">
-				<h1 id="session-title">{{ state.mySessionId }}</h1>
-				<input class="btn btn-large btn-danger m-3" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
-			</div>
-      <div class="d-flex">
-          <div id="main-video" class="col-3 mx-3">
-            <user-video :stream-manager="state.mainStreamManager"/>
+    <div id="container">
+      {{ $route.params.conferenceId + '번 방 상세 보기 페이지' }}
+      <div id="join" v-if="!state.session">
+        <div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div>
+        <div id="join-dialog" class="jumbotron vertical-center">
+          <h1>Join a video session</h1>
+          <div class="form-group">
+            <p>
+              <label>참석자 이름</label>
+              <input v-model="state.myUserName" class="form-control" type="text" required>
+            </p>
+            <p>
+              <label>세션 이름</label>
+              <input v-model="state.mySessionId" class="form-control" type="text" required>
+            </p>
+            <p class="text-center">
+              <button class="btn btn-lg btn-success" @click="joinSession()">Join!</button>
+            </p>
           </div>
-        <div>
-          <div id="video-container" class="col-5 mx-1">
-            <user-video :stream-manager="state.publisher" @click="updateMainVideoStreamManager(state.publisher)"/>
-            <user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
-          </div>
-        </div>
-        <div class="col-3" id="chat">
-          <chat-live :session="state.session" @sendMessage="sendMessage"/>
         </div>
       </div>
-		</div>
-	</div>
+
+      <div id="session" class="d-flex-row justify-content-between" v-if="state.session">
+        <div id="session-header">
+          <h1 id="session-title">{{ state.mySessionId }}</h1>
+          <input class="btn btn-large btn-danger my-3" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
+        </div>
+        <div class="d-flex">
+            <!-- <div id="main-video" class="col-3 mx-3">
+              <user-video :stream-manager="state.mainStreamManager"/>
+            </div> -->
+          <div class="col-5 d-flex">
+            <div id="video-container">
+              <user-video :stream-manager="state.publisher" @click="updateMainVideoStreamManager(state.publisher)"/>
+              <user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+            </div>
+          </div>
+          <div class="offset-3 col-3" id="chat">
+            <chat-live :session="state.session" @sendMessage="sendMessage"/>
+          </div>
+        </div>
+      </div>
+    </div>
 </template>
-<style>
-  #chat{
-    transform: translate(0, -10%);
+<style scoped>
+  #container {
+    position: absolute;
+    top: -90px;
+    left: -260px;
+    margin-left: 0;
+    margin-top: 0;
+    z-index: 10;
+    background-color: white;
+    width: 125%;
+    /* background: #112; */
+    /* background-image: url("https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1"); */
+    background-size:cover;
   }
-  #video-container video {
+  /* #video-container video {
     position: relative;
+    display: inline;
     float: left;
-    width: 80%;
+    width: 60%;
     cursor: pointer;
   }
 
@@ -97,7 +105,7 @@
     cursor: pointer;
     object-fit: cover;
     height: 180px;
-  }
+  } */
 </style>
 <script>
 import { reactive, onMounted, onUnmounted, computed } from 'vue'
@@ -160,7 +168,7 @@ export default {
 
       state.session.on('streamCreated', ({ stream }) => {
         const subscriber = state.session.subscribe(stream)
-          state.subscribers.push(subscriber)
+        state.subscribers.push(subscriber)
       })
 
       state.session.on('streamDestroyed', ({ stream }) => {
