@@ -164,4 +164,30 @@ export function takeMember ({ state }, payload) {
   // const body = payload.body
   // return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
   return $axios({ method: 'get', url: url})
+
+// 게시글
+// 게시글 작성
+export function addArticle ({ state }, payload) {
+  console.log('게시글 작성 함수')
+  console.log(payload)
+  const url = '/article'
+  const body = payload.body
+  return $axios({
+    method: 'post',
+    url: url,
+    data: body
+  })
+}
+
+// 게시판
+// 특정 일자 게시판 조회
+export function getBoardDetail ({ state }, payload) {
+  console.log('특정 일자 게시판 조회 함수')
+  const teamId = payload.teamId
+  const uploadDate = payload.uploadDate
+  const url = `/team/${teamId}/${uploadDate}`
+  return $axios({
+    method: 'get',
+    url: url
+  })
 }
