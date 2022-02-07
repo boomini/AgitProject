@@ -164,7 +164,7 @@ export function takeMember ({ state }, payload) {
   // const body = payload.body
   // return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
   return $axios({ method: 'get', url: url})
-
+}
 // 게시글
 // 게시글 작성
 export function addArticle ({ state }, payload) {
