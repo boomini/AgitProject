@@ -20,6 +20,7 @@ export function getTeams (state) {
   return state.userTeams
 }
 
+// 메시지 정보 가져오기
 export function getMessages (state) {
   return state.messages
 }

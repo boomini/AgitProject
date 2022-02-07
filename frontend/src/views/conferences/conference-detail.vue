@@ -10,7 +10,7 @@
           <h1>Join a video session</h1>
           <div class="form-group">
             <p>
-              <label>참석자 이름</label>
+              <label>이름 설정</label>
               <input v-model="state.myUserName" class="form-control" type="text" required>
             </p>
             <p>
@@ -150,10 +150,11 @@ export default {
       publisher: undefined,
 			subscribers: [],
       mySessionId: 'Session',
-      myUserName: 'Participant',
-      roomId: computed(() => route.params.conferenceId)
+      myUserName: 'Person1',
+      roomId: computed(() => route.params.conferenceId),
+      teamName: '',
+      userName: '',
     })
-
     // 페이지 진입시 불리는 훅
     onMounted(() => {
       state.conferenceId = route.params.conferenceId
@@ -181,11 +182,12 @@ export default {
       state.OV = new OpenVidu()
 
       state.session = state.OV.initSession()
-
+      state.mySessionId = state.teamName
+      console.log(state.mySessionId)
       state.session.on('streamCreated', ({ stream }) => {
         const subscriber = state.session.subscribe(stream)
         state.subscribers.push(subscriber)
-      })
+      })g
 
       state.session.on('streamDestroyed', ({ stream }) => {
 				const index = state.subscribers.indexOf(stream.streamManager, 0)
@@ -319,9 +321,31 @@ export default {
         })
     }
 
+    const takeProfile = function () {
+      const token = store.getters['root/getJWTToken']
+      store.dispatch('root/getProfile', token)
+      .then(res => {
+        state.userName = res.data.nickName
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
+    const getTeamInfo = function () {
+      store.dispatch('root/getTeamInfoDetail', route.params.conferenceId)
+      .then(res => {
+        state.teamName = `${res.data.teamName}팀의 방`
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
+
+    // takeProfile()
+    // getTeamInfo()
 
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager,
-          getToken, createSession, createToken, sendMessage, closeSession }
+          getToken, createSession, createToken, sendMessage, closeSession, takeProfile, getTeamInfo }
   }
 }
 </script>
