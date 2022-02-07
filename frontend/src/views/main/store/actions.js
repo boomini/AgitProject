@@ -34,6 +34,15 @@ export function getProfile ({ state }, payload) {
   return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
 }
 
+// 이메일로 보낸 인증 번호 가져오기
+export function getAuthNumber ({ state }, payload) {
+  console.log('authNumber', state, payload)
+  const url = `/email/check/auth/sendEmail?userEmail=${payload.userEmail}`
+  console.log(url);
+  return $axios({method:'get', url: url})
+
+}
+
 
 // 로그인한 유저가 소속된 팀 정보 가져오기
 export function getTeamInfo ({ state }, payload) {
