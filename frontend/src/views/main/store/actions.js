@@ -105,8 +105,32 @@ export function deleteUser ({ state }, payload) {
 //팀원초대하기
 export function addTeamMember ({ state }, payload) {
   console.log('addTeamMember', state, payload)
-  const url = `/team/${payload.teamId}/${payload.userId}`
+  const url = `/team/${payload.teamId}/member/${payload.userId}`
   return $axios({ method: 'get', url: url})
+}
+
+//팀원 state 확인하기
+export function checkTeamMember ({ state }, payload) {
+  console.log('checkTeamMember', state, payload)
+  const url = `/team/check/${payload.teamId}`
+  const token = payload.token;
+  return $axios({ method: 'get', url: url,headers: { Authorization: `Bearer ${token}`}})
+}
+
+//팀원 state 수락 확인하기
+export function confirmTeamMember ({ state }, payload) {
+  console.log('confirmTeamMember', state, payload)
+  const url = `/team/confirm/${payload.teamId}`
+  const token = payload.token;
+  return $axios({ method: 'get', url: url,headers: { Authorization: `Bearer ${token}`}})
+}
+
+//팀원 state 거절 확인하기
+export function rejectTeamMember ({ state }, payload) {
+  console.log('rejectTeamMember', state, payload)
+  const url = `/team/reject/${payload.teamId}`
+  const token = payload.token;
+  return $axios({ method: 'get', url: url,headers: { Authorization: `Bearer ${token}`}})
 }
 
 // 유저 한달 일정 가져오기

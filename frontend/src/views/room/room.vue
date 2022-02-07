@@ -279,6 +279,7 @@ export default {
       token:'',
       title : computed(() => `${state.year}년 ${state.month}월 ${state.day}일 게시판`),
       circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+      isLogin: computed(() => store.getters['root/getJWTToken'])
     })
 
     const selectDate = (val) => {
@@ -321,18 +322,7 @@ export default {
       // })
     }
 
-    onBeforeMount(() => {
-
-      // state.team.teamId = route.params.roomId
-      // state.team.teamName = route.params.roomName
-      // state.team.teamDescription = route.params.roomDescription
-      // state.team.teamPicture = route.params.roomPicture
-      console.log(state.team.teamName)
-
-
-      let url = window.location.href;
-      state.team.teamId = url.split('/').reverse()[0];
-
+    const getTeamDetail = function(){
       store.dispatch('root/getTeamInfoDetail', state.team.teamId)
       .then(function(result){
         console.log(result.data);
@@ -341,6 +331,68 @@ export default {
         console.log(state.team.teamId);
         console.log(state.team.teamName)
       })
+    }
+
+    const checkUserState = function(){
+      let url = window.location.href;
+      state.team.teamId = url.split('/').reverse()[0];
+
+      if(state.isLogin==null){
+        setTimeout(() => {
+                swal({
+                  title: "로그인 필요한 페이지",
+                  text: "로그인 후 이용해주세요.",
+                  icon: "success",
+                  button: "확인",
+                });
+              }, 500)
+       router.push({
+        name: 'intro',
+        })
+      }
+      else{
+        console.log(state.isLogin);
+        store.dispatch('root/checkTeamMember', {teamId: state.team.teamId, token:state.isLogin} )
+      .then(function(result){
+        console.log(result.data);
+        console.log(result);
+      }).catch(function(err){
+        console.log(err.response)
+        if(err.response.data.statusCode==1005){
+
+          getTeamDetail();
+          //비활성화 된 회원
+          console.log(state.team.teamId);
+          console.log(state.team.teamName);
+          router.push({
+          name: 'RoomConfirm',
+          params: {
+            roomId: state.team.teamId,
+            roomName: state.team.teamName,
+          },
+        })
+        }else if(err.response.data.statusCode==1002){
+          //접근불가한 User
+          router.push({
+            name: 'Error'
+          })
+
+        }
+      })
+      }
+
+
+    }
+    onBeforeMount(() => {
+
+      // state.team.teamId = route.params.roomId
+      // state.team.teamName = route.params.roomName
+      // state.team.teamDescription = route.params.roomDescription
+      // state.team.teamPicture = route.params.roomPicture
+      checkUserState();
+      getTeamDetail();
+
+
 
       const today = new Date()
       const year = today.getFullYear()
