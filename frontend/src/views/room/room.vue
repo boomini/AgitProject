@@ -118,7 +118,7 @@
           </el-button>
         </div>
         <div>
-          <el-button style="width: 100%" @click="joinConference(1)">
+          <el-button style="width: 100%" @click="joinConference(state.team.teamId)">
             회의하기
           </el-button>
         </div>

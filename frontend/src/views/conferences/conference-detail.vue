@@ -1,9 +1,12 @@
 <template>
-    <div id="container">
-      {{ $route.params.conferenceId + '번 방 상세 보기 페이지' }}
+    <div id="chat-container">
+      <div class="d-flex justify-content-between my-3">
+        {{ $route.params.conferenceId + '번 방 상세 보기 페이지' }}
+        <button class="mx-4" @click="closeSession()">X</button>
+      </div>
       <div id="join" v-if="!state.session">
         <div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div>
-        <div id="join-dialog" class="jumbotron vertical-center">
+        <div id="join-dialog" class="jumbotron vertical-center d-flex-column offset-3 col-6">
           <h1>Join a video session</h1>
           <div class="form-group">
             <p>
@@ -44,17 +47,16 @@
     </div>
 </template>
 <style scoped>
-  #container {
+  #chat-container {
     position: absolute;
     top: -90px;
-    left: -260px;
+    left: -250px;
     margin-left: 0;
     margin-top: 0;
     z-index: 10;
     background-color: white;
     width: 125%;
-    /* background: #112; */
-    /* background-image: url("https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1"); */
+    height: 100vh;
     background-size:cover;
   }
   /* #video-container video {
@@ -110,7 +112,7 @@
 <script>
 import { reactive, onMounted, onUnmounted, computed } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { OpenVidu } from 'openvidu-browser'
 import UserVideo from '@/views/live/UserVideo.vue'
 import ChatLive from '@/views/live/ChatLive.vue'
@@ -129,6 +131,7 @@ export default {
 
   setup () {
     const route = useRoute()
+    const router = useRouter()
     const store = useStore()
     const OPENVIDU_SERVER_URL = "https://i6a403.p.ssafy.io:5443"
     const OPENVIDU_SERVER_SECRET = "MY_SECRET"
@@ -146,8 +149,9 @@ export default {
       mainStreamManager: undefined,
       publisher: undefined,
 			subscribers: [],
-      mySessionId: 'SessionA',
+      mySessionId: 'Session',
       myUserName: 'Participant',
+      roomId: computed(() => route.params.conferenceId)
     })
 
     // 페이지 진입시 불리는 훅
@@ -160,6 +164,18 @@ export default {
     onUnmounted(() => {
       state.conferenceId = ''
     })
+
+    // 세션 Exit 버튼 눌렀을 때
+    const closeSession = function (){
+      leaveSession()
+      router.push({
+        name: 'room-board',
+        params: {
+          roomId: state.roomId
+        }
+      })
+
+    }
 
     const joinSession = function () {
       state.OV = new OpenVidu()
@@ -305,7 +321,7 @@ export default {
 
 
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager,
-          getToken, createSession, createToken, sendMessage }
+          getToken, createSession, createToken, sendMessage, closeSession }
   }
 }
 </script>
