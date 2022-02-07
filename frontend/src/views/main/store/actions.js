@@ -152,3 +152,16 @@ export function sendMessage({state}, payload){
     to: [],
   })
 }
+
+// 팀원 조회
+export function takeMember ({ state }, payload) {
+  console.log(payload.body)
+  console.log('안돠나')
+  const teamId = payload.body.teamId
+  const url = `/team/${teamId}/users`
+  console.log(url)
+  // const token = payload.token
+  // const body = payload.body
+  // return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
+  return $axios({ method: 'get', url: url})
+}

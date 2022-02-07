@@ -102,11 +102,11 @@
     <div class="col-2 d-flex flex-column justify-content-between" style="border: 1px solid black; border-radius: 20px; margin-bottom: 180px;">
       <div>
         <div>멤 버</div>
-        <div v-for="i in [1, 2, 3, 4, 5]" :key="i" class="d-flex align-items-center">
+        <div v-for="member in state.teamMembers" :key="member.id" class="d-flex align-items-center">
           <div class="d-flex align-items-center mb-2">
             <el-avatar :size="50" :src="state.circleUrl"></el-avatar>
             <span style="height: 50px; line-height: 50px;">
-              사람 {{ i }}
+              {{ member.name }}
             </span>
           </div>
         </div>
@@ -279,6 +279,7 @@ export default {
       token:'',
       title : computed(() => `${state.year}년 ${state.month}월 ${state.day}일 게시판`),
       circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+      teamMembers: null
     })
 
     const selectDate = (val) => {
@@ -288,6 +289,8 @@ export default {
       const month = convertMonth(date.$M + 1)
       state.team.uploadDate = `${year}-${month}`
     }
+
+
 
     const onCloseInviteDialog = function () {
       state.inviteDialogOpen = false
@@ -348,6 +351,29 @@ export default {
       state.team.uploadDate = `${year}-${month}`
 
 
+      // console.log(state.team.teamId)
+      // console.log("제발봐주세요")
+      const takeMember = function () {
+        const token = store.getters['root/getJWTToken']
+        const body = {
+          'teamId': state.team.teamId
+        }
+        store.dispatch('root/takeMember', {'body': body, 'token': token})
+        .then(res=> {
+          console.log(res.data)
+          state.teamMembers = res.data
+          console.log(state.teamMembers[0].name)
+        })
+        .catch(err => {
+          console.log(err)
+          // console.log('기달')
+      })
+      }
+
+
+
+      takeMember()
+
       // 이번 달 달력 가져오기
       const payload = {
         'teamId': state.team.teamId,
@@ -356,18 +382,18 @@ export default {
 
       store.dispatch('root/getCategoryCount', payload)
       .then(function (result) {
-        console.log('해당 달의 개요 가져오기 성공')
+        // console.log('해당 달의 개요 가져오기 성공')
         // json ->
         convertListToDict(result.data.articleCntList, state.team.articleCntDict)
         convertListToDict(result.data.imageCntList, state.team.imageCntDict)
         convertListToDict(result.data.videoCntList, state.team.videoCntDict)
       })
-      .catch(function (error) {
+      .catch(function (err) {
         console.log('실패')
       })
     })
-
-    return { clickOnDate, drawer, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, joinConference }
+    // takeMember,
+    return { clickOnDate, drawer, state, selectDate, calendar,  onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, joinConference }
   }
 }
 </script>
