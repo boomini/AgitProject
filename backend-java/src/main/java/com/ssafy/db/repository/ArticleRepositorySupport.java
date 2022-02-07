@@ -66,7 +66,7 @@ public class ArticleRepositorySupport {
     }
 
     public Optional<List<DayCountDto>>  findTeamArticleCountByMont(String uploadDate, Long teamId) {
-        //LocalDate 객체를 yyyy-mm-dd 형태의 String으로 변경
+        //LocalDate 객체를 yyyy-mm 형태의 String으로 변경
         StringTemplate dateFormat = Expressions.stringTemplate("DATE_FORMAT({0}, {1})", qArticle.uploadDate, ConstantImpl.create("%Y-%m"));
         List<DayCountDto> dayCountDtoList = jpaQueryFactory.select(
                         new QDayCountDto(qArticle.count().as("count"),qArticle.uploadDate)
@@ -76,7 +76,6 @@ public class ArticleRepositorySupport {
                 .groupBy(qArticle.uploadDate)
                 .fetch();
 
-        if(dayCountDtoList.size()==0) return Optional.empty();
         return Optional.ofNullable(dayCountDtoList);
     }
 }

@@ -19,4 +19,5 @@ public class BoardDto {
     List<ArticleDto> articleList = new ArrayList<>();
     List<ImageDto> imageList = new ArrayList<>();
     List<VideoDto> videoList = new ArrayList<>();
+    List<EventResDto> eventResList = new ArrayList<>();
 }

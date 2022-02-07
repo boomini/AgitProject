@@ -67,6 +67,7 @@
 
 </style>
 <script>
+//import LoginDialog from './components/login-dialog'
 import LoginDialog from './components/login-dialog'
 import SignupDialog from './components/signup-dialog'
 import AuthDialog from './components/auth-dialog.vue'
@@ -88,7 +89,7 @@ export default {
     AuthDialog
   },
   data () {
-    return {
+     return {
       loginDialogOpen: false,
       signupDialogOpen: false,
       authDialogOpen: false,

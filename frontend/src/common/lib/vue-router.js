@@ -7,6 +7,7 @@ import Intro from '@/views/intro/intro'
 import Schedule from '@/views/schedule/schedule'
 import Room from '@/views/room/room'
 import Profile from '@/views/profile/profile'
+import Error from '@/views/error/error'
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
@@ -23,7 +24,7 @@ function makeRoutesFromMenu () {
       return { path: fullMenu[key].path, name: key, component: Schedule }
     } else if (key === 'room1') {
       return { path: fullMenu[key].path, name: key, component: Room }
-    } else { // menu.json 에 들어있는 로그아웃 메뉴
+    }else { // menu.json 에 들어있는 로그아웃 메뉴
       return null
     }
   })
@@ -49,6 +50,11 @@ function makeRoutesFromMenu () {
     component: Profile
   })
 
+  routes.push({
+    path: '/error/error',
+    name: 'Error',
+    component: Error
+  })
   return routes
 }
 

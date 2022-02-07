@@ -3,7 +3,7 @@
     {{ $route.params.conferenceId + '번 방 상세 보기 페이지' }}
 
   </div>
-  <div id="main-container" class="container">
+  <div id="main-container">
 		<div id="join" v-if="!state.session">
 			<div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div>
 			<div id="join-dialog" class="jumbotron vertical-center">
@@ -24,30 +24,90 @@
 			</div>
 		</div>
 
-		<div id="session" v-if="state.session">
+		<div id="session" class="d-flex-row justify-content-between" v-if="state.session">
 			<div id="session-header">
 				<h1 id="session-title">{{ state.mySessionId }}</h1>
-				<input class="btn btn-large btn-danger" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
+				<input class="btn btn-large btn-danger m-3" type="button" id="buttonLeaveSession" @click="leaveSession" value="Leave session">
 			</div>
-			<div id="main-video" class="col-md-6">
-				<user-video :stream-manager="state.mainStreamManager"/>
-			</div>
-			<div id="video-container" class="col-md-6">
-				<user-video :stream-manager="state.publisher" @click="updateMainVideoStreamManager(state.publisher)"/>
-				<user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
-			</div>
+      <div class="d-flex">
+          <div id="main-video" class="col-3 mx-3">
+            <user-video :stream-manager="state.mainStreamManager"/>
+          </div>
+        <div>
+          <div id="video-container" class="col-5 mx-1">
+            <user-video :stream-manager="state.publisher" @click="updateMainVideoStreamManager(state.publisher)"/>
+            <user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+          </div>
+        </div>
+        <div class="col-3" id="chat">
+          <chat-live :session="state.session" @sendMessage="sendMessage"/>
+        </div>
+      </div>
 		</div>
 	</div>
 </template>
 <style>
+  #chat{
+    transform: translate(0, -10%);
+  }
+  #video-container video {
+    position: relative;
+    float: left;
+    width: 80%;
+    cursor: pointer;
+  }
+
+  #video-container p {
+    display: inline-block;
+    background: #f8f8f8;
+    padding-left: 5px;
+    padding-right: 5px;
+    color: #777777;
+    font-weight: bold;
+    border-bottom-right-radius: 4px;
+  }
+
+  video {
+    width: 100%;
+    height: auto;
+  }
+
+
+  #main-video p {
+    display: inline-block;
+    background: #f8f8f8;
+    font-size: 22px;
+    color: #777777;
+    font-weight: bold;
+    border-bottom-right-radius: 4px;
+  }
+
+  #session img {
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    object-fit: contain;
+    vertical-align: baseline;
+  }
+
+  #session #video-container img {
+    position: relative;
+    float: left;
+    width: 50%;
+    cursor: pointer;
+    object-fit: cover;
+    height: 180px;
+  }
 </style>
 <script>
-import { reactive, onMounted, onUnmounted } from 'vue'
+import { reactive, onMounted, onUnmounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { OpenVidu } from 'openvidu-browser'
 import UserVideo from '@/views/live/UserVideo.vue'
+import ChatLive from '@/views/live/ChatLive.vue'
 import axios from 'axios'
+import moment from 'moment';
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -56,6 +116,7 @@ export default {
 
   components: {
     UserVideo,
+    ChatLive,
   },
 
   setup () {
@@ -99,7 +160,7 @@ export default {
 
       state.session.on('streamCreated', ({ stream }) => {
         const subscriber = state.session.subscribe(stream)
-        state.subscribers.push(subscriber)
+          state.subscribers.push(subscriber)
       })
 
       state.session.on('streamDestroyed', ({ stream }) => {
@@ -112,6 +173,21 @@ export default {
       state.session.on('exception', ({ exception }) => {
 				console.warn(exception)
 			})
+
+      // 채팅
+      state.session.on('signal:chat', (event) => {
+        let eventData = JSON.parse(event.data);
+        let data = new Object()
+        let time = new Date()
+        data.message = eventData.content;
+        if (state.currentMode === 'anonymous') {
+          data.sender = eventData.secretName;
+        } else {
+          data.sender = event.from.data.slice(15,-2);
+        }
+        data.time = moment(time).format('HH:mm')
+        store.commit('root/setMessages', data)
+      })
 
       getToken(state.mySessionId).then(token => {
 				state.session.connect(token, { clientData: state.myUserName })
@@ -153,7 +229,7 @@ export default {
 			state.publisher = undefined;
 			state.subscribers = [];
 			state.OV = undefined;
-
+      store.commit('root/clearMessages')
 			window.removeEventListener('beforeunload', leaveSession);
     }
 
@@ -207,9 +283,21 @@ export default {
 					.catch(error => reject(error.response));
 			});
 		}
+    const sendMessage = function (message){
+      var messageData = {
+        content: message,
+        secretName: store.getters['root/getSecretName'],
+      }
+        state.session.signal({
+          type: 'chat',
+          data: JSON.stringify(messageData),
+          to: [],
+        })
+    }
+
 
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager,
-          getToken, createSession, createToken }
+          getToken, createSession, createToken, sendMessage }
   }
 }
 </script>

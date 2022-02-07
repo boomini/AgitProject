@@ -21,6 +21,16 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button type="primary" @click="clickLogin" v-loading.fullscreen="loading">로그인</el-button>
+        <div class="easy-login">
+          <div class="line"></div>
+          <div style="text-align:center">간편로그인</div>
+          <div>
+            <button @click="handleClickSignIn" class='easy-custom-btn google-btn'></button>
+            <button @click="handleClickSignIn" class='easy-custom-btn naver-btn'></button>
+            <button @click="handleClickSignIn" class='easy-custom-btn kakao-btn'></button>
+          </div>
+        </div>
+
       </span>
     </template>
   </el-dialog>
@@ -28,7 +38,7 @@
 <style>
 .login-dialog {
   width: 400px !important;
-  height: 280px;
+  height: 400px;
 }
 .login-dialog .el-dialog__headerbtn {
   float: right;
@@ -57,6 +67,36 @@
 .login-dialog .dialog-footer .el-button {
   width: 120px;
 }
+.easy-login{
+  font-size:11px;
+}
+.line {
+  width: 30px;
+  height: 30px;
+  border:1px solid var(--el-border-color-base);
+}
+.easy-custom-btn{
+  width: 25px !important;
+  height: 30px !important;
+  margin:auto;
+  margin-top: 15px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  border: 0px;
+  text-align:center;
+}
+
+.google-btn{
+  background-image: url('../../../assets/images/googleicon.png');
+}
+
+.naver-btn{
+  background-image: url('../../../assets/images/navericon.png');
+}
+
+.kakao-btn{
+  background-image: url('../../../assets/images/kakaoicon.png');
+}
 </style>
 <script>
 import { reactive, computed, ref, onMounted } from 'vue'
@@ -72,7 +112,62 @@ export default {
       default: false
     }
   },
+  data(){
+    return {
+      user: '',
+      name:'',
+      email:'',
+      imageurl:'',
+      id:'',
+      idToken:'',
+    }
+  },
+methods: {
+    async handleClickSignIn(){
+      try {
+        const googleUser = await this.$gAuth.signIn();
+        if (!googleUser) {
+          return null;
+        }
+        const authuser = await this.$gAuth.instance;
+        console.log('authuser', authuser);
+        console.log('googleUser', googleUser);
+        this.user = googleUser.getBasicProfile().getEmail();
+        this.name = googleUser.getBasicProfile().getName();
+        this.imageurl = googleUser.getBasicProfile().getImageUrl();
+        this.id = googleUser.getBasicProfile().getId();
+        this.idToken = this.$gAuth.instance.currentUser.get().getAuthResponse().id_token;
+        this.tokenVerify()
+      } catch (error) {
+        //on fail do something
+        console.error(error);
+        return null;
+      }
+    },
+    async handleClickGetAuthCode(){
+      try {
+        const authCode = await this.$gAuth.getAuthCode();
+        console.log('authCode', authCode);
+      } catch(error) {
+        //on fail do something
+        console.error(error);
+        return null;
+      }
+    },
+    async handleClickSignOut() {
+      try {
+        await this.$gAuth.signOut();
+        console.log('isAuthorized', this.Vue3GoogleOauth.isAuthorized);
+        this.user = '';
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    handleClickDisconnect() {
+      window.location.href = `https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=${window.location.href}`;
+    },
 
+  },
   setup(props, { emit }) {
     const store = useStore()
     // 마운드 이후 바인딩 될 예정 - 컨텍스트에 노출시켜야함. <return>
@@ -86,6 +181,8 @@ export default {
       // rules의 객체 키 값과 form의 객체 키 값이 같아야 매칭되어 적용됨
       //
     */
+
+
     const state = reactive({
       form: {
         id: '',
@@ -131,12 +228,11 @@ export default {
             store.dispatch('root/getTeamInfo', token)
             .then(function (result) {
               store.commit('root/setUserTeam', result.data)
-              // console.l
               console.log('회원 팀정보 가져오기')
-              // console.log(result.data)
-              console.log(store.getters['root/getTeams'])
-              console.log('팀정보 가져오기 성공')
             })
+
+
+
 
             handleClose() // 로그인 모달 끄기
           })
@@ -167,8 +263,42 @@ export default {
       state.form.password = ''
       emit('closeLoginDialog')
     }
+    const tokenVerify = function(){
 
-    return { loginForm, state, clickLogin, handleClose, loading }
+      const params = new URLSearchParams();
+      params.append('idToken', this.idToken);
+      console.log(this.idToken);
+
+      store.dispatch('root/verifyToken', {accessToken:this.idToken})
+          .then(function (result) {
+            router.push({ name: 'home' })
+            store.commit('root/setMenuActive', 0)
+
+            localStorage.setItem('JWT', result.data.accessToken)
+            store.commit('root/setJWTToken', result.data.accessToken)
+
+            // 로그인한 유저가 가입한 팀 정보 가져오기
+            const token = store.getters['root/getJWTToken']
+            store.dispatch('root/getTeamInfo', token)
+            .then(function (result) {
+              store.commit('root/setUserTeam', result.data)
+              console.log('회원 팀정보 가져오기')
+            })
+
+            handleClose()
+          })
+          // 로딩 스피너를 바로 꺼버리면 사용자가 볼 수 없으므로
+          // 작업 중인 것을 볼 수 있도록 조금의 여유를 주고 로딩 스피너를 끔.
+          .then(() => {
+            setTimeout(() => {
+              loading.value = false
+            }, 500)
+          })
+          .catch(function (err) {
+            console.log(err);
+          })
+    }
+    return { loginForm, state, clickLogin, handleClose, loading,tokenVerify }
   }
 }
 </script>

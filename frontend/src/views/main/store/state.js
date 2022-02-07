@@ -31,8 +31,12 @@ const IsDesktop = getIsDesktop()
 
 export default {
   isDesktopPlatform: IsDesktop,
-  activeMenu: 'home',
+  activeMenu: 'schedule',
   menus: menuData,
   JWTToken: localStorage.getItem('JWT'), // JWT Token을 저장해둠.
   userTeams: [],
+  isChatPanel: false,
+  messages: [],
+  secretName: null,
+  currentMode: 'anonymous',
 }

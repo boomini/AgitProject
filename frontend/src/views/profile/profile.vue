@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <div class="d-flex flex-row" style="max-width: 1200px; margin-left: 350px; margin-top: 50px;">
       <div class="d-flex justify-content-between" style="width: 100%">
         <div class="col-md-3">
@@ -15,7 +14,7 @@
             </div>
             <p>Birthday : {{ state.info.year}}년 {{ state.info.month}}월 {{ state.info.day}}일</p>
             <p class="card-text"><small class="text-muted">최초 가입일 : {{state.info.cdate.slice(2, 10)}} </small></p>
-            <el-button type="danger">회원 탈퇴</el-button>
+            <el-button type="danger" @click="deleteuserId">회원 탈퇴</el-button>
           </div>
         </div>
       </div>
@@ -46,18 +45,18 @@
 
 
 
-  <nickname-dialog
-    :open="state.nicknameDialogOpen"
-    :info="state.info"
-    @closeNicknameDialog="onCloseNicknameDialog"
-    @edit-nickname="editNickname"
-    />
+    <nickname-dialog
+      :open="state.nicknameDialogOpen"
+      :info="state.info"
+      @closeNicknameDialog="onCloseNicknameDialog"
+      @edit-nickname="editNickname"
+      />
   </div>
 </template>
 
 
 <script>
-import { reactive } from 'vue'
+import { reactive, onBeforeMount } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import NicknameDialog from './components/nickname-dialog.vue'
@@ -72,14 +71,37 @@ export default {
     const store = useStore()
     const router = useRouter()
     const state = reactive({
-      info: null,
+      info: {
+        name: '',
+        nickName: '',
+        userId: '',
+        year: '',
+        month: '',
+        day: '',
+        cdate: '1970-01-01'
+      },
+      // info: null,
       nicknameDialogOpen : false,
     })
+
+    // onBeforeMount(() => {
+    //   const token = store.getters['root/getJWTToken']
+    //   store.dispatch('root/getProfile', token)
+    //   .then(res => {
+    //     state.info = res.data
+    //     console.log(state.info)
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
+    // })
+
     const takeProfile = function () {
       const token = store.getters['root/getJWTToken']
       store.dispatch('root/getProfile', token)
       .then(res => {
         state.info = res.data
+        console.log(res)
       })
       .catch(err => {
         console.log(err)
@@ -90,7 +112,38 @@ export default {
       state.info.nickName = nickname.nickname
     }
 
-    takeProfile()
+    const deleteuserId = function () {
+      const token = store.getters['root/getJWTToken']
+      const body = {
+        'userId': state.info.userId,
+      }
+      store.dispatch('root/deleteUser',{ 'body': body, 'token': token})
+      .then(res => {
+          setTimeout(() => {
+                swal({
+                  title: "회원탈퇴",
+                  text: "이용해주셔서 감사합니다.",
+                  icon: "success",
+                  button: "확인",
+                });
+              }, 500)
+
+              store.commit('root/setJWTTokenReset')
+              localStorage.removeItem('JWT')
+              store.commit('root/setMenuActive', 0)
+              router.push({
+                name: 'home',
+              })
+
+              // router.go(router.currentRoute)
+
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+
+    // takeProfile()
     // console.log(typeof(state.info))
 
     const activities = [
@@ -119,7 +172,7 @@ export default {
 
 
 
-    return { store, router, takeProfile, state, activities, onCloseNicknameDialog, editNickname}
+    return { store, router, takeProfile, state, activities, onCloseNicknameDialog, editNickname, deleteuserId}
   }
 }
 </script>

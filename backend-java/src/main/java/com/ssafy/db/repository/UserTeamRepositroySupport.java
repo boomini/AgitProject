@@ -38,7 +38,7 @@ public class UserTeamRepositroySupport {
         return Optional.ofNullable(userFKList);
     }
 
-    // 특정 유저가 가입된 팀 리스트
+    // 특정 팀에 가입된 유저 리스트
     public Optional<List<User>> findUserListByTeamId(Long id) {
         List<User> userList = jpaQueryFactory.select(qUser)
                 .from(qUserTeam)
@@ -50,7 +50,7 @@ public class UserTeamRepositroySupport {
         return Optional.ofNullable(userList);
     }
 
-    // 특정 팀에 가입된 유저 리스트
+    // 특정 유저가 가입한 팀 리스트
     public Optional<List<Team>> findTeamListByUserId(Long id) {
         List<Team> teamList = jpaQueryFactory.select(qTeam)
                 .from(qUserTeam)

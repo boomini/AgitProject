@@ -17,14 +17,14 @@
     <!-- content -->
     <div class="d-flex flex-column justify-content-around" style="height: 150px;">
       <div style="border: 1px solid black; background-color: black; border-radius: 5px; font-size: 20px; padding: 5px 1rem;">
-        여기에 안내 문구를 입력해주세요.
+        초대를 원하는 회원의 아이디를 입력해주세요.
       </div>
       <div class="d-flex justify-content-between">
         <div style="width: 100%" class="me-2">
           <el-input placeholder="User@example.com" v-model="state.inputEmail" clearable></el-input>
         </div>
         <div>
-          <el-button>초대코드 전송</el-button>
+          <el-button @click="addTeamMember">초대코드 전송</el-button>
         </div>
       </div>
     </div>
@@ -34,20 +34,26 @@
 </template>
 
 <script>
-import { reactive, computed } from 'vue'
-
+import { reactive, computed, onBeforeMount } from 'vue'
+import {useStore} from 'vuex'
 export default {
   name: 'invite-dialog',
   props: {
     open: {
       type: Boolean,
       default: false
-    }
+    },
+    info: {
+      type: Object,
+      required: true,
+    },
   },
   setup(props, { emit }) {
+    const store = useStore();
     const state = reactive({
       dialogVisible: computed(() => props.open),
       inputEmail: '',
+      teamId:null,
     })
 
     const handleClose = function () {
@@ -55,7 +61,25 @@ export default {
       emit('closeInviteDialog')
     }
 
-    return { state, handleClose }
+    const addTeamMember = function(){
+      store.dispatch('root/addTeamMember', { 'teamId': state.teamId, 'userId': state.inputEmail})
+      .then(function (result) {
+        alert('팀 초대 메세지 전송')
+
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
+    }
+
+    onBeforeMount(() => {
+      //state.team.teamId = props.info.teamId;
+      console.log(props.info);
+      state.teamId = props.info;
+      //이번 달 달력 가져오기
+      //store.commit()
+    })
+    return { state, handleClose, addTeamMember }
   }
 }
 </script>

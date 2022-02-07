@@ -56,16 +56,9 @@ public class UserController {
         @ApiResponse(code = 500, message = "서버 오류")
     })
 
-	public ResponseEntity<? extends BaseResponseBody> register (@RequestParam(value="userId") String userId, @RequestParam(value="name") String name, @RequestParam(value="nickName") String nickName, @RequestParam(value="email") String email,
-																@RequestParam(value="birthDay") String birthDay, @RequestParam(value="password") String password) throws Exception {
-		UserDto userDto = new UserDto();
-		userDto.setUserId(userId);
-		userDto.setName(name);
-		userDto.setPassword(password);
-		userDto.setNickName(nickName);
-		userDto.setBirthDay(LocalDate.parse(birthDay));
-		userDto.setEmailType(EmailType.Local);
+	public ResponseEntity<? extends BaseResponseBody> register (@RequestBody @ApiParam(value="회원가입 정보", required = true) UserDto userDto) throws Exception {
 		//임의로 리턴된 User 인스턴스. 현재 코드는 회원 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
+		userDto.setEmailType(EmailType.Local);
 		try {
 			userService.createUser(userDto);
 		} catch (DataIntegrityViolationException e) {

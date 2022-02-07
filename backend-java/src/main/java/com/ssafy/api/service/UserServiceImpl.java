@@ -48,7 +48,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean createUser(UserDto userDto){
 		// 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
-		userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+		if(userDto.getPassword()!=null){
+			userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+		}
 		userRepository.save(userDto.toEntity()).getId();
 		return true;
 	}
@@ -88,7 +90,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User tokenVerify(String idToken) {
+	public UserDto tokenVerify(String idToken) {
 
 		System.out.println("idToken : " + idToken);
 
@@ -106,12 +108,12 @@ public class UserServiceImpl implements UserService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		User user=null;
+		UserDto user=null;
 		if (git == null) {
 			System.out.println("Google ID Token is invalid");
 		}else {
 			GoogleIdToken.Payload payload = git.getPayload();
-
+			user = new UserDto();
 			// Print user identifier & Get profile information from payload
 			String userId = payload.getSubject();
 			System.out.println("User ID: " + userId);
@@ -128,7 +130,9 @@ public class UserServiceImpl implements UserService {
 			user.setEmailType(EmailType.Google);
 			user.setNickName(name);
 
-
+			System.out.println(user.getUserId());
+			System.out.println(user.getName());
+			System.out.println(user.getNickName());
 
 		}
 		return user;

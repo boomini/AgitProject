@@ -2,6 +2,7 @@ package com.ssafy.api.controller;
 
 
 import com.ssafy.api.advice.exception.CTokenForbiddenException;
+import com.ssafy.api.dto.ArticleDto;
 import com.ssafy.api.dto.EventDto;
 import com.ssafy.api.dto.EventResDto;
 import com.ssafy.api.dto.UserDto;
@@ -42,15 +43,10 @@ public class EventController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<? extends BaseResponseBody> addTeamEvent(@RequestParam(value="eventDate")String eventDate, @RequestParam(value="eventTitle")String eventTitle,
-                                                               @RequestParam(value="eventContent")String eventContent, @ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId) throws Exception{
-        EventDto eventDto = new EventDto();
+    public ResponseEntity<? extends BaseResponseBody> addTeamEvent (@RequestBody @ApiParam(value="일정 작성", required = true) EventDto eventDto, @PathVariable("teamId") Long teamId) throws Exception{
         Team team = teamRepositorySupport.findTeamByTeamId(teamId).get();
-
-        eventDto.setEventTitle(eventTitle);
-        eventDto.setEventContent(eventContent);
         eventDto.setTeamName(team.getTeamName());
-        eventDto.setEventDate(LocalDate.parse(eventDate));
+
         eventService.addTeamEvent(eventDto, teamId);
 
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
@@ -105,11 +101,11 @@ public class EventController {
     })
     public ResponseEntity<List<EventResDto>> getUsersEventListInMonth(@ApiIgnore Authentication authentication){
         List<EventResDto> eventResDtoList;
-        int month = LocalDate.now().getMonthValue();
+        LocalDate date = LocalDate.now();
         try{
             SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
             Long userId = userDetails.getUser().getId();
-            eventResDtoList = eventService.getUserEventListInMonth(userId, month);
+            eventResDtoList = eventService.getUserEventListInMonth(userId, date);
         }catch(Exception e){
             //잘못된 접근일때
             throw new CTokenForbiddenException();

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDate;
 
@@ -20,14 +21,16 @@ public class EventResDto {
     String eventTitle;
     String eventContent;
     String teamName;
-    LocalDate eventDate;
+    LocalDate startDate;
+    LocalDate endDate;
 
     @QueryProjection
-    public EventResDto(String eventTitle, String eventContent, String teamName, LocalDate eventDate, Long dDay){
+    public EventResDto(String eventTitle, String eventContent, String teamName, LocalDate startDate, LocalDate endDate, Long dDay){
         this.eventTitle = eventTitle;
         this.eventContent = eventContent;
         this.teamName = teamName;
-        this.eventDate = eventDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.dDay = dDay;
     }
 }

@@ -132,17 +132,17 @@ export default {
       } else {
         const key = param - commonMenuKeys.length
         const roomId = getTeams[key.toString()].id
-        const roomName = getTeams[key.toString()].teamName
-        const roomDescription = getTeams[key.toString()].teamDescription
-        const roomPicture = getTeams[key.toString()].teamPicture
+        // const roomName = getTeams[key.toString()].teamName
+        // const roomDescription = getTeams[key.toString()].teamDescription
+        // const roomPicture = getTeams[key.toString()].teamPicture
         // console.log(roomId)
         router.push({
           name: 'room-board',
           params: {
             roomId: roomId,
-            roomName: roomName,
-            roomDescription: roomDescription,
-            roomPicture: roomPicture,
+            // roomName: roomName,
+            // roomDescription: roomDescription,
+            // roomPicture: roomPicture,
           },
         })
       }
