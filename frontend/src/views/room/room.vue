@@ -155,7 +155,10 @@
     @closeCreateArticleDialog="onCloseCreateArticleDialog"/>
 
   <!-- 게시글 클릭 시 나오는 세부화면 -->
-  <el-drawer
+  <board
+    :title="state.title"
+    :open="state.boardOpen"/>
+  <!-- <el-drawer
     v-model="drawer"
     :title= "state.title"
     :direction="rtl"
@@ -177,7 +180,7 @@
     <div style="border: 1px solid gray; height: 200px;">
       회의 메모
     </div>
-  </el-drawer>
+  </el-drawer> -->
 </template>
 
 <script>
@@ -189,6 +192,7 @@ import CreateScheduleDialog from './components/create-schedule-dialog.vue'
 import CreateArticleDialog from './components/create-article-dialog.vue'
 import UploadImageDialog from './components/upload-image-dialog.vue'
 import UploadVideoDialog from './components/upload-video-dialog.vue'
+import Board from './components/board/board.vue'
 
 
 export default {
@@ -199,6 +203,7 @@ export default {
     CreateArticleDialog,
     UploadImageDialog,
     UploadVideoDialog,
+    Board,
   },
   // props: {
   //   roomId: {
@@ -237,9 +242,6 @@ export default {
     }
 
     function convertListToDict (list, dict) {
-      console.log('함수 실행')
-      console.log(dict)
-      console.log(list)
       for (let i = 0; i < list.length; i++) {
         let count = ''
         const length = list[i].count
@@ -249,10 +251,7 @@ export default {
           count = length.toString()
         }
         const uploadDate = list[i].uploadDate
-        console.log(count)
-        console.log(uploadDate)
         dict[uploadDate] = count
-        console.log(dict)
       }
     }
 
@@ -288,6 +287,7 @@ export default {
       uploadImageDialogOpen: false,
       uploadVideoDialogOpen: false,
       inviteDialogOpen: false,
+      boardOpen: false,
       year : '',
       month : '',
       day : '',
