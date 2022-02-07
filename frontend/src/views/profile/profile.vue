@@ -110,7 +110,7 @@ export default {
     }
 
     const createBirthday = (birthday) => {
-      state.info.birthday = birthday.birthday
+      state.info.birthDay = birthday.birthday
     }
 
     const deleteuserId = function () {
