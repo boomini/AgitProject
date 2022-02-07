@@ -12,7 +12,7 @@
             <div style="margin-bottom: 10px;">
               <span>Nickname : {{ state.info.nickName }}</span> <el-button style=" min-height: 15px; padding: 10px; margin-left: 10px" @click="state.nicknameDialogOpen = true">수정하기</el-button>
             </div>
-            <p>Birthday : {{ state.info.birthday }}</p>
+            <p>Birthday : {{ state.info.birthDay }}</p>
             <p class="card-text"><small class="text-muted">최초 가입일 : {{state.info.cdate.slice(2, 10)}} </small></p>
             <el-button type="danger" @click="deleteuserId">회원 탈퇴</el-button>
           </div>
@@ -76,7 +76,7 @@ export default {
     const router = useRouter()
     const state = reactive({
       info: {
-        birthday: '',
+        birthDay: '',
         name: '',
         nickName: '',
         userId: '',
@@ -96,7 +96,7 @@ export default {
       .then(res => {
         state.info = res.data
         console.log(res)
-        if (state.info.birthday == null) {
+        if (state.info.birthDay == null) {
           state.birthdayDialogOpen = true
         }
       })
