@@ -11,7 +11,7 @@
             <el-button @click="clickLogin " style="background-color:#112; color: white;">로그인</el-button>
           </div>
           <div v-else class="button-wrapper d-flex flex-row" style="position:fixed">
-            <el-button @click="clickProfile" style="background-color:#112; color: white;">마이 페이지</el-button>
+            <el-button @click="clickHome" style="background-color:#112; color: white;">홈으로</el-button>
             <el-button @click="clickLogout" style="background-color:#112; color: white;">로그아웃</el-button>
           </div>
          </el-row>
@@ -264,21 +264,24 @@ export default {
       })
     }
 
-    const clickProfile = function () {
-      const token = store.getters['root/getJWTToken']
-      store.dispatch('root/getProfile', token)
-      .then(res => {
-        console.log('정보가져오기')
-        console.log(res)
+    const clickHome = function () {
+      router.push({
+        name: 'home',
       })
-      .catch(err => {
-        console.log(err)
-      })
+      // const token = store.getters['root/getJWTToken']
+      // store.dispatch('root/getProfile', token)
+      // .then(res => {
+      //   console.log('정보가져오기')
+      //   console.log(res)
+      // })
+      // .catch(err => {
+      //   console.log(err)
+      // })
     }
 
 
 
-    return { state, clickLogin, clickSignup, clickAuth, clickLogout, clickProfile }
+    return { state, clickLogin, clickSignup, clickAuth, clickLogout, clickHome }
   }
 }
 </script>

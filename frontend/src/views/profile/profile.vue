@@ -32,13 +32,13 @@
       <div>
       </div>
     </div>
-    <div style="max-width: 1200px; margin-top: 20px; margin-left: 100px margin-bottom: 100px; z-index: -1">
+    <!-- <div style="max-width: 1200px; margin-top: 20px; margin-left: 100px margin-bottom: 100px; z-index: -1">
       <el-carousel :interval="4000" type="card" height="200px">
       <el-carousel-item v-for="item in 6" :key="item">
         <h3>{{ item }}</h3>
       </el-carousel-item>
       </el-carousel>
-    </div>
+    </div> -->
 
     <nickname-dialog
       :open="state.nicknameDialogOpen"
