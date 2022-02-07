@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService {
 			return false;
 		}
 		user.setNickName(userDto.getNickName());
+		user.setBirthDay(userDto.getBirthDay());
 		userRepository.save(user);
 		return true;
 	}
