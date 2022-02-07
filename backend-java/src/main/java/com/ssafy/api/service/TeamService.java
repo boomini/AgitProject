@@ -16,4 +16,8 @@ public interface TeamService {
     TeamDto getTeamById(Long teamId);
 
     Optional<UserTeam> getTeamMemberState(Long teamId, String userId);
+
+    void changeTeamMemberConfirm(Long teamId, String userId);
+
+    void changeTeamMemberReject(Long teamId, String userId);
 }
