@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog custom-class="before-dialog" v-model="state.dialogVisible" title="이전 약속" width="30%" style="margin: 50%">
+    <el-dialog custom-class="after-dialog" v-model="state.dialogVisible" title="다음 약속" width="30%" style="margin: 50%">
       <span>
       팀 이름: {{ info.teamName }} <br>
       시작 날짜: {{ info.startDate }} <br>
@@ -27,7 +27,7 @@ import { useRouter } from 'vue-router'
 
 
 export default {
-  name: 'before-dialog',
+  name: 'after-dialog',
   props: {
     open: {
       type: Boolean,
@@ -49,7 +49,7 @@ export default {
 
 
     const handleClose = function () {
-      emit('closeBeforeDialog')
+      emit('closeAfterDialog')
     }
 
     return { state, store, router, handleClose }

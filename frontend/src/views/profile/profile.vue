@@ -12,7 +12,7 @@
             <div style="margin-bottom: 10px;">
               <span>Nickname : {{ state.info.nickName }}</span> <el-button style=" min-height: 15px; padding: 10px; margin-left: 10px" @click="state.nicknameDialogOpen = true">수정하기</el-button>
             </div>
-            <p>Birthday : {{ state.info.year}}년 {{ state.info.month}}월 {{ state.info.day}}일</p>
+            <p>Birthday : {{ state.info.birthday }}</p>
             <p class="card-text"><small class="text-muted">최초 가입일 : {{state.info.cdate.slice(2, 10)}} </small></p>
             <el-button type="danger" @click="deleteuserId">회원 탈퇴</el-button>
           </div>
@@ -46,6 +46,13 @@
       @closeNicknameDialog="onCloseNicknameDialog"
       @edit-nickname="editNickname"
       />
+
+    <birthday-dialog
+    :open="state.birthdayDialogOpen"
+    :info="state.info"
+    @closeBirthdayDialog="onCloseBirthdayDialog"
+    @create-birthday="createBirthday"
+    />
   </div>
 </template>
 
@@ -55,11 +62,13 @@ import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import NicknameDialog from './components/nickname-dialog.vue'
+import BirthdayDialog from './components/birthday-dialog.vue'
 
 export default {
   name: 'Profile',
   components: {
     NicknameDialog,
+    BirthdayDialog,
   },
 
   setup() {
@@ -78,6 +87,7 @@ export default {
       },
       // info: null,
       nicknameDialogOpen : false,
+      birthdayDialogOpen : false,
     })
 
     const takeProfile = function () {
@@ -86,6 +96,9 @@ export default {
       .then(res => {
         state.info = res.data
         console.log(res)
+        if (state.info.birthday == null) {
+          state.birthdayDialogOpen = true
+        }
       })
       .catch(err => {
         console.log(err)
@@ -94,6 +107,10 @@ export default {
 
     const editNickname = (nickname) => {
       state.info.nickName = nickname.nickname
+    }
+
+    const createBirthday = (birthday) => {
+      state.info.birthday = birthday.birthday
     }
 
     const deleteuserId = function () {
@@ -151,6 +168,9 @@ export default {
       state.nicknameDialogOpen = false
     }
 
+    const onCloseBirthdayDialog = function () {
+      state.birthdayDialogOpen = false
+    }
 
 
 
@@ -158,7 +178,8 @@ export default {
 
 
 
-    return { store, router, takeProfile, state, activities, onCloseNicknameDialog, editNickname, deleteuserId}
+
+    return { store, router, takeProfile, state, activities, onCloseNicknameDialog, editNickname, deleteuserId, onCloseBirthdayDialog, createBirthday}
   }
 }
 </script>

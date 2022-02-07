@@ -1,5 +1,4 @@
 <template>
-  <div>{{ state.pros.beforepro[0].dday }}</div>
   <div style="hegint: 80%; margin-bottom: 100px;" >
     <div id="scape">
       <div class="landing">
@@ -33,22 +32,9 @@
         </div>
         <div class="ground d-flex justify-content-evenly">
           <div>
-            <el-button type="text" @click="centerDialogVisible = true" style="margin-left:100px; font-size: 40px;"
+            <el-button type="text" @click="state.beforeDialogOpen = true" style="margin-left:100px; font-size: 40px;"
               >이전 약속</el-button
             >
-
-            <el-dialog v-model="centerDialogVisible" title="Warning" width="30%" style="margin: 50%">
-              <span
-                >수고했어 지환아</span
-              >
-              <template #footer>
-                <span class="dialog-footer">
-                  <el-button type="primary" @click="centerDialogVisible = false"
-                    >Confirm제발</el-button
-                  >
-                </span>
-              </template>
-            </el-dialog>
           </div>
             <div class="page-wrapper">
               <div class="loader">
@@ -62,35 +48,14 @@
               </div>
             </div>
           <div>
-            <el-button type="text" @click="centerDialogVisible = true" style="margin-right:100px; font-size: 40px;"
+            <el-button type="text" @click="state.afterDialogOpen = true" style="margin-right:100px; font-size: 40px;"
               >다음 약속</el-button
             >
-
-            <el-dialog v-model="centerDialogVisible" title="Warning" width="30%" style="margin: 50%">
-              <span
-                >It should be noted that the content will not be aligned in center by
-                default</span
-              >
-              <template #footer>
-                <span class="dialog-footer">
-                  <el-button type="primary" @click="centerDialogVisible = false"
-                    >Confirm</el-button
-                  >
-                </span>
-              </template>
-            </el-dialog>
           </div>
         </div>
 
       </div>
     </div>
-
-
-
-
-
-
-
     <div style="margin-bottom: 100px; dispaly: flex; justify-content: center; align-items:center;" class="my-2">
       <el-carousel :interval="4000" type="card" height="200px">
         <el-carousel-item v-for="info in state.infos" :key="info.startDate">
@@ -104,12 +69,23 @@
         </el-carousel-item>
       </el-carousel>
     </div>
+
+    <before-dialog
+      :open="state.beforeDialogOpen"
+      :info="state.pros.beforepro[0]"
+      @closeBeforeDialog="onCloseBeforeDialog" />
+    <after-dialog
+      :open="state.afterDialogOpen"
+      :info="state.pros.afterpro[0]"
+      @closeAfterDialog="onCloseAfterDialog" />
   </div>
 </template>
 
 <script>
-import { reactive, ref, onBeforeMount} from 'vue'
+import { reactive, ref} from 'vue'
 import { useStore } from 'vuex'
+import BeforeDialog from './components/before-dialog.vue'
+import AfterDialog from './components/after-dialog.vue'
 
 // import { useRouter } from 'vue-router'
 
@@ -117,8 +93,11 @@ import { useStore } from 'vuex'
 
 export default {
   name: 'schedule',
+  components: {
+    BeforeDialog,
+    AfterDialog,
+  },
   setup() {
-
   const centerDialogVisible = ref(false)
   // let beforepro = ''
   // let afterpro = ''
@@ -136,7 +115,9 @@ export default {
     pros : {
       beforepro: [],
       afterpro: []
-    }
+    },
+    afterDialogOpen: false,
+    beforeDialogOpen: false,
   })
   const beforeschedule = []
   const afterschedule = []
@@ -220,9 +201,16 @@ export default {
   // }
 
   // calcdate()
+  const onCloseAfterDialog = function () {
+    state.afterDialogOpen = false
+  }
+
+  const onCloseBeforeDialog = function () {
+    state.beforeDialogOpen = false
+  }
 
 
-    return { centerDialogVisible, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule }
+    return { centerDialogVisible, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog }
   }
 }
 
