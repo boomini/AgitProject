@@ -50,10 +50,12 @@
   <auth-dialog
     :open="authDialogOpen"
     @closeAuthDialog="onCloseAuthDialog"/>
-
   <register-team-dialog
     :open="registerTeamDialogOpen"
     @closeRegisterTeamDialog="onCloseRegisterTeamDialog"/>
+  <signup-birthday
+    :open="signupBirthdayOpen"
+    @closeSignupBirthday="onCloseSignupBirthday"/>
 
 </template>
 <style>
@@ -75,6 +77,7 @@ import MainHeader from './components/main-header'
 import MainSidebar from './components/main-sidebar'
 import MainFooter from './components/main-footer'
 import RegisterTeamDialog from './components/register-team-dialog'
+import SignupBirthday from './components/signup-birthday'
 import { useStore } from 'vuex'
 
 export default {
@@ -86,7 +89,8 @@ export default {
     LoginDialog,
     SignupDialog,
     RegisterTeamDialog,
-    AuthDialog
+    AuthDialog,
+    SignupBirthday,
   },
   data () {
      return {
@@ -94,6 +98,7 @@ export default {
       signupDialogOpen: false,
       authDialogOpen: false,
       registerTeamDialogOpen: false,
+      signupBirthdayOpen: false,
     }
   },
   methods: {
@@ -120,6 +125,9 @@ export default {
     },
     onCloseRegisterTeamDialog () {
       this.registerTeamDialogOpen = false
+    },
+    onCloseSignupBirthday () {
+      this.signupBirthdayOpen = false
     }
   },
   created () {

@@ -21,7 +21,7 @@ public class UserTeam extends BaseEntity{
     private User user;
 
     //1 활성화, 0 비활성화
-    int state=0;
+    int state=1;
 
 
     public void setTeam(Team team){

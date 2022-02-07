@@ -45,17 +45,19 @@
             <div class="row">
               <!-- {{ data }} -->
               <span class="col-3">
-                {{ data.day.split('-')[2] }}
+                {{ data.day }}
               </span>
               <span class="col-9">
-                <span class="badge-box-test">
-                  <span class="badge-tag-test schedule">4</span>
+                <!-- <span v-bind="state.dict.articleCntDict"> -->
+                <span v-if="data.day.toString() in state.dict.articleCntDict" class="badge-box-test">
+                  <span class="badge-tag-test schedule">{{ state.dict.articleCntDict[data.day.toString()] }}</span>
                 </span>
-                <span class="badge-box-test">
-                  <span class="badge-tag-test video">54</span>
+                <!-- </span> -->
+                <span v-if="data.day.toString() in state.dict.imageCntDict" class="badge-box-test">
+                  <span class="badge-tag-test video">{{ state.dict.imageCntDict[data.day.toString()] }}</span>
                 </span>
-                <span class="badge-box-test">
-                  <span class="badge-tag-test picture">554</span>
+                <span v-if="data.day.toString() in state.dict.videoCntDict" class="badge-box-test">
+                  <span class="badge-tag-test picture">{{ state.dict.videoCntDict[data.day.toString()] }}</span>
                 </span>
               </span>
             </div>
@@ -68,12 +70,12 @@
                   <span class="badge">4</span>
                 </div>
               </div> -->
-              <div v-show=" state.team.articleCntDict.get(data.day.toString())" class="badge-tag article">
+              <div v-show="data.day.toString() in state.dict.articleCntDict" class="badge-tag article">
                 <div class="ms-3">
                   게시글
                 </div>
                 <div class="me-3">
-                  <span class="badge">{{ state.team.articleCntDict.get(data.day.toString()) }}</span>
+                  <span class="badge">{{ state.dict.articleCntDict[data.day.toString()] }}</span>
                 </div>
               </div>
               <!-- <div v-if="parseInt(data.day.split('-').slice(2)[0], 10) <= 10 && !(data.type === 'prev-month' || data.type === 'next-month')" class="badge-tag picture">
@@ -102,11 +104,11 @@
     <div class="col-2 d-flex flex-column justify-content-between" style="border: 1px solid black; border-radius: 20px; margin-bottom: 180px;">
       <div>
         <div>멤 버</div>
-        <div v-for="i in [1, 2, 3, 4, 5]" :key="i" class="d-flex align-items-center">
+        <div v-for="member in state.teamMembers" :key="member.id" class="d-flex align-items-center">
           <div class="d-flex align-items-center mb-2">
             <el-avatar :size="50" :src="state.circleUrl"></el-avatar>
             <span style="height: 50px; line-height: 50px;">
-              사람 {{ i }}
+              {{ member.name }}
             </span>
           </div>
         </div>
@@ -151,10 +153,16 @@
   <!-- 게시글 추가 다이얼로그 -->
   <create-article-dialog
     :open="state.createArticleDialogOpen"
-    @closeCreateArticleDialog="onCloseCreateArticleDialog"/>
+    :info="state.team"
+    @closeCreateArticleDialog="onCloseCreateArticleDialog"
+    @createArticle="onCreateArticle"/>
 
   <!-- 게시글 클릭 시 나오는 세부화면 -->
-  <el-drawer
+  <board
+    :data="state.boardData"
+    :open="state.boardOpen"
+    @closeBoard="onCloseBoard"/>
+  <!-- <el-drawer
     v-model="drawer"
     :title= "state.title"
     :direction="rtl"
@@ -176,18 +184,19 @@
     <div style="border: 1px solid gray; height: 200px;">
       회의 메모
     </div>
-  </el-drawer>
+  </el-drawer> -->
 </template>
 
 <script>
 import { ref, reactive, computed, onBeforeMount } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import InviteDialog from './components/invite-dialog.vue'
 import CreateScheduleDialog from './components/create-schedule-dialog.vue'
 import CreateArticleDialog from './components/create-article-dialog.vue'
 import UploadImageDialog from './components/upload-image-dialog.vue'
 import UploadVideoDialog from './components/upload-video-dialog.vue'
+import Board from './components/board/board.vue'
 
 
 export default {
@@ -198,6 +207,7 @@ export default {
     CreateArticleDialog,
     UploadImageDialog,
     UploadVideoDialog,
+    Board,
   },
   // props: {
   //   roomId: {
@@ -219,14 +229,12 @@ export default {
   setup() {
     const store = useStore()
     const router = useRouter()
-
-    const drawer = ref(false)
-
     const calendar = ref()
 
     // const inviteDialogOpen = ref(false)
     // const createScheduleDialogOpen = ref(false)
 
+    // 월 강제로 2자리 맞추기 (ex: 2 -> 02)
     function convertMonth (month) {
       if (month < 10) {
         return `0${month}`
@@ -235,26 +243,55 @@ export default {
       }
     }
 
+    // json -> dict
     function convertListToDict (list, dict) {
       for (let i = 0; i < list.length; i++) {
-        const count = list[i].count
+        let count = ''
+        const length = list[i].count
+        if (length >= 100) {
+          count = '99+'
+        } else {
+          count = length.toString()
+        }
         const uploadDate = list[i].uploadDate
-        dict.set(uploadDate.toString(), count)
+        dict[uploadDate] = count
       }
     }
 
+    function reloadCalendar () {
+      let url = window.location.href;
+      state.team.teamId = url.split('/').reverse()[0];
 
-    const clickOnDate = function (data) {
-      const date = data.day.split('-')
-      state.year = parseInt(date[0], 10)
-      state.month = parseInt(date[1], 10)
-      state.day = parseInt(date[2], 10)
+      store.dispatch('root/getTeamInfoDetail', state.team.teamId)
+      .then(function(result){
+        // console.log(result.data);
+        state.team = result.data;
+        state.team.teamId = result.data.id;
+        // console.log(state.team.teamId);
+        // console.log(state.team.teamName)
+      })
 
-      if (data.type === 'current-month') {
-        drawer.value = true
-      } else {
-        drawer.value = false
+      const today = new Date()
+      const year = today.getFullYear()
+      const month = convertMonth(today.getMonth() + 1)
+      state.team.uploadDate = `${year}-${month}`
+
+      const payload = {
+        'teamId': state.team.teamId,
+        'uploadDate': state.team.uploadDate
       }
+      store.dispatch('root/getCategoryCount', payload)
+      .then(function (result) {
+        console.log('해당 달의 개요 가져오기 성공')
+        console.log(result.data)
+        convertListToDict(result.data.articleCntList, state.dict.articleCntDict)
+        convertListToDict(result.data.imageCntList, state.dict.imageCntDict)
+        convertListToDict(result.data.videoCntList, state.dict.videoCntDict)
+        // console.log(state.dict.articleCntDict)
+      })
+      .catch(function (error) {
+        console.log('해당 달의 개요 가져오기 실패')
+      })
     }
 
     const state = reactive({
@@ -263,23 +300,66 @@ export default {
         teamName: '',
         teamDescription: '',
         teamPicture: '',
-        articleCntDict: new Map(),
-        imageCntDict: new Map(),
-        videoCntDict: new Map(),
         uploadDate: ''
+      },
+      dict: {
+        articleCntDict: {},
+        imageCntDict: {},
+        videoCntDict: {},
+      },
+      boardData: {
+        teamId: '',
+        articleList: [],
+        eventResList: [],
+        videoList: [],
+        imageList: [],
+        uploadDate: '1970-01-01'
       },
       createScheduleDialogOpen: false,
       createArticleDialogOpen: false,
       uploadImageDialogOpen: false,
       uploadVideoDialogOpen: false,
       inviteDialogOpen: false,
-      year : '',
-      month : '',
-      day : '',
+      boardOpen: false,
+      // year : '',
+      // month : '',
+      // day : '',
       token:'',
+      // clickDate: '',
       title : computed(() => `${state.year}년 ${state.month}월 ${state.day}일 게시판`),
       circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+      teamMembers: null
     })
+
+    const clickOnDate = function (data) {
+      // const date = data.day.split('-')
+      // state.year = parseInt(date[0], 10)
+      // state.month = parseInt(date[1], 10)
+      // state.day = parseInt(date[2], 10)
+      // state.clickDate = data.day
+
+      if (data.type === 'current-month') {
+        const teamId = state.team.teamId
+        const uploadDate = data.day
+        const payload = {
+          'teamId': teamId,
+          'uploadDate': uploadDate
+        }
+        store.dispatch('root/getBoardDetail', payload)
+        .then(function (result) {
+          console.log('게시판 상세조회 성공')
+          state.boardData = result.data
+          state.boardData['uploadDate'] = uploadDate
+          state.boardOpen = true
+        })
+        .catch(function (error) {
+          console.log('게시판 상세조회 실패')
+        })
+      } else {
+        state.boardOpen = false
+      }
+
+    }
 
     const selectDate = (val) => {
       calendar.value.selectDate(val)
@@ -288,6 +368,8 @@ export default {
       const month = convertMonth(date.$M + 1)
       state.team.uploadDate = `${year}-${month}`
     }
+
+
 
     const onCloseInviteDialog = function () {
       state.inviteDialogOpen = false
@@ -301,12 +383,20 @@ export default {
       state.createArticleDialogOpen = false
     }
 
+    const onCreateArticle = function () {
+      reloadCalendar()
+    }
+
     const onCloseUploadImageDialog = function () {
       state.uploadImageDialogOpen = false
     }
 
     const onCloseUploadVideoDialog = function () {
       state.uploadVideoDialogOpen = false
+    }
+
+    const onCloseBoard = function () {
+      state.boardOpen = false
     }
 
     const joinConference = function (roomId) {
@@ -327,47 +417,70 @@ export default {
       // state.team.teamName = route.params.roomName
       // state.team.teamDescription = route.params.roomDescription
       // state.team.teamPicture = route.params.roomPicture
-      console.log(state.team.teamName)
+      // console.log(state.team.teamName)
 
 
-      let url = window.location.href;
-      state.team.teamId = url.split('/').reverse()[0];
+      // let url = window.location.href;
+      // state.team.teamId = url.split('/').reverse()[0];
 
-      store.dispatch('root/getTeamInfoDetail', state.team.teamId)
-      .then(function(result){
-        console.log(result.data);
-        state.team = result.data;
-        state.team.teamId = result.data.id;
-        console.log(state.team.teamId);
-        console.log(state.team.teamName)
+      // store.dispatch('root/getTeamInfoDetail', state.team.teamId)
+      // .then(function(result){
+      //   console.log(result.data);
+      //   state.team = result.data;
+      //   state.team.teamId = result.data.id;
+      //   console.log(state.team.teamId);
+      //   console.log(state.team.teamName)
+      // })
+
+      // const today = new Date()
+      // const year = today.getFullYear()
+      // const month = convertMonth(today.getMonth() + 1)
+      // state.team.uploadDate = `${year}-${month}`
+
+
+      // console.log(state.team.teamId)
+      // console.log("제발봐주세요")
+      const takeMember = function () {
+        const token = store.getters['root/getJWTToken']
+        const body = {
+          'teamId': state.team.teamId
+        }
+        store.dispatch('root/takeMember', {'body': body, 'token': token})
+        .then(res=> {
+          console.log(res.data)
+          state.teamMembers = res.data
+          console.log(state.teamMembers[0].name)
+        })
+        .catch(err => {
+          console.log(err)
+          // console.log('기달')
       })
-
-      const today = new Date()
-      const year = today.getFullYear()
-      const month = convertMonth(today.getMonth() + 1)
-      state.team.uploadDate = `${year}-${month}`
-
-
-      // 이번 달 달력 가져오기
-      const payload = {
-        'teamId': state.team.teamId,
-        'uploadDate': state.team.uploadDate
       }
 
-      store.dispatch('root/getCategoryCount', payload)
-      .then(function (result) {
-        console.log('해당 달의 개요 가져오기 성공')
-        // json ->
-        convertListToDict(result.data.articleCntList, state.team.articleCntDict)
-        convertListToDict(result.data.imageCntList, state.team.imageCntDict)
-        convertListToDict(result.data.videoCntList, state.team.videoCntDict)
-      })
-      .catch(function (error) {
-        console.log('실패')
-      })
+
+
+      takeMember()
+
+      // 이번 달 달력 가져오기
+      // const payload = {
+      //   'teamId': state.team.teamId,
+      //   'uploadDate': state.team.uploadDate
+      // }
+      // store.dispatch('root/getCategoryCount', payload)
+      // .then(function (result) {
+      //   console.log('해당 달의 개요 가져오기 성공')
+      //   // json -> map
+      //   convertListToDict(result.data.articleCntList, state.dict.articleCntDict)
+      //   convertListToDict(result.data.imageCntList, state.dict.imageCntDict)
+      //   convertListToDict(result.data.videoCntList, state.dict.videoCntDict)
+      // })
+      // .catch(function (error) {
+      //   console.log('해당 달의 개요 가져오기 실패')
+      // })
+      reloadCalendar()
     })
 
-    return { clickOnDate, drawer, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, joinConference }
+    return { clickOnDate, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, joinConference, onCloseBoard, onCreateArticle }
   }
 }
 </script>

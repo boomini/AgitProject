@@ -165,6 +165,7 @@ methods: {
     },
     handleClickDisconnect() {
       window.location.href = `https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=${window.location.href}`;
+      console.log('빠이')
     },
 
   },
@@ -283,6 +284,16 @@ methods: {
             .then(function (result) {
               store.commit('root/setUserTeam', result.data)
               console.log('회원 팀정보 가져오기')
+            })
+            store.dispatch('root/getProfile', token)
+            .then(function (result) {
+              console.log(result.data.birthDay)
+              if (result.data.birthDay == '' || result.data.birthDay == null || result.data.birthDay == undefined) {
+                console.log('하아')
+                router.push({
+                name: 'Profile',
+              })
+              }
             })
 
             handleClose()

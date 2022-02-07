@@ -32,23 +32,9 @@
         </div>
         <div class="ground d-flex justify-content-evenly">
           <div>
-            <el-button type="text" @click="centerDialogVisible = true" style="margin-left:100px; font-size: 40px;"
+            <el-button type="text" @click="state.beforeDialogOpen = true" style="margin-left:100px; font-size: 40px;"
               >이전 약속</el-button
             >
-
-            <el-dialog v-model="centerDialogVisible" title="Warning" width="30%" style="margin: 50%">
-              <span
-                >It should be noted that the content will not be aligned in center by
-                default</span
-              >
-              <template #footer>
-                <span class="dialog-footer">
-                  <el-button type="primary" @click="centerDialogVisible = false"
-                    >Confirm</el-button
-                  >
-                </span>
-              </template>
-            </el-dialog>
           </div>
             <div class="page-wrapper">
               <div class="loader">
@@ -62,82 +48,169 @@
               </div>
             </div>
           <div>
-            <el-button type="text" @click="centerDialogVisible = true" style="margin-right:100px; font-size: 40px;"
+            <el-button type="text" @click="state.afterDialogOpen = true" style="margin-right:100px; font-size: 40px;"
               >다음 약속</el-button
             >
-
-            <el-dialog v-model="centerDialogVisible" title="Warning" width="30%" style="margin: 50%">
-              <span
-                >It should be noted that the content will not be aligned in center by
-                default</span
-              >
-              <template #footer>
-                <span class="dialog-footer">
-                  <el-button type="primary" @click="centerDialogVisible = false"
-                    >Confirm</el-button
-                  >
-                </span>
-              </template>
-            </el-dialog>
           </div>
         </div>
 
       </div>
     </div>
-
-
-
-
-
-
-
     <div style="margin-bottom: 100px; dispaly: flex; justify-content: center; align-items:center;" class="my-2">
-      <el-carousel :interval="4000" type="card" height="200px" style=" z-index: -1" >
-
-        <el-carousel-item v-for="item in 5" :key="item">
-
-          <h3>{{ item }}</h3>
+      <el-carousel :interval="4000" type="card" height="200px">
+        <el-carousel-item v-for="info in state.infos" :key="info.startDate">
+          <h3>팀 이름: {{ info.teamName }} <br>
+              시작 날짜: {{ info.startDate }} <br>
+              종료 날짜: {{ info.endDate }} <br>
+              D-day: {{ info.dday }}일 <br>
+              약속 제목: {{ info.eventTitle }} <br>
+              약속 내용: {{ info.eventContent }}
+          </h3>
         </el-carousel-item>
       </el-carousel>
     </div>
+
+    <before-dialog
+      :open="state.beforeDialogOpen"
+      :info="state.pros.beforepro[0]"
+      @closeBeforeDialog="onCloseBeforeDialog" />
+    <after-dialog
+      :open="state.afterDialogOpen"
+      :info="state.pros.afterpro[0]"
+      @closeAfterDialog="onCloseAfterDialog" />
   </div>
 </template>
 
 <script>
-import { reactive, ref, onBeforeMount } from 'vue'
+import { reactive, ref} from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import BeforeDialog from './components/before-dialog.vue'
+import AfterDialog from './components/after-dialog.vue'
+
+// import { useRouter } from 'vue-router'
+
 
 
 export default {
   name: 'schedule',
+  components: {
+    BeforeDialog,
+    AfterDialog,
+  },
   setup() {
-
   const centerDialogVisible = ref(false)
+  // let beforepro = ''
+  // let afterpro = ''
   const store = useStore()
   const state = reactive({
-    info: null,
-    schedulelength: 0
+    infos: {
+        eventTitle: '',
+        eventContent: '',
+        teamName: '',
+        startDate: '1970-01-01',
+        endDate: '1970-01-01',
+        dday: '1970-01-01',
+      },
+    schedulelength: 0,
+    pros : {
+      beforepro: [],
+      afterpro: []
+    },
+    afterDialogOpen: false,
+    beforeDialogOpen: false,
   })
+  const beforeschedule = []
+  const afterschedule = []
+  let beforeday = ''
+  let afterday = ''
 
-  onBeforeMount(() => {
+
+  const takeSchdule = function () {
       const token = store.getters['root/getJWTToken']
       store.dispatch('root/getSchedule', token)
       // console.log(token)
       .then(res => {
-        console.log(res.data.length)
-        console.log(res.data)
-        console.log('하이')
+        // console.log(res.data.length)
+        // console.log(res.data)
+        // console.log('하이')
+        let today = new Date()
+        let date = today.getDate()
         state.schedulelength = res.data.length
-        // console.log(state.info)
+        state.infos = res.data.slice().reverse()
+        for (var i = 0; i < state.schedulelength; i++) {
+          // console.log(state.infos[i].startDate)
+          // let tempday = Number(state.infos[i].startDate.slice(8,12))
+          let tempday = state.infos[i].dday
+          // console.log(tempday)
+          if (0 >= tempday) {
+            beforeschedule.push(state.infos[i])
+          } else {
+            afterschedule.push(state.infos[i])
+          }
+        }
+        let beforemax = -31
+        for (var b = 0; b < beforeschedule.length; b++) {
+          if (beforeschedule[b].dday >= beforemax) {
+            beforemax = beforeschedule[b].dday
+            beforeday = b
+          }
+        }
+        console.log(beforeday)
+        state.pros.beforepro.push(beforeschedule[beforeday])
+        // console.log(beforepro)
+        let aftermin = 32
+        for (var a = 0; a < afterschedule.length; a++) {
+          if (afterschedule[a].dday <= aftermin) {
+            // console.log(a)
+            aftermin = afterschedule[a].dday
+            afterday = a
+          }
+        }
+        console.log(afterday)
+        state.pros.afterpro.push(afterschedule[afterday])
+        // console.log(afterpro)
+        // state.infos = computed(() => { return _.orderBy(state.infos, 'dday')} )
+        // console.log(state.infos[2].teamName)
       })
       .catch(err => {
         console.log(err)
       })
-    })
+    }
+
+  // let today = new Date()
+  // let year = today.getFullYear()
+  // let month = today.getMonth() + 1
+  // let date = today.getDate()
+  // let realday = `${year}-${month}-${date}`
+  // console.log(realday)
+  console.log('맞냐')
+  console.log(beforeschedule.sort())
+  console.log(afterschedule.sort())
+  console.log(state.pros.beforepro)
+  // console.log(beforepro)
+  // console.log(afterpro)
+
+  takeSchdule()
+  // console.log(beforeday)
 
 
-    return { centerDialogVisible, state }
+  // const calcdate = function () {
+  //   for (var i = 0; i < state.schedulelength; i++) {
+  //     console.log(i)
+  //   }
+  // }
+
+  // calcdate()
+  const onCloseAfterDialog = function () {
+    state.afterDialogOpen = false
+  }
+
+  const onCloseBeforeDialog = function () {
+    state.beforeDialogOpen = false
+  }
+
+
+    return { centerDialogVisible, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog }
   }
 }
 
@@ -146,7 +219,7 @@ export default {
 
 <style>
   /* test */
-  .el-carousel__item h3 {
+  .el-carousel__item {
   color: #475669;
   font-size: 14px;
   opacity: 0.75;

@@ -45,7 +45,7 @@
               maxlength="20"
               placeholder="약속의 제목을 입력해주세요."
               show-word-limit
-              rows="2"
+              rows="1"
               type="textarea"
               resize="none"
             >
@@ -54,10 +54,10 @@
           <el-form-item prop="content" label="내용">
             <el-input
               v-model="state.form.content"
-              maxlength="500"
+              maxlength="100"
               placeholder="약속의 내용을 입력해주세요."
               show-word-limit
-              rows="10"
+              rows="5"
               type="textarea"
               resize="none"
             >
@@ -153,15 +153,16 @@ export default {
       .then(res => {
           setTimeout(() => {
                 swal({
-                  title: "약속 등록",
-                  text: "약속이 일정에 등록되었습니다.",
-                  icon: "success",
-                  button: "확인",
+                  title: '약속 등록',
+                  text: '약속이 일정에 등록되었습니다.',
+                  icon: 'success',
+                  button: '확인',
                 });
               }, 500)
 
               // router.go(router.currentRoute)
-
+              console.log(res)
+              // console.log(swal)
 
               handleClose()
         })
@@ -182,6 +183,8 @@ export default {
 <style>
 .create-schedule-dialog {
   width: 700px;
-  height: 800px;
+  height: 1200px;
 }
+
+
 </style>

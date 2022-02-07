@@ -15,25 +15,28 @@
     <!-- content -->
     <div>
       <div>
-        일정을 추가해보세요.
+        글을 작성해보세요.
       </div>
       <div>
         <el-form :model="state.form" :rules="state.rules" ref="createArticleForm" :label-position="state.form.align">
-          <el-form-item prop="schedule" label="일자">
+          <el-form-item prop="uploadDate" label="날짜">
             <el-date-picker
               style="width: 100%;"
-              v-model="state.form.schedule"
+              v-model="state.form.uploadDate"
               type="date"
               value-format="YYYY-MM-DD"
               placeholder="일자를 선택해주세요."
             >
             </el-date-picker>
           </el-form-item>
-          <el-form-item prop="content" label="내용">
+          <el-form-item prop="title" label="제목" :label-width="state.formLabelWidth" >
+            <el-input v-model="state.form.title" autocomplete="off" placeholder="제목을 입력해주세요."></el-input>
+          </el-form-item>
+          <el-form-item prop="content" label="본문" :label-width="state.formLabelWidth">
             <el-input
               v-model="state.form.content"
               maxlength="500"
-              placeholder="약속의 내용을 입력해주세요."
+              placeholder="내용을 입력해주세요."
               show-word-limit
               rows="10"
               type="textarea"
@@ -57,6 +60,8 @@
 
 <script>
 import { reactive, computed, ref } from 'vue'
+import { useStore } from 'vuex'
+import jwt_decode from 'jwt-decode'
 
 export default {
   name: 'create-article-dialog',
@@ -65,17 +70,22 @@ export default {
     open: {
       type: Boolean,
       default: false
+    },
+    info: {
+      type: Object,
     }
   },
 
   setup(props, { emit }) {
+    const store = useStore()
     const createArticleForm = ref(null)
 
     const state = reactive({
       form: {
         align: 'left',
         content: '',
-        schedule: '',
+        title: '',
+        uploadDate: '',
       },
       rules: {
         schedule: [
@@ -95,7 +105,34 @@ export default {
     }
 
     const createArticle = function () {
-      console.log('약속 생성 함수 작동')
+      const token = store.getters['root/getJWTToken']
+      const writer = jwt_decode(token).sub
+      const payload = {
+        'body': {
+          'writer': writer,
+          'teamName': props.info.teamName,
+          'title': state.form.title,
+          'content': state.form.content,
+          'uploadDate': state.form.uploadDate
+        }
+      }
+      // console.log('게시글 작성')
+      // console.log(payload)
+
+      store.dispatch('root/addArticle', payload)
+      .then(function (result) {
+        console.log('게시글 등록 성공')
+        emit('createArticle')
+        swal({
+          title: "게시글 등록",
+          text: "게시글이 등록되었습니다.",
+          icon: "success",
+          button: "확인",
+        })
+      })
+      .catch(function (error) {
+        console.log('게시글 등록 실패')
+      })
       handleClose()
     }
 
