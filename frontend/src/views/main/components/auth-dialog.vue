@@ -13,8 +13,8 @@
         <el-input v-model="state.form.id" autocomplete="off" style="width: 70%" :disabled="state.form.isValidatedId" id="id-input" placeholder="이메일"></el-input>
         <el-button size="small" style="float: right; margin-top:5px;" @click="sendAuthEmail" :disabled="state.form.isValidatedId">인증번호 보내기</el-button>
       </el-form-item>
-      <el-form-item prop="password" label="인증번호" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.password" autocomplete="off" show-password placeholder="인증번호"></el-input>
+      <el-form-item prop="authNumber" label="인증번호" :label-width="state.formLabelWidth">
+        <el-input v-model="state.form.authNumber" autocomplete="off" show-authNumber placeholder="인증번호"></el-input>
       </el-form-item>
 
 
@@ -105,7 +105,7 @@ export default {
       },
       form: {
         id: '',
-        password: '',
+        authNumber: '',
       },
       dialogVisible: computed(() => props.open),
       isAvailable: computed(function () {
@@ -131,7 +131,7 @@ export default {
           if (valid) {
             // 날짜는 년, 월, 일로 구분하여 대입
             loading.value = TextTrackCue
-            if(state.form.password==state.auth.str){
+            if(state.form.authNumber==state.auth.str){
               //모달 다음 페이지로 이동
               console.log("인증 성공");
               setTimeout(() => {
@@ -160,7 +160,7 @@ export default {
 
     const handleClose = function () {
       state.form.id = ''
-      state.form.password = ''
+      state.form.authNumber = ''
       emit('closeAuthDialog')
     }
 
