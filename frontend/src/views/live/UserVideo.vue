@@ -1,6 +1,6 @@
 <template>
 <div v-if="streamManager">
-  <div class="d-flex flex-column align-items-center">
+  <div class="d-flex flex-column align-items-center mx-3">
     <ov-video :stream-manager="streamManager"/>
     <div><p>{{ clientData }}</p></div>
   </div>
