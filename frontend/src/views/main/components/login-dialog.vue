@@ -218,7 +218,7 @@ methods: {
           const userPw = state.form.password
           store.dispatch('root/requestLogin', { userId: userId, password: userPw })
           .then(function (result) {
-            router.push({ name: 'home' })
+            router.push({ name: 'schedule' })
             store.commit('root/setMenuActive', 0)
 
             localStorage.setItem('JWT', result.data.accessToken)
