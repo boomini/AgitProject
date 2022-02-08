@@ -151,24 +151,24 @@ export default {
       // const teamId = props.info.teamId
       store.dispatch('root/createSchedule',{ 'body': body, 'token': token, 'teamId': teamId})
       .then(res => {
-          setTimeout(() => {
-                swal({
-                  title: '약속 등록',
-                  text: '약속이 일정에 등록되었습니다.',
-                  icon: 'success',
-                  button: '확인',
-                });
-              }, 500)
+        setTimeout(() => {
+          swal({
+            title: '약속 등록',
+            text: '약속이 일정에 등록되었습니다.',
+            icon: 'success',
+            button: '확인',
+          });
+        }, 500)
 
-              // router.go(router.currentRoute)
-              console.log(res)
-              // console.log(swal)
-
-              handleClose()
-        })
-        .catch(err => {
-          console.log(err)
-        })
+        // router.go(router.currentRoute)
+        console.log(res)
+        // console.log(swal)
+        emit('createSchedule')
+        handleClose()
+      })
+      .catch(err => {
+        console.log(err)
+      })
 
       handleClose()
     }

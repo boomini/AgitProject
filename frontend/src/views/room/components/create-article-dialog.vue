@@ -100,7 +100,8 @@ export default {
 
     const handleClose = function () {
       state.form.content = ''
-      state.form.schedule = ''
+      state.form.uploadDate = ''
+      state.form.title = ''
       emit('closeCreateArticleDialog')
     }
 
