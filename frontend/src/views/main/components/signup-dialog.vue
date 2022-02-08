@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="signup-dialog" v-model="state.dialogVisible" @close="handleClose" :destroy-on-close="true" :close-on-click-modal="false" :close-on-press-escape="false" top="100px">
+  <el-dialog custom-class="signup-dialog" v-model="state.dialogVisible" @close="handleClose" :destroy-on-close="true" :close-on-click-modal="false" :close-on-press-escape="false" top="50px" style="width:100%">
     <!-- header -->
     <template #title>
       <span>
@@ -12,7 +12,7 @@
       <el-form-item prop="id" label="아이디" :label-width="state.formLabelWidth">
         <el-input v-model="state.form.id" autocomplete="off" style="width: 70%" :disabled="state.form.isValidatedId" id="id-input" placeholder="ID"></el-input>
         <el-button size="small" style="float: right; margin-top:5px;" @click="checkDup" :disabled="state.form.isValidatedId">중복 확인</el-button>
-        <el-button size="small" style="float: right; margin-top:5px;" @click="sendAuthEmail" :disabled="state.form.isValidatedAuth">인증 번호 전송</el-button>
+        <!-- <el-button size="small" style="float: right; margin-top:5px;" @click="sendAuthEmail" :disabled="state.form.isValidatedAuth">인증 번호 전송</el-button> -->
 
       </el-form-item>
       <el-form-item prop="authNumber" label="인증번호" ref="authForm" :label-width="state.formLabelWidth">
@@ -64,7 +64,7 @@
 <style>
 .signup-dialog {
   width: 500px !important;
-  height: 550px;
+  height: 600px !important;
 }
 .signup-dialog .checkbox .el-form-item__content {
   float: left;
@@ -249,6 +249,12 @@ export default {
       } else {
         if(state.form.authNumber==state.auth.str){
           console.log("일치 확인");
+          swal({
+                  title: "인증 성공",
+                  text: "회원가입을 진행해주세요.",
+                  icon: "success",
+                  button: "확인",
+                });
           state.form.isValidatedAuth = true
         }
         //console.log("확인");
@@ -373,6 +379,7 @@ export default {
           });
         state.form.isPossibleId = false
       } else {
+
         store.dispatch('root/checkDupId', { userId: state.form.id })
         .then(res => {
           state.form.isValidatedId = true
@@ -381,6 +388,7 @@ export default {
               icon: "success",
               button: "확인",
             });
+            sendAuthEmail();
         })
         .catch(err => {
           swal({
