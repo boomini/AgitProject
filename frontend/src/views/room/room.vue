@@ -158,11 +158,13 @@
   <!-- 사진 추가 다이얼로그 -->
   <upload-image-dialog
     :open="state.uploadImageDialogOpen"
+    :info="state.team.teamId"
     @closeUploadImageDialog="onCloseUploadImageDialog"/>
 
   <!-- 동영상 추가 다이얼로그 -->
   <upload-video-dialog
     :open="state.uploadVideoDialogOpen"
+    :info="state.team.teamId"
     @closeUploadVideoDialog="onCloseUploadVideoDialog"/>
 
   <!-- 게시글 추가 다이얼로그 -->

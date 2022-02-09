@@ -35,21 +35,17 @@
         <el-empty :image-size="100" description="약속이 없어요."/>
       </div>
     </div>
-    <div class="mb-4">
-      <h4>
-        사진
-      </h4>
-      <div>
-        내용
-      </div>
+    <div style="border: 1px solid gray;">
+      <div>사진</div>
+      <image-page
+      :uploaddate = state.uploadDate
+      :teamId = state.teamId></image-page>
     </div>
-    <div class="mb-4">
-      <h4>
-        동영상
-      </h4>
-      <div>
-        내용
-      </div>
+    <div style="border: 1px solid gray;">
+      <div>동영상</div>
+      <video-page
+      :uploaddate = state.uploadDate
+      :teamId = state.teamId></video-page>
     </div>
     <div>
       <h4>
@@ -68,10 +64,14 @@
 
 <script>
 import { reactive, computed, onBeforeMount } from 'vue'
-
+import ImagePage from './image.vue'
+import VideoPage from './video.vue'
 export default {
   name: 'board',
-
+  components:{
+    ImagePage,
+    VideoPage
+  },
   props: {
     data: {
       type: Object,
@@ -94,7 +94,8 @@ export default {
       // imageList: props.data.imageList,
       // videoList: props.data.videoList,
       // eventResList: props.data.eventResList,
-      teamId: computed(() => props.teamId),
+      uploadDate: computed(()=>props.data.uploadDate),
+      teamId: computed(() => props.data.teamId),
       articleList: computed(function () {
         let articleList = props.data.articleList
         for (let i = 0; i < articleList.length; i++) {
@@ -102,6 +103,7 @@ export default {
         }
         return articleList
       } ),
+
       imageList: computed(() => props.data.imageList),
       videoList: computed(() => props.data.videoList),
       eventResList: computed(() => props.data.eventResList),
@@ -109,6 +111,7 @@ export default {
       title: computed(() => `${state.YMD[0]}년 ${state.YMD[1]}월 ${state.YMD[2]}일 게시판`)
     })
 
+    console.log(state.teamId);
     const handleClose = function () {
       emit('closeBoard')
     }
