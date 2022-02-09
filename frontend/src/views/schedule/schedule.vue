@@ -32,7 +32,7 @@
         </div>
         <div class="ground d-flex justify-content-evenly">
           <div>
-            <el-button type="text" @click="state.beforeDialogOpen = true" style="margin-left:100px; font-size: 40px;"
+            <el-button type="text" @click="state.beforeDialogOpen = true" style="margin-left:100px; font-size: 40px; color: #13C7A3"
               >이전 약속</el-button
             >
           </div>
@@ -48,7 +48,7 @@
               </div>
             </div>
           <div>
-            <el-button type="text" @click="state.afterDialogOpen = true" style="margin-right:100px; font-size: 40px;"
+            <el-button type="text" @click="state.afterDialogOpen = true" style="margin-right:100px; font-size: 40px; color: #13C7A3"
               >다음 약속</el-button
             >
           </div>
@@ -57,17 +57,50 @@
       </div>
     </div>
     <div style="margin-bottom: 100px; dispaly: flex; justify-content: center; align-items:center;" class="my-2">
-      <el-carousel :interval="4000" type="card" height="200px">
-        <el-carousel-item v-for="info in state.infos" :key="info.startDate">
-          <h3>팀 이름: {{ info.teamName }} <br>
-              시작 날짜: {{ info.startDate }} <br>
-              종료 날짜: {{ info.endDate }} <br>
-              D-day: {{ info.dday }}일 <br>
-              약속 제목: {{ info.eventTitle }} <br>
-              약속 내용: {{ info.eventContent }}
-          </h3>
-        </el-carousel-item>
-      </el-carousel>
+        <div v-if = "state.infos.length >= 3">
+          <el-carousel :interval="4000" type="card" height="200px">
+            <el-carousel-item v-for="info in state.infos" :key="info.startDate">
+              <h3>팀 이름: {{ info.teamName }} <br>
+                  시작 날짜: {{ info.startDate }} <br>
+                  종료 날짜: {{ info.endDate }} <br>
+                  D-day: {{ info.dday }}일 <br>
+                  약속 제목: {{ info.eventTitle }} <br>
+                  약속 내용: {{ info.eventContent }}
+              </h3>
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+        <div v-else-if = "state.infos.length === 2">
+          <el-carousel height="200px" direction="vertical" :autoplay="false">
+            <el-carousel-item v-for="info in state.infos" :key="info.startDate">
+            <h3>팀 이름: {{ info.teamName }} <br>
+                시작 날짜: {{ info.startDate }} <br>
+                종료 날짜: {{ info.endDate }} <br>
+                D-day: {{ info.dday }}일 <br>
+                약속 제목: {{ info.eventTitle }} <br>
+                약속 내용: {{ info.eventContent }}
+            </h3>
+          </el-carousel-item>
+        </el-carousel>
+        </div>
+        <div v-else-if = "state.infos.length === 1">
+          <el-carousel height="200px" direction="vertical" :autoplay="false">
+            <el-carousel-item v-for="info in state.infos" :key="info.startDate">
+            <h3>팀 이름: {{ info.teamName }} <br>
+                시작 날짜: {{ info.startDate }} <br>
+                종료 날짜: {{ info.endDate }} <br>
+                D-day: {{ info.dday }}일 <br>
+                약속 제목: {{ info.eventTitle }} <br>
+                약속 내용: {{ info.eventContent }}
+            </h3>
+          </el-carousel-item>
+        </el-carousel>
+        </div>
+        <!-- 확인필요! -->
+        <div v-else-if = "state.infos.length === 0">
+          <el-empty :image-size="200"></el-empty>
+        </div>
+
     </div>
 
     <before-dialog
@@ -136,7 +169,7 @@ export default {
         let today = new Date()
         let date = today.getDate()
         state.schedulelength = res.data.length
-        state.infos = res.data.slice().reverse()
+        state.infos = res.data.slice()
         for (var i = 0; i < state.schedulelength; i++) {
           // console.log(state.infos[i].startDate)
           // let tempday = Number(state.infos[i].startDate.slice(8,12))
@@ -220,8 +253,9 @@ export default {
 <style>
   /* test */
   .el-carousel__item {
-  color: #475669;
-  font-size: 14px;
+  background-color: #FAFAA0;
+  color: #13C7A3;
+  font-size: 10px;
   opacity: 0.75;
   line-height: 200px;
   margin: 0;
@@ -230,11 +264,13 @@ export default {
   }
 
   .el-carousel__item:nth-child(2n) {
-    background-color: #99a9bf;
+    background-color: #FAFAA0;
+    color: #13C7A3;
   }
 
   .el-carousel__item:nth-child(2n + 1) {
-    background-color: #d3dce6;
+    background-color: #FAEB78;
+    color: #20B2AA;
   }
 
   #scape {
@@ -292,7 +328,7 @@ export default {
     width: 40px;
     height: 20px;
     border-radius: 50%;
-    background-color: #ff4081;
+    background-color: #13C7A3;
   }
 
   .loader .eye {
@@ -551,7 +587,7 @@ export default {
   background: linear-gradient(
     158deg,
     rgba(190, 231, 232, 1) 0%,
-    rgba(255, 212, 201, 1) 55%
+    #FAFAAA 55%
   );
 }
 .mountain-scene {
@@ -582,8 +618,8 @@ width = 1.41 x height(padding-bottom) */
   background: rgb(254, 194, 178);
   background: linear-gradient(
     180deg,
-    rgba(254, 194, 178, 1) 0%,
-    rgba(235, 148, 126, 1) 55%
+    #369F36 0%,
+    #FAFAAA 55%
   );
   border-radius: 20px;
 
@@ -630,8 +666,8 @@ width = 1.41 x height(padding-bottom) */
   background: rgb(254, 194, 178);
   background: linear-gradient(
     180deg,
-    rgba(254, 194, 178, 1) 0%,
-    rgba(235, 148, 126, 1) 55%
+    #FFCD28		 0%,
+    #FAFAAA 55%
   );
   border-radius: 20px;
 
