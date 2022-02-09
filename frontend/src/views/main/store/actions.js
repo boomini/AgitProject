@@ -226,7 +226,8 @@ export function uploadImage ({state}, payload){
   console.log(payload.formData.get('upfile'));
   console.log(payload.formData.get('uploadDate'));
   console.log(payload.formData.get('teamId'));
-  return $axios.post('/image', payload.formData,{header})
+  //return $axios.post('/image', payload.formData,{header})
+  return $axios({ method: 'post', url: '/image', data: payload.formData, headers: header})
 }
 
 //이미지리스트
