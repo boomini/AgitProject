@@ -145,6 +145,17 @@ export function takeMember ({ state }, payload) {
 
 
 // 게시판
+// 특정 달의 달력 개요(일정) 가져오기
+export function getEventCount({ state }, payload) {
+  const teamId = payload.teamId
+  const reqDate = payload.reqDate
+  const url = `team/${teamId}/teamEvents/${reqDate}`
+  return $axios({
+    method: 'get',
+    url: url
+  })
+}
+
 // 특정 일자 게시판 조회
 export function getBoardDetail ({ state }, payload) {
   console.log('특정 일자 게시판 조회 함수')
@@ -259,3 +270,5 @@ export function sendMessage({state}, payload){
     to: [],
   })
 }
+
+

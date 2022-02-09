@@ -5,37 +5,35 @@
     :direction="rtl"
     :before-close="handleClose"
   >
-    <div style="border: 1px solid gray;">
-      일정
-      <el-scrollbar>
-        <div class="scrollbar-flex-content">
-          <p v-for="item in 50" :key="item" class="scrollbar-demo-item">
-            {{ item }}
-          </p>
-          <!-- <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3" v-for="item in 50" :key="item"/> -->
-          <!-- <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3"/>
-          <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3"/>
-          <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3"/>
-          <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3"/>
-          <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3"/>
-          <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3"/>
-          <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3"/>
-          <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3"/>
-          <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3"/>
-          <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3"/>
-          <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3"/>
-          <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3"/>
-          <el-skeleton-item variant="image" style="width: 120px; height: 120px" class="me-3"/> -->
-        </div>
-      </el-scrollbar>
-      <el-scrollbar native>
-        <div class="scrollbar-flex-content">
-          <p v-for="item in 50" :key="item" class="scrollbar-demo-item">
-            {{ item }}
-          </p>
-        </div>
-      </el-scrollbar>
-
+    <div class="mb-4">
+      <h4>
+        오늘의 일정
+      </h4>
+      <div v-if="state.eventResList.length >= 1">
+        <el-scrollbar>
+          <div>
+            <p v-for="(item, index) in state.eventResList" :key="item" class="scrollbar-demo-item">
+              <span>
+                {{ index + 1 }}. {{ item.eventTitle }}
+              </span>
+              <span v-if="data.uploadDate === item.endDate">
+                D-day
+                <!-- {{ data.uploadDate }}
+                {{ item.startDate }}
+                {{ item.endDate }}
+                {{ item.endDate}}
+                {{ item.dday }} -->
+              </span>
+              <span v-else>
+                약속 시작
+              </span>
+            </p>
+          </div>
+        </el-scrollbar>
+      </div>
+      <div v-else>
+        <el-empty :image-size="100" description="약속이 없어요."/>
+      </div>
     </div>
     <div style="border: 1px solid gray;">
       <div>사진</div>
@@ -49,13 +47,17 @@
       :uploaddate = state.uploadDate
       :teamId = state.teamId></video-page>
     </div>
-    <div style="border: 1px solid gray;">
-      게시판
-      <el-scrollbar max-height="400px">
-          <p v-for="item in state.articleList" :key="item.id" class="scrollbar-demo-item">
-            {{ item.title }}
-          </p>
-      </el-scrollbar>
+    <div>
+      <h4>
+        게시판
+      </h4>
+      <div style="margin: 10px;">
+        <el-table :data="state.articleList" height="40vh" style="width: 100%">
+          <el-table-column prop="index" label="글번호" width="80" />
+          <el-table-column prop="title" label="글제목" width="180" />
+          <el-table-column prop="content" label="글내용" />
+        </el-table>
+      </div>
     </div>
   </el-drawer>
 </template>
@@ -85,9 +87,6 @@ export default {
       const teamId = props.teamId
       const uploadDate = props.date
     })
-    console.log('ㄴㅁㅇ라ㅣㅁ니;러')
-    console.log(props.data)
-
     const state = reactive({
       boardVisible: computed(() => props.open),
       // teamId: props.teamId,
@@ -97,7 +96,14 @@ export default {
       // eventResList: props.data.eventResList,
       uploadDate: computed(()=>props.data.uploadDate),
       teamId: computed(() => props.data.teamId),
-      articleList: computed(() => props.data.articleList),
+      articleList: computed(function () {
+        let articleList = props.data.articleList
+        for (let i = 0; i < articleList.length; i++) {
+          articleList[i]['index'] = i + 1
+        }
+        return articleList
+      } ),
+
       imageList: computed(() => props.data.imageList),
       videoList: computed(() => props.data.videoList),
       eventResList: computed(() => props.data.eventResList),
@@ -124,7 +130,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100px;
+  width: calc(100% - 20px);
   height: 50px;
   margin: 10px;
   text-align: center;
@@ -132,5 +138,35 @@ export default {
   border-radius: 4px;
   background: var(--el-color-danger-lighter);
   color: var(--el-color-danger);
+}
+.el-drawer {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+h4 {
+  overflow: hidden;
+  text-align: center;
+}
+
+h4:before,
+h4:after {
+  background-color: #000;
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+  vertical-align: middle;
+  width: 50%;
+}
+
+h4:before {
+  right: 0.5em;
+  margin-left: -50%;
+}
+
+h4:after {
+  left: 0.5em;
+  margin-right: -50%;
 }
 </style>

@@ -1,16 +1,9 @@
 {
-  "home" : {
-    "name" : "홈",
+  "intro" : {
+    "name" : "소개 페이지",
     "hidden" : false,
-    "path" : "/home",
-    "icon" : "el-icon-s-home",
-    "children" : []
-  },
-  "history" : {
-    "name" : "지난 회의 이력",
-    "hidden" : false,
-    "path" : "/history",
-    "icon" : "el-icon-s-order",
+    "path" : "/",
+    "icon" : "el-icon-link",
     "children" : []
   },
   "customercenter" : {
@@ -18,13 +11,6 @@
     "hidden" : false,
     "path" : "/customercenter",
     "icon" : "el-icon-s-order",
-    "children" : []
-  },
-  "intro" : {
-    "name" : "소개 페이지",
-    "hidden" : false,
-    "path" : "/",
-    "icon" : "el-icon-link",
     "children" : []
   },
   "schedule" : {

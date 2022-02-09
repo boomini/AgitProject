@@ -172,6 +172,34 @@ public class TeamController {
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
     }
 
+
+    @GetMapping("/confirm/{teamId}")
+    @ApiOperation(value = "team state변경", notes = "수락시 team member state 1로 변경")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<? extends BaseResponseBody> confirmTeamMember(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId, @ApiIgnore Authentication authentication){
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String userId = userDetails.getUsername();
+        //수락시, 회원 state변경
+        teamService.changeTeamMemberConfirm(teamId, userId);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+    //거절시, 회원 팀에서 삭제
+    @GetMapping("/reject/{teamId}")
+    @ApiOperation(value = "team 거절", notes = "거절시 userteam table에서 삭제")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<? extends BaseResponseBody> rejectTeamMember(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId, @ApiIgnore Authentication authentication){
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String userId = userDetails.getUsername();
+
+        teamService.changeTeamMemberReject(teamId, userId);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
     @GetMapping("/{teamId}/{uploadDate}")
     @ApiOperation(value = "team에서 특정 일자에 작성한 전체 게시글 조회 (일까지 들어감)", notes = "team name, date(yyyy-mm-dd) 이용하여 조회")
     @ApiResponses({

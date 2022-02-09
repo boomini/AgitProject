@@ -111,4 +111,22 @@ public class TeamServiceImpl implements TeamService{
         return userTeam;
     }
 
+    @Override
+    public void changeTeamMemberConfirm(Long teamId, String userId) {
+        Optional<User> user = userRepositorySupport.findUserByUserId(userId);
+        Optional<UserTeam> userTeam = userTeamRepositroySupport.findTeamUserStateByTeamIdAndUserId(teamId, user.get().getId());
+
+        userTeam.get().setState(1);
+        userTeamRepository.save(userTeam.get());
+    }
+
+    @Override
+    public void changeTeamMemberReject(Long teamId, String userId) {
+        Optional<User> user = userRepositorySupport.findUserByUserId(userId);
+        Optional<UserTeam> userTeam = userTeamRepositroySupport.findTeamUserStateByTeamIdAndUserId(teamId, user.get().getId());
+
+        userTeamRepository.delete(userTeam.get());
+
+    }
+
 }
