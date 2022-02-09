@@ -15,8 +15,10 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -44,8 +46,12 @@ public class VideoController {
             @ApiResponse(code = 200, message = "성공"),
     })
     public ResponseEntity<? extends BaseResponseBody> addVideo (
-            @RequestParam(value="upfile", required = true) MultipartFile[] files ,@RequestParam(value="uploadDate")String uploadDate,@RequestParam(value="userId")String userId,@RequestParam(value="teamId")Long teamId) throws Exception {
+            @RequestParam(value="upfile", required = true) MultipartFile[] files ,@RequestParam(value="uploadDate")String uploadDate,@RequestParam(value="teamId")Long teamId, @ApiIgnore Authentication authentication) throws Exception {
 
+        String userId="bomin2641@gmail.com";
+
+//            SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+//            userId = userDetails.getUsername();
 
         //System.out.println(servletContext.getRealPath("/resources/dist/video"));
         //String realPath = servletContext.getRealPath("/resources/dist/video");
