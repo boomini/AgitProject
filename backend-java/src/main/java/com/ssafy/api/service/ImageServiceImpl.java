@@ -90,4 +90,10 @@ public class ImageServiceImpl implements ImageService{
         return true;
     }
 
+    @Override
+    public Optional<Image> findById(Long no) {
+        Image image = imageRepository.findById(no).get();
+        return Optional.of(image);
+    }
+
 }

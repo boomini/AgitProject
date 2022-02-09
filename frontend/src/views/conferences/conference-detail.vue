@@ -7,20 +7,19 @@
       <div id="join" v-if="!state.session">
         <div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div>
         <div id="join-dialog" class="jumbotron vertical-center d-flex-column offset-3 col-6">
-          <h1>Join a video session</h1>
-          <div class="form-group col-6">
-            <p>
+          <h1 class="text-center">Join a video session!</h1>
+            <!-- <p>
               <label>이름 설정</label>
               <input v-model="state.myUserName" class="form-control" type="text" required>
             </p>
-            <!-- <p>
+            <p>
               <label>세션 이름</label>
               <input v-model="state.mySessionId" class="form-control" type="text" required>
             </p> -->
+            <h2 class="text-center my-5">현재 들어가려는 방: {{ state.teamName }}</h2>
             <p class="text-center">
               <button class="btn btn-lg btn-success" @click="joinSession()">Join!</button>
             </p>
-          </div>
         </div>
       </div>
 
@@ -154,6 +153,7 @@ export default {
       mySessionId: 'Session',
       myUserName: 'Person1',
       roomId: computed(() => route.params.conferenceId),
+      teamName: '',
     })
     // 페이지 진입시 불리는 훅
     onMounted(() => {
@@ -181,6 +181,8 @@ export default {
     const joinSession = function () {
       state.OV = new OpenVidu()
       getTeamInfo()
+      takeProfile()
+      console.log(state.userNickName)
       // console.log(state.mySessionId)
       state.session = state.OV.initSession()
       state.session.on('streamCreated', ({ stream }) => {
@@ -320,16 +322,16 @@ export default {
         })
     }
 
-    // const takeProfile = function () {
-    //   const token = store.getters['root/getJWTToken']
-    //   store.dispatch('root/getProfile', token)
-    //   .then(res => {
-    //     state.userName = res.data.nickName
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
-    // }
+    const takeProfile = function () {
+      const token = store.getters['root/getJWTToken']
+      store.dispatch('root/getProfile', token)
+      .then(res => {
+        state.myUserName = res.data.nickName
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
     const getTeamInfo = function () {
       store.dispatch('root/getTeamInfoDetail', route.params.conferenceId)
       .then(res => {
@@ -340,10 +342,26 @@ export default {
       })
     }
 
-    // takeProfile()
+    const getTeamName = function () {
+      store.dispatch('root/getTeamInfoDetail', route.params.conferenceId)
+      .then(res => {
+        state.teamName = `${res.data.teamName}팀의 방`
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
+
+
+    const setScrollTop = function() {
+      window.scrollTo(0, 0)
+    }
+
+    getTeamName()
+    setScrollTop()
 
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager,
-          getToken, createSession, createToken, sendMessage, closeSession, getTeamInfo}
+          getToken, createSession, createToken, sendMessage, closeSession, getTeamInfo, setScrollTop, takeProfile, getTeamName}
   }
 }
 </script>

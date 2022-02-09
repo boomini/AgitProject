@@ -1,28 +1,33 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.advice.exception.CFileNotFoundException;
-import com.ssafy.api.advice.exception.CUserDuplicateException;
+import com.ssafy.api.advice.exception.CTokenForbiddenException;
+import com.ssafy.api.dto.ArticleDto;
 import com.ssafy.api.dto.ImageDto;
 import com.ssafy.api.service.ImageService;
+import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.db.entity.Image;
 import io.swagger.annotations.*;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import java.io.*;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.StringTokenizer;
-import java.util.UUID;
+import java.util.*;
 
 @Api(value = "이미지 API", tags = {"Image"})
 @RestController
@@ -39,8 +44,12 @@ public class ImageController {
             @ApiResponse(code = 200, message = "성공"),
     })
     public ResponseEntity<? extends BaseResponseBody> addImage (
-           @RequestParam(value="upfile", required = true) MultipartFile[] files ,@RequestParam(value="uploadDate")String uploadDate,@RequestParam(value="userId")String userId,@RequestParam(value="teamId")Long teamId) throws Exception {
+           @RequestParam(value="upfile", required = true) MultipartFile[] files ,@RequestParam(value="uploadDate")String uploadDate,@RequestParam(value="teamId")Long teamId, @ApiIgnore Authentication authentication) throws Exception {
 
+        String userId="bomin2641@gmail.com";
+
+//            SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+//            userId = userDetails.getUsername();
 
         //System.out.println(servletContext.getRealPath("/resources/dist/img"));
         //String realPath = servletContext.getRealPath("/resources/dist/img");
@@ -132,6 +141,64 @@ public class ImageController {
         };
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
+
+    @GetMapping(path="/{teamId}/{uploadDate}")
+    @ApiOperation(value = "team에서 특정 일자에 작성한 전체 이미지 조회", notes = "team Id, date(yyyy-mm-dd) 이용하여 조회")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<List<String>> getTeamsImageListAtDate(@ApiParam(value = "teamName", required = true) @PathVariable("teamId") Long teamId,
+                                                                      @ApiParam(value = "date", required = true) @PathVariable("uploadDate") String cDate){
+        List<ImageDto> imageDto = imageService.getImageListAtDateByTeamId(cDate, teamId);
+        String imageBasePath = "http://localhost:8080/api/v1/image/";
+        List<String> pathList = new ArrayList<>();
+        pathList.add("");
+        for(int i=0; i<imageDto.size(); i++){
+            pathList.add(imageBasePath+imageDto.get(i).getId());
+        }
+
+        return ResponseEntity.status(200).body(pathList);
+    }
+
+    @GetMapping(path="/{no}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> getImage(@PathVariable("no") Long no) throws IOException {
+        Optional<Image> image = imageService.findById(no);
+        if(image.isEmpty()){
+            System.out.println("빈객체");
+        }
+        String filePath = System.getProperty("user.dir") + "\\files"+"\\image"+ File.separator + image.get().getFilePath() + File.separator + image.get().getFileName();
+        File target = new File(filePath);
+
+        byte[] returnValue = null;
+        ByteArrayOutputStream baos =null;
+        FileInputStream fis = null;
+
+        try{
+            baos = new ByteArrayOutputStream();
+            fis = new FileInputStream(filePath);
+
+            byte[] buf = new byte[1024];
+            int read = 0;
+
+            while((read=fis.read(buf,0,buf.length))!=-1){
+                baos.write(buf,0,read);
+            }
+
+            returnValue = baos.toByteArray();
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            if(baos!=null){
+                baos.close();
+            }
+
+            if(fis!=null){
+                fis.close();
+            }
+        }
+        return ResponseEntity.status(200).body(returnValue);
+    }
+
 
 
 }
