@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	UserRepositorySupport userRepositorySupport;
 	
-	@Autowired
+
 	PasswordEncoder passwordEncoder;
 
 	private final NetHttpTransport transport = new NetHttpTransport();
