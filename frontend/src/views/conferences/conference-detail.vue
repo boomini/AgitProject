@@ -131,6 +131,7 @@ export default {
   },
 
   setup () {
+
     const route = useRoute()
     const router = useRouter()
     const store = useStore()
@@ -143,6 +144,8 @@ export default {
       }
     })
 
+    // 이 팀에 속한 유저인지
+    // 아니면 이제 그냥 alert
     const state = reactive({
       conferenceId: '',
       OV: undefined,
@@ -152,8 +155,9 @@ export default {
 			subscribers: [],
       mySessionId: 'Session',
       myUserName: 'Person1',
+      isLogin: computed(() => store.getters['root/getJWTToken']),
       roomId: computed(() => route.params.conferenceId),
-      teamName: '',
+      teamId: null,
     })
     // 페이지 진입시 불리는 훅
     onMounted(() => {
@@ -176,6 +180,50 @@ export default {
         }
       })
 
+    }
+
+    const checkUserState = function(){
+      let url = window.location.href;
+      state.teamId = url.split('/').reverse()[0];
+
+      if(state.isLogin==null){
+        setTimeout(() => {
+                swal({
+                  title: "로그인 필요한 페이지",
+                  text: "로그인 후 이용해주세요.",
+                  icon: "success",
+                  button: "확인",
+                });
+              }, 100)
+       router.push({
+        name: 'intro',
+        })
+      }
+      else{
+        console.log(state.isLogin);
+        store.dispatch('root/checkTeamMember', {teamId: state.teamId, token:state.isLogin} )
+      .then(function(result){
+        console.log(result.data);
+        console.log(result);
+      }).catch(function(err){
+        console.log(err.response)
+        if(err.response.data.statusCode==1005){
+          router.push({
+          name: 'RoomConfirm',
+          params: {
+            roomId: state.team.teamId,
+            roomName: state.team.teamName,
+          },
+        })
+        }else if(err.response.data.statusCode==1002){
+          //접근불가한 User
+            router.push({
+              name: 'Error'
+            })
+
+          }
+        })
+      }
     }
 
     const joinSession = function () {
@@ -361,7 +409,7 @@ export default {
     setScrollTop()
 
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager,
-          getToken, createSession, createToken, sendMessage, closeSession, getTeamInfo, setScrollTop, takeProfile, getTeamName}
+          getToken, createSession, createToken, sendMessage, closeSession, getTeamInfo, setScrollTop, takeProfile, getTeamName, checkUserState}
   }
 }
 </script>
