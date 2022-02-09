@@ -272,7 +272,7 @@ methods: {
 
       store.dispatch('root/verifyToken', {accessToken:this.idToken})
           .then(function (result) {
-            router.push({ name: 'home' })
+            router.push({ name: 'schedule' })
             store.commit('root/setMenuActive', 0)
 
             localStorage.setItem('JWT', result.data.accessToken)
