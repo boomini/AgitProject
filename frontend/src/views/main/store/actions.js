@@ -261,7 +261,7 @@ export function uploadVideo ({state}, payload){
 export function sendMessage({state}, payload){
   console.log(payload)
   var messageData = {
-    content: payload.message,
+    content: payload.msssage,
     secretName: state.secretName
   }
   state.session.signal({
