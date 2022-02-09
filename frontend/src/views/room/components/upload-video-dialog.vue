@@ -35,6 +35,8 @@
             type="file"
             accept="video/*"
             multiple
+            @change="selectedVideo"
+            ref="inputVideo"
           >
         </el-form>
       </div>
@@ -52,7 +54,7 @@
 
 <script>
 import { reactive, computed, ref } from 'vue'
-
+import { useStore } from 'vuex'
 export default {
   name: 'create-schedule-dialog',
 
@@ -60,17 +62,23 @@ export default {
     open: {
       type: Boolean,
       default: false
-    }
+    },
+     info:{
+      type:Object,
+      required:true,
+    },
   },
 
   setup(props, { emit }) {
     const uploadVideoForm = ref(null)
-
+    const inputVideo = ref(null);
+    const store = useStore();
     const state = reactive({
       form: {
         align: 'left',
         content: '',
         schedule: '',
+        videos:[]
       },
       rules: {
         schedule: [
@@ -89,12 +97,49 @@ export default {
       emit('closeUploadVideoDialog')
     }
 
+    const selectedVideo = function(){
+      console.log(inputVideo);
+      for (let i = 0; i < inputVideo.value.files.length; i++) {
+        console.log(URL.createObjectURL(inputVideo.value.files[i]))
+        console.log(state.form.images)
+        state.form.videos.push({
+          file: inputVideo.value.files[i],
+        })
+
+      }
+    }
     const uploadVideo = function () {
       console.log('비디오등록')
-      handleClose()
-    }
+      let formData = new FormData();
+        for (let i=0; i<state.form.videos.length; i++){
+          formData.append('upfile', state.form.videos[i].file);
+        }
+        formData.append('uploadDate',state.form.schedule);
+        formData.append('teamId',props.info)
 
-    return { state, handleClose, uploadVideoForm, uploadVideo }
+        store.dispatch('root/uploadVideo',{ 'formData': formData, 'token': state.isLogin})
+      .then(res => {
+          setTimeout(() => {
+                swal({
+                  title: '비디오 등록',
+                  text: '비디오가 일정에 등록되었습니다.',
+                  icon: 'success',
+                  button: '확인',
+                });
+              }, 500)
+
+              // router.go(router.currentRoute)
+              console.log(res)
+              // console.log(swal)
+
+              handleClose()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      }
+
+    return { state, handleClose, uploadVideoForm, uploadVideo , selectedVideo}
   }
 }
 </script>

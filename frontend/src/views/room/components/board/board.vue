@@ -38,10 +38,16 @@
 
     </div>
     <div style="border: 1px solid gray;">
-      사진
+      <div>사진</div>
+      <image-page
+      :uploaddate = state.uploadDate
+      :teamId = state.teamId></image-page>
     </div>
     <div style="border: 1px solid gray;">
-      동영상
+      <div>동영상</div>
+      <video-page
+      :uploaddate = state.uploadDate
+      :teamId = state.teamId></video-page>
     </div>
     <div style="border: 1px solid gray;">
       게시판
@@ -56,10 +62,14 @@
 
 <script>
 import { reactive, computed, onBeforeMount } from 'vue'
-
+import ImagePage from './image.vue'
+import VideoPage from './video.vue'
 export default {
   name: 'board',
-
+  components:{
+    ImagePage,
+    VideoPage
+  },
   props: {
     data: {
       type: Object,
@@ -85,7 +95,8 @@ export default {
       // imageList: props.data.imageList,
       // videoList: props.data.videoList,
       // eventResList: props.data.eventResList,
-      teamId: computed(() => props.teamId),
+      uploadDate: computed(()=>props.data.uploadDate),
+      teamId: computed(() => props.data.teamId),
       articleList: computed(() => props.data.articleList),
       imageList: computed(() => props.data.imageList),
       videoList: computed(() => props.data.videoList),
@@ -94,6 +105,7 @@ export default {
       title: computed(() => `${state.YMD[0]}년 ${state.YMD[1]}월 ${state.YMD[2]}일 게시판`)
     })
 
+    console.log(state.teamId);
     const handleClose = function () {
       emit('closeBoard')
     }
