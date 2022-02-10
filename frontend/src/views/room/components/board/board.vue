@@ -36,16 +36,32 @@
       </div>
     </div>
     <div style="border: 1px solid gray;">
-      <div>사진</div>
-      <image-page
-      :uploaddate = state.uploadDate
-      :teamId = state.teamId></image-page>
+      <h4>
+        사진
+      </h4>
+      <div v-if="state.imageList.length >= 1">
+        <image-page
+        :uploaddate = state.uploadDate
+        :teamId = state.teamId
+        :srcList = state.imageList></image-page>
+      </div>
+      <div v-else>
+        <el-empty :image-size="60" description="사진을 등록해주세요."/>
+      </div>
     </div>
     <div style="border: 1px solid gray;">
-      <div>동영상</div>
-      <video-page
-      :uploaddate = state.uploadDate
-      :teamId = state.teamId></video-page>
+      <h4>
+        비디오
+      </h4>
+      <div v-if="state.videoList.length >= 1">
+        <video-page
+        :uploaddate = state.uploadDate
+        :teamId = state.teamId
+        :srcList = state.videoList></video-page>
+      </div>
+      <div v-else>
+        <el-empty :image-size="60" description="비디오를 등록해주세요."/>
+      </div>
     </div>
     <div>
       <h4>
@@ -80,6 +96,7 @@ export default {
       type: Boolean,
       default: false,
     },
+
   },
 
   setup(props, { emit }) {
@@ -104,8 +121,20 @@ export default {
         return articleList
       } ),
 
-      imageList: computed(() => props.data.imageList),
-      videoList: computed(() => props.data.videoList),
+      imageList: computed(function(){
+        let imageList = props.data.imageList
+        for ( let i=0; i<imageList.length; i++){
+          imageList[i] = 'http://localhost:8080/api/v1/image/'+imageList[i].id;
+        }
+        return imageList;
+      }),
+      videoList: computed(function(){
+        let videoList = props.data.videoList
+        for ( let i=0; i<videoList.length; i++){
+          videoList[i] = 'http://localhost:8080/api/v1/video/'+videoList[i].id;
+        }
+        return videoList;
+      }),
       eventResList: computed(() => props.data.eventResList),
       YMD: computed(() => props.data.uploadDate.split('-')),
       title: computed(() => `${state.YMD[0]}년 ${state.YMD[1]}월 ${state.YMD[2]}일 게시판`)

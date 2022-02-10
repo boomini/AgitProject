@@ -394,6 +394,7 @@ export default {
         store.dispatch('root/getBoardDetail', payload)
         .then(function (result) {
           console.log('게시판 상세조회 성공')
+          console.log(result.data);
           state.boardData = result.data
           state.boardData['uploadDate'] = uploadDate
           state.boardOpen = true

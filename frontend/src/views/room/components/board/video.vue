@@ -1,10 +1,10 @@
 <template>
   <el-scrollbar>
         <div class="scrollbar-flex-content">
-          <p v-for="item in state.size" :key="item" class="scrollbar-demo-video-item">
+          <p v-for="item in state.srcList.length" :key="item" class="scrollbar-demo-video-item">
             <div class="demo-image__preview">
               <video width="450" height="300" controls>
-            <source type="video/mp4">
+                <source :src='state.srcList[item-1]' type="video/mp4">
           </video>
             </div>
           </p>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import {onBeforeMount,reactive} from 'vue'
+import {onBeforeMount,computed,reactive} from 'vue'
 import { useStore } from 'vuex'
 export default {
   props:{
@@ -24,34 +24,22 @@ export default {
     },
     teamId:{
       type:Number
+    },
+    srcList:{
+      TYPE:Array
     }
   },
   setup(props){
     const store = useStore()
     const state = reactive({
       size:'',
-      srcList:[],
+      srcList:computed(()=>props.srcList),
     })
 
     console.log(props.uploaddate);
     console.log(props.teamId);
 
-    onBeforeMount(()=>{
-      store.dispatch('root/getListImage', {'uploadDate':props.uploaddate,'teamId':props.teamId})
-      .then(function (result){
-        console.log(result.data);
-        console.log(result.data.length);
-        state.srcList = result.data;
-        state.size = result.data.length;
-        if(state.size==-1){
-          state.size = 0;
-        }
-      }).catch(function(error){
-        console.log(error.response);
-      })
 
-      console.log(state.srcList);
-    })
     return {state};
   }
 }

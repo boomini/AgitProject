@@ -34,7 +34,6 @@
           <input
             type="file"
             accept="video/*"
-            multiple
             @change="selectedVideo"
             ref="inputVideo"
           >
@@ -89,6 +88,7 @@ export default {
         ]
       },
       dialogVisible: computed(() => props.open),
+      isLogin: computed(()=> store.getters['root/getJWTToken'])
     })
 
     const handleClose = function () {
@@ -98,12 +98,12 @@ export default {
     }
 
     const selectedVideo = function(){
-      console.log(inputVideo);
+      console.log(inputVideo.value);
       for (let i = 0; i < inputVideo.value.files.length; i++) {
-        console.log(URL.createObjectURL(inputVideo.value.files[i]))
-        console.log(state.form.images)
+        console.log(state.form.videos)
+        console.log(inputVideo.value.files[i])
         state.form.videos.push({
-          file: inputVideo.value.files[i],
+          file: inputVideo.value.files[i]
         })
 
       }
@@ -139,7 +139,7 @@ export default {
         })
       }
 
-    return { state, handleClose, uploadVideoForm, uploadVideo , selectedVideo}
+    return { state, handleClose, uploadVideoForm, uploadVideo , selectedVideo, inputVideo}
   }
 }
 </script>
