@@ -5,36 +5,38 @@
     :direction="rtl"
     :before-close="handleClose"
   >
-    <div class="mb-4">
-      <h4>
-        오늘의 일정
-      </h4>
-      <div v-if="state.eventResList.length >= 1">
-        <el-scrollbar>
-          <div>
-            <p v-for="(item, index) in state.eventResList" :key="item" class="scrollbar-demo-item">
-              <span>
-                {{ index + 1 }}. {{ item.eventTitle }}
-              </span>
-              <span v-if="data.uploadDate === item.endDate">
-                D-day
-                <!-- {{ data.uploadDate }}
-                {{ item.startDate }}
-                {{ item.endDate }}
-                {{ item.endDate}}
-                {{ item.dday }} -->
-              </span>
-              <span v-else>
-                약속 시작
-              </span>
-            </p>
-          </div>
-        </el-scrollbar>
+    <el-scrollbar max-height="90vh">
+
+      <div class="mb-4">
+        <h4>
+          오늘의 일정
+        </h4>
+        <div v-if="state.eventResList.length >= 1">
+          <el-scrollbar>
+            <div>
+              <p v-for="(item, index) in state.eventResList" :key="item" class="scrollbar-demo-item">
+                <span>
+                  {{ index + 1 }}. {{ item.eventTitle }}
+                </span>
+                <span v-if="data.uploadDate === item.endDate">
+                  D-day
+                  <!-- {{ data.uploadDate }}
+                  {{ item.startDate }}
+                  {{ item.endDate }}
+                  {{ item.endDate}}
+                  {{ item.dday }} -->
+                </span>
+                <span v-else>
+                  약속 시작
+                </span>
+              </p>
+            </div>
+          </el-scrollbar>
+        </div>
+        <div v-else>
+          <el-empty :image-size="100" description="약속이 없어요."/>
+        </div>
       </div>
-      <div v-else>
-        <el-empty :image-size="100" description="약속이 없어요."/>
-      </div>
-    </div>
     <div style="border: 1px solid gray;">
       <h4>
         사진
@@ -75,6 +77,7 @@
         </el-table>
       </div>
     </div>
+    </el-scrollbar>
   </el-drawer>
 </template>
 
@@ -126,6 +129,7 @@ export default {
         for ( let i=0; i<imageList.length; i++){
           imageList[i] = 'http://localhost:8080/api/v1/image/'+imageList[i].id;
         }
+        console.log(imageList)
         return imageList;
       }),
       videoList: computed(function(){
@@ -133,6 +137,7 @@ export default {
         for ( let i=0; i<videoList.length; i++){
           videoList[i] = 'http://localhost:8080/api/v1/video/'+videoList[i].id;
         }
+        console.log(videoList);
         return videoList;
       }),
       eventResList: computed(() => props.data.eventResList),

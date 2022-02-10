@@ -46,10 +46,10 @@ public class ImageController {
     public ResponseEntity<? extends BaseResponseBody> addImage (
            @RequestParam(value="upfile", required = true) MultipartFile[] files ,@RequestParam(value="uploadDate")String uploadDate,@RequestParam(value="teamId")Long teamId, @ApiIgnore Authentication authentication) throws Exception {
 
-        String userId="bomin2641@gmail.com";
+        //String userId="bomin2641@gmail.com";
 
-//            SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-//            userId = userDetails.getUsername();
+            SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+            String userId = userDetails.getUsername();
 
         //System.out.println(servletContext.getRealPath("/resources/dist/img"));
         //String realPath = servletContext.getRealPath("/resources/dist/img");

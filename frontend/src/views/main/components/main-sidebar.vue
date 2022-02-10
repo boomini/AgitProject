@@ -2,7 +2,7 @@
   <el-row
     class="main-sidebar"
     :gutter="10"
-    :style="{ 'width': width, 'height': 'calc(100vh - 150px)' }">
+    :style="{ 'width': width, 'height': 'calc(100vh - 120px)' }">
     <div class="hide-on-small">
       <el-menu
         :default-active="String(state.activeIndex)"
@@ -16,16 +16,18 @@
           <!-- <hr v-if="index === 4" style="color: black;"> -->
           <!-- <hr v-if="index === 4" style="color: black"> -->
         </el-menu-item>
-        <el-menu-item v-for="(item, index) in state.userTeams" :key="index + state.menuItems.length" :index="index + state.menuItems.length">
-          <!-- <i v-if="item.icon" :class="['ic', item.icon]"/> -->
-          <span>{{index + state.menuItems.length}} {{ item.teamName }}</span>
-          <span>{{ item.id }}</span>
-          <!-- <div v-if="index === 4" style="border-top: 1px solid #dcdfe6;"/> -->
-          <!-- <hr v-if="index === 4" style="color: black;"> -->
-          <!-- <hr v-if="index === 4" style="color: black"> -->
-        </el-menu-item>
-        <el-button @click="registerTeam">방 생성 버튼</el-button>
-        <!-- <el-button @click="state.registerTeamDialogOpen = true">방 생성 버튼</el-button> -->
+        <el-scrollbar native id="sidebar">
+          <el-menu-item v-for="(item, index) in state.userTeams" :key="index + state.menuItems.length" :index="index + state.menuItems.length">
+            <!-- <i v-if="item.icon" :class="['ic', item.icon]"/> -->
+            <span>{{index + state.menuItems.length}} {{ item.teamName }}</span>
+            <span>{{ item.id }}</span>
+            <!-- <div v-if="index === 4" style="border-top: 1px solid #dcdfe6;"/> -->
+            <!-- <hr v-if="index === 4" style="color: black;"> -->
+            <!-- <hr v-if="index === 4" style="color: black"> -->
+          </el-menu-item>
+          <el-button @click="registerTeam">방 생성 버튼</el-button>
+          <!-- <el-button @click="state.registerTeamDialogOpen = true">방 생성 버튼</el-button> -->
+        </el-scrollbar>
       </el-menu>
     </div>
   </el-row>
@@ -49,6 +51,9 @@
 }
 .main-sidebar .el-menu .el-menu-item .ic {
   margin-right: 5px;
+}
+#sidebar {
+  height: calc(100% - 224px);
 }
 </style>
 <script>
