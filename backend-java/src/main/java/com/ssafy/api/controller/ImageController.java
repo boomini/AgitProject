@@ -152,7 +152,6 @@ public class ImageController {
         List<ImageDto> imageDto = imageService.getImageListAtDateByTeamId(cDate, teamId);
         String imageBasePath = "http://localhost:8080/api/v1/image/";
         List<String> pathList = new ArrayList<>();
-        pathList.add("");
         for(int i=0; i<imageDto.size(); i++){
             pathList.add(imageBasePath+imageDto.get(i).getId());
         }
