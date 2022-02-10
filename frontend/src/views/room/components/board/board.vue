@@ -5,60 +5,63 @@
     :direction="rtl"
     :before-close="handleClose"
   >
-    <div class="mb-4">
-      <h4>
-        오늘의 일정
-      </h4>
-      <div v-if="state.eventResList.length >= 1">
-        <el-scrollbar>
-          <div>
-            <p v-for="(item, index) in state.eventResList" :key="item" class="scrollbar-demo-item">
-              <span>
-                {{ index + 1 }}. {{ item.eventTitle }}
-              </span>
-              <span v-if="data.uploadDate === item.endDate">
-                D-day
-                <!-- {{ data.uploadDate }}
-                {{ item.startDate }}
-                {{ item.endDate }}
-                {{ item.endDate}}
-                {{ item.dday }} -->
-              </span>
-              <span v-else>
-                약속 시작
-              </span>
-            </p>
-          </div>
-        </el-scrollbar>
+    <el-scrollbar max-height="90vh">
+
+      <div class="mb-4">
+        <h4>
+          오늘의 일정
+        </h4>
+        <div v-if="state.eventResList.length >= 1">
+          <el-scrollbar>
+            <div>
+              <p v-for="(item, index) in state.eventResList" :key="item" class="scrollbar-demo-item">
+                <span>
+                  {{ index + 1 }}. {{ item.eventTitle }}
+                </span>
+                <span v-if="data.uploadDate === item.endDate">
+                  D-day
+                  <!-- {{ data.uploadDate }}
+                  {{ item.startDate }}
+                  {{ item.endDate }}
+                  {{ item.endDate}}
+                  {{ item.dday }} -->
+                </span>
+                <span v-else>
+                  약속 시작
+                </span>
+              </p>
+            </div>
+          </el-scrollbar>
+        </div>
+        <div v-else>
+          <el-empty :image-size="100" description="약속이 없어요."/>
+        </div>
       </div>
-      <div v-else>
-        <el-empty :image-size="100" description="약속이 없어요."/>
+      <div style="border: 1px solid gray;">
+        <div>사진</div>
+        <image-page
+        :uploaddate = state.uploadDate
+        :teamId = state.teamId></image-page>
       </div>
-    </div>
-    <div style="border: 1px solid gray;">
-      <div>사진</div>
-      <image-page
-      :uploaddate = state.uploadDate
-      :teamId = state.teamId></image-page>
-    </div>
-    <div style="border: 1px solid gray;">
-      <div>동영상</div>
-      <video-page
-      :uploaddate = state.uploadDate
-      :teamId = state.teamId></video-page>
-    </div>
-    <div>
-      <h4>
-        게시판
-      </h4>
-      <div style="margin: 10px;">
-        <el-table :data="state.articleList" height="40vh" style="width: 100%">
-          <el-table-column prop="index" label="글번호" width="80" />
-          <el-table-column prop="title" label="글제목" width="180" />
-          <el-table-column prop="content" label="글내용" />
-        </el-table>
+      <div style="border: 1px solid gray;">
+        <div>동영상</div>
+        <video-page
+        :uploaddate = state.uploadDate
+        :teamId = state.teamId></video-page>
       </div>
-    </div>
+      <div>
+        <h4>
+          게시판
+        </h4>
+        <div style="margin: 10px;">
+          <el-table :data="state.articleList" height="40vh" style="width: 100%">
+            <el-table-column prop="index" label="글번호" width="80" />
+            <el-table-column prop="title" label="글제목" width="180" />
+            <el-table-column prop="content" label="글내용" />
+          </el-table>
+        </div>
+      </div>
+    </el-scrollbar>
   </el-drawer>
 </template>
 
