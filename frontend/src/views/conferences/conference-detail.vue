@@ -143,7 +143,6 @@ export default {
         'Content-Type': 'application/json'
       }
     })
-
     // 이 팀에 속한 유저인지
     // 아니면 이제 그냥 alert
     const state = reactive({
@@ -159,6 +158,7 @@ export default {
       roomId: computed(() => route.params.conferenceId),
       teamId: null,
     })
+    checkUserState()
     // 페이지 진입시 불리는 훅
     onMounted(() => {
       state.conferenceId = route.params.conferenceId
@@ -185,7 +185,9 @@ export default {
     const checkUserState = function(){
       let url = window.location.href;
       state.teamId = url.split('/').reverse()[0];
-
+      console.log("hihi")
+      console.log(state.teamId)
+      console.log(state.isLogin)
       if(state.isLogin==null){
         setTimeout(() => {
                 swal({
@@ -207,21 +209,10 @@ export default {
         console.log(result);
       }).catch(function(err){
         console.log(err.response)
-        if(err.response.data.statusCode==1005){
-          router.push({
-          name: 'RoomConfirm',
-          params: {
-            roomId: state.team.teamId,
-            roomName: state.team.teamName,
-          },
-        })
-        }else if(err.response.data.statusCode==1002){
           //접근불가한 User
-            router.push({
-              name: 'Error'
-            })
-
-          }
+        router.push({
+          name: 'Error'
+        })
         })
       }
     }

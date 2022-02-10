@@ -148,6 +148,7 @@ export default {
         'endDate': state.form.enddate
       }
       const teamId = props.info.teamId
+      const uploadDate = state.form.startdate.slice(0, -3)
       // const teamId = props.info.teamId
       store.dispatch('root/createSchedule',{ 'body': body, 'token': token, 'teamId': teamId})
       .then(res => {
