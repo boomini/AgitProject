@@ -26,7 +26,7 @@
           <div class="line"></div>
           <div style="text-align:center">간편로그인</div>
           <div>
-            <el-button @click="handleClickSignIn" class='easy-custom-btn google-btn' v-loading.fullscreen="loading"></el-button>
+            <button @click="handleClickSignIn" class='easy-custom-btn google-btn' v-loading.fullscreen="loading"></button>
             <button @click="handleClickSignIn" class='easy-custom-btn naver-btn'></button>
             <button @click="handleClickSignIn" class='easy-custom-btn kakao-btn'></button>
           </div>
@@ -274,6 +274,8 @@ methods: {
     }
     const tokenVerify = function(){
 
+      loading.value = true
+
       const params = new URLSearchParams();
       params.append('idToken', this.idToken);
       console.log(this.idToken);
@@ -328,6 +330,7 @@ methods: {
           })
           .catch(function (err) {
             console.log(err);
+            loading.value = false
           })
     }
     return { loginForm, state, clickLogin, handleClose, loading,tokenVerify }

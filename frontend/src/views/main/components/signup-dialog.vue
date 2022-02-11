@@ -100,6 +100,11 @@
 .signup-dialog .dialog-footer .el-button {
   width: 120px;
 }
+
+.signup-dialog .el-checkbox a {
+  color: #0d6efd;
+  text-decoration: underline;
+}
 .signup-dialog .el-checkbox a:hover {
   background-color: rgba(141, 29, 216, 0.322);
 }
