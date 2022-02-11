@@ -93,5 +93,10 @@ public class VideoServiceImpl implements VideoService{
         file.delete();
         return true;
     }
+
+    @Override
+    public Optional<Video> findById(Long no) {
+        return videoRepository.findById(no);
+    }
 }
 

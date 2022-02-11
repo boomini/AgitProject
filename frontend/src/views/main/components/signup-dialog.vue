@@ -328,9 +328,9 @@ export default {
                 });
               }, 500)
 
-              router.push({
-                name: 'home',
-              })
+              // router.push({
+              //   name: 'schedule',
+              // })
 
               handleClose()
             })
