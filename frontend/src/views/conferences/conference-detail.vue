@@ -7,37 +7,37 @@
       <div id="join" v-if="!state.session">
         <div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div>
         <div id="join-dialog" class="jumbotron vertical-center d-flex-column offset-3 col-6">
-          <h1 class="text-center">Join a video session!</h1>
-            <!-- <p>
+          <h1>Join a video session</h1>
+          <div class="form-group">
+            <p>
               <label>이름 설정</label>
               <input v-model="state.myUserName" class="form-control" type="text" required>
             </p>
             <p>
               <label>세션 이름</label>
               <input v-model="state.mySessionId" class="form-control" type="text" required>
-            </p> -->
-            <h2 class="text-center my-5">현재 들어가려는 방: {{ state.teamName }}</h2>
+            </p>
             <p class="text-center">
               <button class="btn btn-lg btn-success" @click="joinSession()">Join!</button>
             </p>
+          </div>
         </div>
       </div>
 
-      <div id="session" v-if="state.session">
+      <div id="session" class="d-flex-row justify-content-between" v-if="state.session">
         <div id="session-header">
           <h1 id="session-title">{{ state.mySessionId }}</h1>
           <input class="btn btn-large btn-danger my-3" type="button" id="buttonLeaveSession" @click="closeSession()" value="Leave session">
         </div>
-          <!-- 프레젠테이션 용 -->
-          <!-- <div id="main-video" class="col-3 mx-3">
-            <user-video :stream-manager="state.mainStreamManager"/>
-          </div> -->
         <div class="d-flex">
-          <div>
-            <user-video :stream-manager="state.publisher" @click="updateMainVideoStreamManager(state.publisher)"/>
-          </div>
-          <div id="video-container d-flex flex-wrap">
-            <user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+            <!-- <div id="main-video" class="col-3 mx-3">
+              <user-video :stream-manager="state.mainStreamManager"/>
+            </div> -->
+          <div class="col-5 d-flex">
+            <div id="video-container">
+              <user-video :stream-manager="state.publisher" @click="updateMainVideoStreamManager(state.publisher)"/>
+              <user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+            </div>
           </div>
           <div class="offset-3 col-3" id="chat">
             <chat-live :session="state.session" @sendMessage="sendMessage"/>
@@ -56,11 +56,10 @@
     z-index: 10;
     background-color: white;
     width: 125%;
-    height: 150vh;
+    height: 100vh;
     background-size:cover;
   }
-
-  #video-container video {
+  /* #video-container video {
     position: relative;
     display: inline;
     float: left;
@@ -108,7 +107,7 @@
     cursor: pointer;
     object-fit: cover;
     height: 180px;
-  }
+  } */
 </style>
 <script>
 import { reactive, onMounted, onUnmounted, computed } from 'vue'
@@ -131,7 +130,6 @@ export default {
   },
 
   setup () {
-
     const route = useRoute()
     const router = useRouter()
     const store = useStore()
@@ -143,8 +141,7 @@ export default {
         'Content-Type': 'application/json'
       }
     })
-    // 이 팀에 속한 유저인지
-    // 아니면 이제 그냥 alert
+
     const state = reactive({
       conferenceId: '',
       OV: undefined,
@@ -154,11 +151,10 @@ export default {
 			subscribers: [],
       mySessionId: 'Session',
       myUserName: 'Person1',
-      isLogin: computed(() => store.getters['root/getJWTToken']),
       roomId: computed(() => route.params.conferenceId),
-      teamId: null,
+      teamName: '',
+      userName: '',
     })
-    checkUserState()
     // 페이지 진입시 불리는 훅
     onMounted(() => {
       state.conferenceId = route.params.conferenceId
@@ -182,48 +178,12 @@ export default {
 
     }
 
-    const checkUserState = function(){
-      let url = window.location.href;
-      state.teamId = url.split('/').reverse()[0];
-      console.log("hihi")
-      console.log(state.teamId)
-      console.log(state.isLogin)
-      if(state.isLogin==null){
-        setTimeout(() => {
-                swal({
-                  title: "로그인 필요한 페이지",
-                  text: "로그인 후 이용해주세요.",
-                  icon: "success",
-                  button: "확인",
-                });
-              }, 100)
-       router.push({
-        name: 'intro',
-        })
-      }
-      else{
-        console.log(state.isLogin);
-        store.dispatch('root/checkTeamMember', {teamId: state.teamId, token:state.isLogin} )
-      .then(function(result){
-        console.log(result.data);
-        console.log(result);
-      }).catch(function(err){
-        console.log(err.response)
-          //접근불가한 User
-        router.push({
-          name: 'Error'
-        })
-        })
-      }
-    }
-
     const joinSession = function () {
       state.OV = new OpenVidu()
-      getTeamInfo()
-      takeProfile()
-      console.log(state.userNickName)
-      // console.log(state.mySessionId)
+
       state.session = state.OV.initSession()
+      state.mySessionId = state.teamName
+      console.log(state.mySessionId)
       state.session.on('streamCreated', ({ stream }) => {
         const subscriber = state.session.subscribe(stream)
         state.subscribers.push(subscriber)
@@ -365,23 +325,13 @@ export default {
       const token = store.getters['root/getJWTToken']
       store.dispatch('root/getProfile', token)
       .then(res => {
-        state.myUserName = res.data.nickName
+        state.userName = res.data.nickName
       })
       .catch(err => {
         console.log(err)
       })
     }
     const getTeamInfo = function () {
-      store.dispatch('root/getTeamInfoDetail', route.params.conferenceId)
-      .then(res => {
-        state.mySessionId = `${res.data.teamName}팀의 방`
-      })
-      .catch(err => {
-        console.log(err)
-      })
-    }
-
-    const getTeamName = function () {
       store.dispatch('root/getTeamInfoDetail', route.params.conferenceId)
       .then(res => {
         state.teamName = `${res.data.teamName}팀의 방`
@@ -391,16 +341,11 @@ export default {
       })
     }
 
-
-    const setScrollTop = function() {
-      window.scrollTo(0, 0)
-    }
-
-    getTeamName()
-    setScrollTop()
+    // takeProfile()
+    // getTeamInfo()
 
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager,
-          getToken, createSession, createToken, sendMessage, closeSession, getTeamInfo, setScrollTop, takeProfile, getTeamName, checkUserState}
+          getToken, createSession, createToken, sendMessage, closeSession, takeProfile, getTeamInfo }
   }
 }
 </script>
