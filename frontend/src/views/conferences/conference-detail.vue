@@ -1,9 +1,5 @@
 <template>
     <div id="chat-container">
-      <div class="d-flex justify-content-between my-3">
-        {{ $route.params.conferenceId + '번 방 상세 보기 페이지' }}
-        <button class="mx-4" @click="closeSession()">X</button>
-      </div>
       <div id="join" v-if="!state.session">
         <div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div>
         <div id="join-dialog" class="jumbotron vertical-center d-flex-column offset-3 col-6">
@@ -24,22 +20,20 @@
         </div>
       </div>
 
-      <div id="session" class="d-flex-row justify-content-between" v-if="state.session">
-        <div id="session-header">
-          <h1 id="session-title">{{ state.mySessionId }}</h1>
-          <input class="btn btn-large btn-danger my-3" type="button" id="buttonLeaveSession" @click="closeSession()" value="Leave session">
+      <div class="d-flex-row justify-content-between my-4" v-if="state.session">
+        <div class="d-flex justify-content-between">
+          <h1 class="offset-5">{{ state.mySessionId }}</h1>
+          <input class="btn btn-large btn-danger my-3 mx-4" type="button" id="close-btn" @click="closeSession()" value="방 나가기">
         </div>
-        <div class="d-flex">
+        <div class="d-flex justify-content-between">
             <!-- <div id="main-video" class="col-3 mx-3">
               <user-video :stream-manager="state.mainStreamManager"/>
             </div> -->
-          <div class="col-5 d-flex">
-            <div id="video-container">
-              <user-video :stream-manager="state.publisher" @click="updateMainVideoStreamManager(state.publisher)"/>
-              <user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
-            </div>
+          <div class="d-flex flex-wrap">
+            <user-video :stream-manager="state.publisher" @click="updateMainVideoStreamManager(state.publisher)"/>
+            <user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
           </div>
-          <div class="offset-3 col-3" id="chat">
+          <div id="chat-box">
             <chat-live :session="state.session" @sendMessage="sendMessage"/>
           </div>
         </div>
@@ -59,55 +53,14 @@
     height: 100vh;
     background-size:cover;
   }
-  /* #video-container video {
-    position: relative;
-    display: inline;
-    float: left;
-    width: 60%;
-    cursor: pointer;
+  #chat-box{
+    margin-right: 4vh;
   }
 
-  #video-container p {
-    display: inline-block;
-    background: #f8f8f8;
-    padding-left: 5px;
-    padding-right: 5px;
-    color: #777777;
-    font-weight: bold;
-    border-bottom-right-radius: 4px;
+  #close-btn{
+    width: 20vh;
   }
 
-  video {
-    width: 100%;
-    height: auto;
-  }
-
-
-  #main-video p {
-    display: inline-block;
-    background: #f8f8f8;
-    font-size: 22px;
-    color: #777777;
-    font-weight: bold;
-    border-bottom-right-radius: 4px;
-  }
-
-  #session img {
-    width: 100%;
-    height: auto;
-    display: inline-block;
-    object-fit: contain;
-    vertical-align: baseline;
-  }
-
-  #session #video-container img {
-    position: relative;
-    float: left;
-    width: 50%;
-    cursor: pointer;
-    object-fit: cover;
-    height: 180px;
-  } */
 </style>
 <script>
 import { reactive, onMounted, onUnmounted, computed } from 'vue'
@@ -149,7 +102,7 @@ export default {
       mainStreamManager: undefined,
       publisher: undefined,
 			subscribers: [],
-      mySessionId: 'Session',
+      mySessionId: 'SessionA',
       myUserName: 'Person1',
       roomId: computed(() => route.params.conferenceId),
       teamName: '',
@@ -182,7 +135,7 @@ export default {
       state.OV = new OpenVidu()
 
       state.session = state.OV.initSession()
-      state.mySessionId = state.teamName
+      // state.mySessionId = state.teamName
       console.log(state.mySessionId)
       state.session.on('streamCreated', ({ stream }) => {
         const subscriber = state.session.subscribe(stream)
