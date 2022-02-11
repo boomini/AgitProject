@@ -1,140 +1,172 @@
 <template>
-  <div style="hegint: 80%; margin-bottom: 100px;" >
-    <div id="scape">
-      <div class="landing">
-        <div class="mountain-scene">
-          <div id="clouds">
-            <div class="cloud"></div>
-            <div class="cloud"></div>
-            <div class="cloud"></div>
-            <div class="cloud"></div>
+  <div style="dispaly: flex; justify-content: center; align-items:center; width: 100%; margin-bottom: 20px">
+    <div v-if = "state.infos.length >= 3">
+      <el-carousel :interval="4000" type="card" height="200px">
+        <el-carousel-item v-for="info in state.infos" :key="info.startDate">
+          <h3>팀 이름: {{ info.teamName }} <br>
+              시작 날짜: {{ info.startDate }} <br>
+              종료 날짜: {{ info.endDate }} <br>
+              D-day: {{ info.dday }}일 <br>
+              약속 제목: {{ info.eventTitle }} <br>
+              약속 내용: {{ info.eventContent }}
+          </h3>
+        </el-carousel-item>
+      </el-carousel>
+    </div>
+    <div v-else-if = "state.infos.length === 2">
+      <el-carousel height="200px" direction="vertical" :autoplay="false">
+        <el-carousel-item v-for="info in state.infos" :key="info.startDate">
+        <h3>팀 이름: {{ info.teamName }} <br>
+            시작 날짜: {{ info.startDate }} <br>
+            종료 날짜: {{ info.endDate }} <br>
+            D-day: {{ info.dday }}일 <br>
+            약속 제목: {{ info.eventTitle }} <br>
+            약속 내용: {{ info.eventContent }}
+        </h3>
+      </el-carousel-item>
+    </el-carousel>
+    </div>
+    <div v-else-if = "state.infos.length === 1">
+      <el-carousel height="200px" direction="vertical" :autoplay="false">
+        <el-carousel-item v-for="info in state.infos" :key="info.startDate">
+        <h3>팀 이름: {{ info.teamName }} <br>
+            시작 날짜: {{ info.startDate }} <br>
+            종료 날짜: {{ info.endDate }} <br>
+            D-day: {{ info.dday }}일 <br>
+            약속 제목: {{ info.eventTitle }} <br>
+            약속 내용: {{ info.eventContent }}
+        </h3>
+      </el-carousel-item>
+    </el-carousel>
+    </div>
+    <!-- 확인필요! -->
+    <div v-else-if = "state.infos.length === 0">
+      <el-empty :image-size="200"></el-empty>
+    </div>
+  </div>
+  <div style="width:100%;">
+    <div style="width: 83vw;" class="d-flex flex-row">
+      <div id="scape">
+        <div class="landing">
+          <div class="mountain-scene">
+            <div id="clouds">
+              <div class="cloud"></div>
+              <div class="cloud"></div>
+              <div class="cloud"></div>
+              <div class="cloud"></div>
 
-          </div>
-          <!-- background mountains -->
-          <div class="small-mountains">
-            <div class="tri"></div>
-            <div class="tri"></div>
-            <div class="tri"></div>
-          </div>
-          <div class="tall-mountains">
-            <div class="tri2"></div>
-            <div class="tri2"></div>
-            <div class="tri2"></div>
-          </div>
-          <!-- foreground mountains -->
-          <div class="tiny-mountains">
-            <div class="tri3"></div>
-            <div class="tri3"></div>
-            <div class="tri3"></div>
-            <div class="tri3"></div>
-            <div class="tri3"></div>
-          </div>
-        </div>
-        <div class="ground d-flex justify-content-evenly">
-          <div>
-            <el-button type="text" @click="state.beforeDialogOpen = true" style="margin-left:100px; font-size: 40px; color: #13C7A3"
-              >이전 약속</el-button
-            >
-          </div>
-            <div class="page-wrapper">
-              <div class="loader">
-                <div class="jelly">
-                  <div class="body"></div>
-                  <div class="eye"></div>
-                  <div class="eye"></div>
-                  <div class="mouth"></div>
-                </div>
-                <div class="shadow"></div>
-              </div>
             </div>
-          <div>
-            <el-button type="text" @click="state.afterDialogOpen = true" style="margin-right:100px; font-size: 40px; color: #13C7A3"
-              >다음 약속</el-button
-            >
+            <!-- background mountains -->
+            <div class="small-mountains">
+              <div class="tri"></div>
+              <div class="tri"></div>
+              <div class="tri"></div>
+            </div>
+            <div class="tall-mountains">
+              <div class="tri2"></div>
+              <div class="tri2"></div>
+              <div class="tri2"></div>
+            </div>
+            <!-- foreground mountains -->
+            <div class="tiny-mountains">
+              <div class="tri3"></div>
+              <div class="tri3"></div>
+              <div class="tri3"></div>
+              <div class="tri3"></div>
+              <div class="tri3"></div>
+            </div>
+          </div>
+          <div class="ground d-flex justify-content-evenly">
+            <div>
+              <el-button type="text" @click="state.beforeDialogOpen = true" style="margin-left:100px; font-size: 1.5rem; color: #13C7A3"
+                >이전 약속</el-button
+              >
+            </div>
+              <div class="page-wrapper">
+                <div class="loader">
+                  <div class="jelly">
+                    <div class="body"></div>
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                    <div class="mouth"></div>
+                  </div>
+                  <div class="shadow"></div>
+                </div>
+              </div>
+            <div>
+              <el-button type="text" @click="state.afterDialogOpen = true" style="margin-right:100px; font-size: 1.5rem; color: #13C7A3"
+                >다음 약속</el-button
+              >
+            </div>
           </div>
         </div>
-
+      </div>
+      <div class="iphone" style="margin-left: -50px">
+        <div class="header">
+          <div class="order-summary">
+            <div class="order-status">{{ state.profileinfo.userId }}</div>
+            <div class="order-date">
+            {{ state.profileinfo.nickName }} <el-button style=" min-height: 15px; padding: 10px; margin-left: 10px; font-size: 1.5rem;" @click="state.nicknameDialogOpen = true">수정하기</el-button>
+            </div>
+            <div class="order-day">
+            {{ state.profileinfo.nickName }}의 생일: {{ state.profileinfo.birthDay }}
+            </div>
+          </div>
+        </div>
+        <div class="hero-img-container">
+          <img src="https://drive.google.com/uc?id=15iXUI6DkRr5Zcp0yH5uF2U47ycr-WzUY" class="hero-img">
+        </div>
       </div>
     </div>
-    <div style="margin-bottom: 100px; dispaly: flex; justify-content: center; align-items:center;" class="my-2">
-        <div v-if = "state.infos.length >= 3">
-          <el-carousel :interval="4000" type="card" height="200px">
-            <el-carousel-item v-for="info in state.infos" :key="info.startDate">
-              <h3>팀 이름: {{ info.teamName }} <br>
-                  시작 날짜: {{ info.startDate }} <br>
-                  종료 날짜: {{ info.endDate }} <br>
-                  D-day: {{ info.dday }}일 <br>
-                  약속 제목: {{ info.eventTitle }} <br>
-                  약속 내용: {{ info.eventContent }}
-              </h3>
-            </el-carousel-item>
-          </el-carousel>
-        </div>
-        <div v-else-if = "state.infos.length === 2">
-          <el-carousel height="200px" direction="vertical" :autoplay="false">
-            <el-carousel-item v-for="info in state.infos" :key="info.startDate">
-            <h3>팀 이름: {{ info.teamName }} <br>
-                시작 날짜: {{ info.startDate }} <br>
-                종료 날짜: {{ info.endDate }} <br>
-                D-day: {{ info.dday }}일 <br>
-                약속 제목: {{ info.eventTitle }} <br>
-                약속 내용: {{ info.eventContent }}
-            </h3>
-          </el-carousel-item>
-        </el-carousel>
-        </div>
-        <div v-else-if = "state.infos.length === 1">
-          <el-carousel height="200px" direction="vertical" :autoplay="false">
-            <el-carousel-item v-for="info in state.infos" :key="info.startDate">
-            <h3>팀 이름: {{ info.teamName }} <br>
-                시작 날짜: {{ info.startDate }} <br>
-                종료 날짜: {{ info.endDate }} <br>
-                D-day: {{ info.dday }}일 <br>
-                약속 제목: {{ info.eventTitle }} <br>
-                약속 내용: {{ info.eventContent }}
-            </h3>
-          </el-carousel-item>
-        </el-carousel>
-        </div>
-        <!-- 확인필요! -->
-        <div v-else-if = "state.infos.length === 0">
-          <el-empty :image-size="200"></el-empty>
-        </div>
-
-    </div>
-
-    <before-dialog
-      :open="state.beforeDialogOpen"
-      :info="state.pros.beforepro[0]"
-      @closeBeforeDialog="onCloseBeforeDialog" />
-    <after-dialog
-      :open="state.afterDialogOpen"
-      :info="state.pros.afterpro[0]"
-      @closeAfterDialog="onCloseAfterDialog" />
   </div>
+
+  <before-dialog
+    :open="state.beforeDialogOpen"
+    :info="state.pros.beforepro[0]"
+    @closeBeforeDialog="onCloseBeforeDialog" />
+  <after-dialog
+    :open="state.afterDialogOpen"
+    :info="state.pros.afterpro[0]"
+    @closeAfterDialog="onCloseAfterDialog" />
+  <nickname-dialog
+    :open="state.nicknameDialogOpen"
+    :info="state.profileinfo"
+    @closeNicknameDialog="onCloseNicknameDialog"
+    @edit-nickname="editNickname"
+    />
+  <birthday-dialog
+  :open="state.birthdayDialogOpen"
+  :info="state.profileinfo"
+  @closeBirthdayDialog="onCloseBirthdayDialog"
+  @create-birthday="createBirthday"
+  />
+
 </template>
 
 <script>
 import { reactive, ref} from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import BeforeDialog from './components/before-dialog.vue'
 import AfterDialog from './components/after-dialog.vue'
-
-// import { useRouter } from 'vue-router'
-
-
+import NicknameDialog from './components/nickname-dialog.vue'
+import BirthdayDialog from './components/birthday-dialog.vue'
 
 export default {
   name: 'schedule',
   components: {
     BeforeDialog,
     AfterDialog,
+    NicknameDialog,
+    BirthdayDialog,
   },
+
   setup() {
   const centerDialogVisible = ref(false)
   // let beforepro = ''
   // let afterpro = ''
   const store = useStore()
+  const router = useRouter()
   const state = reactive({
     infos: {
         eventTitle: '',
@@ -144,6 +176,16 @@ export default {
         endDate: '1970-01-01',
         dday: '1970-01-01',
       },
+     profileinfo: {
+        birthDay: '1970-01-01',
+        name: '',
+        nickName: '',
+        userId: '',
+        id: '',
+        cdate: '1970-01-01',
+        emailType: '',
+        password: ''
+      },
     schedulelength: 0,
     pros : {
       beforepro: [],
@@ -151,6 +193,8 @@ export default {
     },
     afterDialogOpen: false,
     beforeDialogOpen: false,
+    nicknameDialogOpen : false,
+    birthdayDialogOpen : false,
   })
   const beforeschedule = []
   const afterschedule = []
@@ -169,7 +213,7 @@ export default {
         let today = new Date()
         let date = today.getDate()
         state.schedulelength = res.data.length
-        state.infos = res.data.slice()
+        state.infos = res.data.slice().reverse()
         for (var i = 0; i < state.schedulelength; i++) {
           // console.log(state.infos[i].startDate)
           // let tempday = Number(state.infos[i].startDate.slice(8,12))
@@ -233,6 +277,76 @@ export default {
   //   }
   // }
 
+  const takeProfile = function () {
+      const token = store.getters['root/getJWTToken']
+      store.dispatch('root/getProfile', token)
+      .then(res => {
+        state.profileinfo = res.data
+        console.log(res)
+        if (state.profileinfo.birthDay == null) {
+          state.birthdayDialogOpen = true
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
+
+    const editNickname = (nickname) => {
+      state.profileinfo.nickName = nickname.nickname
+    }
+
+    const createBirthday = (birthday) => {
+      state.profileinfo.birthDay = birthday.birthday
+    }
+
+    // const deleteuserId = function () {
+    //   const token = store.getters['root/getJWTToken']
+    //   const body = {
+    //     'userId': state.profileinfo.userId,
+    //   }
+    //   store.dispatch('root/deleteUser',{ 'body': body, 'token': token})
+    //   .then(res => {
+    //       setTimeout(() => {
+    //             swal({
+    //               title: '회원탈퇴',
+    //               text: '이용해주셔서 감사합니다.',
+    //               icon: 'success',
+    //               button: '확인',
+    //             });
+    //           }, 500)
+
+    //           console.log(res)
+
+    //           store.commit('root/setJWTTokenReset')
+    //           localStorage.removeItem('JWT')
+    //           store.commit('root/setMenuActive', 0)
+    //           router.push({
+    //             name: 'home',
+    //           })
+
+    //           // router.go(router.currentRoute)
+
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // }
+
+  takeProfile()
+
+
+
+
+  const onCloseNicknameDialog = function () {
+    state.nicknameDialogOpen = false
+  }
+
+  const onCloseBirthdayDialog = function () {
+    state.birthdayDialogOpen = false
+  }
+
+
   // calcdate()
   const onCloseAfterDialog = function () {
     state.afterDialogOpen = false
@@ -243,7 +357,7 @@ export default {
   }
 
 
-    return { centerDialogVisible, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog }
+    return { router, takeProfile, centerDialogVisible, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog, onCloseNicknameDialog, editNickname, onCloseBirthdayDialog, createBirthday }
   }
 }
 
@@ -274,8 +388,8 @@ export default {
   }
 
   #scape {
-    max-width: 100%;
-    max-height: 80%;
+    width: 55vw;
+    height: 100%;
     overflow-x: hidden;
     margin: 0px;
   }
@@ -582,12 +696,13 @@ export default {
   margin: auto;
   display: block;
   width: 100%;
-  height: 60vh;
+  height: 67vh;
   background: rgb(190, 231, 232);
   background: linear-gradient(
     158deg,
     rgba(190, 231, 232, 1) 0%,
     #FAFAAA 55%
+
   );
 }
 .mountain-scene {
@@ -889,6 +1004,105 @@ width = 1.41 x height(padding-bottom) */
     margin-left: -1000px;
   }
 }
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
+
+
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+/* .container {
+  display: flex;
+  justify-content: center;
+  align-content: flex-start;
+  /* position:relative; */
+  /* height: 88vh; */
+  /* width: 100vw; */
+/* } */
+
+
+.iphone {
+  background-color: #F4F4FB;
+  height:83.7vh;
+  width: 64vh;
+  /* overflow: hidden; */
+  position: relative;
+  z-index: 2;
+  transform:scale(0.8);
+  transform-origin: top center;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 30%;
+}
+
+.order-summary {
+  margin-left: 1.5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.order-summary > div {
+  margin: 6px;
+}
+
+.order-status {
+  color: #338A9A;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.order-date {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.order-day {
+  color: #338A9A;
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.hero-img-container {
+  width: 100%;
+  height: 36vh;
+   display: flex;
+    justify-content: center;
+    align-items: center;
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.hero-img-container::before {
+   height: 20px;
+   width: 20px;
+   background-color: #0268EE;
+   position: absolute;
+  top: 25px;
+  right: 150px;
+  content:'';
+  border-radius: 50%;
+}
+
+.hero-img {
+  width: 80%;
+}
+
+.img-photo {
+  width: 90px;
+  transform: rotate(-35deg)
+}
+
+
 
 
 
