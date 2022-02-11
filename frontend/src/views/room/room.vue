@@ -158,11 +158,13 @@
   <!-- 사진 추가 다이얼로그 -->
   <upload-image-dialog
     :open="state.uploadImageDialogOpen"
+    :info="state.team.teamId"
     @closeUploadImageDialog="onCloseUploadImageDialog"/>
 
   <!-- 동영상 추가 다이얼로그 -->
   <upload-video-dialog
     :open="state.uploadVideoDialogOpen"
+    :info="state.team.teamId"
     @closeUploadVideoDialog="onCloseUploadVideoDialog"/>
 
   <!-- 게시글 추가 다이얼로그 -->
@@ -241,8 +243,6 @@ export default {
       }
     }
 
-    console.log('setup')
-
     // json -> dict
     function convertListToDict (list, dict) {
       for (let i = 0; i < list.length; i++) {
@@ -260,7 +260,6 @@ export default {
 
     function convertEventToDict (list, dict, key, value) {
       for (let i = 0; i < list.length; i++) {
-
         const dictKey = list[i][key.toString()]
         const dictValue = list[i][value.toString()]
         const title = list[i].eventTitle
@@ -276,10 +275,25 @@ export default {
       }
     }
 
-    // 달력 개요(게시글, 사진, 동영상) 새로고침
-    function reloadCalendar () {
+    // 팀 세부정보 가져오기
+    function getTeamDetail () {
       let url = window.location.href;
       state.team.teamId = url.split('/').reverse()[0];
+
+      store.dispatch('root/getTeamInfoDetail', state.team.teamId)
+      .then(function(result){
+        console.log('팀 세부정보 가져오기')
+        console.log(result.data);
+        state.team = result.data;
+        // state.team.teamId = result.data.id;
+        // console.log(state.team.teamId);
+        // console.log(state.team.teamName)
+      })
+    }
+
+    // 달력 개요(게시글, 사진, 동영상) 새로고침
+    function reloadCalendar () {
+      console.log('달력 개요 새로고침')
 
       store.dispatch('root/getTeamInfoDetail', state.team.teamId)
       .then(function(result){
@@ -289,12 +303,6 @@ export default {
         // console.log(state.team.teamId);
         // console.log(state.team.teamName)
       })
-
-      // const today = new Date()
-      // const year = today.getFullYear()
-      // const month = convertMonth(today.getMonth() + 1)
-      // state.team.uploadDate = `${year}-${month}`
-
       const payload = {
         'teamId': state.team.teamId,
         'uploadDate': state.team.uploadDate
@@ -315,13 +323,13 @@ export default {
 
     // 달력 개요(일정) 새로고침
     function reloadEvent () {
-      // console.log('reqDate')
-      // console.log(state.team.teamId)
-      // console.log(state.team.uploadDate)
       const payload = {
         'teamId': state.team.teamId,
         'reqDate': state.team.uploadDate
       }
+      console.log('fiiciciciciicic')
+      console.log(state.team.teamId)
+      console.log(state.team.uploadDate)
       store.dispatch('root/getEventCount', payload)
       .then(function (result) {
         console.log('일정 가져오는데 성공하였습니다.')
@@ -332,6 +340,73 @@ export default {
       })
       .catch(function (error) {
         console.log('일정 가져오는데 실패하였습니다.')
+      })
+    }
+
+
+    const checkUserState = function(){
+      // let url = window.location.href;
+      // state.team.teamId = url.split('/').reverse()[0];
+
+      if(state.isLogin==null){
+        setTimeout(() => {
+                swal({
+                  title: "로그인 필요한 페이지",
+                  text: "로그인 후 이용해주세요.",
+                  icon: "success",
+                  button: "확인",
+                });
+              }, 500)
+       router.push({
+        name: 'intro',
+        })
+      } else{
+        console.log(state.isLogin);
+        store.dispatch('root/checkTeamMember', {teamId: state.team.teamId, token:state.isLogin} )
+        .then(function(result){
+          console.log(result.data);
+          console.log(result);
+        })
+        .catch(function(err){
+          console.log(err.response)
+          if(err.response.data.statusCode==1005){
+
+            getTeamDetail();
+            //비활성화 된 회원
+            console.log(state.team.teamId);
+            console.log(state.team.teamName);
+            router.push({
+              name: 'RoomConfirm',
+              params: {
+                roomId: state.team.teamId,
+                roomName: state.team.teamName,
+              },
+            })
+          }else if(err.response.data.statusCode==1002){
+            //접근불가한 User
+              router.push({
+                name: 'Error'
+              })
+            }
+          }
+        )
+      }
+    }
+
+    function takeMember () {
+      const token = store.getters['root/getJWTToken']
+      const body = {
+        'teamId': state.team.teamId
+      }
+      store.dispatch('root/takeMember', {'body': body, 'token': token})
+      .then(res=> {
+        console.log(res.data)
+        state.teamMembers = res.data
+        console.log(state.teamMembers[0].name)
+      })
+      .catch(err => {
+        console.log(err)
+        // console.log('기달')
       })
     }
 
@@ -376,12 +451,6 @@ export default {
     })
 
     const clickOnDate = function (data) {
-      // const date = data.day.split('-')
-      // state.year = parseInt(date[0], 10)
-      // state.month = parseInt(date[1], 10)
-      // state.day = parseInt(date[2], 10)
-      // state.clickDate = data.day
-
       if (data.type === 'current-month') {
         const teamId = state.team.teamId
         const uploadDate = data.day
@@ -392,6 +461,7 @@ export default {
         store.dispatch('root/getBoardDetail', payload)
         .then(function (result) {
           console.log('게시판 상세조회 성공')
+          console.log(result.data);
           state.boardData = result.data
           state.boardData['uploadDate'] = uploadDate
           state.boardOpen = true
@@ -406,13 +476,15 @@ export default {
     }
 
     const selectDate = (val) => {
+      let url = window.location.href;
+      state.team.teamId = url.split('/').reverse()[0];
+
       calendar.value.selectDate(val)
       const date = calendar.value.date
       const year = date.$y
       const month = convertMonth(date.$M + 1)
       state.team.uploadDate = `${year}-${month}`
-      console.log('ㄻ냉럼냥런애먈ㄴㅁㅇ')
-      console.log(state.team.uploadDate)
+
       reloadCalendar()
       reloadEvent()
     }
@@ -430,7 +502,13 @@ export default {
     }
 
     const onCreateEvent = function () {
+      const today = new Date()
+      const year = today.getFullYear()
+      const month = convertMonth(today.getMonth() + 1)
+      state.team.uploadDate = `${year}-${month}`
+      calendar.value.selectDate('today')
       reloadCalendar()
+      reloadEvent()
     }
 
     const onCloseUploadImageDialog = function () {
@@ -457,111 +535,101 @@ export default {
       // })
     }
 
-    const getTeamDetail = function(){
-      store.dispatch('root/getTeamInfoDetail', state.team.teamId)
-      .then(function(result){
-        console.log(result.data);
-        state.team = result.data;
-        state.team.teamId = result.data.id;
-        console.log(state.team.teamId);
-        console.log(state.team.teamName)
-      })
-    }
+    // const getTeamDetail = function(){
+    //   store.dispatch('root/getTeamInfoDetail', state.team.teamId)
+    //   .then(function(result){
+    //     console.log(result.data);
+    //     state.team = result.data;
+    //     state.team.teamId = result.data.id;
+    //     console.log(state.team.teamId);
+    //     console.log(state.team.teamName)
+    //   })
+    // }
 
-    const checkUserState = function(){
-      let url = window.location.href;
-      state.team.teamId = url.split('/').reverse()[0];
+    // const checkUserState = function(){
+    //   let url = window.location.href;
+    //   state.team.teamId = url.split('/').reverse()[0];
 
-      if(state.isLogin==null){
-        setTimeout(() => {
-                swal({
-                  title: "로그인 필요한 페이지",
-                  text: "로그인 후 이용해주세요.",
-                  icon: "success",
-                  button: "확인",
-                });
-              }, 500)
-       router.push({
-        name: 'intro',
-        })
-      }
-      else{
-        console.log(state.isLogin);
-        store.dispatch('root/checkTeamMember', {teamId: state.team.teamId, token:state.isLogin} )
-      .then(function(result){
-        console.log(result.data);
-        console.log(result);
-      }).catch(function(err){
-        console.log(err.response)
-        if(err.response.data.statusCode==1005){
+    //   if(state.isLogin==null){
+    //     setTimeout(() => {
+    //             swal({
+    //               title: "로그인 필요한 페이지",
+    //               text: "로그인 후 이용해주세요.",
+    //               icon: "success",
+    //               button: "확인",
+    //             });
+    //           }, 500)
+    //    router.push({
+    //     name: 'intro',
+    //     })
+    //   }
+    //   else{
+    //     console.log(state.isLogin);
+    //     store.dispatch('root/checkTeamMember', {teamId: state.team.teamId, token:state.isLogin} )
+    //   .then(function(result){
+    //     console.log(result.data);
+    //     console.log(result);
+    //   }).catch(function(err){
+    //     console.log(err.response)
+    //     if(err.response.data.statusCode==1005){
 
-          getTeamDetail();
-          //비활성화 된 회원
-          console.log(state.team.teamId);
-          console.log(state.team.teamName);
-          router.push({
-          name: 'RoomConfirm',
-          params: {
-            roomId: state.team.teamId,
-            roomName: state.team.teamName,
-          },
-        })
-        }else if(err.response.data.statusCode==1002){
-          //접근불가한 User
-            router.push({
-              name: 'Error'
-            })
+    //       getTeamDetail();
+    //       //비활성화 된 회원
+    //       console.log(state.team.teamId);
+    //       console.log(state.team.teamName);
+    //       router.push({
+    //       name: 'RoomConfirm',
+    //       params: {
+    //         roomId: state.team.teamId,
+    //         roomName: state.team.teamName,
+    //       },
+    //     })
+    //     }else if(err.response.data.statusCode==1002){
+    //       //접근불가한 User
+    //         router.push({
+    //           name: 'Error'
+    //         })
 
-          }
-        })
-      }
-    }
+    //       }
+    //     })
+    //   }
+    // }
 
-      const takeMember = function () {
-        const token = store.getters['root/getJWTToken']
-        const body = {
-          'teamId': state.team.teamId
-        }
-        store.dispatch('root/takeMember', {'body': body, 'token': token})
-        .then(res=> {
-          console.log(res.data)
-          state.teamMembers = res.data
-          console.log(state.teamMembers[0].name)
-        })
-        .catch(err => {
-          console.log(err)
-          // console.log('기달')
-        })
-      }
+    //   const takeMember = function () {
+    //     const token = store.getters['root/getJWTToken']
+    //     const body = {
+    //       'teamId': state.team.teamId
+    //     }
+    //     store.dispatch('root/takeMember', {'body': body, 'token': token})
+    //     .then(res=> {
+    //       console.log(res.data)
+    //       state.teamMembers = res.data
+    //       console.log(state.teamMembers[0].name)
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //       // console.log('기달')
+    //     })
+    //   }
 
     onBeforeMount(() => {
-
-      checkUserState();
-      getTeamDetail();
-
-
-
+      let url = window.location.href;
+      state.team.teamId = url.split('/').reverse()[0];
+      console.log(state.team.teamId);
       const today = new Date()
       const year = today.getFullYear()
       const month = convertMonth(today.getMonth() + 1)
       state.team.uploadDate = `${year}-${month}`
 
-
-      // // 이번 달 달력 가져오기
-      // const payload = {
-      //   'teamId': state.team.teamId,
-      //   'uploadDate': state.team.uploadDate
-
-      // }
-
-
+      checkUserState();
+      getTeamDetail();
       reloadCalendar()
       reloadEvent()
       takeMember()
 
     })
 
-    return { takeMember, clickOnDate, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, joinConference, onCloseBoard, onCreateEvent }
+    return { clickOnDate, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, joinConference, onCloseBoard, onCreateEvent }
   }
 
 }

@@ -108,13 +108,17 @@ export default {
     const createArticle = function () {
       const token = store.getters['root/getJWTToken']
       const writer = jwt_decode(token).sub
+      const teamName = props.info.teamName
+      const title = state.form.title
+      const content = state.form.content
+      const uploadDate = state.form.uploadDate
       const payload = {
         'body': {
           'writer': writer,
-          'teamName': props.info.teamName,
-          'title': state.form.title,
-          'content': state.form.content,
-          'uploadDate': state.form.uploadDate
+          'teamName': teamName,
+          'title': title,
+          'content': content,
+          'uploadDate': uploadDate
         }
       }
       // console.log('게시글 작성')
@@ -123,6 +127,7 @@ export default {
       store.dispatch('root/addArticle', payload)
       .then(function (result) {
         console.log('게시글 등록 성공')
+        // console.log(uploadDate.slice(0, -3))
         emit('createArticle')
         swal({
           title: "게시글 등록",

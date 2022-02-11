@@ -35,13 +35,12 @@
             type="file"
             accept="image/*"
             multiple
-            @change="uploadImage"
+            @change="selectedImage"
             ref="inputImage"
           />
         </el-form>
       </div>
-      <div v-for="img in state.form.images" :key="img.name">
-        <!-- {{ img.preview }} -->
+      <div v-for="img in state.form.images" width=150 :key="img.name">
         <img :src="img.preview" alt="" width=100>
       </div>
     </div>
@@ -58,7 +57,7 @@
 
 <script>
 import { reactive, computed, ref } from 'vue'
-
+import { useStore } from 'vuex'
 export default {
   name: 'upload-image-dialog',
 
@@ -66,13 +65,17 @@ export default {
     open: {
       type: Boolean,
       default: false
-    }
+    },
+    info:{
+      type:Object,
+      required:true,
+    },
   },
 
   setup(props, { emit }) {
     const uploadImageForm = ref(null)
     const inputImage = ref(null)
-
+    const store = useStore();
     const state = reactive({
       form: {
         align: 'left',
@@ -88,18 +91,21 @@ export default {
         ]
       },
       dialogVisible: computed(() => props.open),
+      isLogin: computed(()=> store.getters['root/getJWTToken'])
     })
 
     const handleClose = function () {
       state.form.content = ''
       state.form.schedule = ''
+      state.form.images = ''
       emit('closeUploadImageDialog')
     }
 
-    const uploadImage = function () {
+    const selectedImage = function () {
       console.log('이미지등록')
       for (let i = 0; i < inputImage.value.files.length; i++) {
-        // console.log(URL.createObjectURL(inputImage.value.files[i]))
+        console.log(URL.createObjectURL(inputImage.value.files[i]))
+        console.log(inputImage.value);
         console.log(state.form.images)
         state.form.images.push({
           file: inputImage.value.files[i],
@@ -107,17 +113,49 @@ export default {
         })
 
       }
-      // handleClose()
     }
 
-    return { state, handleClose, uploadImageForm, inputImage, uploadImage }
+      const uploadImage = function(){
+        let formData = new FormData();
+        for (let i=0; i<state.form.images.length; i++){
+          formData.append('upfile', state.form.images[i].file);
+        }
+        formData.append('uploadDate',state.form.schedule);
+        formData.append('teamId',props.info)
+
+        store.dispatch('root/uploadImage',{ 'formData': formData, 'token': state.isLogin})
+      .then(res => {
+          setTimeout(() => {
+                swal({
+                  title: '사진 등록',
+                  text: '사진이 일정에 등록되었습니다.',
+                  icon: 'success',
+                  button: '확인',
+                });
+              }, 500)
+
+              // router.go(router.currentRoute)
+              console.log(res)
+              // console.log(swal)
+
+              handleClose()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      }
+
+    return { state, handleClose, uploadImageForm, inputImage, selectedImage, uploadImage }
   }
-}
+  }
 </script>
 
 <style>
 .upload-image-dialog {
   width: 700px;
   height: 600px;
+}
+img{
+  float: left;
 }
 </style>
