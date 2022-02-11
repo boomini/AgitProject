@@ -51,7 +51,21 @@ export function editProfile ({ state }, payload) {
   const url = '/user'
   const token = payload.token
   const body = payload.body
-  // console.log(body)
+  console.log(body)
+  console.log('닉네임')
+  return $axios({ method: 'patch', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
+  // return $axios.patch(url, body)
+}
+
+// 생일 수정
+export function editBirthday ({ state }, payload) {
+  // console.log('editProfile', state, payload)
+  // console.log(payload)
+  const url = '/user'
+  const token = payload.token
+  const body = payload.body
+  console.log(body)
+  console.log('생일')
   return $axios({ method: 'patch', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
   // return $axios.patch(url, body)
 }
@@ -132,8 +146,6 @@ export function rejectTeamMember ({ state }, payload) {
 
 // 팀원 조회
 export function takeMember ({ state }, payload) {
-  console.log(payload.body)
-  console.log('안돠나')
   const teamId = payload.body.teamId
   const url = `/team/${teamId}/users`
   console.log(url)
@@ -226,7 +238,7 @@ export function uploadImage ({state}, payload){
   console.log(payload.formData.get('upfile'));
   console.log(payload.formData.get('uploadDate'));
   console.log(payload.formData.get('teamId'));
-  return $axios.post('/image', payload.formData,{header})
+  return $axios({ method: 'post', url: '/image', data: payload.formData, headers: header})
 }
 
 //이미지리스트
@@ -250,9 +262,17 @@ export function uploadVideo ({state}, payload){
   console.log(payload.formData.get('upfile'));
   console.log(payload.formData.get('uploadDate'));
   console.log(payload.formData.get('teamId'));
-  return $axios.post('/video', payload.formData,{header})
+  return $axios({ method: 'post', url: '/video', data: payload.formData, headers: header})
 }
 
+//비디오리스트
+export function getListVideo ({state}, payload){
+  const url = `/video/${payload.teamId}/${payload.uploadDate}`
+  return $axios({
+    method: 'get',
+    url: url
+  })
+}
 
 
 

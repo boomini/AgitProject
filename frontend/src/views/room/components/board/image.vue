@@ -1,11 +1,11 @@
 <template>
   <el-scrollbar>
         <div class="scrollbar-flex-content">
-          <p v-for="item in state.size" :key="item" class="scrollbar-demo-image-item">
+          <p v-for="item in state.srcList.length" :key="item" class="scrollbar-demo-image-item">
             <div class="demo-image__preview">
               <el-image
-                style="width: 300px; height: 250px"
-                :src='state.srcList[item]'
+                style="width: 250px; height: 200px"
+                :src='state.srcList[item-1]'
                 :preview-src-list="state.srcList"
                 fit="fill"
               >
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import {onBeforeMount,reactive} from 'vue'
+import {onBeforeMount,computed,reactive} from 'vue'
 import { useStore } from 'vuex'
 export default {
   props:{
@@ -27,34 +27,22 @@ export default {
     },
     teamId:{
       type:Number
+    },
+    srcList:{
+      type: Array,
     }
   },
   setup(props){
     const store = useStore()
     const state = reactive({
       size:'',
-      srcList:[],
+      srcList:computed(()=>props.srcList),
     })
 
     console.log(props.uploaddate);
     console.log(props.teamId);
+    console.log(state.srcList);
 
-    onBeforeMount(()=>{
-      store.dispatch('root/getListImage', {'uploadDate':props.uploaddate,'teamId':props.teamId})
-      .then(function (result){
-        console.log(result.data);
-        console.log(result.data.length);
-        state.srcList = result.data;
-        state.size = result.data.length-1;
-        if(state.size==-1){
-          state.size = 0;
-        }
-      }).catch(function(error){
-        console.log(error.response);
-      })
-
-      console.log(state.srcList);
-    })
     return {state};
   }
 }
@@ -76,8 +64,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 300px;
-  height: 250px;
+  width: 250px;
+  height: 200px;
   margin: 1px;
   text-align: center;
   border: 0px solid black;

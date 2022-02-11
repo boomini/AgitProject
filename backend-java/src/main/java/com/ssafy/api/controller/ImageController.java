@@ -46,10 +46,10 @@ public class ImageController {
     public ResponseEntity<? extends BaseResponseBody> addImage (
            @RequestParam(value="upfile", required = true) MultipartFile[] files ,@RequestParam(value="uploadDate")String uploadDate,@RequestParam(value="teamId")Long teamId, @ApiIgnore Authentication authentication) throws Exception {
 
-        String userId="bomin2641@gmail.com";
+        //String userId="bomin2641@gmail.com";
 
-//            SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-//            userId = userDetails.getUsername();
+            SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+            String userId = userDetails.getUsername();
 
         //System.out.println(servletContext.getRealPath("/resources/dist/img"));
         //String realPath = servletContext.getRealPath("/resources/dist/img");
@@ -152,7 +152,6 @@ public class ImageController {
         List<ImageDto> imageDto = imageService.getImageListAtDateByTeamId(cDate, teamId);
         String imageBasePath = "http://localhost:8080/api/v1/image/";
         List<String> pathList = new ArrayList<>();
-        pathList.add("");
         for(int i=0; i<imageDto.size(); i++){
             pathList.add(imageBasePath+imageDto.get(i).getId());
         }
