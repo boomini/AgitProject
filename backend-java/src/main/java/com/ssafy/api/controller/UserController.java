@@ -46,6 +46,8 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
+
+
 	
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "아이디, PW, 닉네임, 생일, 이메일에 대한 정보를 필수로 전달 한다.")
