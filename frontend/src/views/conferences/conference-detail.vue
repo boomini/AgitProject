@@ -1,10 +1,7 @@
 <template>
     <div id="chat-container">
-      <div id="join" v-if="!state.session">
-        <div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div>
-        <div id="join-dialog" class="jumbotron vertical-center d-flex-column offset-3 col-6">
-          <h1>Join a video session</h1>
-          <div class="form-group">
+        <!-- <div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div> -->
+          <!-- <div class="form-group">
             <p>
               <label>이름 설정</label>
               <input v-model="state.myUserName" class="form-control" type="text" required>
@@ -13,16 +10,20 @@
               <label>세션 이름</label>
               <input v-model="state.mySessionId" class="form-control" type="text" required>
             </p>
-            <p class="text-center">
-              <button class="btn btn-lg btn-success" @click="joinSession()">Join!</button>
-            </p>
+          </div> -->
+      <div v-if="!state.session">
+        <div class="d-flex flex-column align-items-center my-5">
+          <h1>회의실 참가하기!</h1>
+          <h3 class="my-3">현재 접속하려는 방: {{ state.teamName}}의 방</h3>
+          <div>
+            <button id="join-btn" class="btn btn-lg btn-success my-3" @click="joinSession()">Join!</button>
           </div>
         </div>
       </div>
 
       <div class="d-flex-row justify-content-between my-4" v-if="state.session">
         <div class="d-flex justify-content-between">
-          <h1 class="offset-5">{{ state.mySessionId }}</h1>
+          <h1 class="offset-4">{{ state.teamName }}의 방입니다.</h1>
           <input class="btn btn-large btn-danger my-3 mx-4" type="button" id="close-btn" @click="closeSession()" value="방 나가기">
         </div>
         <div class="d-flex justify-content-between">
@@ -41,6 +42,9 @@
     </div>
 </template>
 <style scoped>
+  #join-btn{
+    width: 20vh;
+  }
   #chat-container {
     position: absolute;
     top: -90px;
@@ -133,10 +137,7 @@ export default {
 
     const joinSession = function () {
       state.OV = new OpenVidu()
-
       state.session = state.OV.initSession()
-      // state.mySessionId = state.teamName
-      console.log(state.mySessionId)
       state.session.on('streamCreated', ({ stream }) => {
         const subscriber = state.session.subscribe(stream)
         state.subscribers.push(subscriber)
@@ -148,10 +149,14 @@ export default {
 					state.subscribers.splice(index, 1)
 				}
 			})
-
+      state.myUserName = state.userName
+      state.mySessionId = state.roomId
+      console.log("=======================================ㄴㄴㄴㄴㄴ")
+      console.log(state.myUserName)
       state.session.on('exception', ({ exception }) => {
 				console.warn(exception)
 			})
+
 
       // 채팅
       state.session.on('signal:chat', (event) => {
@@ -287,16 +292,14 @@ export default {
     const getTeamInfo = function () {
       store.dispatch('root/getTeamInfoDetail', route.params.conferenceId)
       .then(res => {
-        state.teamName = `${res.data.teamName}팀의 방`
+        state.teamName = res.data.teamName
       })
       .catch(err => {
         console.log(err)
       })
     }
-
-    // takeProfile()
-    // getTeamInfo()
-
+    getTeamInfo()
+    takeProfile()
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager,
           getToken, createSession, createToken, sendMessage, closeSession, takeProfile, getTeamInfo }
   }
