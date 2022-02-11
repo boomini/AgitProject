@@ -313,7 +313,8 @@ export default {
             const year = arr[0]
             const month = arr[1]
             const day = arr[2]
-            store.dispatch('root/requestRegister', { userId: state.form.id, password: state.form.password, name: state.form.name, year: year, month: month, day: day, nickName: state.form.nickname })
+            // store.dispatch('root/requestRegister', { userId: state.form.id, password: state.form.password, name: state.form.name, year: year, month: month, day: day, nickName: state.form.nickname })
+            store.dispatch('root/requestRegister', { userId: state.form.id, password: state.form.password, name: state.form.name, birthDay: state.form.birthDate, nickName: state.form.nickname })
             .then(function (result) {
               console.log('여기서 걸림')
               // console.log('로딩 스피너 넣으면 됨')

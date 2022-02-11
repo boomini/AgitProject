@@ -154,7 +154,7 @@ export default {
       store.commit('root/setMenuActive', 0)
       store.commit('root/setUserTeam', [])
       router.push({
-        name: 'home',
+        name: 'intro',
       })
     }
 

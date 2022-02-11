@@ -172,4 +172,9 @@ h4:after {
   left: 0.5em;
   margin-right: -50%;
 }
+
+.el-overlay {
+  animation: unfoldIn 0.25s cubic-bezier(.165,.84,.44,1) forwards;
+  -webkit-animation: unfoldIn 0.25s cubic-bezier(.165,.84,.44,1) forwards;
+}
 </style>
