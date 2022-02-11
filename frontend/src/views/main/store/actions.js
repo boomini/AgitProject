@@ -107,7 +107,7 @@ export function getTeamInfoDetail ({ state }, payload) {
 // 팀 생성하기
 export function registerTeam ({ state }, payload) {
   console.log('registerTeam', state, payload)
-  const url = `/team?userId=${payload.userId}`
+  const url = '/team'
   const teamDto = payload.teamDto
   const token = payload.token
   return $axios({ method: 'post', url: url, data: teamDto, headers: { Authorization: `Bearer ${token}`}})

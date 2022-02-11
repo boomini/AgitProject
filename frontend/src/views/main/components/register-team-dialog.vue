@@ -17,9 +17,9 @@
       <el-form-item prop="teamName" label="방이름" :label-width="state.formLabelWidth">
         <el-input v-model="state.form.teamName" autocomplete="off" id="id-input" placeholder="방 이름을 입력해주세요."></el-input>
       </el-form-item>
-      <el-form-item prop="teamPassword" label="방 비밀번호" :label-width="state.formLabelWidth">
+      <!-- <el-form-item prop="teamPassword" label="방 비밀번호" :label-width="state.formLabelWidth">
         <el-input v-model="state.form.teamPassword" autocomplete="off" show-password placeholder="비밀번호를 설정해주세요."></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item prop="teamDescription" label="팀 소개">
         <el-input
           v-model="state.form.teamDescription"
@@ -32,8 +32,8 @@
         >
         </el-input>
       </el-form-item>
-      <el-form-item prop="teamPicture" label="팀 사진" :label-width="state.formLabelWidth" >
-        <!-- <el-input v-model="state.form.teamPicture" autocomplete="off" placeholder="사진 등록 버튼 추가"></el-input> -->
+      <!-- <el-form-item prop="teamPicture" label="팀 사진" :label-width="state.formLabelWidth" >
+        <el-input v-model="state.form.teamPicture" autocomplete="off" placeholder="사진 등록 버튼 추가"></el-input>
         <input
             type="file"
             accept="image/*"
@@ -46,7 +46,7 @@
       </el-form-item>
       <el-form-item prop="teamMember" label="팀원 수" :label-width="state.formLabelWidth" >
         <el-input v-model="state.form.teamMember" autocomplete="off" placeholder="팀원은 몇명이에요?"></el-input>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
 
 
@@ -104,10 +104,10 @@ export default {
 
     const handleClose = function () {
       state.form.teamName = ''
-      state.form.teamPassword = ''
+    //  state.form.teamPassword = ''
       state.form.teamDescription = ''
-      state.form.teamPicture = null
-      state.form.teamMember = ''
+    //  state.form.teamPicture = null
+    //  state.form.teamMember = ''
       emit('closeRegisterTeamDialog')
     }
 
@@ -127,17 +127,16 @@ export default {
     const registerTeam = function () {
       const token = store.getters['root/getJWTToken']
       const userId = jwt_decode(token).sub
-      console.log(state.form.teamPicture.preview)
       const teamDto = {
         'teamBoss': userId,
         'teamDescription': state.form.teamDescription,
-        'teamMember': state.form.teamMember,
-        'teamPicture': state.form.teamPicture.preview,
+       // 'teamMember': state.form.teamMember,
+       // 'teamPicture': state.form.teamPicture.preview,
         'teamName': state.form.teamName,
-        'teamPassword': state.form.teamPassword
+        //'teamPassword': state.form.teamPassword
       }
 
-      store.dispatch('root/registerTeam', { 'teamDto': teamDto, 'userId': userId, 'token': token })
+      store.dispatch('root/registerTeam', { 'teamDto': teamDto, 'token': token })
       .then(function (result) {
         alert('방 생성 성공')
         // 유저가 가입한 방 정보 갱신
@@ -161,7 +160,7 @@ export default {
 <style>
 .register-team-dialog {
   width: 500px !important;
-  height: 650px;
+  height: 350px;
 }
 .register-team-dialog .checkbox .el-form-item__content {
   float: left;

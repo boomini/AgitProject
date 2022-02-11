@@ -326,11 +326,6 @@ export default {
                   button: "확인",
                 });
               }, 500)
-
-              router.push({
-                name: 'home',
-              })
-
               handleClose()
             })
             .catch(function (error) {
