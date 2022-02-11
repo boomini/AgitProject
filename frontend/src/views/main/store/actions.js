@@ -51,7 +51,21 @@ export function editProfile ({ state }, payload) {
   const url = '/user'
   const token = payload.token
   const body = payload.body
-  // console.log(body)
+  console.log(body)
+  console.log('닉네임')
+  return $axios({ method: 'patch', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
+  // return $axios.patch(url, body)
+}
+
+// 생일 수정
+export function editBirthday ({ state }, payload) {
+  // console.log('editProfile', state, payload)
+  // console.log(payload)
+  const url = '/user'
+  const token = payload.token
+  const body = payload.body
+  console.log(body)
+  console.log('생일')
   return $axios({ method: 'patch', url: url, headers: { Authorization: `Bearer ${token}`}, data: body})
   // return $axios.patch(url, body)
 }
@@ -132,8 +146,6 @@ export function rejectTeamMember ({ state }, payload) {
 
 // 팀원 조회
 export function takeMember ({ state }, payload) {
-  console.log(payload.body)
-  console.log('안돠나')
   const teamId = payload.body.teamId
   const url = `/team/${teamId}/users`
   console.log(url)
