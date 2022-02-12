@@ -7,13 +7,13 @@
         </div>
         <div class="col-md-9" style="margin-left: 0px;">
           <div class="card-body">
-            <h5 class="card-title" style="margin-bottom: 5%;">{{ state.info.userId }}님의 프로필</h5>
-            <p style="margin-bottom: 10px;">ID : {{ state.info.userId }}</p>
+            <h5 class="card-title" style="margin-bottom: 5%;">{{ state.profileinfo.userId }}님의 프로필</h5>
+            <p style="margin-bottom: 10px;">ID : {{ state.profileinfo.userId }}</p>
             <div style="margin-bottom: 10px;">
-              <span>Nickname : {{ state.info.nickName }}</span> <el-button style=" min-height: 15px; padding: 10px; margin-left: 10px" @click="state.nicknameDialogOpen = true">수정하기</el-button>
+              <span>Nickname : {{ state.profileinfo.nickName }}</span> <el-button style=" min-height: 15px; padding: 10px; margin-left: 10px" @click="state.nicknameDialogOpen = true">수정하기</el-button>
             </div>
-            <p>Birthday : {{ state.info.birthDay }}</p>
-            <p class="card-text"><small class="text-muted">최초 가입일 : {{state.info.cdate.slice(2, 10)}} </small></p>
+            <p>Birthday : {{ state.profileinfo.birthDay }}</p>
+            <p class="card-text"><small class="text-muted">최초 가입일 : {{state.profileinfo.cdate.slice(2, 10)}} </small></p>
             <el-button type="danger" @click="deleteuserId">회원 탈퇴</el-button>
           </div>
         </div>
@@ -42,14 +42,14 @@
 
     <nickname-dialog
       :open="state.nicknameDialogOpen"
-      :info="state.info"
+      :info="state.profileinfo"
       @closeNicknameDialog="onCloseNicknameDialog"
       @edit-nickname="editNickname"
       />
 
     <birthday-dialog
     :open="state.birthdayDialogOpen"
-    :info="state.info"
+    :info="state.profileinfo"
     @closeBirthdayDialog="onCloseBirthdayDialog"
     @create-birthday="createBirthday"
     />
@@ -75,8 +75,8 @@ export default {
     const store = useStore()
     const router = useRouter()
     const state = reactive({
-      info: {
-        birthDay: '',
+      profileinfo: {
+        birthDay: '1970-01-01',
         name: '',
         nickName: '',
         userId: '',
@@ -85,7 +85,7 @@ export default {
         emailType: '',
         password: ''
       },
-      // info: null,
+      // profileinfo: null,
       nicknameDialogOpen : false,
       birthdayDialogOpen : false,
     })
@@ -94,9 +94,9 @@ export default {
       const token = store.getters['root/getJWTToken']
       store.dispatch('root/getProfile', token)
       .then(res => {
-        state.info = res.data
-        console.log(res)
-        if (state.info.birthDay == null) {
+        state.profileinfo = res.data
+        console.log(res.data.birthDay)
+        if (state.profileinfo.birthDay == null) {
           state.birthdayDialogOpen = true
         }
       })
@@ -106,17 +106,17 @@ export default {
     }
 
     const editNickname = (nickname) => {
-      state.info.nickName = nickname.nickname
+      state.profileinfo.nickName = nickname.nickname
     }
 
     const createBirthday = (birthday) => {
-      state.info.birthDay = birthday.birthday
+      state.profileinfo.birthDay = birthday.birthday
     }
 
     const deleteuserId = function () {
       const token = store.getters['root/getJWTToken']
       const body = {
-        'userId': state.info.userId,
+        'userId': state.profileinfo.userId,
       }
       store.dispatch('root/deleteUser',{ 'body': body, 'token': token})
       .then(res => {

@@ -461,6 +461,7 @@ export default {
         store.dispatch('root/getBoardDetail', payload)
         .then(function (result) {
           console.log('게시판 상세조회 성공')
+          console.log(result.data);
           state.boardData = result.data
           state.boardData['uploadDate'] = uploadDate
           state.boardOpen = true
@@ -614,7 +615,7 @@ export default {
     onBeforeMount(() => {
       let url = window.location.href;
       state.team.teamId = url.split('/').reverse()[0];
-
+      console.log(state.team.teamId);
       const today = new Date()
       const year = today.getFullYear()
       const month = convertMonth(today.getMonth() + 1)

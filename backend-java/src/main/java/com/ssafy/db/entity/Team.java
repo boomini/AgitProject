@@ -17,9 +17,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "team", uniqueConstraints = {@UniqueConstraint(
-        name = "TEAM_ID_UNIQUE", columnNames = {"teamName"}
-)})
+@Table(name = "team")
 @EntityListeners(AuditingEntityListener.class)
 @DynamicUpdate
 public class Team extends BaseEntity{
