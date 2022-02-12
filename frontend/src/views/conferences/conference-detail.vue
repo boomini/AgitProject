@@ -12,17 +12,13 @@
             </p>
           </div> -->
     <div v-if="!state.session">
-      <div class="d-flex flex-column align-items-center my-5">
+      <div class="d-flex flex-column justify-content-center align-items-center offset-3 join-room">
         <h1>회의실 참가하기!</h1>
         <h3 class="my-3">현재 접속하려는 방: {{ state.teamName }}의 방</h3>
         <div>
-          <button
-            id="join-btn"
-            class="btn btn-lg btn-success my-3"
-            @click="joinSession()"
-          >
-            Join!
-          </button>
+          <el-button type="primary" @click="joinSession()" id="join-btn">
+            <i class="fa-solid fa-right-to-bracket"></i>
+          </el-button>
         </div>
       </div>
     </div>
@@ -31,30 +27,30 @@
       <div class="d-flex offset-1">
         <!-- 비디오 토글 버튼 -->
           <div v-if="state.publisher.stream.videoActive">
-            <i class="fa-solid fa-video-slash toggle-icon" @click="changeVideoState()"></i>
+            <i class="fa-solid fa-video-slash toggle-icon cursor" @click="changeVideoState()"></i>
           </div>
           <div v-else>
-            <i class="fa-solid fa-video toggle-icon" @click="changeVideoState()"></i>
+            <i class="fa-solid fa-video toggle-icon cursor" @click="changeVideoState()"></i>
           </div>
           <!-- 오디오 토글 버튼 -->
           <div v-if="state.publisher.stream.audioActive">
-           <i
-              class="fa-solid fa-microphone-slash toggle-icon"
-              @click="changeAudioState()"
-            ></i>
+           <i class="fa-solid fa-microphone-slash toggle-icon cursor" @click="changeAudioState()"></i>
           </div>
           <div v-else>
-            <i class="fa-solid fa-microphone toggle-icon" @click="changeAudioState()"></i>
+            <i class="fa-solid fa-microphone toggle-icon cursor" @click="changeAudioState()"></i>
           </div>
         <div class="d-flex justify-content-between offset-2" id="header">
           <h1>{{ state.teamName }}의 방입니다.</h1>
-            <input
+            <!-- <input
               class="btn btn-large btn-danger my-3 mx-4"
               type="button"
               id="close-btn"
               @click="closeSession()"
               value="방 나가기"
-            />
+            /> -->
+          <el-button type="danger" @click="closeSession()">
+            <i class="fa-solid fa-xmark"></i>
+          </el-button>
         </div>
       </div>
       <div class="d-flex justify-content-between">
@@ -77,8 +73,19 @@
   </div>
 </template>
 <style scoped>
+.join-room{
+  margin-top: 20vh;
+  border-color: black;
+  border-style: solid;
+  width: 100vh;
+  height: 40vh;
+  background-color: rgb(87, 193, 129);
+}
+.cursor{
+  cursor: pointer;
+}
 #join-btn {
-  width: 20vh;
+  width: 15vh;
 }
 #video-btn {
   width: 10vh;
@@ -87,11 +94,11 @@
 #chat-container {
   position: absolute;
   top: -90px;
-  left: -100px;
+  left: -110px;
   margin-left: 0;
   margin-top: 0;
   z-index: 10;
-  background-color: white;
+  background-color: #427b9a;
   width: 125%;
   height: 100vh;
   background-size: cover;
@@ -106,10 +113,11 @@
 }
 .toggle-icon{
   width: 12vh;
-  transform: scale(2) translate(0, 150%);
+  transform: scale(2) translate(20%, 100%);
 }
 #header{
-  width: 120vh;
+  width: 132vh;
+  margin-bottom: 2vh;
 }
 </style>
 <script>

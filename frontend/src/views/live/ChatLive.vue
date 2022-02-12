@@ -18,12 +18,12 @@
         :height="state.form.chatHeight"
       >
         <div
-          class="mt-2 text-left message"
+          class="mt-2 mx-2 text-left message"
           v-for="(message, i) of state.messages"
           :key="i"
         >
           <div class="message-title">
-            <span class="mr-2 message-header">{{ message.sender }}</span>
+            <span class="mr-2 message-header">{{ message.sender }} :</span>
             <span class="m-3 message-header">{{ message.time }}</span>
           </div>
           <div>
@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="footer d-flex mt-auto">
-        <div class="col-10 px-1 py-0">
+        <div class="px-2 py-0">
           <input
             class="text-box"
             v-model="state.form.message"
@@ -44,7 +44,7 @@
             class="send-btn"
             @click="clickSendMessage"
           >
-            <i class="fas fa-paper-plane"></i>
+            <i class="fas fa-paper-plane color-g"></i>
           </button>
         </div>
       </div>
@@ -102,6 +102,9 @@ export default {
   border-radius: 3%;
   background-color: #3e7090;
 }
+.color-g{
+  color: #323f45;
+}
 
 .header {
   position: relative;
@@ -115,11 +118,12 @@ export default {
 }
 
 .text-box {
-  background-color: #ffffff;
-  width: 100%;
-  border-radius: 20px;
+  background-color: #7d7d7d;
+  width: 35vh;
+  border-radius: 12px;
   color: black;
   padding-left: 10px;
+  height: 5svh;
 }
 
 .text-box:focus {

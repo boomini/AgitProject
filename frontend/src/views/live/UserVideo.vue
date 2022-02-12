@@ -18,12 +18,12 @@
     border-radius: 2%;
     border-width: 2px;
     border-style: solid;
+    background-color:   rgb(99, 97, 97);
   }
 
   #user-video p{
     display: inline-block;
-    background: #f8f8f8;
-    color: #3e3b3b;
+    color: #322f2f;
     font-weight: bold;
     border-bottom-right-radius: 4px;
   }
