@@ -20,4 +20,6 @@ public interface TeamService {
     void changeTeamMemberConfirm(Long teamId, String userId);
 
     void changeTeamMemberReject(Long teamId, String userId);
+
+    boolean checkStateIfTeamPossible(Long teamId);
 }

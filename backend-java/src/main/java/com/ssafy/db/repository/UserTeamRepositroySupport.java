@@ -44,7 +44,8 @@ public class UserTeamRepositroySupport {
                 .from(qUserTeam)
                 .join(qUser)
                 .on(qUserTeam.user.id.eq(qUser.id))
-                .where(qUserTeam.team.id.eq(id))
+                .where(qUserTeam.team.id.eq(id)
+                        .and(qUserTeam.state.eq(1)) )
                 .fetch();
 
         return Optional.ofNullable(userList);

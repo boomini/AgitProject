@@ -83,6 +83,8 @@
               >
             </div>
               <div class="page-wrapper">
+
+                <div class="box sb4 rounded" style="margin-bottom: 200px;">흔들리는버튼</div>
                 <div class="loader">
                   <div class="jelly">
                     <div class="body"></div>
@@ -92,11 +94,11 @@
                   </div>
                   <div class="shadow"></div>
                 </div>
+                <div class="box sb3 rounded" style="margin-bottom: 250px; margin-left:-20px;">흔들리는버튼</div>
               </div>
             <div>
               <el-button type="text" @click="state.afterDialogOpen = true" style="margin-right:100px; font-size: 1.5rem; color: #13C7A3"
-                >다음 약속</el-button
-              >
+                >다음 약속</el-button>
             </div>
           </div>
         </div>
@@ -104,9 +106,9 @@
       <div class="iphone" style="margin-left: -50px">
         <div class="header">
           <div class="order-summary">
-            <div class="order-status">{{ state.profileinfo.userId }}</div>
+            <div class="order-status">ID: {{ state.profileinfo.userId }}</div>
             <div class="order-date">
-            {{ state.profileinfo.nickName }} <el-button style=" min-height: 15px; padding: 10px; margin-left: 10px; font-size: 1.5rem;" @click="state.nicknameDialogOpen = true">수정하기</el-button>
+            닉네임: {{ state.profileinfo.nickName }}<el-button type="text" style=" min-height: 15px; padding: 10px; font-size: 1.5rem;" @click="state.nicknameDialogOpen = true">수정하기</el-button>
             </div>
             <div class="order-day">
             {{ state.profileinfo.nickName }}의 생일: {{ state.profileinfo.birthDay }}
@@ -115,6 +117,13 @@
         </div>
         <div class="hero-img-container">
           <img src="https://drive.google.com/uc?id=15iXUI6DkRr5Zcp0yH5uF2U47ycr-WzUY" class="hero-img">
+        </div>
+        <div>
+          <p>들어갈 버튼 궁리(이용약관, 이미지 변경 등)</p>
+          <p>✨🥒🥪</p>
+
+          <p>이모지<i class="em em-astonished" aria-role="presentation" aria-label="ASTONISHED FACE"></i></p>
+          <el-button type="text" style=" min-height: 15px; padding: 10px; margin-left: 10px; font-size: 1.5rem;" @click="state.termsDialogOpen = true">이용약관</el-button>
         </div>
       </div>
     </div>
@@ -140,6 +149,10 @@
   @closeBirthdayDialog="onCloseBirthdayDialog"
   @create-birthday="createBirthday"
   />
+  <terms-dialog
+  :open="state.termsDialogOpen"
+  @closeTermsDialog="onCloseTermsDialog"
+  />
 
 </template>
 
@@ -151,6 +164,8 @@ import BeforeDialog from './components/before-dialog.vue'
 import AfterDialog from './components/after-dialog.vue'
 import NicknameDialog from './components/nickname-dialog.vue'
 import BirthdayDialog from './components/birthday-dialog.vue'
+import TermsDialog from './components/terms-dialog.vue'
+import _ from "lodash"
 
 export default {
   name: 'schedule',
@@ -159,10 +174,11 @@ export default {
     AfterDialog,
     NicknameDialog,
     BirthdayDialog,
+    TermsDialog,
   },
 
   setup() {
-  const centerDialogVisible = ref(false)
+
   // let beforepro = ''
   // let afterpro = ''
   const store = useStore()
@@ -195,6 +211,7 @@ export default {
     beforeDialogOpen: false,
     nicknameDialogOpen : false,
     birthdayDialogOpen : false,
+    termsDialogOpen : false,
   })
   const beforeschedule = []
   const afterschedule = []
@@ -214,6 +231,11 @@ export default {
         let date = today.getDate()
         state.schedulelength = res.data.length
         state.infos = res.data.slice().reverse()
+        // console.log(typeof(state.infos))
+        // console.log(state.infos)
+        // console.log('로데시 장전!')
+        // console.log(_.sortBy(state.infos, 'dday'))
+        state.infos = _.sortBy(state.infos, 'dday')
         for (var i = 0; i < state.schedulelength; i++) {
           // console.log(state.infos[i].startDate)
           // let tempday = Number(state.infos[i].startDate.slice(8,12))
@@ -232,7 +254,7 @@ export default {
             beforeday = b
           }
         }
-        console.log(beforeday)
+        // console.log(beforeday)
         state.pros.beforepro.push(beforeschedule[beforeday])
         // console.log(beforepro)
         let aftermin = 32
@@ -243,7 +265,7 @@ export default {
             afterday = a
           }
         }
-        console.log(afterday)
+        // console.log(afterday)
         state.pros.afterpro.push(afterschedule[afterday])
         // console.log(afterpro)
         // state.infos = computed(() => { return _.orderBy(state.infos, 'dday')} )
@@ -260,10 +282,10 @@ export default {
   // let date = today.getDate()
   // let realday = `${year}-${month}-${date}`
   // console.log(realday)
-  console.log('맞냐')
-  console.log(beforeschedule.sort())
-  console.log(afterschedule.sort())
-  console.log(state.pros.beforepro)
+  // console.log('맞냐')
+  // console.log(beforeschedule.sort())
+  // console.log(afterschedule.sort())
+  // console.log(state.pros.beforepro)
   // console.log(beforepro)
   // console.log(afterpro)
 
@@ -356,8 +378,12 @@ export default {
     state.beforeDialogOpen = false
   }
 
+  const onCloseTermsDialog = function () {
+    state.termsDialogOpen = false
+  }
 
-    return { router, takeProfile, centerDialogVisible, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog, onCloseNicknameDialog, editNickname, onCloseBirthdayDialog, createBirthday }
+
+    return { router, takeProfile, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog, onCloseNicknameDialog, editNickname, onCloseBirthdayDialog, createBirthday, onCloseTermsDialog }
   }
 }
 
@@ -365,6 +391,62 @@ export default {
 </script>
 
 <style>
+.box {
+  animation: bounce-in 3s 1;
+  width: 150px;
+  background: #00bfb6;
+  padding: 20px;
+  text-align: center;
+  font-weight: 900;
+  color: #fff;
+  position: relative;
+}
+
+.sb3:before {
+content: "";
+width: 0px;
+height: 0px;
+position: absolute;
+border-left: 10px solid #00bfb6;
+border-right: 10px solid transparent;
+border-top: 10px solid #00bfb6;
+border-bottom: 10px solid transparent;
+left: 19px;
+bottom: -19px;
+}
+
+.sb4:before {
+content: "";
+width: 0px;
+height: 0px;
+position: absolute;
+border-left: 10px solid transparent;
+border-right: 10px solid #00bfb6;
+border-top: 10px solid #00bfb6;
+border-bottom: 10px solid transparent;
+right: 19px;
+bottom: -19px;
+}
+
+  @keyframes bounce-in {
+  from, 20%, 40%, 60%, 80%, to {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1); }
+  0% {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3); }
+  30% {
+    transform: scale3d(1.1, 1.1, 1.1); }
+  60% {
+    transform: scale3d(0.9, 0.9, 0.9); }
+  70% {
+    opacity: 1;
+    transform: scale3d(1.03, 1.03, 1.03); }
+  80% {
+    transform: scale3d(0.97, 0.97, 0.97); }
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1); } }
+
   /* test */
   .el-carousel__item {
   background-color: #FAFAA0;
@@ -405,7 +487,7 @@ export default {
   .loader {
     position: relative;
     width: 100px;
-    margin: 50px;
+    margin: 10px;
   }
 
   .loader .jelly {
@@ -413,22 +495,22 @@ export default {
   }
 
   .loader .body {
-    width: 100px;
-    height: 200px;
-    border-radius: 50px;
+    width: 80px;
+    height: 160px;
+    border-radius: 40px;
     background: linear-gradient( to bottom,#32BEBE 60%, yellow);
     animation: body 1s infinite;
   }
 
   .loader .mouth {
     position: absolute;
-    top: 85px;
-    left: 27px;
+    top: 70px;
+    left: 20px;
     width: 40px;
     height: 20px;
     border: 3px solid #2a333b;
     border-radius: 0 0 40px 40px;
-    background-color: #363b2a;
+    background-color: #787878;
     overflow: hidden;
     z-index: 1;
   }
@@ -442,12 +524,12 @@ export default {
     width: 40px;
     height: 20px;
     border-radius: 50%;
-    background-color: #13C7A3;
+    background-color: #FF0000;
   }
 
   .loader .eye {
     position: absolute;
-    top: 45px;
+    top: 35px;
     width: 10px;
     height: 20px;
     border-radius: 50%;
@@ -456,11 +538,11 @@ export default {
   }
 
   .loader .eye:nth-child(even) {
-    left: 30px;
+    left: 25px;
   }
 
   .loader .eye:nth-child(odd) {
-    right: 30px;
+    left: 45px;
   }
 
   .loader .shadow {

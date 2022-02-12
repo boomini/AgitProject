@@ -46,6 +46,13 @@ function makeRoutesFromMenu () {
   })
 
   routes.push({
+    path: '/',
+    name: 'Intro',
+    component: Intro,
+    props: true,
+  })
+
+  routes.push({
     path: '/profile/profile',
     name: 'Profile',
     component: Profile

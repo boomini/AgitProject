@@ -260,7 +260,7 @@ export default {
       localStorage.removeItem('JWT')
       store.commit('root/setMenuActive', 2)
       router.push({
-        name: 'schedule',
+        name: 'Intro',
       })
     }
 

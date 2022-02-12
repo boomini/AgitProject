@@ -6,18 +6,21 @@
     <div class="hide-on-small">
       <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"/></div>
       <div class="tool-wrapper">
-        <div class="search-field">
+        <!-- <div class="search-field">
           <el-input
             placeholder="검색"
             prefix-icon="el-icon-search"
             v-model="state.searchValue">
           </el-input>
-        </div>
+        </div> -->
         <div v-if="state.isLogin === null" class="button-wrapper">
           <el-button type="success" @click="clickSignup">회원가입</el-button>
           <el-button type="primary" @click="clickLogin">로그인</el-button>
         </div>
         <div v-else class="button-wrapper">
+          <el-button type="danger" @click="clickIntro">소개페이지</el-button>
+          <el-button type="warning" @click="clickCenter">고객센터</el-button>
+          <el-button type="info" @click="clickSchedule">일정관리</el-button>
           <el-button type="success" @click="clickProfile">마이 페이지</el-button>
           <el-button type="primary" @click="clickLogout">로그아웃</el-button>
         </div>
@@ -154,8 +157,13 @@ export default {
       store.commit('root/setMenuActive', 0)
       store.commit('root/setUserTeam', [])
       router.push({
-        name: 'home',
+<<<<<<< HEAD
+        name: 'Intro',
+=======
+        name: 'intro',
+>>>>>>> feature/front-board
       })
+
     }
 
     const clickProfile = function () {
@@ -173,11 +181,35 @@ export default {
       })
     }
 
+    const clickIntro = function () {
+      const getMenus = store.getters['root/getMenus'];
+      const commonMenuKeys = Object.keys(getMenus)
+      router.push({
+        name: commonMenuKeys[0]
+      })
+    }
+
+    const clickCenter = function () {
+      const getMenus = store.getters['root/getMenus'];
+      const commonMenuKeys = Object.keys(getMenus)
+      router.push({
+        name: commonMenuKeys[1]
+      })
+    }
+
+    const clickSchedule = function () {
+      const getMenus = store.getters['root/getMenus'];
+      const commonMenuKeys = Object.keys(getMenus)
+      router.push({
+        name: commonMenuKeys[2]
+      })
+    }
+
     const changeCollapse = () => {
       state.isCollapse = !state.isCollapse
     }
 
-    return { state, menuSelect, clickLogo, clickLogin, clickSignup, changeCollapse, clickLogout, clickProfile }
+    return { state, menuSelect, clickLogo, clickLogin, clickSignup, changeCollapse, clickLogout, clickProfile, clickIntro, clickCenter, clickSchedule }
   }
 }
 </script>
@@ -262,9 +294,14 @@ export default {
   }
 
   /*Desktop - Need to add Class if Need*/
+  .hide-on-small{
+    width: 100%;
+    display: flex;
+  }
+
   .main-header .hide-on-small .logo-wrapper {
+    width: 20%;
     cursor: pointer;
-    display: inline-block;
   }
   .main-header .hide-on-small .logo-wrapper .ic.ic-logo {
     width: 70px;
@@ -274,15 +311,16 @@ export default {
     background-image: url('../../../assets/images/agit_logo.png');
   }
   .main-header .hide-on-small .tool-wrapper {
-    width: 50%;
-    float: right;
+    width: 80%;
+    display: flex;
+    justify-content: end;
   }
   .main-header .hide-on-small .tool-wrapper .button-wrapper {
-    width: 45%;
     float: right;
+    display: flex;
   }
   .main-header .hide-on-small .tool-wrapper .button-wrapper .el-button {
-    width: 45%;
+    width: 120px;
     height: 50px;
     cursor: pointer;
     margin-right: 1%;
