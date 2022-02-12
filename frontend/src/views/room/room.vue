@@ -18,10 +18,22 @@
 
           <span>
             <div class="d-flex justify-content-between mb-2">
-              <el-button type="danger" @click="state.createArticleDialogOpen = true">게시글 작성</el-button>
-              <el-button type="success" @click="state.createScheduleDialogOpen = true">일정 추가</el-button>
-              <el-button type="warning" @click="state.uploadImageDialogOpen = true">사진 등록</el-button>
-              <el-button type="warning" @click="state.uploadVideoDialogOpen = true">동영상 등록</el-button>
+              <el-button type="danger" @click="state.createArticleDialogOpen = true">
+                <!-- 게시글 작성 -->
+                <i class="fa-regular fa-pen-to-square"></i>
+              </el-button>
+              <el-button type="success" @click="state.createScheduleDialogOpen = true">
+                <!-- 일정 추가 -->
+                <i class="fa-regular fa-calendar-days"></i>
+              </el-button>
+              <el-button type="warning" @click="state.uploadImageDialogOpen = true">
+                <!-- 사진 등록 -->
+                <i class="fa-regular fa-images"></i>
+              </el-button>
+              <el-button type="warning" @click="state.uploadVideoDialogOpen = true">
+                <!-- 동영상 등록 -->
+                <i class="fa-solid fa-video"></i>
+              </el-button>
             </div>
             <div class="d-flex justify-content-between">
               <el-button size="small" @click="selectDate('prev-year')"
@@ -207,6 +219,7 @@
 </template>
 
 <script>
+
 import { ref, reactive, computed, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
