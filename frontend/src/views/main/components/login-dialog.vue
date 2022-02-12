@@ -20,19 +20,17 @@
 
     <!-- footer -->
     <template #footer>
-      <span class="dialog-footer">
+      <div class="dialog-footer">
         <el-button type="primary" @click="clickLogin" v-loading.fullscreen="loading">로그인</el-button>
         <div class="easy-login">
-          <div class="line"></div>
-          <div style="text-align:center">간편로그인</div>
-          <div>
-            <button @click="handleClickSignIn" class='easy-custom-btn google-btn' v-loading.fullscreen="loading"></button>
+          <div class="login-title">간편로그인</div>
+          <div class="login-btn-wrap">
+            <button @click="handleClickSignIn" class='easy-custom-btn google-btn'></button>
             <button @click="handleClickSignIn" class='easy-custom-btn naver-btn'></button>
             <button @click="handleClickSignIn" class='easy-custom-btn kakao-btn'></button>
           </div>
         </div>
-
-      </span>
+      </div>
     </template>
   </el-dialog>
 
@@ -48,8 +46,7 @@
 }
 .login-dialog .el-form-item__content {
   margin-left: 0 !important;
-  float: right;
-  width: 200px;
+  width: 220px;
   display: inline-block;
 }
 .login-dialog .el-form-item {
@@ -63,30 +60,39 @@
   display: none;
 }
 .login-dialog .el-dialog__footer {
-  margin: 0 calc(50% - 80px);
+  width: 100%;
   padding-top: 0;
   display: inline-block;
+}
+.login-dialog .dialog-footer{
+  text-align: center;
 }
 .login-dialog .dialog-footer .el-button {
   width: 120px;
 }
 .easy-login{
-  font-size:11px;
+  font-size: 11px;
+  margin-top: 5%;
 }
-.line {
-  width: 30px;
-  height: 30px;
-  border:1px solid var(--el-border-color-base);
+
+.easy-login .login-title{
+  font-size: 0.95rem;
 }
+
 .easy-custom-btn{
-  width: 25px !important;
-  height: 30px !important;
-  margin:auto;
+  width: 40px !important;
+  height: 35px !important;
+  margin: auto;
   margin-top: 15px;
   background-size: contain;
   background-repeat: no-repeat;
   border: 0px;
-  text-align:center;
+  text-align: center;
+  background-color: #fff;
+}
+
+.easy-custom-btn:nth-child(2){
+  margin: 0 5px;
 }
 
 .google-btn{
