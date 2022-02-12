@@ -186,6 +186,7 @@ export default {
       // console.log(state.mySessionId)
       state.session = state.OV.initSession()
       state.session.on('streamCreated', ({ stream }) => {
+        console.log(stream)
         const subscriber = state.session.subscribe(stream)
         state.subscribers.push(subscriber)
       })

@@ -72,7 +72,7 @@
                   <span class="badge">4</span>
                 </div>
               </div> -->
-              <div v-if="data.day.toString() in state.dict.eventDictEnd">
+              <div v-if="data.day.toString() in state.dict.eventDictEnd && data.type === 'current-month'">
                 <div class="badge-tag article" v-for="(item, index) in state.dict.eventDictEnd[data.day.toString()]" :key="index">
                   <div class="ms-3">
                     {{ item.title }}
@@ -82,7 +82,7 @@
                   </div>
                 </div>
               </div>
-              <div v-else-if="data.day.toString() in state.dict.eventDictStart">
+              <div v-if="data.day.toString() in state.dict.eventDictStart && data.type === 'current-month'">
                 <div class="badge-tag article" v-for="(item, index) in state.dict.eventDictStart[data.day.toString()]" :key="index">
                   <div class="ms-3">
                     {{ item.title }}
@@ -159,13 +159,15 @@
   <upload-image-dialog
     :open="state.uploadImageDialogOpen"
     :info="state.team.teamId"
-    @closeUploadImageDialog="onCloseUploadImageDialog"/>
+    @closeUploadImageDialog="onCloseUploadImageDialog"
+    @createImage="onCreateEvent"/>
 
   <!-- 동영상 추가 다이얼로그 -->
   <upload-video-dialog
     :open="state.uploadVideoDialogOpen"
     :info="state.team.teamId"
-    @closeUploadVideoDialog="onCloseUploadVideoDialog"/>
+    @closeUploadVideoDialog="onCloseUploadVideoDialog"
+    @createVideo="onCreateEvent"/>
 
   <!-- 게시글 추가 다이얼로그 -->
   <create-article-dialog
@@ -337,6 +339,8 @@ export default {
         state.dict.eventDictEnd = {}
         convertEventToDict(result.data, state.dict.eventDictStart, 'startDate', 'endDate')
         convertEventToDict(result.data, state.dict.eventDictEnd, 'endDate', 'startDate')
+        console.log(state.dict.eventDictEnd)
+        console.log(state.dict.eventDictStart)
       })
       .catch(function (error) {
         console.log('일정 가져오는데 실패하였습니다.')
