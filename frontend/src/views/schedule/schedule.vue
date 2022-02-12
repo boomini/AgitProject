@@ -38,16 +38,20 @@
         </h3>
       </el-carousel-item>
     </el-carousel>
+
     </div>
     <!-- 확인필요! -->
     <div v-else-if = "state.infos.length === 0">
-      <el-empty :image-size="200"></el-empty>
+      <el-empty :image-size="200"><p>일정을 추가해주세요</p></el-empty>
     </div>
   </div>
   <div style="width:100%;">
     <div style="width: 83vw;" class="d-flex flex-row">
       <div id="scape">
         <div class="landing">
+          <div id="clock" style="z-index:0; top:30px;" class="mx-0" >
+            <p class="date">{{ state.clock.date }}</p>
+          </div>
           <div class="mountain-scene">
             <div id="clouds">
               <div class="cloud"></div>
@@ -84,7 +88,8 @@
             </div>
               <div class="page-wrapper">
 
-                <div class="box sb4 rounded" style="margin-bottom: 200px;">흔들리는버튼</div>
+                <div class="box sb4 rounded-pill" style="margin-bottom: 200px;" v-if="todayschedule.length >= 1">오늘 일정이<br>{{ todayschedule.length }}개 있어요!</div>
+                <div class="box sb4 rounded-pill" style="margin-bottom: 200px;" v-else-if="todayschedule.length == 0">오늘은 일정이<br> 없어요!</div>
                 <div class="loader">
                   <div class="jelly">
                     <div class="body"></div>
@@ -94,7 +99,9 @@
                   </div>
                   <div class="shadow"></div>
                 </div>
-                <div class="box sb3 rounded" style="margin-bottom: 250px; margin-left:-20px;">흔들리는버튼</div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;"  v-if="todayschedule.length == 0">푹 쉬세요 <i style="margin-bottom:3px" class="em em-stuck_out_tongue_closed_eyes" aria-role="presentation" aria-label="FACE WITH STUCK-OUT TONGUE AND TIGHTLY-CLOSED EYES"></i></div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;" v-else-if="1 <= todayschedule.length && todayschedule.length <= 2">좋은 추억<br>쌓으세요 <i style="margin-bottom:3px" class="em em-sunglasses" aria-role="presentation" aria-label="SMILING FACE WITH SUNGLASSES"></i></div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;" v-else-if="todayschedule.length >= 3">오늘은<br>바쁘네요 <i style="margin-bottom:3px" class="em em-cry" aria-role="presentation" aria-label="CRYING FACE"></i></div>
               </div>
             <div>
               <el-button type="text" @click="state.afterDialogOpen = true" style="margin-right:100px; font-size: 1.5rem; color: #13C7A3"
@@ -127,6 +134,7 @@
         </div>
       </div>
     </div>
+
   </div>
 
   <before-dialog
@@ -202,6 +210,10 @@ export default {
         emailType: '',
         password: ''
       },
+    clock : {
+        time: '',
+        date: '',
+    },
     schedulelength: 0,
     pros : {
       beforepro: [],
@@ -215,8 +227,11 @@ export default {
   })
   const beforeschedule = []
   const afterschedule = []
+  const todayschedule = []
   let beforeday = ''
   let afterday = ''
+  var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  var timerID = setInterval(updateTime, 1000);
 
 
   const takeSchdule = function () {
@@ -227,22 +242,42 @@ export default {
         // console.log(res.data.length)
         // console.log(res.data)
         // console.log('하이')
-        let today = new Date()
-        let date = today.getDate()
+        let today = new Date().toISOString().slice(0,10)
+        console.log(today) //2022-02-12
+        console.log(typeof(today)) //string
         state.schedulelength = res.data.length
         state.infos = res.data.slice().reverse()
         // console.log(typeof(state.infos))
         // console.log(state.infos)
         // console.log('로데시 장전!')
         // console.log(_.sortBy(state.infos, 'dday'))
+        // let year = today.getFullYear()
+        // let month = today.getMonth() + 1
+        // let date = today.getDate()
+        // let realday = `${year}-${month}-${date}`
+        // console.log(realday)
         state.infos = _.sortBy(state.infos, 'dday')
         for (var i = 0; i < state.schedulelength; i++) {
           // console.log(state.infos[i].startDate)
           // let tempday = Number(state.infos[i].startDate.slice(8,12))
+          let tempstartday = state.infos[i].startDate
+          let tempendday = state.infos[i].endDate
+          let startdayday = Number(tempstartday.slice(8,10))
+          let enddayday = Number(tempendday.slice(8,10))
+          // console.log(startdayday)
+          // console.log(enddayday)
+          // console.log(Number(today.slice(8,10)))
+          if ( startdayday <= Number(today.slice(8,10)) && Number(today.slice(8,10)) <= enddayday) {
+            todayschedule.push(state.infos[i])
+          }
+          else {
+            console.log('No')
+          }
           let tempday = state.infos[i].dday
           // console.log(tempday)
           if (0 >= tempday) {
             beforeschedule.push(state.infos[i])
+            console.log(state.infos[i].startDate)
           } else {
             afterschedule.push(state.infos[i])
           }
@@ -357,6 +392,21 @@ export default {
 
   takeProfile()
 
+    const zeroPadding = function(num, digit) {
+      var zero = '';
+      for(var i = 0; i < digit; i++) {
+          zero += '0';
+      }
+      return (zero + num).slice(-digit);
+  }
+
+  const updateTime = function () {
+    var cd = new Date();
+    state.clock.time = zeroPadding(cd.getHours(), 2) + ':' + zeroPadding(cd.getMinutes(), 2) + ':' + zeroPadding(cd.getSeconds(), 2);
+    state.clock.date = zeroPadding(cd.getFullYear(), 4) + '-' + zeroPadding(cd.getMonth()+1, 2) + '-' + zeroPadding(cd.getDate(), 2) + ' ' + week[cd.getDay()];
+  }
+
+  updateTime()
 
 
 
@@ -383,7 +433,7 @@ export default {
   }
 
 
-    return { router, takeProfile, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog, onCloseNicknameDialog, editNickname, onCloseBirthdayDialog, createBirthday, onCloseTermsDialog }
+    return { router, takeProfile, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog, onCloseNicknameDialog, editNickname, onCloseBirthdayDialog, createBirthday, onCloseTermsDialog, todayschedule, week, timerID, updateTime, zeroPadding }
   }
 }
 
@@ -394,12 +444,15 @@ export default {
 .box {
   animation: bounce-in 3s 1;
   width: 150px;
-  background: #00bfb6;
+  background-color: #F0FFF0;
   padding: 20px;
+  border: 5px solid #20B2AA;
   text-align: center;
   font-weight: 900;
-  color: #fff;
+  color: #20B2AA;
   position: relative;
+  transition: 0.5s;
+  /* background-image: linear-gradient(to right, #84fab0 0%, #13C7A3 51%, #84fab0 100%); */
 }
 
 .sb3:before {
@@ -407,12 +460,13 @@ content: "";
 width: 0px;
 height: 0px;
 position: absolute;
-border-left: 10px solid #00bfb6;
+border-left: 10px solid #20B2AA;
 border-right: 10px solid transparent;
-border-top: 10px solid #00bfb6;
+border-top: 10px solid #20B2AA;
 border-bottom: 10px solid transparent;
-left: 19px;
-bottom: -19px;
+/* background: transparent; */
+left: 21px;
+bottom: -20px;
 }
 
 .sb4:before {
@@ -421,11 +475,11 @@ width: 0px;
 height: 0px;
 position: absolute;
 border-left: 10px solid transparent;
-border-right: 10px solid #00bfb6;
-border-top: 10px solid #00bfb6;
+border-right: 10px solid #20B2AA;
+border-top: 10px solid #20B2AA;
 border-bottom: 10px solid transparent;
-right: 19px;
-bottom: -19px;
+right: 25px;
+bottom: -21px;
 }
 
   @keyframes bounce-in {
@@ -1184,6 +1238,36 @@ a {
   transform: rotate(-35deg)
 }
 
+
+p{
+	 margin: 0;
+	 padding: 0;
+}
+ #clock {
+	 font-family: 'Share Tech Mono', monospace;
+	 color: #fff;
+	 text-align: center;
+	 position: absolute;
+	 left: 50%;
+	 top: 50%;
+	 transform: translate(-50%, -50%);
+	 color:#20B2AA	;
+	 text-shadow: 0 0 20px rgba(10, 175, 230, 1), 0 0 20px rgba(10, 175, 230, 0);
+}
+ #clock .time {
+	 letter-spacing: 0.05em;
+	 font-size: 80px;
+	 padding: 5px 0;
+}
+ #clock .date {
+	 letter-spacing: 0.1em;
+	 font-size: 24px;
+}
+ #clock .text {
+	 letter-spacing: 0.1em;
+	 font-size: 12px;
+	 padding: 20px 0 0;
+}
 
 
 
