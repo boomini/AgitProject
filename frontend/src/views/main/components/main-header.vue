@@ -159,7 +159,6 @@ export default {
       router.push({
         name: 'Intro',
       })
-
     }
 
     const clickProfile = function () {
