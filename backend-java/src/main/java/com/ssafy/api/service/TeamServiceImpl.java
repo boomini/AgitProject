@@ -123,10 +123,24 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public void changeTeamMemberReject(Long teamId, String userId) {
         Optional<User> user = userRepositorySupport.findUserByUserId(userId);
-        Optional<UserTeam> userTeam = userTeamRepositroySupport.findTeamUserStateByTeamIdAndUserId(teamId, user.get().getId());
+        Optional<Team> team = teamRepositorySupport.findTeamByTeamId(teamId);
+        UserTeam userTeam = userTeamRepositroySupport.findTeamUserStateByTeamIdAndUserId(teamId, user.get().getId()).get();
+        user.get().getUserTeams().remove(userTeam);
+        team.get().getUserTeams().remove(userTeam);
+        userTeam.setTeam(null);
+        userTeam.setUser(null);
 
-        userTeamRepository.delete(userTeam.get());
 
+        userTeamRepository.delete(userTeam);
+    }
+
+    @Override
+    public boolean checkStateIfTeamPossible(Long teamId) {
+        List<User> userList = userTeamRepositroySupport.findUserListByTeamId(teamId).get();
+        if(userList.size()>=6){
+            return false;
+        }
+        return true;
     }
 
 }

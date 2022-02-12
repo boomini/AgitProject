@@ -1,9 +1,6 @@
 package com.ssafy.api.controller;
 
-import com.ssafy.api.advice.exception.CTokenForbiddenException;
-import com.ssafy.api.advice.exception.CUserDuplicateException;
-import com.ssafy.api.advice.exception.CUserInactiveException;
-import com.ssafy.api.advice.exception.CUserNotFoundException;
+import com.ssafy.api.advice.exception.*;
 import com.ssafy.api.dto.*;
 
 import com.ssafy.api.service.*;
@@ -81,8 +78,9 @@ public class TeamController {
         try{
             SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
             String userId = userDetails.getUsername();
+            User user = userService.getUserByUserId(userId);
             // 디폴트로 team Boss는 팀 생성자로 설정
-            teamDto.setTeamBoss(userId);
+            teamDto.setTeamBoss(user.getName());
             teamService.createTeam(teamDto, userId);
         }catch (DataIntegrityViolationException e) {
             //회원중복시 예외처리
@@ -165,8 +163,12 @@ public class TeamController {
         if(user==null){
             throw new CUserNotFoundException();
         }
+        try{
+            teamService.addMember(teamId, userId);
+        }catch (Exception e){
+            throw new CUserInviteDuplicateException();
+        }
 
-        teamService.addMember(teamId, userId);
         MailDto mailDto = emailService.sendTeamAddEmail(userId,teamId);
         emailService.mailSend(mailDto);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
@@ -181,6 +183,10 @@ public class TeamController {
     public ResponseEntity<? extends BaseResponseBody> confirmTeamMember(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId, @ApiIgnore Authentication authentication){
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
+
+        if(!teamService.checkStateIfTeamPossible(teamId)){
+            throw new CTooManyTeamMemberException();
+        }
         //수락시, 회원 state변경
         teamService.changeTeamMemberConfirm(teamId, userId);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));

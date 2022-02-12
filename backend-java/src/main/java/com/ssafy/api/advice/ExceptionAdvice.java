@@ -59,4 +59,16 @@ public class ExceptionAdvice {
     protected ResponseEntity<? extends BaseResponseBody> userInactiveException(HttpServletRequest request, CUserInactiveException e){
         return ResponseEntity.status(500).body(BaseResponseBody.of(1005, "비활성화 처리된 회원입니다.."));
     }
+
+    @ExceptionHandler(CTooManyTeamMemberException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ResponseEntity<? extends BaseResponseBody> tooManyTeamMemberException(HttpServletRequest request, CTooManyTeamMemberException e){
+        return ResponseEntity.status(500).body(BaseResponseBody.of(1006, "수용가능한 팀멤버인원을 초과하였습니다."));
+    }
+
+    @ExceptionHandler(CUserInviteDuplicateException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ResponseEntity<? extends BaseResponseBody> userInviteDuplicateException(HttpServletRequest request, CUserInviteDuplicateException e){
+        return ResponseEntity.status(500).body(BaseResponseBody.of(1007, "이미 팀원이거나 초대메세지를 보낸 멤버입니다."));
+    }
 }

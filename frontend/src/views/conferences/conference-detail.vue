@@ -1,45 +1,56 @@
 <template>
     <div id="chat-container">
-      <div class="d-flex justify-content-between my-3">
-        {{ $route.params.conferenceId + '번 방 상세 보기 페이지' }}
-        <button class="mx-4" @click="closeSession()">X</button>
-      </div>
-      <div id="join" v-if="!state.session">
-        <div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div>
-        <div id="join-dialog" class="jumbotron vertical-center d-flex-column offset-3 col-6">
-          <h1 class="text-center">Join a video session!</h1>
-            <!-- <p>
+        <!-- <div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div> -->
+          <!-- <div class="form-group">
+            <p>
               <label>이름 설정</label>
               <input v-model="state.myUserName" class="form-control" type="text" required>
             </p>
             <p>
               <label>세션 이름</label>
               <input v-model="state.mySessionId" class="form-control" type="text" required>
-            </p> -->
-            <h2 class="text-center my-5">현재 들어가려는 방: {{ state.teamName }}</h2>
-            <p class="text-center">
-              <button class="btn btn-lg btn-success" @click="joinSession()">Join!</button>
             </p>
+          </div> -->
+      <div v-if="!state.session">
+        <div class="d-flex flex-column align-items-center my-5">
+          <h1>회의실 참가하기!</h1>
+          <h3 class="my-3">현재 접속하려는 방: {{ state.teamName}}의 방</h3>
+          <div>
+            <button id="join-btn" class="btn btn-lg btn-success my-3" @click="joinSession()">Join!</button>
+          </div>
         </div>
       </div>
 
-      <div id="session" v-if="state.session">
-        <div id="session-header">
-          <h1 id="session-title">{{ state.mySessionId }}</h1>
-          <input class="btn btn-large btn-danger my-3" type="button" id="buttonLeaveSession" @click="closeSession()" value="Leave session">
-        </div>
-          <!-- 프레젠테이션 용 -->
-          <!-- <div id="main-video" class="col-3 mx-3">
-            <user-video :stream-manager="state.mainStreamManager"/>
-          </div> -->
+      <div class="d-flex-row justify-content-between my-3" v-if="state.session">
         <div class="d-flex">
-          <div>
-            <user-video :stream-manager="state.publisher" @click="updateMainVideoStreamManager(state.publisher)"/>
+          <h1 class="offset-4">{{ state.teamName }}의 방입니다.</h1>
+          <!-- 비디오 토글 버튼 -->
+          <div class="d-flex offset-2">
+            <div v-if="state.publisher.stream.videoActive">
+              <button id="video-btn" class="btn btn-danger my-3 mx-3" @click="changeVideoState()">OFF</button>
+            </div>
+            <div v-else>
+              <button id="video-btn" class="btn btn-success my-3 mx-3" @click="changeVideoState()">ON</button>
+            </div>
+            <!-- 오디오 토글 버튼 -->
+            <div v-if="state.publisher.stream.audioActive">
+              <button id="video-btn" class="btn btn-danger my-3 mx-3" @click="changeAudioState()">Mute</button>
+            </div>
+            <div v-else>
+              <button id="video-btn" class="btn btn-success my-3 mx-3" @click="changeAudioState()">ON</button>
+            </div>
+            <input class="btn btn-large btn-danger my-3 mx-4" type="button" id="close-btn" @click="closeSession()" value="방 나가기">
           </div>
-          <div id="video-container d-flex flex-wrap">
-            <user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+        </div>
+        <div class="d-flex justify-content-between">
+            <!-- <div id="main-video" class="col-3 mx-3">
+              <user-video :stream-manager="state.mainStreamManager"/>
+            </div> -->
+          <div class="d-flex flex-wrap mx-3">
+            <user-video :stream-manager="state.publisher"/>
+            <user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub"/>
           </div>
-          <div class="offset-3 col-3" id="chat">
+          <div id="chat-box">
             <chat-live :session="state.session" @sendMessage="sendMessage"/>
           </div>
         </div>
@@ -47,6 +58,13 @@
     </div>
 </template>
 <style scoped>
+  #join-btn{
+    width: 20vh;
+  }
+  #video-btn{
+    width: 10vh;
+    height: 7vh;
+  }
   #chat-container {
     position: absolute;
     top: -90px;
@@ -56,59 +74,18 @@
     z-index: 10;
     background-color: white;
     width: 125%;
-    height: 150vh;
+    height: 100vh;
     background-size:cover;
   }
-
-  #video-container video {
-    position: relative;
-    display: inline;
-    float: left;
-    width: 60%;
-    cursor: pointer;
+  #chat-box{
+    margin-right: 5vh;
   }
 
-  #video-container p {
-    display: inline-block;
-    background: #f8f8f8;
-    padding-left: 5px;
-    padding-right: 5px;
-    color: #777777;
-    font-weight: bold;
-    border-bottom-right-radius: 4px;
+  #close-btn{
+    width: 20vh;
+    height: 7vh;
   }
 
-  video {
-    width: 100%;
-    height: auto;
-  }
-
-
-  #main-video p {
-    display: inline-block;
-    background: #f8f8f8;
-    font-size: 22px;
-    color: #777777;
-    font-weight: bold;
-    border-bottom-right-radius: 4px;
-  }
-
-  #session img {
-    width: 100%;
-    height: auto;
-    display: inline-block;
-    object-fit: contain;
-    vertical-align: baseline;
-  }
-
-  #session #video-container img {
-    position: relative;
-    float: left;
-    width: 50%;
-    cursor: pointer;
-    object-fit: cover;
-    height: 180px;
-  }
 </style>
 <script>
 import { reactive, onMounted, onUnmounted, computed } from 'vue'
@@ -150,10 +127,11 @@ export default {
       mainStreamManager: undefined,
       publisher: undefined,
 			subscribers: [],
-      mySessionId: 'Session',
+      mySessionId: 'SessionA',
       myUserName: 'Person1',
       roomId: computed(() => route.params.conferenceId),
       teamName: '',
+      userName: '',
     })
     // 페이지 진입시 불리는 훅
     onMounted(() => {
@@ -180,14 +158,12 @@ export default {
 
     const joinSession = function () {
       state.OV = new OpenVidu()
-      getTeamInfo()
-      takeProfile()
-      console.log(state.userNickName)
-      // console.log(state.mySessionId)
       state.session = state.OV.initSession()
       state.session.on('streamCreated', ({ stream }) => {
         const subscriber = state.session.subscribe(stream)
         state.subscribers.push(subscriber)
+        // console.log("===============================")
+        // console.log(state.subscribers)
       })
 
       state.session.on('streamDestroyed', ({ stream }) => {
@@ -196,10 +172,13 @@ export default {
 					state.subscribers.splice(index, 1)
 				}
 			})
+      state.myUserName = state.userName
+      state.mySessionId = state.roomId
 
       state.session.on('exception', ({ exception }) => {
 				console.warn(exception)
 			})
+
 
       // 채팅
       state.session.on('signal:chat', (event) => {
@@ -215,6 +194,13 @@ export default {
         data.time = moment(time).format('HH:mm')
         store.commit('root/setMessages', data)
       })
+
+      // 음성 인지
+      // state.publisher.on('publisherStartSpeaking', (event) => {
+      //       console.log('User ' + event.connection.connectionId + ' start speaking');
+      // });
+
+
 
       getToken(state.mySessionId).then(token => {
 				state.session.connect(token, { clientData: state.myUserName })
@@ -326,7 +312,7 @@ export default {
       const token = store.getters['root/getJWTToken']
       store.dispatch('root/getProfile', token)
       .then(res => {
-        state.myUserName = res.data.nickName
+        state.userName = res.data.nickName
       })
       .catch(err => {
         console.log(err)
@@ -335,33 +321,29 @@ export default {
     const getTeamInfo = function () {
       store.dispatch('root/getTeamInfoDetail', route.params.conferenceId)
       .then(res => {
-        state.mySessionId = `${res.data.teamName}팀의 방`
+        state.teamName = res.data.teamName
       })
       .catch(err => {
         console.log(err)
       })
     }
-
-    const getTeamName = function () {
-      store.dispatch('root/getTeamInfoDetail', route.params.conferenceId)
-      .then(res => {
-        state.teamName = `${res.data.teamName}팀의 방`
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    // 비디오 토글
+    const changeVideoState = function (){
+      state.publisher.stream.videoActive = !state.publisher.stream.videoActive
+      console.log(state.publisher)
+      state.publisher.publishVideo(state.publisher.stream.videoActive)
     }
 
+    // 오디오 토글
+    const changeAudioState = function (){
+      state.publisher.stream.audioActive = !state.publisher.stream.audioActive
+      state.publisher.publishAudio(state.publisher.stream.audioActive)
 
-    const setScrollTop = function() {
-      window.scrollTo(0, 0)
     }
-
-    getTeamName()
-    setScrollTop()
-
+    getTeamInfo()
+    takeProfile()
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager,
-          getToken, createSession, createToken, sendMessage, closeSession, getTeamInfo, setScrollTop, takeProfile, getTeamName}
+          getToken, createSession, createToken, sendMessage, closeSession, takeProfile, getTeamInfo, changeVideoState, changeAudioState }
   }
 }
 </script>
