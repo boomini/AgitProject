@@ -1,6 +1,6 @@
 <template>
 <div v-if="streamManager">
-  <div class="d-flex flex-column align-items-center mx-2 my-2" id="user-video">
+  <div class="d-flex flex-column align-items-center mx-2 my-2" id="user-video" :style="{ borderColor: this.borderColor}">
     <ov-video :stream-manager="streamManager"/>
     <div class="d-flex justify-content-center" id="user-bar">
       <div>
@@ -16,7 +16,6 @@
     width: 45vh;
     padding: 0.3vh;
     border-radius: 2%;
-    border-color: black;
     border-width: 2px;
     border-style: solid;
   }
@@ -48,6 +47,7 @@ export default {
 
 	props: {
 		streamManager: Object,
+    borderColor: String,
 	},
 
 	computed: {

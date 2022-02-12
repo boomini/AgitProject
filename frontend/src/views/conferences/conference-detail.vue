@@ -62,7 +62,7 @@
               <user-video :stream-manager="state.mainStreamManager"/>
             </div> -->
         <div class="d-flex flex-wrap mx-3">
-          <user-video :stream-manager="state.publisher" />
+          <user-video :stream-manager="state.publisher" :border-color="state.BorderColor"/>
           <user-video
             v-for="sub in state.subscribers"
             :key="sub.stream.connection.connectionId"
@@ -159,6 +159,7 @@ export default {
       userName: "",
       videoStatus: true,
       audioStatus: true,
+      BorderColor: 'black',
     });
     // 페이지 진입시 불리는 훅
     onMounted(() => {
@@ -222,9 +223,15 @@ export default {
       });
 
       // 음성 인지
-      // state.publisher.on('publisherStartSpeaking', (event) => {
-      //       console.log('User ' + event.connection.connectionId + ' start speaking');
-      // });
+      state.session.on('publisherStartSpeaking', (event) => {
+          state.BorderColor = "blue"
+          console.log(state.BorderColor)
+      });
+
+      state.session.on('publisherStopSpeaking', (event) => {
+          state.BorderColor = "black"
+          console.log(state.BorderColor)
+      });
 
       getToken(state.mySessionId).then((token) => {
         state.session
