@@ -40,8 +40,7 @@
           />
         </el-form>
       </div>
-      <div v-for="img in state.form.images" :key="img.name">
-        <!-- {{ img.preview }} -->
+      <div v-for="img in state.form.images" width=150 :key="img.name">
         <img :src="img.preview" alt="" width=100>
       </div>
     </div>
@@ -98,13 +97,15 @@ export default {
     const handleClose = function () {
       state.form.content = ''
       state.form.schedule = ''
+      state.form.images = ''
       emit('closeUploadImageDialog')
     }
 
     const selectedImage = function () {
       console.log('이미지등록')
       for (let i = 0; i < inputImage.value.files.length; i++) {
-        // console.log(URL.createObjectURL(inputImage.value.files[i]))
+        console.log(URL.createObjectURL(inputImage.value.files[i]))
+        console.log(inputImage.value);
         console.log(state.form.images)
         state.form.images.push({
           file: inputImage.value.files[i],
@@ -153,5 +154,8 @@ export default {
 .upload-image-dialog {
   width: 700px;
   height: 600px;
+}
+img{
+  float: left;
 }
 </style>

@@ -37,30 +37,46 @@
           <el-empty :image-size="100" description="약속이 없어요."/>
         </div>
       </div>
-      <div style="border: 1px solid gray;">
-        <div>사진</div>
+    <div style="border: 1px solid gray;">
+      <h4>
+        사진
+      </h4>
+      <div v-if="state.imageList.length >= 1">
         <image-page
         :uploaddate = state.uploadDate
-        :teamId = state.teamId></image-page>
+        :teamId = state.teamId
+        :srcList = state.imageList></image-page>
       </div>
-      <div style="border: 1px solid gray;">
-        <div>동영상</div>
+      <div v-else>
+        <el-empty :image-size="60" description="사진을 등록해주세요."/>
+      </div>
+    </div>
+    <div style="border: 1px solid gray;">
+      <h4>
+        비디오
+      </h4>
+      <div v-if="state.videoList.length >= 1">
         <video-page
         :uploaddate = state.uploadDate
-        :teamId = state.teamId></video-page>
+        :teamId = state.teamId
+        :srcList = state.videoList></video-page>
       </div>
-      <div>
-        <h4>
-          게시판
-        </h4>
-        <div style="margin: 10px;">
-          <el-table :data="state.articleList" height="40vh" style="width: 100%">
-            <el-table-column prop="index" label="글번호" width="80" />
-            <el-table-column prop="title" label="글제목" width="180" />
-            <el-table-column prop="content" label="글내용" />
-          </el-table>
-        </div>
+      <div v-else>
+        <el-empty :image-size="60" description="비디오를 등록해주세요."/>
       </div>
+    </div>
+    <div>
+      <h4>
+        게시판
+      </h4>
+      <div style="margin: 10px;">
+        <el-table :data="state.articleList" height="40vh" style="width: 100%">
+          <el-table-column prop="index" label="글번호" width="80" />
+          <el-table-column prop="title" label="글제목" width="180" />
+          <el-table-column prop="content" label="글내용" />
+        </el-table>
+      </div>
+    </div>
     </el-scrollbar>
   </el-drawer>
 </template>
@@ -83,6 +99,7 @@ export default {
       type: Boolean,
       default: false,
     },
+
   },
 
   setup(props, { emit }) {
@@ -107,8 +124,22 @@ export default {
         return articleList
       } ),
 
-      imageList: computed(() => props.data.imageList),
-      videoList: computed(() => props.data.videoList),
+      imageList: computed(function(){
+        let imageList = props.data.imageList
+        for ( let i=0; i<imageList.length; i++){
+          imageList[i] = 'http://localhost:8080/api/v1/image/'+imageList[i].id;
+        }
+        console.log(imageList)
+        return imageList;
+      }),
+      videoList: computed(function(){
+        let videoList = props.data.videoList
+        for ( let i=0; i<videoList.length; i++){
+          videoList[i] = 'http://localhost:8080/api/v1/video/'+videoList[i].id;
+        }
+        console.log(videoList);
+        return videoList;
+      }),
       eventResList: computed(() => props.data.eventResList),
       YMD: computed(() => props.data.uploadDate.split('-')),
       title: computed(() => `${state.YMD[0]}년 ${state.YMD[1]}월 ${state.YMD[2]}일 게시판`)
