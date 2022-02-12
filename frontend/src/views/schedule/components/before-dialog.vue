@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="info">
     <el-dialog custom-class="before-dialog" v-model="state.dialogVisible" title="이전 약속" width="30%" style="margin: 50%">
       <span>
       팀 이름: {{ info.teamName }} <br>
@@ -18,6 +18,22 @@
       </template>
     </el-dialog>
   </div>
+  <div v-else-if="info == undefined">
+    <el-dialog custom-class="before-dialog" v-model="state.dialogVisible" title="이전 약속" width="30%" style="margin: 50%">
+      <span>
+      일정을 추가해주세요!!
+      </span>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button type="primary" @click="handleClose()"
+            >Confirm</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
+  </div>
+
+
 </template>
 
 <script>
@@ -45,7 +61,8 @@ export default {
       dialogVisible: computed(() => props.open),
     })
 
-
+  console.log(props.info)
+  console.log('여기냐')
 
 
     const handleClose = function () {

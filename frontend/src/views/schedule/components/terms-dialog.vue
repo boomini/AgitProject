@@ -15,8 +15,8 @@
     </template>
 
     <!-- content -->
-    <div class="d-flex flex-column justify-content-around" style="height: 1250px;">
-      <div>
+    <div class="d-flex flex-column justify-content-around" style="height: 400px;">
+      <div style="overflow:scroll;">
         <h2 class="fw-bold">
       <span style="color: #20B2AA">아지트  </span>
       <span style="color: #FFDC37">이용약관 </span>
@@ -158,6 +158,6 @@ export default {
 <style>
 .terms-dialog {
   width: 1000px !important;
-  height: 1300px !important;
+  height: 1200px !important;
 }
 </style>
