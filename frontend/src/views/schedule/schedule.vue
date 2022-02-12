@@ -38,6 +38,7 @@
         </h3>
       </el-carousel-item>
     </el-carousel>
+
     </div>
     <!-- 확인필요! -->
     <div v-else-if = "state.infos.length === 0">
