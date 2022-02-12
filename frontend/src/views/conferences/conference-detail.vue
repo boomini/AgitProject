@@ -21,18 +21,34 @@
         </div>
       </div>
 
-      <div class="d-flex-row justify-content-between my-4" v-if="state.session">
-        <div class="d-flex justify-content-between">
+      <div class="d-flex-row justify-content-between my-3" v-if="state.session">
+        <div class="d-flex">
           <h1 class="offset-4">{{ state.teamName }}의 방입니다.</h1>
-          <input class="btn btn-large btn-danger my-3 mx-4" type="button" id="close-btn" @click="closeSession()" value="방 나가기">
+          <!-- 비디오 토글 버튼 -->
+          <div class="d-flex offset-2">
+            <div v-if="state.publisher.stream.videoActive">
+              <button id="video-btn" class="btn btn-danger my-3 mx-3" @click="changeVideoState()">OFF</button>
+            </div>
+            <div v-else>
+              <button id="video-btn" class="btn btn-success my-3 mx-3" @click="changeVideoState()">ON</button>
+            </div>
+            <!-- 오디오 토글 버튼 -->
+            <div v-if="state.publisher.stream.audioActive">
+              <button id="video-btn" class="btn btn-danger my-3 mx-3" @click="changeAudioState()">Mute</button>
+            </div>
+            <div v-else>
+              <button id="video-btn" class="btn btn-success my-3 mx-3" @click="changeAudioState()">ON</button>
+            </div>
+            <input class="btn btn-large btn-danger my-3 mx-4" type="button" id="close-btn" @click="closeSession()" value="방 나가기">
+          </div>
         </div>
         <div class="d-flex justify-content-between">
             <!-- <div id="main-video" class="col-3 mx-3">
               <user-video :stream-manager="state.mainStreamManager"/>
             </div> -->
-          <div class="d-flex flex-wrap">
-            <user-video :stream-manager="state.publisher" @click="updateMainVideoStreamManager(state.publisher)"/>
-            <user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub" @click="updateMainVideoStreamManager(sub)"/>
+          <div class="d-flex flex-wrap mx-3">
+            <user-video :stream-manager="state.publisher"/>
+            <user-video v-for="sub in state.subscribers" :key="sub.stream.connection.connectionId" :stream-manager="sub"/>
           </div>
           <div id="chat-box">
             <chat-live :session="state.session" @sendMessage="sendMessage"/>
@@ -44,6 +60,10 @@
 <style scoped>
   #join-btn{
     width: 20vh;
+  }
+  #video-btn{
+    width: 10vh;
+    height: 7vh;
   }
   #chat-container {
     position: absolute;
@@ -58,11 +78,12 @@
     background-size:cover;
   }
   #chat-box{
-    margin-right: 4vh;
+    margin-right: 5vh;
   }
 
   #close-btn{
     width: 20vh;
+    height: 7vh;
   }
 
 </style>
@@ -141,6 +162,8 @@ export default {
       state.session.on('streamCreated', ({ stream }) => {
         const subscriber = state.session.subscribe(stream)
         state.subscribers.push(subscriber)
+        // console.log("===============================")
+        // console.log(state.subscribers)
       })
 
       state.session.on('streamDestroyed', ({ stream }) => {
@@ -151,8 +174,7 @@ export default {
 			})
       state.myUserName = state.userName
       state.mySessionId = state.roomId
-      console.log("=======================================ㄴㄴㄴㄴㄴ")
-      console.log(state.myUserName)
+
       state.session.on('exception', ({ exception }) => {
 				console.warn(exception)
 			})
@@ -172,6 +194,13 @@ export default {
         data.time = moment(time).format('HH:mm')
         store.commit('root/setMessages', data)
       })
+
+      // 음성 인지
+      // state.publisher.on('publisherStartSpeaking', (event) => {
+      //       console.log('User ' + event.connection.connectionId + ' start speaking');
+      // });
+
+
 
       getToken(state.mySessionId).then(token => {
 				state.session.connect(token, { clientData: state.myUserName })
@@ -298,10 +327,23 @@ export default {
         console.log(err)
       })
     }
+    // 비디오 토글
+    const changeVideoState = function (){
+      state.publisher.stream.videoActive = !state.publisher.stream.videoActive
+      console.log(state.publisher)
+      state.publisher.publishVideo(state.publisher.stream.videoActive)
+    }
+
+    // 오디오 토글
+    const changeAudioState = function (){
+      state.publisher.stream.audioActive = !state.publisher.stream.audioActive
+      state.publisher.publishAudio(state.publisher.stream.audioActive)
+
+    }
     getTeamInfo()
     takeProfile()
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager,
-          getToken, createSession, createToken, sendMessage, closeSession, takeProfile, getTeamInfo }
+          getToken, createSession, createToken, sendMessage, closeSession, takeProfile, getTeamInfo, changeVideoState, changeAudioState }
   }
 }
 </script>
