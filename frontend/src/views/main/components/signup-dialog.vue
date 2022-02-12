@@ -100,6 +100,11 @@
 .signup-dialog .dialog-footer .el-button {
   width: 120px;
 }
+
+.signup-dialog .el-checkbox a {
+  color: #0d6efd;
+  text-decoration: underline;
+}
 .signup-dialog .el-checkbox a:hover {
   background-color: rgba(141, 29, 216, 0.322);
 }
@@ -313,7 +318,8 @@ export default {
             const year = arr[0]
             const month = arr[1]
             const day = arr[2]
-            store.dispatch('root/requestRegister', { userId: state.form.id, password: state.form.password, name: state.form.name, year: year, month: month, day: day, nickName: state.form.nickname })
+            // store.dispatch('root/requestRegister', { userId: state.form.id, password: state.form.password, name: state.form.name, year: year, month: month, day: day, nickName: state.form.nickname })
+            store.dispatch('root/requestRegister', { userId: state.form.id, password: state.form.password, name: state.form.name, birthDay: state.form.birthDate, nickName: state.form.nickname })
             .then(function (result) {
               console.log('여기서 걸림')
               // console.log('로딩 스피너 넣으면 됨')

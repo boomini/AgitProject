@@ -37,7 +37,7 @@
       :height="`80px`"
       style="position:fixed; bottom: 0; width: 100%; background-color: white;"/>
   <!-- </div> -->
-  <div style="position: absolute; top: 90px; left: 260px; width: 80%;">
+  <div style="position: absolute; top: 90px; left: 110px; width: 80%;">
     <router-view @openLoginDialog="onOpenLoginDialog" @openSignupDialog="onOpenSignupDialog" @openAuthDialog="onOpenAuthDialog" @openRegisterTeamDialog="onOpenRegisterTeamDialog" :key="$route.fullPath"></router-view>
 
   </div>
@@ -59,7 +59,9 @@
 
 </template>
 <style>
-  @import "https://unpkg.com/element-plus@1.0.2-beta.44/lib/theme-chalk/index.css";
+  /* @import "https://unpkg.com/element-plus@1.0.2-beta.44/lib/theme-chalk/index.css"; */
+  /* @import "https://unpkg.com/element-plus@1.1.0-beta.10/dist/index.css"; */
+  @import "https://unpkg.com/element-plus@1.1.0-beta.10/theme-chalk/index.css";
   @import './main.css';
   @import '../../common/css/common.css';
   @import '../../common/css/element-plus.css';
@@ -104,9 +106,13 @@ export default {
   methods: {
     onOpenLoginDialog () {
       this.loginDialogOpen = true
+      console.log('로그인 다이얼로그 켜기')
+      console.log(this.loginDialogOpen)
     },
     onCloseLoginDialog () {
       this.loginDialogOpen = false
+      console.log('로그인 다이얼로그 끄기')
+      console.log(this.loginDialogOpen)
     },
     onOpenSignupDialog () {
       this.signupDialogOpen = true

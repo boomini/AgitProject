@@ -9,25 +9,48 @@
         active-text-color="#ffd04b"
         class="el-menu-vertical-demo"
         @select="menuSelect">
-        <el-menu-item v-for="(item, index) in state.menuItems" :key="index" :index="index">
+        <!-- <el-menu-item v-for="(item, index) in state.menuItems" :key="index" :index="index">
           <i v-if="item.icon" :class="['ic', item.icon]"/>
           <span>{{index}} {{ item.title }}</span>
-          <div v-if="index === 4" style="border-top: 1px solid #dcdfe6;"/>
+          <div v-if="index === 4" style="border-top: 1px solid #dcdfe6;"/> -->
           <!-- <hr v-if="index === 4" style="color: black;"> -->
           <!-- <hr v-if="index === 4" style="color: black"> -->
-        </el-menu-item>
-        <el-scrollbar native id="sidebar">
+        <!-- </el-menu-item> -->
+
+        <div>
+          <div style="padding-left: 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #cfcfcf; width: 90%; margin: 1rem auto 0;">
+            <p style="margin-bottom: 0px">가입한 팀 목록</p>
+          </div>
+        </div>
+        <el-scrollbar id="sidebar">
           <el-menu-item v-for="(item, index) in state.userTeams" :key="index + state.menuItems.length" :index="index + state.menuItems.length">
             <!-- <i v-if="item.icon" :class="['ic', item.icon]"/> -->
-            <span>{{index + state.menuItems.length}} {{ item.teamName }}</span>
-            <span>{{ item.id }}</span>
+            <!-- <span>{{index + state.menuItems.length}} {{ item.teamName }}</span> -->
+            <span>{{ item.id }} {{ item.teamName }}</span>
             <!-- <div v-if="index === 4" style="border-top: 1px solid #dcdfe6;"/> -->
             <!-- <hr v-if="index === 4" style="color: black;"> -->
             <!-- <hr v-if="index === 4" style="color: black"> -->
           </el-menu-item>
-          <el-button @click="registerTeam">방 생성 버튼</el-button>
           <!-- <el-button @click="state.registerTeamDialogOpen = true">방 생성 버튼</el-button> -->
         </el-scrollbar>
+        <div style="width: 100%;">
+          <div style="border-top: 1px solid #cfcfcf; height: 57px; display: flex; flex-direction: flex-column; justify-content: center; align-items: center; width: 90%; margin: 0 auto;">
+            <el-tooltip
+              effect="dark"
+              placement="top"
+            >
+              <template #content>
+                <div style="font-size: 15px; width: 90px; text-align: center;">
+                  방 생성하기
+                </div>
+              </template>
+              <el-button @click="registerTeam" id="btnCreateRoom" circle>
+                <i class="el-icon-plus"></i>
+                <!-- <p style="font-size: 40px;">+</p> -->
+              </el-button>
+            </el-tooltip>
+          </div>
+        </div>
       </el-menu>
     </div>
   </el-row>
@@ -53,8 +76,76 @@
   margin-right: 5px;
 }
 #sidebar {
-  height: calc(100% - 224px);
+  height: calc(100% - 320px);
 }
+/* #btnCreateRoom {
+  text-align: center;
+  border: 1px solid #89bdb2b3;
+  background-color: #a7f3e3c7;
+  width: 43px;
+  height: 43px;
+}
+#btnCreateRoom i {
+  text-shadow:
+    -1px -1px 0 #89bdb2b3,
+    1px -1px 0 #89bdb2b3,
+    -1px 1px 0 #89bdb2b3,
+    1px 1px 0 #89bdb2b3;
+  font-weight: 900;
+  font-style: normal;
+  color: white;
+} */
+.tool-tip {
+  font-size: 500px;
+
+}
+
+
+#btnCreateRoom {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  width: 43px;
+  height: 43px;
+  background-color: #78ccbb;
+  /* border-radius: 50%; */
+}
+
+#btnCreateRoom:hover {
+  border-radius: 30%;
+  border: 1px solid #b9a23190;
+  background-color: #f9db49;
+  transition: 0.1s;
+}
+
+#btnCreateRoom:hover i {
+  text-shadow:
+    -1px -1px 0 #b9a23190,
+    1px -1px 0 #b9a23190,
+    -1px 1px 0 #b9a23190,
+    1px 1px 0 #b9a23190;
+  color: #78ccbb;
+}
+
+#btnCreateRoom i {
+  /* text-shadow:
+    -1px -1px 0 #f9db49,
+    1px -1px 0 #f9db49,
+    -1px 1px 0 #f9db49,
+    1px 1px 0 #f9db49; */
+  /* background-color: grey; */
+  font-weight: 900;
+  font-style: normal;
+  color: #f9db49;
+}
+
+#btnCreateRoom:active {
+  /* animation-duration: 1s; */
+  /* animation-name: btnClick; */
+  transform: translateY(3px);
+}
+
+
 </style>
 <script>
 import { reactive, computed } from 'vue'

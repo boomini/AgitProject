@@ -131,7 +131,7 @@ export default {
               // router.go(router.currentRoute)
               console.log(res)
               // console.log(swal)
-
+              emit('createVideo')
               handleClose()
         })
         .catch(err => {

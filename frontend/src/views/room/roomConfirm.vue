@@ -1,5 +1,5 @@
 <template class="errorbody container">
-        <div class='c'>
+        <!-- <div class='c'>
             <div class='_404'>Agit 초대장</div>
             <hr>
             <div class='_2'> {{state.team.teamName}}에서 </div>
@@ -7,7 +7,50 @@
             <div class='_2'>초대에 응하시겠습니까?</div>
             <a class='btn' @click = "clickacceptbtn()">수락</a>
             <a class='btn' @click = "clickrejectbtn()">거절</a>
+        </div> -->
+
+        <div id="final">
+      <div
+        data-aos="zoom-out"
+        style="width: 18rem; margin: 30px auto;"
+        class="d-flex flex-column align-items-center"
+
+      >
+        <img
+            src="https://static8.depositphotos.com/1149789/974/i/450/depositphotos_9743915-stock-photo-vintage-old-paper.jpg"
+            alt="..."
+            class="my-4"
+            height="700"
+          />
+        <div style="position: absolute; margin-top:25%;" class="d-flex flex-column align-items-center">
+          <!-- <div v-if="state.isLogin === null" class="button-wrapper"> -->
+            <!-- <el-button @click="clickSignup" style="background-color:white; color: #ffc107; font-family: 'East Sea Dokdo', cursive;">회원가입</el-button> -->
+            <!-- <el-button @click="clickLogin " style="background-color:white; color: #ffc107;">로그인</el-button> -->
+          <!-- </div> -->
+          <div style="margin-top: 20px; font-size: 50px; font-family: 'East Sea Dokdo', cursive;">Agit Invitation</div>
+          <p style="font-family: 'East Sea Dokdo', cursive; font-size: 25px;">비밀의 공간으로 당신을 초대합니다.</p>
+          <p style="font-family: 'East Sea Dokdo', cursive; font-size: 25px;">{{state.team.teamName}}에서 </p>
+          <p style="font-family: 'East Sea Dokdo', cursive; font-size: 30px;"> {{state.team.teamBoss}} 님이</p>
+          <p style="font-family: 'East Sea Dokdo', cursive; font-size: 25px;">당신을 초대합니다.</p>
+          <p style="font-family: 'East Sea Dokdo', cursive; font-size: 25px;"> 초대에 응하시겠습니까?</p>
+          <div style="float: left;">
+            <a class='btn' style="font-family: 'East Sea Dokdo', cursive; font-size: 30px;" @click = "clickacceptbtn()">수락</a>
+            <a class='btn' style="font-family: 'East Sea Dokdo', cursive; font-size: 30px;"  @click = "clickrejectbtn()">거절</a>
+          </div>
+
+
+          <div style="width:90%; height: 30%; margin-top: 12%;" class="d-flex flex-column align-items-center">
+            <div class="candle" style="margin-top: 10px;">
+              <span class="glow"></span>
+              <span class="flames"></span>
+              <span class="thread"></span>
+            </div>
+          </div>
+
+
         </div>
+      </div>
+    </div>
 </template>
 
 <script>
@@ -47,14 +90,12 @@ setup() {
       .then(function(result){
         console.log(result.data);
         console.log(result);
-        setTimeout(() => {
-                swal({
-                  title: "초대거절",
-                  text: "초대를 거절하였습니다.",
-                  icon: "success",
-                  button: "확인",
-                });
-              }, 500)
+        swal({
+          title: "초대거절",
+          text: "초대를 거절하였습니다.",
+          icon: "success",
+          button: "확인",
+        });
         router.push({
           name: 'intro'
       })
@@ -71,14 +112,12 @@ setup() {
       .then(function(result){
         console.log(result.data);
         console.log(result);
-        setTimeout(() => {
-                swal({
-                  title: "초대승인",
-                  text: "초대를 승인하였습니다.",
-                  icon: "success",
-                  button: "확인",
-                });
-              }, 500)
+        swal({
+          title: "초대승인",
+          text: "초대를 승인하였습니다.",
+          icon: "success",
+          button: "확인",
+        });
         router.push({
           name: 'room-board',
           params: {
@@ -86,6 +125,14 @@ setup() {
           },
       })
       }).catch(function(err){
+        if(err.response.data.statusCode==1006){
+          swal({
+          title: "초대승인",
+          text: "수용가능한 팀멤버인원을 초과하였습니다.",
+          icon: "error",
+          button: "확인",
+        });
+        }
         console.log(err.response)
 
       })
@@ -154,120 +201,20 @@ setup() {
 
 
             .btn{
-                background-color: rgb( 255, 255, 255 );
+                background-color: transparent !important;
                 position: relative;
                 display: inline-block;
-                width: 358px;
+                width: 100px;
                 padding: 5px;
                 z-index: 5;
                 font-size: 25px;
                 margin:0 auto;
-                color:#33cc99;
+                color:#A85247;
                 text-decoration: none;
-                margin-right: 10px
-            }
-            .right{
-                float:right;
-                width:60%;
-            }
-
-            hr{
-                padding: 0;
-                border: none;
-                border-top: 5px solid #fff;
-                color: #fff;
-                text-align: center;
-                margin: 0px auto;
-                width: 420px;
-                height:10px;
-                z-index: -10;
-            }
-
-            hr:after {
-                content: "\2022";
-                display: inline-block;
-                position: relative;
-                top: -0.75em;
-                font-size: 2em;
-                padding: 0 0.2em;
-                background: #33cc99;
+                margin-right: 10px;
             }
 
 
-
-            .x1 {
-                top:-50px;
-                left:100px;
-                -webkit-transform: scale(0.3);
-                -moz-transform: scale(0.3);
-                transform: scale(0.3);
-                opacity: 0.9;
-                -webkit-animation: moveclouds 15s linear infinite;
-                -moz-animation: moveclouds 15s linear infinite;
-                -o-animation: moveclouds 15s linear infinite;
-            }
-
-            .x1_5{
-                top:-80px;
-                left:250px;
-                -webkit-transform: scale(0.3);
-                -moz-transform: scale(0.3);
-                transform: scale(0.3);
-                -webkit-animation: moveclouds 17s linear infinite;
-                -moz-animation: moveclouds 17s linear infinite;
-                -o-animation: moveclouds 17s linear infinite;
-            }
-
-            .x2 {
-                left: 250px;
-                top:30px;
-                -webkit-transform: scale(0.6);
-                -moz-transform: scale(0.6);
-                transform: scale(0.6);
-                opacity: 0.6;
-                -webkit-animation: moveclouds 25s linear infinite;
-                -moz-animation: moveclouds 25s linear infinite;
-                -o-animation: moveclouds 25s linear infinite;
-            }
-
-            .x3 {
-                left: 250px; bottom: -70px;
-
-                -webkit-transform: scale(0.6);
-                -moz-transform: scale(0.6);
-                transform: scale(0.6);
-                opacity: 0.8;
-
-                -webkit-animation: moveclouds 25s linear infinite;
-                -moz-animation: moveclouds 25s linear infinite;
-                -o-animation: moveclouds 25s linear infinite;
-            }
-
-            .x4 {
-                left: 470px; botttom: 20px;
-
-                -webkit-transform: scale(0.75);
-                -moz-transform: scale(0.75);
-                transform: scale(0.75);
-                opacity: 0.75;
-
-                -webkit-animation: moveclouds 18s linear infinite;
-                -moz-animation: moveclouds 18s linear infinite;
-                -o-animation: moveclouds 18s linear infinite;
-            }
-
-            .x5 {
-                left: 200px; top: 300px;
-
-                -webkit-transform: scale(0.5);
-                -moz-transform: scale(0.5);
-                transform: scale(0.5);
-                opacity: 0.8;
-
-                -webkit-animation: moveclouds 20s linear infinite;
-                -moz-animation: moveclouds 20s linear infinite;
-                -o-animation: moveclouds 20s linear infinite;
-            }
 
             @-webkit-keyframes moveclouds {
                 0% {margin-left: 1000px;}
@@ -281,4 +228,165 @@ setup() {
                 0% {margin-left: 1000px;}
                 100% {margin-left: -1000px;}
             }
+
+
+@keyframes blink {
+  78% {
+    color: inherit;
+    text-shadow: inherit;
+  }
+  79%{
+     color: #333;
+  }
+  80% {
+
+    text-shadow: none;
+  }
+  81% {
+    color: inherit;
+    text-shadow: inherit;
+  }
+  82% {
+    color: #333;
+    text-shadow: none;
+  }
+  83% {
+    color: inherit;
+    text-shadow: inherit;
+  }
+  92% {
+    color: #333;
+    text-shadow: none;
+  }
+  92.5% {
+    color: inherit;
+    text-shadow: inherit;
+  }
+}
+
+.candle {
+    width: 10em;
+    height: 10em;
+    font-size: 7px;
+    background: linear-gradient(
+        orange,
+        darkorange,
+        sienna,
+        saddlebrown 50%,
+        rgba(0, 0, 0, 0.6)
+    );
+    box-shadow:
+        inset 2em -3em 5em rgba(0, 0, 0, 0.4),
+        inset -2em 0 5em rgba(0, 0, 0, 0.4);
+    border-radius: 10em / 4em;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    top: 10em;
+}
+
+.candle::before {
+    content: '';
+    position: absolute;
+    width: inherit;
+    height: 2em;
+    border: 0.2em solid darkorange;
+    border-radius: 50%;
+    box-sizing: border-box;
+    background: radial-gradient(
+        #444,
+        orange,
+        saddlebrown,
+        sienna,
+        darkorange
+    );
+    filter: opacity(0.7);
+}
+
+.thread {
+    position: absolute;
+    width: 0.6em;
+    height: 3.6em;
+    top: -1.8em;
+    background: linear-gradient(
+        #111,
+        black,
+        orange 90%
+    );
+    border-radius: 40% 40% 0 0;
+}
+
+.flames {
+    position: absolute;
+    width: 2.4em;
+}
+
+.flames::before {
+    content: '';
+    position: absolute;
+    width: inherit;
+    height: 6em;
+    background-color: royalblue;
+    top: -4.8em;
+    border-radius: 50% 50% 35% 35%;
+    border: 0.2em solid dodgerblue;
+    box-sizing: border-box;
+    filter: opacity(0.7);
+}
+
+.flames::after {
+    content: '';
+    position: absolute;
+    width: inherit;
+    height: 12em;
+    top: -12em;
+    background: linear-gradient(white 80%, transparent);
+    border-radius: 50% 50% 20% 20%;
+    box-shadow: 0 -0.6em 0.4em darkorange;
+    animation:
+        enlarge 5s linear infinite,
+        move 6s linear infinite;
+}
+
+@keyframes move {
+    0%, 100% {
+        transform: rotate(2deg);
+    }
+
+    50% {
+        transform: rotate(-2deg);
+    }
+}
+
+@keyframes enlarge {
+    0%, 100% {
+        height: 12em;
+        top: -12em;
+    }
+
+    50% {
+        height: 14em;
+        top: -13em;
+    }
+}
+
+.glow {
+    position: absolute;
+    width: 10em;
+    height: 18em;
+    background-color: orangered;
+    border-radius: 50%;
+    top: -17em;
+    filter: blur(6em);
+    animation: okay 100ms infinite;
+}
+
+@keyframes okay {
+    to {
+        filter: blur(6em) opacity(0.8);
+    }
+}
+
+
+
 </style>
