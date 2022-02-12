@@ -9,13 +9,13 @@
         active-text-color="#ffd04b"
         class="el-menu-vertical-demo"
         @select="menuSelect">
-        <el-menu-item v-for="(item, index) in state.menuItems" :key="index" :index="index">
+        <!-- <el-menu-item v-for="(item, index) in state.menuItems" :key="index" :index="index">
           <i v-if="item.icon" :class="['ic', item.icon]"/>
           <span>{{index}} {{ item.title }}</span>
-          <div v-if="index === 4" style="border-top: 1px solid #dcdfe6;"/>
+          <div v-if="index === 4" style="border-top: 1px solid #dcdfe6;"/> -->
           <!-- <hr v-if="index === 4" style="color: black;"> -->
           <!-- <hr v-if="index === 4" style="color: black"> -->
-        </el-menu-item>
+        <!-- </el-menu-item> -->
 
         <div>
           <div style="padding-left: 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #cfcfcf; width: 90%; margin: 1rem auto 0;">
@@ -25,8 +25,8 @@
         <el-scrollbar id="sidebar">
           <el-menu-item v-for="(item, index) in state.userTeams" :key="index + state.menuItems.length" :index="index + state.menuItems.length">
             <!-- <i v-if="item.icon" :class="['ic', item.icon]"/> -->
-            <span>{{index + state.menuItems.length}} {{ item.teamName }}</span>
-            <span>{{ item.id }}</span>
+            <!-- <span>{{index + state.menuItems.length}} {{ item.teamName }}</span> -->
+            <span>{{ item.id }} {{ item.teamName }}</span>
             <!-- <div v-if="index === 4" style="border-top: 1px solid #dcdfe6;"/> -->
             <!-- <hr v-if="index === 4" style="color: black;"> -->
             <!-- <hr v-if="index === 4" style="color: black"> -->

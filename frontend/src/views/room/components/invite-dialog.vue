@@ -64,23 +64,29 @@ export default {
     const addTeamMember = function(){
       store.dispatch('root/addTeamMember', { 'teamId': state.teamId, 'userId': state.inputEmail})
       .then(function (result) {
-        setTimeout(() => {
-                swal({
+              swal({
                   title: "팀 초대 등록",
                   text: "팀 초대 등록이 완료되었습니다.",
                   icon: "success",
                   button: "확인",
                 });
-              }, 500)
 
               // router.go(router.currentRoute)
 
 
-              handleClose()
+
 
       })
       .catch(function (error) {
-        console.log(error)
+        console.log(error.response.data)
+        swal({
+              title: "팀 초대 등록",
+              text: error.response.data.message,
+              icon: "error",
+              button: "확인",
+            });
+
+        handleClose()
       })
     }
 
