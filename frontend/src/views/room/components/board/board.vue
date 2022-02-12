@@ -36,7 +36,8 @@
             </el-scrollbar>
           </div>
           <div v-else>
-            <el-empty :image-size="100" description="약속이 없어요."/>
+            <el-empty :image-size="100" description="약속이 없어요.">
+            </el-empty>
           </div>
         </div>
         <div class="mb-4" style="width: 95%; margin-left: auto; margin-right: auto;">
@@ -75,11 +76,14 @@
             게시판
           </h4>
           <div style="margin: 20px 10px 10px 10px;">
-            <el-table :data="state.articleList" height="40vh" style="width: 100%" @row-click="boardClick(`${data}`)">
+            <article-page
+              :articleList = state.articleList
+            />
+            <!-- <el-table :data="state.articleList" height="40vh" style="width: 100%">
               <el-table-column prop="index" label="글번호" width="80" />
               <el-table-column prop="title" label="글제목" width="180" />
               <el-table-column prop="content" label="글내용" />
-            </el-table>
+            </el-table> -->
           </div>
         </div>
       </el-scrollbar>
@@ -91,11 +95,14 @@
 import { reactive, computed, onBeforeMount } from 'vue'
 import ImagePage from './image.vue'
 import VideoPage from './video.vue'
+import ArticlePage from './article.vue'
+
 export default {
   name: 'board',
   components:{
     ImagePage,
-    VideoPage
+    VideoPage,
+    ArticlePage,
   },
   props: {
     data: {
@@ -169,7 +176,7 @@ export default {
 
 <style>
 .board-container div {
-  background-color: yellow;
+  background-color: #d2f5ed;
 }
 .scrollbar-flex-content {
   display: flex;
