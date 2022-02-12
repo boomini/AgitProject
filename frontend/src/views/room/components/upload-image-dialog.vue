@@ -97,7 +97,7 @@ export default {
     const handleClose = function () {
       state.form.content = ''
       state.form.schedule = ''
-      state.form.images = ''
+      state.form.images = []
       emit('closeUploadImageDialog')
     }
 
@@ -137,7 +137,7 @@ export default {
               // router.go(router.currentRoute)
               console.log(res)
               // console.log(swal)
-
+              emit('createImage')
               handleClose()
         })
         .catch(err => {

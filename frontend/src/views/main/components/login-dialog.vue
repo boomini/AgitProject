@@ -1,5 +1,6 @@
 <template>
-  <el-dialog custom-class="login-dialog" v-model="state.dialogVisible" @close="handleClose" :modal="state.form.modalStatus">
+  <div>
+  <el-dialog custom-class="login-dialog" v-model="open" @close="handleClose" :modal="state.form.modalStatus">
     <!-- header -->
     <template #title>
       <span>
@@ -25,7 +26,7 @@
           <div class="line"></div>
           <div style="text-align:center">간편로그인</div>
           <div>
-            <button @click="handleClickSignIn" class='easy-custom-btn google-btn'></button>
+            <button @click="handleClickSignIn" class='easy-custom-btn google-btn' v-loading.fullscreen="loading"></button>
             <button @click="handleClickSignIn" class='easy-custom-btn naver-btn'></button>
             <button @click="handleClickSignIn" class='easy-custom-btn kakao-btn'></button>
           </div>
@@ -34,6 +35,8 @@
       </span>
     </template>
   </el-dialog>
+
+  </div>
 </template>
 <style>
 .login-dialog {
@@ -183,6 +186,9 @@ methods: {
       //
     */
 
+    console.log('로그인 다이얼로그 상태 in logindialog setup')
+    console.log(props.open)
+
 
     const state = reactive({
       form: {
@@ -262,9 +268,13 @@ methods: {
     const handleClose = function () {
       state.form.id = ''
       state.form.password = ''
+      console.log('로그인 다이얼로그 종료')
+      console.log(state.dialogVisible)
       emit('closeLoginDialog')
     }
     const tokenVerify = function(){
+
+      loading.value = true
 
       const params = new URLSearchParams();
       params.append('idToken', this.idToken);
@@ -285,6 +295,24 @@ methods: {
               store.commit('root/setUserTeam', result.data)
               console.log('회원 팀정보 가져오기')
             })
+
+            handleClose()
+            // store.dispatch('root/getProfile', token)
+            // .then(function (result) {
+            //   console.log(result.data.birthDay)
+            //   if (result.data.birthDay == '' || result.data.birthDay == null || result.data.birthDay == undefined) {
+            //     console.log('하아')
+            //     router.push({
+            //     name: 'Profile',
+            //   })
+            //   }
+            // })
+
+
+          })
+          // 로딩 스피너를 바로 꺼버리면 사용자가 볼 수 없으므로
+          // 작업 중인 것을 볼 수 있도록 조금의 여유를 주고 로딩 스피너를 끔.
+          .then(() => {
             store.dispatch('root/getProfile', token)
             .then(function (result) {
               console.log(result.data.birthDay)
@@ -295,18 +323,14 @@ methods: {
               })
               }
             })
-
-            handleClose()
-          })
-          // 로딩 스피너를 바로 꺼버리면 사용자가 볼 수 없으므로
-          // 작업 중인 것을 볼 수 있도록 조금의 여유를 주고 로딩 스피너를 끔.
-          .then(() => {
             setTimeout(() => {
               loading.value = false
-            }, 500)
+
+            }, 1000)
           })
           .catch(function (err) {
             console.log(err);
+            loading.value = false
           })
     }
     return { loginForm, state, clickLogin, handleClose, loading,tokenVerify }

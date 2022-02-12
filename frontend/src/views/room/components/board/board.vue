@@ -1,84 +1,90 @@
 <template>
-  <el-drawer
-    v-model="state.boardVisible"
-    :title= "state.title"
-    :direction="rtl"
-    :before-close="handleClose"
-  >
-    <el-scrollbar max-height="90vh">
+  <div class="board-container">
+    <el-drawer
+      v-model="state.boardVisible"
+      :title= "state.title"
+      :direction="rtl"
+      :before-close="handleClose"
+    >
+      <el-scrollbar max-height="90vh">
 
-      <div class="mb-4">
-        <h4>
-          오늘의 일정
-        </h4>
-        <div v-if="state.eventResList.length >= 1">
-          <el-scrollbar>
-            <div>
-              <p v-for="(item, index) in state.eventResList" :key="item" class="scrollbar-demo-item">
-                <span>
-                  {{ index + 1 }}. {{ item.eventTitle }}
-                </span>
-                <span v-if="data.uploadDate === item.endDate">
-                  D-day
-                  <!-- {{ data.uploadDate }}
-                  {{ item.startDate }}
-                  {{ item.endDate }}
-                  {{ item.endDate}}
-                  {{ item.dday }} -->
-                </span>
-                <span v-else>
-                  약속 시작
-                </span>
-              </p>
-            </div>
-          </el-scrollbar>
+        <div class="mb-4" style="width: 95%; margin-left: auto; margin-right: auto;">
+          <h4>
+            <i class="em em-spiral_calendar_pad" aria-role="presentation" aria-label=""/>
+            오늘의 일정
+          </h4>
+          <div v-if="state.eventResList.length >= 1">
+            <el-scrollbar>
+              <div>
+                <p v-for="(item, index) in state.eventResList" :key="item" class="scrollbar-demo-item">
+                  <span>
+                    {{ index + 1 }}. {{ item.eventTitle }}
+                  </span>
+                  <span v-if="data.uploadDate === item.endDate">
+                    D-day
+                    <!-- {{ data.uploadDate }}
+                    {{ item.startDate }}
+                    {{ item.endDate }}
+                    {{ item.endDate}}
+                    {{ item.dday }} -->
+                  </span>
+                  <span v-else>
+                    약속 시작
+                  </span>
+                </p>
+              </div>
+            </el-scrollbar>
+          </div>
+          <div v-else>
+            <el-empty :image-size="100" description="약속이 없어요."/>
+          </div>
         </div>
-        <div v-else>
-          <el-empty :image-size="100" description="약속이 없어요."/>
+        <div class="mb-4" style="width: 95%; margin-left: auto; margin-right: auto;">
+          <h4>
+            <i class="em em-camera_with_flash" aria-role="presentation" aria-label="CAMERA WITH FLASH"/>
+            사진
+          </h4>
+          <div v-if="state.imageList.length >= 1">
+            <image-page
+            :uploaddate = state.uploadDate
+            :teamId = state.teamId
+            :srcList = state.imageList></image-page>
+          </div>
+          <div v-else>
+            <el-empty :image-size="60" description="사진을 등록해주세요."/>
+          </div>
         </div>
-      </div>
-    <div style="border: 1px solid gray;">
-      <h4>
-        사진
-      </h4>
-      <div v-if="state.imageList.length >= 1">
-        <image-page
-        :uploaddate = state.uploadDate
-        :teamId = state.teamId
-        :srcList = state.imageList></image-page>
-      </div>
-      <div v-else>
-        <el-empty :image-size="60" description="사진을 등록해주세요."/>
-      </div>
-    </div>
-    <div style="border: 1px solid gray;">
-      <h4>
-        비디오
-      </h4>
-      <div v-if="state.videoList.length >= 1">
-        <video-page
-        :uploaddate = state.uploadDate
-        :teamId = state.teamId
-        :srcList = state.videoList></video-page>
-      </div>
-      <div v-else>
-        <el-empty :image-size="60" description="비디오를 등록해주세요."/>
-      </div>
-    </div>
-    <div>
-      <h4>
-        게시판
-      </h4>
-      <div style="margin: 10px;">
-        <el-table :data="state.articleList" height="40vh" style="width: 100%">
-          <el-table-column prop="index" label="글번호" width="80" />
-          <el-table-column prop="title" label="글제목" width="180" />
-          <el-table-column prop="content" label="글내용" />
-        </el-table>
-      </div>
-    </div>
-    </el-scrollbar>
-  </el-drawer>
+        <div class="mb-4" style="width: 95%; margin-left: auto; margin-right: auto;">
+          <h4>
+            <i class="em em-movie_camera" aria-role="presentation" aria-label="MOVIE CAMERA"></i>
+            비디오
+          </h4>
+          <div v-if="state.videoList.length >= 1">
+            <video-page
+            :uploaddate = state.uploadDate
+            :teamId = state.teamId
+            :srcList = state.videoList></video-page>
+          </div>
+          <div v-else>
+            <el-empty :image-size="60" description="비디오를 등록해주세요."/>
+          </div>
+        </div>
+        <div class="mb-4" style="width: 95%; margin-left: auto; margin-right: auto;">
+          <h4>
+            <i class="em em-clipboard" aria-role="presentation" aria-label="CLIPBOARD"></i>
+            게시판
+          </h4>
+          <div style="margin: 20px 10px 10px 10px;">
+            <el-table :data="state.articleList" height="40vh" style="width: 100%" @row-click="boardClick(`${data}`)">
+              <el-table-column prop="index" label="글번호" width="80" />
+              <el-table-column prop="title" label="글제목" width="180" />
+              <el-table-column prop="content" label="글내용" />
+            </el-table>
+          </div>
+        </div>
+      </el-scrollbar>
+    </el-drawer>
+  </div>
 </template>
 
 <script>
@@ -150,12 +156,21 @@ export default {
       emit('closeBoard')
     }
 
-    return { state, handleClose }
+    const boardClick = function (data) {
+      alert('board click')
+      console.log('여기 집중')
+      console.log(data)
+    }
+
+    return { state, handleClose, boardClick }
   }
 }
 </script>
 
 <style>
+.board-container div {
+  background-color: yellow;
+}
 .scrollbar-flex-content {
   display: flex;
 }
@@ -203,4 +218,29 @@ h4:after {
   left: 0.5em;
   margin-right: -50%;
 }
+
+.el-overlay {
+  animation: unfoldIn 0.25s cubic-bezier(.165,.84,.44,1) forwards;
+  -webkit-animation: unfoldIn 0.25s cubic-bezier(.165,.84,.44,1) forwards;
+}
+
+.el-table {
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+.el-table tr th .cell{
+  text-align: center;
+}
+
+.el-table .cell {
+  background-color: transparent;
+}
+
+.el-table .el-table__body tr:hover {
+  transition: 0.1s;
+  font-size: 20px;
+  /* background-color: black !important; */
+}
+
 </style>
