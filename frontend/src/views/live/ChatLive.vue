@@ -97,10 +97,10 @@ export default {
 </script>
 <style scoped>
 .chat-box {
-  width: 40vh;
-  height: 80vh;
+  width: 45vh;
+  height: 83vh;
   border-radius: 3%;
-  background-color: #32bebe;
+  background-color: #3e7090;
 }
 
 .header {
