@@ -326,6 +326,11 @@ export default {
                   button: "확인",
                 });
               }, 500)
+
+              // router.push({
+              //   name: 'schedule',
+              // })
+
               handleClose()
             })
             .catch(function (error) {
