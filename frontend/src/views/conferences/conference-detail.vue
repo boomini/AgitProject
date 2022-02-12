@@ -225,12 +225,15 @@ export default {
       // 음성 인지
       state.session.on('publisherStartSpeaking', (event) => {
           state.BorderColor = "blue"
-          console.log(state.BorderColor)
+          // subscribers 들의 음성인지는 추가로 알아봐야 함
+          // console.log(event.connection.connectionId)
+          state.subscribers.forEach((subscriber) => {
+            console.log(subscriber.stream.session.remoteConnections.keys())
+          })
       });
 
       state.session.on('publisherStopSpeaking', (event) => {
           state.BorderColor = "black"
-          console.log(state.BorderColor)
       });
 
       getToken(state.mySessionId).then((token) => {
