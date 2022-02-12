@@ -68,7 +68,7 @@
   #chat-container {
     position: absolute;
     top: -90px;
-    left: -250px;
+    left: -100px;
     margin-left: 0;
     margin-top: 0;
     z-index: 10;
@@ -133,6 +133,7 @@ export default {
       teamName: '',
       userName: '',
       videoStatus: true,
+      audioStatus: true,
     })
     // 페이지 진입시 불리는 훅
     onMounted(() => {
@@ -227,6 +228,8 @@ export default {
 						// --- Publish your stream ---
 
 						state.session.publish(state.publisher);
+            state.videoStatus = state.publisher.stream.videoActive
+            state.audioStatus = state.publisher.stream.audioActive
 					})
 					.catch(error => {
 						console.log('There was an error connecting to the session:', error.code, error.message);
@@ -331,15 +334,14 @@ export default {
     }
     // 비디오 토글
     const changeVideoState = function (){
-      // state.publisher.stream.videoActive = !state.publisher.stream.videoActive
-      console.log(state.publisher)
-      state.publisher.publishVideo(state.publisher.stream.videoActive)
+      state.videoStatus = !state.videoStatus
+      state.publisher.publishVideo(state.videoStatus)
     }
 
     // 오디오 토글
     const changeAudioState = function (){
-      state.publisher.stream.audioActive = !state.publisher.stream.audioActive
-      state.publisher.publishAudio(state.publisher.stream.audioActive)
+      state.audioStatus = !state.audioStatus
+      state.publisher.publishAudio(state.audioStatus)
 
     }
     getTeamInfo()
