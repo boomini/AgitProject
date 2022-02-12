@@ -132,6 +132,7 @@ export default {
       roomId: computed(() => route.params.conferenceId),
       teamName: '',
       userName: '',
+      videoStatus: true,
     })
     // 페이지 진입시 불리는 훅
     onMounted(() => {
@@ -330,7 +331,7 @@ export default {
     }
     // 비디오 토글
     const changeVideoState = function (){
-      state.publisher.stream.videoActive = !state.publisher.stream.videoActive
+      // state.publisher.stream.videoActive = !state.publisher.stream.videoActive
       console.log(state.publisher)
       state.publisher.publishVideo(state.publisher.stream.videoActive)
     }
