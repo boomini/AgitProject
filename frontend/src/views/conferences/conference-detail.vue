@@ -257,27 +257,37 @@ export default {
 
       // 음성 인지
       state.session.on('publisherStartSpeaking', (event) => {
-          state.BorderColor = "blue"
           // subscribers 들의 음성인지는 추가로 알아봐야 함
+          const publisherId = state.publisher.stream.streamId
+          // console.log(publisherId)
           state.subscribers.forEach((subscriber) => {
             const str_len = event.connection.connectionId.length
             // console.log(event.connection.connectionId)
             // console.log(subscriber.stream.streamId.slice(-str_len))
             // console.log(subscriber.element)
-            if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
-              subscriber.element = "blue"
+
+            // publisher의 event면 publisher만 변경
+            if (publisherId.slice(-str_len) === event.connection.connectionId){
+              state.BorderColor = "blue"
+            }
+            else if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
+                subscriber.element = "blue"
             }
           })
       });
 
       state.session.on('publisherStopSpeaking', (event) => {
-          state.BorderColor = "black"
+          const publisherId = state.publisher.stream.streamId
           state.subscribers.forEach((subscriber) => {
             const str_len = event.connection.connectionId.length
             // console.log(event.connection.connectionId)
             // console.log(subscriber.stream.streamId.slice(-str_len))
-           if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
-              subscriber.element = "black"
+            if (publisherId.slice(-str_len) === event.connection.connectionId){
+              state.BorderColor = "black"
+            }
+           else if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
+             // publisher === subscriber인 경우는 제외
+                subscriber.element = "black"
             }
           })
       });
