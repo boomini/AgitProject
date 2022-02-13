@@ -38,7 +38,7 @@
       :height="`80px`"
       style="position:fixed; bottom: 0; width: 100%; background-color: white;"/>
   <!-- </div> -->
-  <div style="position: absolute; top: 90px; left: 260px; width: 80%;">
+  <div style="position: absolute; top: 90px; left: 100px; width: 80%;">
     <router-view @openLoginDialog="onOpenLoginDialog" @openSignupDialog="onOpenSignupDialog" @openAuthDialog="onOpenAuthDialog" @openRegisterTeamDialog="onOpenRegisterTeamDialog" :key="$route.fullPath"></router-view>
 
   </div>

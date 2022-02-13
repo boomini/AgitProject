@@ -91,7 +91,7 @@
 #chat-container {
   position: absolute;
   top: -90px;
-  left: -260px;
+  left: -100px;
   margin-left: 0;
   margin-top: 0;
   z-index: 10;

@@ -278,10 +278,12 @@ export default {
       //   console.log(err)
       // })
     }
-
-
-
-    return { state, clickLogin, clickSignup, clickAuth, clickLogout, clickHome }
+    // 인트로 페이지 방문시 최상단으로 스크롤 이동
+    const scrollTop = function (){
+      window.scrollTo(0, 0)
+    }
+    scrollTop()
+    return { state, clickLogin, clickSignup, clickAuth, clickLogout, clickHome, scrollTop}
   }
 }
 </script>
@@ -297,7 +299,7 @@ export default {
   margin-top: 0;
   z-index: 10;
   background-color: white;
-  width: 125%;
+  width: 140%;
   /* background: #112; */
   /* background-image: url("https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1"); */
   background-size:cover;

@@ -1269,8 +1269,4 @@ p{
 	 padding: 20px 0 0;
 }
 
-
-
-
-
 </style>
