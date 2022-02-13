@@ -1,14 +1,15 @@
 <template>
   <div v-if="info">
     <el-dialog custom-class="after-dialog" v-model="state.dialogVisible" title="다음 약속" width="30%" style="margin: 50%">
-      <span>
-      팀 이름: {{ info.teamName }} <br>
-      시작 날짜: {{ info.startDate }} <br>
-      종료 날짜: {{ info.endDate }} <br>
-      D-day: {{ info.dday }}일 <br>
-      약속 제목: {{ info.eventTitle }} <br>
-      약속 내용: {{ info.eventContent }}
-      </span>
+      <h2>팀명: {{ info.teamName }} <span style="font-size: 17px;">(종료 디데이: {{ info.dday }}일)</span></h2>
+      <br>
+      <h5>약속 제목: {{ info.eventTitle }}</h5>
+      <h5>약속 내용: {{ info.eventContent }}</h5>
+      <br>
+      <p>시작 날짜: {{ info.startDate }}</p>
+      <p>종료 날짜: {{ info.endDate }}</p>
+      <p>나오냐: {{ info.teamId }}</p>
+      <!-- <img src="{{ state.team.teamPicture }}" alt=".."> -->
       <template #footer>
         <span class="dialog-footer">
           <el-button type="primary" @click="handleClose()"
@@ -20,9 +21,11 @@
   </div>
   <div v-else-if="info == undefined">
     <el-dialog custom-class="before-dialog" v-model="state.dialogVisible" title="다음 약속" width="30%" style="margin: 50%">
-      <span>
-      일정을 추가해주세요!!
-      </span>
+      <p>
+      지난 일정이 없습니다.
+      </p>
+      <br>
+      <p>팀 생성 후 일정을 추가할 수 있습니다 <i class="em em-closed_book" aria-role="presentation" aria-label="CLOSED BOOK" style="margin-bottom:4px"></i></p>
       <template #footer>
         <span class="dialog-footer">
           <el-button type="primary" @click="handleClose()"
@@ -57,16 +60,36 @@ export default {
     const router = useRouter()
     const state = reactive({
       dialogVisible: computed(() => props.open),
+      team: null,
     })
 
+    // const takeTeam = function () {
+    //   console.log('ddd')
+    //   console.log(props.info.teamId)
+    //   store.dispatch('root/getTeamInfoDetail', props.info.teamId)
+    //   .then(function(result){
+    //     console.log(result.data);
+    //     console.log('어디')
+    //     state.team.teamPicture = result.data.teamPicture;
+    //   })
+    // }
 
+
+    // takeTeam()
+
+  // console.log(state.team.teamPicture)
+
+
+
+  // console.log(state.team.teamPicture)
+  // console.log('여기일듯')
 
 
     const handleClose = function () {
       emit('closeAfterDialog')
     }
 
-    return { state, store, router, handleClose }
+    return { state, store, router, handleClose}
   }
 }
 </script>

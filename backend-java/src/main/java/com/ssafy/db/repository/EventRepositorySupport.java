@@ -92,7 +92,7 @@ public class EventRepositorySupport {
             LocalDate endDate = tuple.get(qEvent.endDate);
             // 특정 달에만 해당하는 쿼리만 추가해서 반환 // 시작 날짜 or 끝나는 날짜 중 하나라도 걸리면
             if ((date.getYear() == endDate.getYear() && endDate.getMonthValue() == date.getMonthValue())
-            || (date.getYear() == startDate.getYear() && startDate.getMonthValue() == date.getMonthValue())){
+                    || (date.getYear() == startDate.getYear() && startDate.getMonthValue() == date.getMonthValue())){
                 EventResDto eventResDto = new EventResDto();
                 eventResDto.setEventTitle(tuple.get(qEvent.eventTitle));
                 eventResDto.setEventContent(tuple.get(qEvent.eventContent));

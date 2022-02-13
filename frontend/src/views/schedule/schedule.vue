@@ -48,9 +48,17 @@
   <div style="width:100%;">
     <div style="width: 92vw;" class="d-flex flex-row">
       <div id="scape">
-        <div class="landing">
-          <div id="clock" style="z-index:0; top:30px;" class="mx-0" >
+        <div class="landing" v-if="value==true">
+          <div id="clock" style="z-index:2; top:30px;" class="mx-0" >
             <p class="date">{{ state.clock.date }}</p>
+            <el-switch
+              v-model="value"
+              size="large"
+              active-text="낮"
+              active-color="#20B2AA"
+              inactive-text="밤"
+              inactive-color="#20B2AA"
+            />
           </div>
           <div class="mountain-scene">
             <div id="clouds">
@@ -99,9 +107,76 @@
                   </div>
                   <div class="shadow"></div>
                 </div>
-                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;"  v-if="todayschedule.length == 0">푹 쉬세요 <i style="margin-bottom:3px" class="em em-stuck_out_tongue_closed_eyes" aria-role="presentation" aria-label="FACE WITH STUCK-OUT TONGUE AND TIGHTLY-CLOSED EYES"></i></div>
-                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;" v-else-if="1 <= todayschedule.length && todayschedule.length <= 2">좋은 추억<br>쌓으세요 <i style="margin-bottom:3px" class="em em-sunglasses" aria-role="presentation" aria-label="SMILING FACE WITH SUNGLASSES"></i></div>
-                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;" v-else-if="todayschedule.length >= 3">오늘은<br>바쁘네요 <i style="margin-bottom:3px" class="em em-cry" aria-role="presentation" aria-label="CRYING FACE"></i></div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px; z-index: 2;"  v-if="todayschedule.length == 0">푹 쉬세요 <i style="margin-bottom:3px" class="em em-stuck_out_tongue_closed_eyes" aria-role="presentation" aria-label="FACE WITH STUCK-OUT TONGUE AND TIGHTLY-CLOSED EYES"></i></div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px; z-index: 2;" v-else-if="1 <= todayschedule.length && todayschedule.length <= 2">좋은 추억<br>쌓으세요 <i style="margin-bottom:3px" class="em em-sunglasses" aria-role="presentation" aria-label="SMILING FACE WITH SUNGLASSES"></i></div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px; z-index: 2;" v-else-if="todayschedule.length >= 3">오늘은<br>바쁘네요 <i style="margin-bottom:3px" class="em em-cry" aria-role="presentation" aria-label="CRYING FACE"></i></div>
+              </div>
+            <div>
+              <el-button type="text" @click="state.afterDialogOpen = true" style="margin-right:100px; font-size: 1.5rem; color: #13C7A3"
+                >다음 약속</el-button>
+            </div>
+          </div>
+        </div>
+        <div class="landing2" v-else-if="value==false">
+          <div id="clock" style="z-index:2; top:30px;" class="mx-0" >
+            <p class="date">{{ state.clock.date }}</p>
+            <el-switch
+              v-model="value"
+              size="large"
+              active-text="낮"
+              inactive-text="밤"
+            />
+          </div>
+          <div class="mountain-scene">
+            <div id="clouds">
+              <div class="cloud"></div>
+              <div class="cloud"></div>
+              <div class="cloud"></div>
+              <div class="cloud"></div>
+
+            </div>
+            <!-- background mountains -->
+            <div class="small-mountains">
+              <div class="tri"></div>
+              <div class="tri"></div>
+              <div class="tri"></div>
+            </div>
+            <div class="tall-mountains">
+              <div class="tri2"></div>
+              <div class="tri2"></div>
+              <div class="tri2"></div>
+            </div>
+            <!-- foreground mountains -->
+            <div class="tiny-mountains">
+              <div class="tri3"></div>
+              <div class="tri3"></div>
+              <div class="tri3"></div>
+              <div class="tri3"></div>
+              <div class="tri3"></div>
+            </div>
+          </div>
+          <div class="ground d-flex justify-content-evenly">
+            <div>
+              <el-button type="text" @click="state.beforeDialogOpen = true" style="margin-left:100px; font-size: 1.5rem; color: #13C7A3"
+                >이전 약속</el-button
+              >
+            </div>
+              <div class="page-wrapper">
+
+                <div class="box sb4 rounded-pill" style="margin-bottom: 200px;" v-if="todayschedule.length >= 1">오늘 일정이<br>{{ todayschedule.length }}개 있어요!</div>
+                <div class="box sb4 rounded-pill" style="margin-bottom: 200px;" v-else-if="todayschedule.length == 0">오늘은 일정이<br> 없어요!</div>
+                <div class="loader">
+                  <div class="jelly">
+                    <div class="body"></div>
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                    <div class="mouth"></div>
+                  </div>
+                  <div class="shadow"></div>
+                </div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px; z-index: 2;"  v-if="todayschedule.length == 0">푹 쉬세요 <i style="margin-bottom:3px" class="em em-stuck_out_tongue_closed_eyes" aria-role="presentation" aria-label="FACE WITH STUCK-OUT TONGUE AND TIGHTLY-CLOSED EYES"></i></div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px; z-index: 2;" v-else-if="1 <= todayschedule.length && todayschedule.length <= 2">좋은 추억<br>쌓으세요 <i style="margin-bottom:3px" class="em em-sunglasses" aria-role="presentation" aria-label="SMILING FACE WITH SUNGLASSES"></i></div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px; z-index: 2;" v-else-if="todayschedule.length >= 3">오늘은<br>바쁘네요 <i style="margin-bottom:3px" class="em em-cry" aria-role="presentation" aria-label="CRYING FACE"></i></div>
               </div>
             <div>
               <el-button type="text" @click="state.afterDialogOpen = true" style="margin-right:100px; font-size: 1.5rem; color: #13C7A3"
@@ -114,12 +189,29 @@
         <div class="header">
           <div class="order-summary">
             <div class="order-status">ID: {{ state.profileinfo.userId }}</div>
-            <div class="order-date">
-            닉네임: {{ state.profileinfo.nickName }}<el-button type="text" style=" min-height: 15px; padding: 10px; font-size: 1.5rem;" @click="state.nicknameDialogOpen = true">수정하기</el-button>
+             <div class="order-date">
+            닉네임: {{ state.profileinfo.nickName }}<el-button type="text" style=" min-height: 15px; padding: 10px; font-size: 1.5rem; z-index:9000;" @click="state.nicknameDialogOpen = true">수정하기</el-button>
             </div>
             <div class="order-day">
             {{ state.profileinfo.nickName }}의 생일: {{ state.profileinfo.birthDay }}
             </div>
+            <!-- <div>
+              <div class="order-date" v-if="state.profileinfo.nickName == ''">
+              닉네임: 오리너구리<el-button type="text" style=" min-height: 15px; padding: 10px; font-size: 1.5rem;" @click="state.nicknameDialogOpen = true">수정하기</el-button>
+              </div>
+              <div class="order-date" v-else-if="state.profileinfo.nickName != null">
+              닉네임: {{ state.profileinfo.nickName }}<el-button type="text" style=" min-height: 15px; padding: 10px; font-size: 1.5rem;" @click="state.nicknameDialogOpen = true">수정하기</el-button>
+              </div>
+            </div> -->
+            <!-- <div>
+            <div class="order-day" v-if="state.profileinfo.nickName == ''">
+            오리너구리의 생일: {{ state.profileinfo.birthDay }}
+            </div>
+            <div class="order-day" v-else-if="state.profileinfo.nickName != null">
+
+            </div>
+            {{ state.profileinfo.nickName }}의 생일: {{ state.profileinfo.birthDay }}
+            </div> -->
           </div>
         </div>
         <div class="hero-img-container">
@@ -128,7 +220,6 @@
         <div>
           <p>들어갈 버튼 궁리(이용약관, 이미지 변경 등)</p>
           <p>✨🥒🥪</p>
-
           <p>이모지<i class="em em-astonished" aria-role="presentation" aria-label="ASTONISHED FACE"></i></p>
           <el-button type="text" style=" min-height: 15px; padding: 10px; margin-left: 10px; font-size: 1.5rem;" @click="state.termsDialogOpen = true">이용약관</el-button>
         </div>
@@ -173,7 +264,7 @@ import AfterDialog from './components/after-dialog.vue'
 import NicknameDialog from './components/nickname-dialog.vue'
 import BirthdayDialog from './components/birthday-dialog.vue'
 import TermsDialog from './components/terms-dialog.vue'
-import _ from "lodash"
+import _ from 'lodash'
 
 export default {
   name: 'schedule',
@@ -199,8 +290,9 @@ export default {
         startDate: '1970-01-01',
         endDate: '1970-01-01',
         dday: '1970-01-01',
+        teamId: '',
       },
-     profileinfo: {
+    profileinfo: {
         birthDay: '1970-01-01',
         name: '',
         nickName: '',
@@ -208,7 +300,7 @@ export default {
         id: '',
         cdate: '1970-01-01',
         emailType: '',
-        password: ''
+        password: '',
       },
     clock : {
         time: '',
@@ -224,14 +316,18 @@ export default {
     nicknameDialogOpen : false,
     birthdayDialogOpen : false,
     termsDialogOpen : false,
+    afterteamId : '',
   })
   const beforeschedule = []
   const afterschedule = []
   const todayschedule = []
   let beforeday = ''
   let afterday = ''
+  // let beforeteamId = ''
+
   var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   var timerID = setInterval(updateTime, 1000);
+  const value = ref(true)
 
 
   const takeSchdule = function () {
@@ -243,8 +339,8 @@ export default {
         // console.log(res.data)
         // console.log('하이')
         let today = new Date().toISOString().slice(0,10)
-        console.log(today) //2022-02-12
-        console.log(typeof(today)) //string
+        // console.log(today) //2022-02-12
+        // console.log(typeof(today)) //string
         state.schedulelength = res.data.length
         state.infos = res.data.slice().reverse()
         // console.log(typeof(state.infos))
@@ -302,7 +398,6 @@ export default {
         }
         // console.log(afterday)
         state.pros.afterpro.push(afterschedule[afterday])
-        // console.log(afterpro)
         // state.infos = computed(() => { return _.orderBy(state.infos, 'dday')} )
         // console.log(state.infos[2].teamName)
       })
@@ -326,20 +421,30 @@ export default {
 
   takeSchdule()
   // console.log(beforeday)
-
+  // console.log('애프터')
+  // console.log(state.afterteamId)
 
   // const calcdate = function () {
   //   for (var i = 0; i < state.schedulelength; i++) {
   //     console.log(i)
   //   }
   // }
+  // const takeTeam = function () {
+  //     const token = store.getters['root/getJWTToken']
+  //     store.dispatch('root/getTeamInfoDetail', token)
+  //     .then(function(res){
+  //       console.log(result.data);
+  //       console.log('어디')
+  //       state.team.teamPicture = result.data.teamPicture;
+  //     })
+  //   }
 
   const takeProfile = function () {
       const token = store.getters['root/getJWTToken']
       store.dispatch('root/getProfile', token)
       .then(res => {
         state.profileinfo = res.data
-        console.log(res)
+        // console.log(res)
         if (state.profileinfo.birthDay == null) {
           state.birthdayDialogOpen = true
         }
@@ -408,6 +513,21 @@ export default {
 
   updateTime()
 
+  // console.log('어디')
+  // console.log(state.pros.afterpro[-1])
+
+  // const takeTeam = function () {
+  //   const temp = state.pros.beforepro[0].teamId
+  //   store.dispatch('root/getTeamInfoDetail', temp)
+  //   .then(function(result){
+  //     console.log(result.data);
+  //     console.log('어디')
+  //   })
+  //   }
+
+
+  // takeTeam()
+
 
 
   const onCloseNicknameDialog = function () {
@@ -433,7 +553,7 @@ export default {
   }
 
 
-    return { router, takeProfile, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog, onCloseNicknameDialog, editNickname, onCloseBirthdayDialog, createBirthday, onCloseTermsDialog, todayschedule, week, timerID, updateTime, zeroPadding }
+    return {  value, router, takeProfile, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog, onCloseNicknameDialog, editNickname, onCloseBirthdayDialog, createBirthday, onCloseTermsDialog, todayschedule, week, timerID, updateTime, zeroPadding }
   }
 }
 
@@ -465,7 +585,7 @@ border-right: 10px solid transparent;
 border-top: 10px solid #20B2AA;
 border-bottom: 10px solid transparent;
 /* background: transparent; */
-left: 21px;
+left: 24px;
 bottom: -20px;
 }
 
@@ -841,6 +961,21 @@ bottom: -21px;
 
   );
 }
+
+.landing2 {
+  position: relative;
+  margin: auto;
+  display: block;
+  width: 100%;
+  height: 67vh;
+  background: rgb(190, 231, 232);
+  background: linear-gradient(
+    158deg,
+    #a0a0a0 0%,
+    #506EA5 55%
+
+  );
+}
 .mountain-scene {
   position: relative;
   height: 75%;
@@ -1166,7 +1301,7 @@ a {
   width: 78vh;
   /* overflow: hidden; */
   position: relative;
-  z-index: 2;
+  z-index: 0;
   transform:scale(0.8);
   transform-origin: top center;
 }
