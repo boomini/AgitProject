@@ -10,6 +10,7 @@ import com.ssafy.api.dto.UserDto;
 import com.ssafy.db.entity.EmailType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +32,10 @@ import io.swagger.annotations.ApiResponses;
 import retrofit2.http.Path;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -148,6 +153,48 @@ public class UserController {
 			throw new CUserNotFoundException();
 		}
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+	}
+
+	@GetMapping(path="profileimg/{userId}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public ResponseEntity<byte[]> getImage(@PathVariable("userId") Long userId) throws IOException {
+		String filePath="";
+		if(userId==0){
+			filePath = System.getProperty("user.dir") + "\\src\\main\\resources\\dist\\img\\"+ "defaultprofile.PNG";
+		}else{
+			User user = userService.getUserById(userId);
+
+			filePath = System.getProperty("user.home") + "\\files"+"\\userProfile"+ File.separator + user.getProfileImg();
+		}
+
+
+		byte[] returnValue = null;
+		ByteArrayOutputStream baos =null;
+		FileInputStream fis = null;
+
+		try{
+			baos = new ByteArrayOutputStream();
+			fis = new FileInputStream(filePath);
+
+			byte[] buf = new byte[1024];
+			int read = 0;
+
+			while((read=fis.read(buf,0,buf.length))!=-1){
+				baos.write(buf,0,read);
+			}
+
+			returnValue = baos.toByteArray();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally {
+			if(baos!=null){
+				baos.close();
+			}
+
+			if(fis!=null){
+				fis.close();
+			}
+		}
+		return ResponseEntity.status(200).body(returnValue);
 	}
 
 	@GetMapping("/teamList")
