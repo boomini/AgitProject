@@ -54,6 +54,7 @@
             v-for="sub in state.subscribers"
             :key="sub.stream.connection.connectionId"
             :stream-manager="sub"
+            :border-color="sub.element"
           />
         </div>
         <div id="chat-box">
@@ -231,6 +232,7 @@ export default {
       state.session.on("streamCreated", ({ stream }) => {
         console.log(stream);
         const subscriber = state.session.subscribe(stream);
+        subscriber.element = "black"
         state.subscribers.push(subscriber);
         // console.log("===============================")
         // console.log(state.subscribers)
@@ -269,15 +271,26 @@ export default {
           state.BorderColor = "blue"
           // subscribers 들의 음성인지는 추가로 알아봐야 함
           state.subscribers.forEach((subscriber) => {
-            console.log(subscriber)
             const str_len = event.connection.connectionId.length
-            console.log(event.connection.connectionId)
-            console.log(subscriber.stream.streamId.slice(-str_len))
+            // console.log(event.connection.connectionId)
+            // console.log(subscriber.stream.streamId.slice(-str_len))
+            // console.log(subscriber.element)
+            if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
+              subscriber.element = "blue"
+            }
           })
       });
 
       state.session.on('publisherStopSpeaking', (event) => {
           state.BorderColor = "black"
+          state.subscribers.forEach((subscriber) => {
+            const str_len = event.connection.connectionId.length
+            // console.log(event.connection.connectionId)
+            // console.log(subscriber.stream.streamId.slice(-str_len))
+           if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
+              subscriber.element = "black"
+            }
+          })
       });
 
       getToken(state.mySessionId).then((token) => {
