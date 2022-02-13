@@ -257,36 +257,35 @@ export default {
 
       // 음성 인지
       state.session.on('publisherStartSpeaking', (event) => {
-          state.BorderColor = "blue"
           // subscribers 들의 음성인지는 추가로 알아봐야 함
           const publisherId = state.publisher.stream.streamId
           // console.log(publisherId)
+          // publisher의 event면 publisher만 변경
+          const str_len = event.connection.connectionId.length
+          if (publisherId.slice(-str_len) === event.connection.connectionId){
+            state.BorderColor = "blue"
+          }
           state.subscribers.forEach((subscriber) => {
-            const str_len = event.connection.connectionId.length
-            // console.log(event.connection.connectionId)
-            // console.log(subscriber.stream.streamId.slice(-str_len))
-            // console.log(subscriber.element)
+
+            // subscirber의 event면 subscriber 변경
             if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
-              // publisher === subscriber인 경우는 제외
-              if (publisherId.slice(-str_len) !== event.connection.connectionId){
                 subscriber.element = "blue"
-              }
             }
           })
       });
 
       state.session.on('publisherStopSpeaking', (event) => {
-          state.BorderColor = "black"
           const publisherId = state.publisher.stream.streamId
+          const str_len = event.connection.connectionId.length
+          if (publisherId.slice(-str_len) === event.connection.connectionId){
+            state.BorderColor = "black"
+          }
           state.subscribers.forEach((subscriber) => {
-            const str_len = event.connection.connectionId.length
-            // console.log(event.connection.connectionId)
-            // console.log(subscriber.stream.streamId.slice(-str_len))
+
+            // publisher의 event면 publisher만 변경
+            // subscirber의 event면 subscriber 변경
            if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
-             // publisher === subscriber인 경우는 제외
-              if (publisherId.slice(-str_len) !== event.connection.connectionId){
                 subscriber.element = "black"
-              }
             }
           })
       });
@@ -474,3 +473,4 @@ export default {
   },
 };
 </script>
+

@@ -21,10 +21,7 @@ import com.ssafy.db.repository.UserRepositorySupport;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  *	유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
@@ -130,10 +127,13 @@ public class UserServiceImpl implements UserService {
 			user.setName(name);
 			user.setEmailType(EmailType.Google);
 			user.setNickName(name);
+			user.setProfileImg(pictureUrl);
 
 			System.out.println(user.getUserId());
 			System.out.println(user.getName());
 			System.out.println(user.getNickName());
+			System.out.println(pictureUrl);
+			System.out.println(user.getProfileImg());
 
 		}
 		return user;
@@ -147,6 +147,12 @@ public class UserServiceImpl implements UserService {
 
 		}
 		return teamDtoList;
+	}
+
+	@Override
+	public User getUserById(Long userId) {
+		User user = userRepository.findById(userId).get();
+		return user;
 	}
 
 

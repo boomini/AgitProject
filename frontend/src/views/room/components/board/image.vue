@@ -1,20 +1,19 @@
 <template>
   <el-scrollbar>
-        <div class="scrollbar-flex-content">
-          <p v-for="item in state.srcList.length" :key="item" class="scrollbar-demo-image-item">
-            <div class="demo-image__preview">
-              <el-image
-                style="width: 250px; height: 200px"
-                :src='state.srcList[item-1]'
-                :preview-src-list="state.srcList"
-                fit="fill"
-              >
-              </el-image>
-            </div>
-          </p>
-        </div>
+    <div class="scrollbar-flex-content">
+      <p v-for="item in state.srcList.length" :key="item" class="scrollbar-demo-image-item">
+        <el-image
+          style="width: 150px; height: 120px;"
+          :src='state.srcList[item-1]'
+          :preview-src-list="state.srcList"
+          fit="fill"
+          lazy
+        >
+        </el-image>
+      </p>
+    </div>
 
-      </el-scrollbar>
+  </el-scrollbar>
 </template>
 
 <script>
@@ -64,13 +63,17 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 250px;
-  height: 200px;
-  margin: 1px;
+  width: 150px;
+  height: 120px;
+  margin: 1px 20px 1px 1px;
   text-align: center;
   border: 0px solid black;
   border-radius: 4px;
-  background: var(--el-color-danger-lighter);
+  background: transparent;
   color: var(--el-color-danger);
+}
+
+.is-horizontal {
+  display: none;
 }
 </style>

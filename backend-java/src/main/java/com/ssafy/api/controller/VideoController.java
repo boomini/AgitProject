@@ -53,7 +53,7 @@ public class VideoController {
 
         //System.out.println(servletContext.getRealPath("/resources/dist/video"));
         //String realPath = servletContext.getRealPath("/resources/dist/video");
-        String realPath =  System.getProperty("user.dir") + "\\files"+"\\video";
+        String realPath =  System.getProperty("user.home") + "\\files"+"\\video";
         System.out.println(realPath);
         System.out.println(userId);
         StringTokenizer st = new StringTokenizer(uploadDate,"-");
@@ -93,7 +93,7 @@ public class VideoController {
     public ResponseEntity<UrlResource> download (
             @RequestBody VideoDto videoDto, HttpServletRequest request) throws Exception {
 //		System.out.println(param);
-        String filePath = System.getProperty("user.dir") + "\\files"+"\\video"+ File.separator + videoDto.getFilePath() + File.separator + videoDto.getFileName();
+        String filePath = System.getProperty("user.home") + "\\files"+"\\video"+ File.separator + videoDto.getFilePath() + File.separator + videoDto.getFileName();
         // String filePath = servletContext.getRealPath("/resources/dist/video") + File.separator + imageDto.getFilePath() + File.separator + imageDto.getOriginalFileName();
         File target = new File(filePath);
         System.out.println(target);
@@ -135,7 +135,7 @@ public class VideoController {
     @DeleteMapping("/{no}")
     public ResponseEntity<? extends BaseResponseBody>  delete(@PathVariable("no") Long no) throws Exception {
         //String path=servletContext.getRealPath("/resources/dist/img");
-        String path =  System.getProperty("user.dir") + "\\files"+"\\video";
+        String path =  System.getProperty("user.home") + "\\files"+"\\video";
         if(!videoService.deleteVideo(no,
                 path)){
             throw new CFileNotFoundException();
@@ -145,7 +145,7 @@ public class VideoController {
     @GetMapping("/{no}")
     public StreamingResponseBody stream(@PathVariable("no") Long no) throws Exception {
         Optional<Video> image = videoService.findById(no);
-        String Filepath = System.getProperty("user.dir") + "\\files"+"\\video"+ File.separator + image.get().getFilePath() + File.separator + image.get().getFileName();
+        String Filepath = System.getProperty("user.home")+ "\\files"+"\\video"+ File.separator + image.get().getFilePath() + File.separator + image.get().getFileName();
         File file = new File(Filepath);
         final InputStream is = new FileInputStream(file);
         return os -> {

@@ -96,7 +96,7 @@ public class TeamController {
             teamService.createTeam(teamDto, userId);
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
         }
-        String realPath = System.getProperty("user.dir") + "\\files" + "\\teamProfile";
+        String realPath = System.getProperty("user.home") + "\\files" + "\\teamProfile";
         String saveFolder = realPath;
 
         File folder = new File(saveFolder);
@@ -117,7 +117,7 @@ public class TeamController {
     public ResponseEntity<byte[]> getImage(@PathVariable("teamId") Long teamId) throws IOException {
         TeamDto teamDto = teamService.getTeamById(teamId);
 
-        String filePath = System.getProperty("user.dir") + "\\files"+"\\teamProfile"+ File.separator + teamDto.getTeamPicture();
+        String filePath = System.getProperty("user.home") + "\\files"+"\\teamProfile"+ File.separator + teamDto.getTeamPicture();
         File target = new File(filePath);
 
         byte[] returnValue = null;
