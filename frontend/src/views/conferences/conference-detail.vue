@@ -270,6 +270,7 @@ export default {
             if (publisherId.slice(-str_len) === event.connection.connectionId){
               state.BorderColor = "blue"
             }
+            // subscirber의 event면 subscriber 변경
             else if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
                 subscriber.element = "blue"
             }
@@ -282,11 +283,13 @@ export default {
             const str_len = event.connection.connectionId.length
             // console.log(event.connection.connectionId)
             // console.log(subscriber.stream.streamId.slice(-str_len))
+
+            // publisher의 event면 publisher만 변경
             if (publisherId.slice(-str_len) === event.connection.connectionId){
               state.BorderColor = "black"
             }
+            // subscirber의 event면 subscriber 변경
            else if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
-             // publisher === subscriber인 경우는 제외
                 subscriber.element = "black"
             }
           })
