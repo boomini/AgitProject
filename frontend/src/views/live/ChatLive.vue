@@ -102,7 +102,7 @@ export default {
   border-radius: 15px;
   border-width: 0.3vh;
   border-style: solid;
-  border-color: rgb(55, 120, 81);
+  border-color: black;
   background-color: rgb(85, 174, 121);
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.25);
 }

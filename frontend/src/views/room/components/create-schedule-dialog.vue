@@ -73,9 +73,9 @@
         <el-button @click="handleClose">취소</el-button>
         <el-button type="primary" @click="createSchedule">약속잡기</el-button>
       </span>
-      <span>
+      <!-- <span>
         {{ info.teamId }}
-      </span>
+      </span> -->
     </template>
   </el-dialog>
 </template>

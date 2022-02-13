@@ -14,23 +14,32 @@
 
     <div class="d-flex-row justify-content-between my-3" v-if="state.session">
       <div class="d-flex offset-1">
-        <!-- 비디오 토글 버튼 -->
-          <div v-if="state.publisher.stream.videoActive">
-            <i class="fa-solid fa-video-slash toggle-icon-off mx-5 text-center" @click="changeVideoState()"></i>
-          </div>
-          <div v-else>
-            <i class="fa-solid fa-video toggle-icon-on mx-5 text-center" style="padding-left: 0.95vh" @click="changeVideoState()"></i>
-          </div>
-          <!-- 오디오 토글 버튼 -->
-          <div v-if="state.publisher.stream.audioActive">
-           <i class="fa-solid fa-microphone-slash toggle-icon-off mx-5 text-center" @click="changeAudioState()"></i>
-          </div>
-          <div v-else>
-            <i class="fa-solid fa-microphone toggle-icon-on mx-5 text-center" style="padding-left: 0.9vh" @click="changeAudioState()"></i>
-          </div>
+        <div class="d-flex" id="btn-group">
+          <!-- 비디오 토글 버튼 -->
+            <div>
+              <div v-if="state.publisher.stream.videoActive">
+                <i class="fa-solid fa-video-slash toggle-icon-off text-center" @click="changeVideoState"></i>
+              </div>
+              <div v-else>
+                <i class="fa-solid fa-video toggle-icon-on text-center" style="padding-left: 0.95vh" @click="changeVideoState"></i>
+              </div>
+            </div>
+            <!-- 오디오 토글 버튼 -->
+            <div>
+              <div v-if="state.publisher.stream.audioActive">
+              <i class="fa-solid fa-microphone-slash toggle-icon-off text-center" @click="changeAudioState"></i>
+              </div>
+              <div v-else>
+                <i class="fa-solid fa-microphone toggle-icon-on text-center" style="padding-left: 0.9vh" @click="changeAudioState"></i>
+              </div>
+            </div>
+            <div>
+              <i class="fa-solid fa-share-from-square share-icon text-center" @click="onOpenShareDialog"></i>
+            </div>
+        </div>
         <div class="d-flex justify-content-between align-items-center offset-1" id="header">
           <h1 class="text-center">Room: {{ state.teamName }}</h1>
-          <h2 id="close-btn" class="d-flex justify-content-center align-items-center" @click="closeSession()">X</h2>
+          <h2 id="close-btn" class="d-flex justify-content-center align-items-center" @click="closeSession">X</h2>
         </div>
       </div>
       <div class="d-flex justify-content-between">
@@ -51,6 +60,7 @@
         </div>
       </div>
     </div>
+    <screen-share :open="state.shareDialogOpen"/>
   </div>
 </template>
 <style scoped>
@@ -93,8 +103,11 @@
 #chat-box {
   margin-right: 5vh;
 }
-
+#btn-group{
+  transform: translate(-20%, 30%);
+}
 #close-btn {
+  transform: translate(50%, 0);
   font-size: 5vh;
   width: 10vh;
   height: 7vh;
@@ -107,11 +120,12 @@
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
 }
 .toggle-icon-off{
-  transform: scale(2) translate(-80%, 60%);
+  margin-right: 7vh;
+  transform: scale(2);
   border-color: black;
   background-color: #b53638;
   border-style: solid;
-  border-width: 2px;
+  border-width: 0.3vh;
   padding: 0.8vh;
   width: 5vh;
   border-radius: 100px;
@@ -119,16 +133,31 @@
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
 }
 .toggle-icon-on{
-  transform: scale(2) translate(-80%, 60%);
+  margin-right: 7vh;
+  transform: scale(2);
   border-color: black;
   background-color: #3d48c2;
   border-style: solid;
-  border-width: 2px;
+  border-width: 0.3vh;
   padding: 0.8vh;
   width: 5vh;
   border-radius: 100px;
   cursor: pointer;
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+}
+.share-icon{
+  margin-right: 5vh;
+  transform: scale(2);
+  border-color: black;
+  border-style: solid;
+  border-width: 0.3vh;
+  padding: 0.8vh;
+  width: 5vh;
+  border-radius: 100px;
+  cursor: pointer;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+  background-color: rgb(27, 26, 26);
+  color: #f6f6f6;
 }
 #header{
   width: 132vh;
@@ -151,6 +180,7 @@ import { useRoute, useRouter } from "vue-router";
 import { OpenVidu } from "openvidu-browser";
 import UserVideo from "@/views/live/UserVideo.vue";
 import ChatLive from "@/views/live/ChatLive.vue";
+import ScreenShare from "@/views/live/ScreenShare.vue"
 import axios from "axios";
 import moment from "moment";
 
@@ -162,6 +192,7 @@ export default {
   components: {
     UserVideo,
     ChatLive,
+    ScreenShare,
   },
 
   setup() {
@@ -192,6 +223,7 @@ export default {
       videoStatus: true,
       audioStatus: true,
       BorderColor: 'black',
+      shareDialogOpen: false,
     });
     // 페이지 진입시 불리는 훅
     onMounted(() => {
@@ -257,7 +289,6 @@ export default {
 
       // 음성 인지
       state.session.on('publisherStartSpeaking', (event) => {
-          // subscribers 들의 음성인지는 추가로 알아봐야 함
           const publisherId = state.publisher.stream.streamId
           // console.log(publisherId)
           // publisher의 event면 publisher만 변경
@@ -450,6 +481,18 @@ export default {
       state.audioStatus = !state.audioStatus;
       state.publisher.publishAudio(state.audioStatus);
     };
+
+
+    // 화면공유 모달창
+    const onOpenShareDialog = function (){
+      this.shareDialogOpen = true
+    };
+
+    const onCloseShareDialog = function (){
+      this.shareDialogOpen = false
+    };
+
+
     getTeamInfo();
     takeProfile();
     return {
@@ -469,6 +512,8 @@ export default {
       getTeamInfo,
       changeVideoState,
       changeAudioState,
+      onOpenShareDialog,
+      onCloseShareDialog,
     };
   },
 };
