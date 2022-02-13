@@ -127,38 +127,10 @@
     </div>
 
     <!-- 오른쪽 멤버 화면 -->
-    <div class="col-2 d-flex flex-column justify-content-between" style="border: 1px solid black; border-radius: 20px; margin-bottom: 180px;">
-      <div>
-        <div>멤 버</div>
-        <div v-for="member in state.teamMembers" :key="member.id" class="d-flex align-items-center">
-          <div class="d-flex align-items-center mb-2">
-            <el-avatar :size="50" :src="state.circleUrl"></el-avatar>
-            <span style="height: 50px; line-height: 50px;">
-              {{ member.name }}
-            </span>
-          </div>
-        </div>
-      </div>
-      <div style="text-align: center; margin-bottom: 1rem">
-        <div>
-          <el-button style="width: 100%; margin-bottom: 0.5rem;" @click="state.inviteDialogOpen = true">
-            초대하기
-          </el-button>
-        </div>
-        <div>
-          <el-button style="width: 100%" @click="joinConference(state.team.teamId)">
-            회의하기
-          </el-button>
-        </div>
-      </div>
-    </div>
+    <room-member
+    :teamId = "state.team.teamId"
+    />
   </div>
-
-  <!-- 초대코드 전송 다이얼로그 -->
-  <invite-dialog
-    :open="state.inviteDialogOpen"
-    :info="state.team.teamId"
-    @closeInviteDialog="onCloseInviteDialog"/>
 
   <!-- 일정 추가 다이얼로그 -->
   <create-schedule-dialog
@@ -223,22 +195,23 @@
 import { ref, reactive, computed, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import InviteDialog from './components/invite-dialog.vue'
+
 import CreateScheduleDialog from './components/create-schedule-dialog.vue'
 import CreateArticleDialog from './components/create-article-dialog.vue'
 import UploadImageDialog from './components/upload-image-dialog.vue'
 import UploadVideoDialog from './components/upload-video-dialog.vue'
 import Board from './components/board/board.vue'
+import RoomMember from './components/roomMember.vue'
 
 
 export default {
   name: 'room-board',
   components: {
-    InviteDialog,
     CreateScheduleDialog,
     CreateArticleDialog,
     UploadImageDialog,
     UploadVideoDialog,
+    RoomMember,
     Board,
   },
   setup() {
@@ -410,23 +383,6 @@ export default {
       }
     }
 
-    function takeMember () {
-      const token = store.getters['root/getJWTToken']
-      const body = {
-        'teamId': state.team.teamId
-      }
-      store.dispatch('root/takeMember', {'body': body, 'token': token})
-      .then(res=> {
-        console.log(res.data)
-        state.teamMembers = res.data
-        console.log(state.teamMembers[0].name)
-      })
-      .catch(err => {
-        console.log(err)
-        // console.log('기달')
-      })
-    }
-
     const state = reactive({
       team: {
         teamId: '',
@@ -454,7 +410,6 @@ export default {
       createArticleDialogOpen: false,
       uploadImageDialogOpen: false,
       uploadVideoDialogOpen: false,
-      inviteDialogOpen: false,
       boardOpen: false,
       // year : '',
       // month : '',
@@ -538,18 +493,6 @@ export default {
 
     const onCloseBoard = function () {
       state.boardOpen = false
-    }
-
-    const joinConference = function (roomId) {
-      router.push({
-        name: 'conference-detail',
-        params: {
-          conferenceId: roomId
-        }
-      })
-      // router.push({
-      //   name: 'Error',
-      // })
     }
 
     // const getTeamDetail = function(){
@@ -642,11 +585,10 @@ export default {
       getTeamDetail();
       reloadCalendar()
       reloadEvent()
-      takeMember()
 
     })
 
-    return { clickOnDate, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, joinConference, onCloseBoard, onCreateEvent }
+    return { clickOnDate, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, onCloseBoard, onCreateEvent }
   }
 
 }

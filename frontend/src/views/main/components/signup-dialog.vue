@@ -222,6 +222,11 @@ export default {
           { min: 2, max: 10, message: '2 ~ 10자 이내로 해주세요.', trigger: 'change' },
           { pattern: /^[a-zA-zㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,10}$/, message: '한글과 영문 대 소문자를 사용하세요. (특수기호, 공백 사용 불가)'}
         ],
+        nickname: [
+          { required: true, message: '이름을 입력해주세요.', trigger: 'blur' },
+          { min: 2, max: 10, message: '2 ~ 10자 이내로 해주세요.', trigger: 'change' },
+          { pattern: /^[a-zA-zㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,10}$/, message: '한글과 영문 대 소문자를 사용하세요. (특수기호, 공백 사용 불가)'}
+        ],
         birthDate: [
           { required: true, message: '생년월일을 선택해주세요.', trigger: 'blur'}
         ],
