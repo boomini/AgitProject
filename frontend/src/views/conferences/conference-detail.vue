@@ -26,18 +26,18 @@
     <div class="d-flex-row justify-content-between my-3" v-if="state.session">
       <div class="d-flex offset-1">
         <!-- 비디오 토글 버튼 -->
-          <div v-if="state.publisher.stream.videoActive" class="d-flex justify-content-center align-items-center">
-            <i class="fa-solid fa-video-slash toggle-icon-off mx-5" @click="changeVideoState()"></i>
+          <div v-if="state.publisher.stream.videoActive">
+            <i class="fa-solid fa-video-slash toggle-icon-off mx-5 text-center" @click="changeVideoState()"></i>
           </div>
-          <div v-else class="d-flex justify-content-center align-items-center">
-            <i class="fa-solid fa-video toggle-icon-on mx-5" style="padding-left: 0.95vh" @click="changeVideoState()"></i>
+          <div v-else>
+            <i class="fa-solid fa-video toggle-icon-on mx-5 text-center" style="padding-left: 0.95vh" @click="changeVideoState()"></i>
           </div>
           <!-- 오디오 토글 버튼 -->
-          <div v-if="state.publisher.stream.audioActive" class="d-flex justify-content-center align-items-center">
-           <i class="fa-solid fa-microphone-slash toggle-icon-off mx-5" @click="changeAudioState()"></i>
+          <div v-if="state.publisher.stream.audioActive">
+           <i class="fa-solid fa-microphone-slash toggle-icon-off mx-5 text-center" @click="changeAudioState()"></i>
           </div>
-          <div v-else class="d-flex justify-content-center align-items-center">
-            <i class="fa-solid fa-microphone toggle-icon-on mx-5" style="padding-left: 1.35vh" @click="changeAudioState()"></i>
+          <div v-else>
+            <i class="fa-solid fa-microphone toggle-icon-on mx-5 text-center" style="padding-left: 0.9vh" @click="changeAudioState()"></i>
           </div>
         <div class="d-flex justify-content-between align-items-center offset-1" id="header">
           <h1 class="text-center">Room: {{ state.teamName }}</h1>
@@ -96,7 +96,7 @@
   margin-top: 0;
   z-index: 10;
   background-color: #36393f;
-  width: 215vh;
+  width: 212.85vh;
   height: 100vh;
   background-size: cover;
 }
