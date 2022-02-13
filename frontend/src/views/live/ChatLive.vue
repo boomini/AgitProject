@@ -100,6 +100,9 @@ export default {
   width: 45vh;
   height: 83vh;
   border-radius: 15px;
+  border-width: 0.3vh;
+  border-style: solid;
+  border-color: rgb(55, 120, 81);
   background-color: rgb(85, 174, 121);
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.25);
 }
@@ -109,6 +112,7 @@ export default {
 
 .header {
   position: relative;
+  background-color: rgb(70, 148, 101);
 }
 
 .close-btn {

@@ -1,16 +1,5 @@
 <template>
   <div id="chat-container">
-    <!-- <div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div> -->
-    <!-- <div class="form-group">
-            <p>
-              <label>이름 설정</label>
-              <input v-model="state.myUserName" class="form-control" type="text" required>
-            </p>
-            <p>
-              <label>세션 이름</label>
-              <input v-model="state.mySessionId" class="form-control" type="text" required>
-            </p>
-          </div> -->
     <div v-if="!state.session">
       <div class="d-flex flex-column justify-content-center align-items-center offset-3 join-room">
         <h1>회의실 참가하기!</h1>
@@ -27,17 +16,17 @@
       <div class="d-flex offset-1">
         <!-- 비디오 토글 버튼 -->
           <div v-if="state.publisher.stream.videoActive">
-            <i class="fa-solid fa-video-slash toggle-icon-off mx-5" @click="changeVideoState()"></i>
+            <i class="fa-solid fa-video-slash toggle-icon-off mx-5 text-center" @click="changeVideoState()"></i>
           </div>
           <div v-else>
-            <i class="fa-solid fa-video toggle-icon-on mx-5" style="padding-left: 0.95vh" @click="changeVideoState()"></i>
+            <i class="fa-solid fa-video toggle-icon-on mx-5 text-center" style="padding-left: 0.95vh" @click="changeVideoState()"></i>
           </div>
           <!-- 오디오 토글 버튼 -->
           <div v-if="state.publisher.stream.audioActive">
-           <i class="fa-solid fa-microphone-slash toggle-icon-off mx-5" @click="changeAudioState()"></i>
+           <i class="fa-solid fa-microphone-slash toggle-icon-off mx-5 text-center" @click="changeAudioState()"></i>
           </div>
           <div v-else>
-            <i class="fa-solid fa-microphone toggle-icon-on mx-5" style="padding-left: 1.35vh" @click="changeAudioState()"></i>
+            <i class="fa-solid fa-microphone toggle-icon-on mx-5 text-center" style="padding-left: 0.9vh" @click="changeAudioState()"></i>
           </div>
         <div class="d-flex justify-content-between align-items-center offset-1" id="header">
           <h1 class="text-center">Room: {{ state.teamName }}</h1>
@@ -54,6 +43,7 @@
             v-for="sub in state.subscribers"
             :key="sub.stream.connection.connectionId"
             :stream-manager="sub"
+            :border-color="sub.element"
           />
         </div>
         <div id="chat-box">
@@ -96,7 +86,7 @@
   margin-top: 0;
   z-index: 10;
   background-color: #36393f;
-  width: 215vh;
+  width: 212.85vh;
   height: 100vh;
   background-size: cover;
 }
@@ -231,6 +221,7 @@ export default {
       state.session.on("streamCreated", ({ stream }) => {
         console.log(stream);
         const subscriber = state.session.subscribe(stream);
+        subscriber.element = "black"
         state.subscribers.push(subscriber);
         // console.log("===============================")
         // console.log(state.subscribers)
@@ -266,18 +257,37 @@ export default {
 
       // 음성 인지
       state.session.on('publisherStartSpeaking', (event) => {
-          state.BorderColor = "blue"
           // subscribers 들의 음성인지는 추가로 알아봐야 함
+          const publisherId = state.publisher.stream.streamId
+          // console.log(publisherId)
+          // publisher의 event면 publisher만 변경
+          const str_len = event.connection.connectionId.length
+          if (publisherId.slice(-str_len) === event.connection.connectionId){
+            state.BorderColor = "blue"
+          }
           state.subscribers.forEach((subscriber) => {
-            console.log(subscriber)
-            const str_len = event.connection.connectionId.length
-            console.log(event.connection.connectionId)
-            console.log(subscriber.stream.streamId.slice(-str_len))
+
+            // subscirber의 event면 subscriber 변경
+            if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
+                subscriber.element = "blue"
+            }
           })
       });
 
       state.session.on('publisherStopSpeaking', (event) => {
-          state.BorderColor = "black"
+          const publisherId = state.publisher.stream.streamId
+          const str_len = event.connection.connectionId.length
+          if (publisherId.slice(-str_len) === event.connection.connectionId){
+            state.BorderColor = "black"
+          }
+          state.subscribers.forEach((subscriber) => {
+
+            // publisher의 event면 publisher만 변경
+            // subscirber의 event면 subscriber 변경
+           if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
+                subscriber.element = "black"
+            }
+          })
       });
 
       getToken(state.mySessionId).then((token) => {
