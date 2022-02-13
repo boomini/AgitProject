@@ -2,10 +2,20 @@
   <div class="board-container">
     <el-drawer
       v-model="state.boardVisible"
-      :title= "state.title"
       :direction="rtl"
       :before-close="handleClose"
     >
+      <template #title>
+        <!-- <div width="50%">
+          <img :src="require(`@/assets/images/agit_logo.png`)">
+        </div> -->
+        <div class="d-flex align-items-center">
+          <el-image fit="scale-down" :src="require(`@/assets/images/agit_logo.png`)" style="height: 50px; width: 50px;"></el-image>
+          <span class="ms-3">
+            {{ state.title }}
+          </span>
+        </div>
+      </template>
       <el-scrollbar max-height="90vh">
 
         <div class="mb-4" style="width: 95%; margin-left: auto; margin-right: auto;">
@@ -16,7 +26,7 @@
           <div v-if="state.eventResList.length >= 1">
             <el-scrollbar>
               <div>
-                <p v-for="(item, index) in state.eventResList" :key="item" class="scrollbar-demo-item">
+                <p v-for="(item, index) in state.eventResList" :key="item" class="event-item">
                   <span>
                     {{ index + 1 }}. {{ item.eventTitle }}
                   </span>
@@ -36,7 +46,10 @@
             </el-scrollbar>
           </div>
           <div v-else>
-            <el-empty :image-size="100" description="약속이 없어요.">
+            <el-empty :image-size="200" description="약속이 없어요.">
+              <template #image>
+                <img :src="require(`@/assets/images/schedule-empty.png`)">
+              </template>
             </el-empty>
           </div>
         </div>
@@ -181,7 +194,7 @@ export default {
 .scrollbar-flex-content {
   display: flex;
 }
-.scrollbar-demo-item {
+.event-item {
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -190,11 +203,20 @@ export default {
   height: 50px;
   margin: 10px;
   text-align: center;
-  border: 1px solid black;
+  border: 1px solid #d1d1d1;
   border-radius: 4px;
-  background: var(--el-color-danger-lighter);
-  color: var(--el-color-danger);
+  background-color: #fff9e4;
+  color: var(--el-text-color-regular);
 }
+.event-item:hover {
+  background-color: #e3ddca;
+  transition: 0.1s;
+}
+
+.event-item:active {
+  opacity: 0.5;
+}
+
 .el-drawer {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
