@@ -1,5 +1,5 @@
 <template>
-  <div style="dispaly: flex; justify-content: center; align-items:center; width: 100%; margin-bottom: 20px">
+  <div style="dispaly: flex; justify-content: center; align-items:center; width: 99.2%; margin-bottom: 20px">
     <div v-if = "state.infos.length >= 3">
       <el-carousel :interval="4000" type="card" height="200px">
         <el-carousel-item v-for="info in state.infos" :key="info.startDate">
@@ -46,7 +46,7 @@
     </div>
   </div>
   <div style="width:100%;">
-    <div style="width: 83vw;" class="d-flex flex-row">
+    <div style="width: 92vw;" class="d-flex flex-row">
       <div id="scape">
         <div class="landing" v-if="value==true">
           <div id="clock" style="z-index:2; top:30px;" class="mx-0" >
@@ -644,7 +644,7 @@ bottom: -21px;
   }
 
   #scape {
-    width: 55vw;
+    width: 80vw;
     height: 100%;
     overflow-x: hidden;
     margin: 0px;
@@ -1298,7 +1298,7 @@ a {
 .iphone {
   background-color: #F4F4FB;
   height:83.7vh;
-  width: 64vh;
+  width: 78vh;
   /* overflow: hidden; */
   position: relative;
   z-index: 0;
@@ -1403,9 +1403,5 @@ p{
 	 font-size: 12px;
 	 padding: 20px 0 0;
 }
-
-
-
-
 
 </style>

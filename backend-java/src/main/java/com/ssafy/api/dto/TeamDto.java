@@ -23,6 +23,7 @@ public class TeamDto {
                 .teamName(teamName)
                 .teamDescription(teamDescription)
                 .teamBoss(teamBoss)
+                .teamPicture(teamPicture)
                 .build();
         return build;
     }

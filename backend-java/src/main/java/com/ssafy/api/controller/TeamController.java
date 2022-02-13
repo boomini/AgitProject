@@ -4,13 +4,12 @@ import com.ssafy.api.advice.exception.*;
 import com.ssafy.api.dto.*;
 
 import com.ssafy.api.service.*;
-import com.ssafy.db.entity.User;
+import com.ssafy.db.entity.*;
 
 
-import com.ssafy.db.entity.UserTeam;
-import com.ssafy.db.entity.Video;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
-import com.ssafy.db.entity.Team;
 import com.ssafy.db.repository.UserRepositorySupport;
 
 import io.swagger.annotations.Api;
@@ -32,10 +30,11 @@ import org.springframework.web.multipart.MultipartFile;
 import retrofit2.http.Path;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.*;
 
 @Api(value = "팀 API", tags = {"Team"})
 @RestController
@@ -73,15 +72,18 @@ public class TeamController {
     })
 
     public ResponseEntity<? extends BaseResponseBody> register (
-            @RequestBody @ApiParam(value="팀가입 정보", required = true) TeamDto teamDto, @ApiIgnore Authentication authentication) throws Exception {
-
+            @RequestParam(value="teamPicture", required = false) MultipartFile file, @RequestParam(value="teamName") String teamName, @RequestParam(value="teamDescription")String teamDescription, @ApiIgnore Authentication authentication) throws Exception {
+            TeamDto teamDto = new TeamDto();
+            String userId = "";
         try{
             SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-            String userId = userDetails.getUsername();
+            userId = userDetails.getUsername();
             User user = userService.getUserByUserId(userId);
             // 디폴트로 team Boss는 팀 생성자로 설정
             teamDto.setTeamBoss(user.getName());
-            teamService.createTeam(teamDto, userId);
+            teamDto.setTeamName(teamName);
+            teamDto.setTeamDescription(teamDescription);
+
         }catch (DataIntegrityViolationException e) {
             //회원중복시 예외처리
             throw new CUserDuplicateException();
@@ -90,7 +92,62 @@ public class TeamController {
             throw new CTokenForbiddenException();
         }
 
+        if(file==null){
+            teamService.createTeam(teamDto, userId);
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+        }
+        String realPath = System.getProperty("user.dir") + "\\files" + "\\teamProfile";
+        String saveFolder = realPath;
+
+        File folder = new File(saveFolder);
+        if(!folder.exists()) folder.mkdirs();
+
+        String originalFileName = file.getOriginalFilename();
+        String saveFileName = UUID.randomUUID().toString().replace("-", "") + originalFileName.substring(originalFileName.lastIndexOf('.'));
+        System.out.println(saveFileName);
+        teamDto.setTeamPicture(saveFileName);
+        file.transferTo(new File(folder, saveFileName));
+
+        teamService.createTeam(teamDto, userId);
+
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+    @GetMapping(path="profileimg/{teamId}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> getImage(@PathVariable("teamId") Long teamId) throws IOException {
+        TeamDto teamDto = teamService.getTeamById(teamId);
+
+        String filePath = System.getProperty("user.dir") + "\\files"+"\\teamProfile"+ File.separator + teamDto.getTeamPicture();
+        File target = new File(filePath);
+
+        byte[] returnValue = null;
+        ByteArrayOutputStream baos =null;
+        FileInputStream fis = null;
+
+        try{
+            baos = new ByteArrayOutputStream();
+            fis = new FileInputStream(filePath);
+
+            byte[] buf = new byte[1024];
+            int read = 0;
+
+            while((read=fis.read(buf,0,buf.length))!=-1){
+                baos.write(buf,0,read);
+            }
+
+            returnValue = baos.toByteArray();
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            if(baos!=null){
+                baos.close();
+            }
+
+            if(fis!=null){
+                fis.close();
+            }
+        }
+        return ResponseEntity.status(200).body(returnValue);
     }
 
     @GetMapping("/check/{teamId}")

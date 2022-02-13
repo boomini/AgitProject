@@ -109,10 +109,12 @@ export function getTeamInfoDetail ({ state }, payload) {
 // 팀 생성하기
 export function registerTeam ({ state }, payload) {
   console.log('registerTeam', state, payload)
-  const url = '/team'
-  const teamDto = payload.teamDto
-  const token = payload.token
-  return $axios({ method: 'post', url: url, data: teamDto, headers: { Authorization: `Bearer ${token}`}})
+  const header = {
+    Authorization : `Bearer ${payload.token}`,
+    'Content-Type' : 'multipart/form-data',
+  }
+
+  return $axios({ method: 'post', url: '/team', data: payload.formData, headers: header})
 }
 
 //팀원초대하기
