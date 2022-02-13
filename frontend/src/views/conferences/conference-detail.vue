@@ -262,9 +262,6 @@ export default {
           // console.log(publisherId)
           state.subscribers.forEach((subscriber) => {
             const str_len = event.connection.connectionId.length
-            // console.log(event.connection.connectionId)
-            // console.log(subscriber.stream.streamId.slice(-str_len))
-            // console.log(subscriber.element)
 
             // publisher의 event면 publisher만 변경
             if (publisherId.slice(-str_len) === event.connection.connectionId){
@@ -281,8 +278,6 @@ export default {
           const publisherId = state.publisher.stream.streamId
           state.subscribers.forEach((subscriber) => {
             const str_len = event.connection.connectionId.length
-            // console.log(event.connection.connectionId)
-            // console.log(subscriber.stream.streamId.slice(-str_len))
 
             // publisher의 event면 publisher만 변경
             if (publisherId.slice(-str_len) === event.connection.connectionId){
