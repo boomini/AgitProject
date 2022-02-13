@@ -27,9 +27,10 @@
       style="position:fixed; top: 0; background-color: white;"
       />
     <div class="main-container" style="position: fixed; top: 70px;">
-      <div class="hide-on-small" width="240px" style="height: calc(100vh - 150px)">
+      <div class="hide-on-small" width="90px;" style="height: calc(100vh - 150px);">
         <main-sidebar
-          :width="`240px`"
+          :width="`90px`"
+          style="position : fixed; z-index:10;"
           @openRegisterTeamDialog="onOpenRegisterTeamDialog"/>
       </div>
     </div>

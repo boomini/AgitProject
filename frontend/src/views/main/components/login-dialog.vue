@@ -242,6 +242,7 @@ methods: {
             .then(function (result) {
               store.commit('root/setUserTeam', result.data)
               console.log('회원 팀정보 가져오기')
+              console.log(result.data)
             })
 
 
@@ -300,6 +301,7 @@ methods: {
             .then(function (result) {
               store.commit('root/setUserTeam', result.data)
               console.log('회원 팀정보 가져오기')
+              console.log(result.data);
             })
 
             handleClose()
