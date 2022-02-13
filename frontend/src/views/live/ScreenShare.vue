@@ -64,7 +64,7 @@ export default {
   .screen-share{
     position: relative;
     background-color: aliceblue;
-    width: 80vh;
+    width: 42vw;
     height: 70vh;
     transform: translate(0, -20%);
   }

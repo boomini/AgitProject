@@ -15,7 +15,7 @@
 
 <style scoped>
   #user-video{
-    width: 45vh;
+    width: 21.2vw;
     padding: 0.65vh;
     border-radius: 1vh;
     border-width: 0.5vh;
@@ -31,7 +31,7 @@
   }
 
   #user-bar{
-    width: 40vh;
+    width: 21.2vw;
     height: 6vh;
   }
   .video-mask{

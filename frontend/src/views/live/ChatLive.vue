@@ -90,7 +90,7 @@ export default {
 </script>
 <style scoped>
 .chat-box {
-  width: 46vh;
+  width: 22vw;
   height: 83vh;
   margin-right: 7vh;
   border-radius: 15px;
@@ -111,11 +111,11 @@ export default {
 
 .text-box {
   background-color: #a7a6a6;
-  width: 36vh;
+  width: 17vw;
   border-radius: 12px;
   color: black;
-  padding-left: 10px;
-  height: 5svh;
+  padding-left: 0.8vw;
+  height: 5vh;
 }
 
 .text-box:focus {
@@ -136,7 +136,6 @@ export default {
   height: 4vh;
 }
 .message-title {
-
   font-size: 0.8rem;
 }
 

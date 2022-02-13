@@ -70,10 +70,10 @@
 <style scoped>
 .join-room{
   margin-top: 20vh;
-  margin-left: 60vh;
+  margin-left: 29vw;
   border-color: black;
   border-style: solid;
-  border-radius: 2vh;
+  border-radius: 15px;
   width: 100vh;
   height: 40vh;
   background-color: rgb(87, 193, 129);
@@ -81,7 +81,7 @@
 }
 
 #join-btn {
-  width: 15vh;
+  width: 8vw;
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.25);
 }
 
@@ -101,7 +101,7 @@
   margin-top: 0;
   z-index: 10;
   background-color: #36393f;
-  width: 212.85vh;
+  width: 100vw;
   height: 100vh;
   background-size: cover;
 }
@@ -111,7 +111,7 @@
 #close-btn {
   transform: translate(50%, 0);
   font-size: 5vh;
-  width: 10vh;
+  width: 4.5vw;
   height: 7vh;
   background-color: #b53638;
   border-style: solid;
@@ -125,14 +125,14 @@
   background-color: #c44749;
 }
 .toggle-icon-off{
-  margin-right: 7vh;
+  margin-right: 3.2vw;
   transform: scale(2);
   border-color: black;
   background-color: #b53638;
   border-style: solid;
   border-width: 0.3vh;
   padding: 0.8vh;
-  width: 5vh;
+  width: 2.5vw;
   border-radius: 100px;
   cursor: pointer;
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
@@ -141,14 +141,14 @@
   background-color: #c44749;
 }
 .toggle-icon-on{
-  margin-right: 7vh;
+  margin-right: 3.2vw;
   transform: scale(2);
   border-color: black;
   background-color: #3d48c2;
   border-style: solid;
   border-width: 0.3vh;
   padding: 0.8vh;
-  width: 5vh;
+  width: 2.5vw;
   border-radius: 100px;
   cursor: pointer;
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
@@ -157,13 +157,13 @@
   background-color: #4753d3;
 }
 .share-icon{
-  margin-right: 5vh;
+  margin-right: 2.5vw;
   transform: scale(2);
   border-color: black;
   border-style: solid;
   border-width: 0.3vh;
   padding: 0.8vh;
-  width: 5vh;
+  width: 2.5vw;
   border-radius: 100px;
   cursor: pointer;
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
