@@ -75,6 +75,7 @@
 }
 .main-sidebar .hide-on-small .el-menu {
   height: 100%;
+
 }
 .main-sidebar .el-menu .el-menu-item {
   cursor: pointer;

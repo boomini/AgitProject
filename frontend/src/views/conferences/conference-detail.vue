@@ -96,7 +96,7 @@
   margin-top: 0;
   z-index: 10;
   background-color: #36393f;
-  width: 125%;
+  width: 215vh;
   height: 100vh;
   background-size: cover;
 }
