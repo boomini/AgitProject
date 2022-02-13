@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 public class Article extends BaseEntity{
     @Column(columnDefinition="varchar(100)")
     String title;
+    @Column(columnDefinition="varchar(100)")
     String content;
     String writer;
     String teamName;
