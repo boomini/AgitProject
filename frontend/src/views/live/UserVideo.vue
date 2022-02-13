@@ -1,10 +1,10 @@
 <template>
 <div v-if="streamManager">
-  <div class="d-flex flex-column align-items-center mx-2 my-2" id="user-video" :style="{ borderColor: this.borderColor}">
+  <div class="d-flex flex-column align-items-center mx-3 my-2" id="user-video" :style="{ borderColor: this.borderColor}">
     <div class="video-mask">
       <ov-video :stream-manager="streamManager"/>
     </div>
-    <div class="d-flex justify-content-center" id="user-bar">
+    <div class="d-flex justify-content-center align-items-center" id="user-bar">
       <div>
        <p>이름: {{ clientData }}</p>
       </div>
@@ -31,9 +31,8 @@
   }
 
   #user-bar{
-    margin-top: 1vh;
     width: 40vh;
-    height: 5vh;
+    height: 6vh;
   }
   .video-mask{
     border-radius: 1vh;

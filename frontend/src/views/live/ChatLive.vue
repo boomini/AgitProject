@@ -1,6 +1,6 @@
 <template>
-    <div class="chat-panel">
-    <div class="chat-box p-2 d-flex flex-column">
+    <div>
+    <div class="chat-box p-2 d-flex flex-column mt-1">
       <div class="header text-left d-flex justify-content-center align-items-center">
         <span class="title">
           채팅
@@ -31,15 +31,15 @@
           </div>
         </div>
       </div>
-      <div class="footer d-flex mt-auto">
-        <div class="px-2 py-0">
+      <div class="d-flex mt-auto text-center">
+        <div class="mx-1">
           <input
             class="text-box"
             v-model="state.form.message"
             @keyup.enter="clickSendMessage"
           >
         </div>
-        <div class="col-2 p-0">
+        <div class="mx-1">
           <button
             class="send-btn"
             @click="clickSendMessage"
@@ -53,40 +53,33 @@
 </template>
 
 <script>
-import { reactive, computed, watch } from 'vue'
+import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { OpenVidu } from 'openvidu-browser'
 
 export default {
   name: "ChatLive",
 
-  setup(props, { emit }){
+  setup( props , { emit }){
   const store = useStore()
-  const router = useRouter()
+
 
   const state = reactive({
     form:{
       message: "",
       chatHeight: "30vh",
     },
-    session: props.session,
     messages: computed(() => store.getters['root/getMessages']),
   })
-
-  // watch(props.messages, setTimeout(() => {
-  //   var chatDiv = document.getElementById("chat-area");
-  //   chatDiv.scrollTo({
-  //     top: chatDiv.scrollHeight - chatDiv.clientHeight,
-  //     behavior: 'smooth'
-  //   });
-  // }, 50)
-  // )
 
   const clickSendMessage = function (){
     if (state.form.message.trim()){
       emit("sendMessage", state.form.message)
       state.form.message = ""
+      setTimeout(() => {
+        let chatDiv = document.getElementById("chat-area")
+        chatDiv.scrollTo(0, chatDiv.scrollHeight)
+      }, 50)
      }
     }
 
@@ -97,10 +90,11 @@ export default {
 </script>
 <style scoped>
 .chat-box {
-  width: 45vh;
+  width: 46vh;
   height: 83vh;
+  margin-right: 7vh;
   border-radius: 15px;
-  border-width: 0.3vh;
+  border-width: 0.35vh;
   border-style: solid;
   border-color: black;
   background-color: rgb(85, 174, 121);
@@ -115,16 +109,9 @@ export default {
   background-color: rgb(70, 148, 101);
 }
 
-.close-btn {
-  position: absolute;
-  color: white;
-  top: 3px;
-  right: 10px;
-}
-
 .text-box {
-  background-color: #7d7d7d;
-  width: 35vh;
+  background-color: #a7a6a6;
+  width: 36vh;
   border-radius: 12px;
   color: black;
   padding-left: 10px;
@@ -162,7 +149,8 @@ export default {
 }
 
 .send-btn {
-  color: white;
+  border-radius: 1.5vh;
+  color: #f6f6f6;
 }
 
 #chat-area {
@@ -183,7 +171,7 @@ export default {
 }
 
 #chat-area::-webkit-scrollbar-thumb {
-  background:  #b0a2c8;
+  background:  #a7a6a6;
 }
 
 #chat-area::-webkit-scrollbar-button {

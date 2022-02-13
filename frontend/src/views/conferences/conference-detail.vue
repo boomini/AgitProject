@@ -1,12 +1,15 @@
 <template>
   <div id="chat-container">
     <div v-if="!state.session">
-      <div class="d-flex flex-column justify-content-center align-items-center offset-3 join-room">
+      <div class="d-flex flex-column justify-content-center align-items-center join-room">
         <h1>회의실 참가하기!</h1>
         <h3 class="my-3">현재 접속하려는 방: {{ state.teamName }}의 방</h3>
         <div>
-          <el-button type="primary" @click="joinSession()" id="join-btn">
+          <el-button type="primary" @click="joinSession" id="join-btn" class="mx-3">
             <i class="fa-solid fa-right-to-bracket"></i>
+          </el-button>
+          <el-button type="danger" @click="closeSession" id="join-btn">
+            <i class="fa-solid fa-xmark"></i>
           </el-button>
         </div>
       </div>
@@ -38,7 +41,7 @@
             </div>
         </div>
         <div class="d-flex justify-content-between align-items-center offset-1" id="header">
-          <h1 class="text-center">Room: {{ state.teamName }}</h1>
+          <h1 class="text-center">{{ state.teamName }}'s Room</h1>
           <h2 id="close-btn" class="d-flex justify-content-center align-items-center" @click="closeSession">X</h2>
         </div>
       </div>
@@ -55,17 +58,19 @@
             :border-color="sub.element"
           />
         </div>
-        <div id="chat-box">
+        <div>
           <chat-live :session="state.session" @sendMessage="sendMessage" />
         </div>
       </div>
+      <screen-share :open="state.shareDialogOpen"
+      @closeShareDialog="onCloseShareDialog"/>
     </div>
-    <screen-share :open="state.shareDialogOpen"/>
   </div>
 </template>
 <style scoped>
 .join-room{
   margin-top: 20vh;
+  margin-left: 60vh;
   border-color: black;
   border-style: solid;
   border-radius: 2vh;
@@ -100,9 +105,6 @@
   height: 100vh;
   background-size: cover;
 }
-#chat-box {
-  margin-right: 5vh;
-}
 #btn-group{
   transform: translate(-20%, 30%);
 }
@@ -119,6 +121,9 @@
   cursor: pointer;
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
 }
+#close-btn:hover{
+  background-color: #c44749;
+}
 .toggle-icon-off{
   margin-right: 7vh;
   transform: scale(2);
@@ -132,6 +137,9 @@
   cursor: pointer;
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
 }
+.toggle-icon-off:hover{
+  background-color: #c44749;
+}
 .toggle-icon-on{
   margin-right: 7vh;
   transform: scale(2);
@@ -144,6 +152,9 @@
   border-radius: 100px;
   cursor: pointer;
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+}
+.toggle-icon-on:hover{
+  background-color: #4753d3;
 }
 .share-icon{
   margin-right: 5vh;
@@ -159,6 +170,9 @@
   background-color: rgb(27, 26, 26);
   color: #f6f6f6;
 }
+.share-icon:hover{
+  background-color: rgb(44, 43, 43);
+}
 #header{
   width: 132vh;
   margin-bottom: 2vh;
@@ -171,6 +185,9 @@
   background-color: rgb(85, 174, 121);
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
   width: 60vh;
+}
+#conf-img{
+  z-index: 9000;
 }
 </style>
 <script>
@@ -294,13 +311,13 @@ export default {
           // publisher의 event면 publisher만 변경
           const str_len = event.connection.connectionId.length
           if (publisherId.slice(-str_len) === event.connection.connectionId){
-            state.BorderColor = "blue"
+            state.BorderColor = "#404eed"
           }
           state.subscribers.forEach((subscriber) => {
 
             // subscirber의 event면 subscriber 변경
             if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
-                subscriber.element = "blue"
+                subscriber.element = "#404eed"
             }
           })
       });
@@ -485,11 +502,11 @@ export default {
 
     // 화면공유 모달창
     const onOpenShareDialog = function (){
-      this.shareDialogOpen = true
+      state.shareDialogOpen = true
     };
 
     const onCloseShareDialog = function (){
-      this.shareDialogOpen = false
+      state.shareDialogOpen = false
     };
 
 
