@@ -46,7 +46,7 @@ public class EventRepositorySupport {
     // 특정 user에 관련된 전체 event 리스트  // 중복 제거
     public Optional<List<EventResDto>> findEventResAllByUserID(Long id){
         List<EventResDto> eventResDtoList = new ArrayList<>();
-        List<Tuple> result = jpaQueryFactory.select(qEvent.eventTitle, qEvent.eventContent, qEvent.teamName, qEvent.startDate, qEvent.endDate)
+        List<Tuple> result = jpaQueryFactory.select(qEvent.eventTitle, qEvent.eventContent, qEvent.teamName, qEvent.startDate, qEvent.endDate, qUserTeam.team.id)
                 .distinct()
                 .from(qUserTeam)
                 .join(qTeam)
@@ -60,6 +60,7 @@ public class EventRepositorySupport {
             eventResDto.setEventTitle(tuple.get(qEvent.eventTitle));
             eventResDto.setEventContent(tuple.get(qEvent.eventContent));
             eventResDto.setTeamName(tuple.get(qEvent.teamName));
+            eventResDto.setTeamId(tuple.get(qUserTeam.team.id));
             LocalDate startDate = tuple.get(qEvent.startDate);
             LocalDate endDate = tuple.get(qEvent.endDate);
             eventResDto.setStartDate(startDate);
@@ -77,7 +78,7 @@ public class EventRepositorySupport {
     // 특정 user에 관련된 event중 특정 달에 해당하는 리스트  // 중복 제거
     public Optional<List<EventResDto>> findEventResListByUserIdInMonth(Long id, LocalDate date){
         List<EventResDto> eventResDtoList = new ArrayList<>();
-        List<Tuple> result = jpaQueryFactory.select(qEvent.eventTitle, qEvent.eventContent, qEvent.teamName, qEvent.startDate, qEvent.endDate)
+        List<Tuple> result = jpaQueryFactory.select(qEvent.eventTitle, qEvent.eventContent, qEvent.teamName, qEvent.startDate, qEvent.endDate, qUserTeam.team.id)
                 .distinct()
                 .from(qUserTeam)
                 .join(qTeam)
@@ -96,6 +97,7 @@ public class EventRepositorySupport {
                 eventResDto.setEventTitle(tuple.get(qEvent.eventTitle));
                 eventResDto.setEventContent(tuple.get(qEvent.eventContent));
                 eventResDto.setTeamName(tuple.get(qEvent.teamName));
+                eventResDto.setTeamId(tuple.get(qUserTeam.team.id));
                 eventResDto.setStartDate(startDate);
                 eventResDto.setEndDate(endDate);
                 // 남은 날짜 계산
@@ -123,6 +125,7 @@ public class EventRepositorySupport {
             eventResDto.setEventTitle(event.getEventTitle());
             eventResDto.setEventContent(event.getEventContent());
             eventResDto.setTeamName(event.getTeamName());
+            eventResDto.setTeamId(teamId);
             eventResDto.setStartDate(event.getStartDate());
             eventResDto.setEndDate(event.getEndDate());
             eventResDto.setDDay(now.until(event.getEndDate(), ChronoUnit.DAYS));
@@ -148,6 +151,7 @@ public class EventRepositorySupport {
             eventResDto.setEventContent(event.getEventContent());
             eventResDto.setTeamName(event.getTeamName());
             eventResDto.setStartDate(event.getStartDate());
+            eventResDto.setTeamId(teamId);
             eventResDto.setEndDate(event.getEndDate());
             eventResDto.setDDay(now.until(event.getEndDate(), ChronoUnit.DAYS));
             eventResDtoList.add(eventResDto);

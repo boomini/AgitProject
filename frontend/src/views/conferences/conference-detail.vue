@@ -12,17 +12,13 @@
             </p>
           </div> -->
     <div v-if="!state.session">
-      <div class="d-flex flex-column align-items-center my-5">
+      <div class="d-flex flex-column justify-content-center align-items-center offset-3 join-room">
         <h1>회의실 참가하기!</h1>
         <h3 class="my-3">현재 접속하려는 방: {{ state.teamName }}의 방</h3>
         <div>
-          <button
-            id="join-btn"
-            class="btn btn-lg btn-success my-3"
-            @click="joinSession()"
-          >
-            Join!
-          </button>
+          <el-button type="primary" @click="joinSession()" id="join-btn">
+            <i class="fa-solid fa-right-to-bracket"></i>
+          </el-button>
         </div>
       </div>
     </div>
@@ -31,30 +27,21 @@
       <div class="d-flex offset-1">
         <!-- 비디오 토글 버튼 -->
           <div v-if="state.publisher.stream.videoActive">
-            <i class="fa-solid fa-video-slash toggle-icon" @click="changeVideoState()"></i>
+            <i class="fa-solid fa-video-slash toggle-icon-off mx-5" @click="changeVideoState()"></i>
           </div>
           <div v-else>
-            <i class="fa-solid fa-video toggle-icon" @click="changeVideoState()"></i>
+            <i class="fa-solid fa-video toggle-icon-on mx-5" @click="changeVideoState()"></i>
           </div>
           <!-- 오디오 토글 버튼 -->
           <div v-if="state.publisher.stream.audioActive">
-           <i
-              class="fa-solid fa-microphone-slash toggle-icon"
-              @click="changeAudioState()"
-            ></i>
+           <i class="fa-solid fa-microphone-slash toggle-icon-off mx-5" @click="changeAudioState()"></i>
           </div>
           <div v-else>
-            <i class="fa-solid fa-microphone toggle-icon" @click="changeAudioState()"></i>
+            <i class="fa-solid fa-microphone toggle-icon-on mx-5" @click="changeAudioState()"></i>
           </div>
-        <div class="d-flex justify-content-between offset-2" id="header">
-          <h1>{{ state.teamName }}의 방입니다.</h1>
-            <input
-              class="btn btn-large btn-danger my-3 mx-4"
-              type="button"
-              id="close-btn"
-              @click="closeSession()"
-              value="방 나가기"
-            />
+        <div class="d-flex justify-content-between offset-1" id="header">
+          <h1 class="text-center">Room: {{ state.teamName }}</h1>
+          <h2 id="close-btn" class="text-center" @click="closeSession()">X</h2>
         </div>
       </div>
       <div class="d-flex justify-content-between">
@@ -62,7 +49,7 @@
               <user-video :stream-manager="state.mainStreamManager"/>
             </div> -->
         <div class="d-flex flex-wrap mx-3">
-          <user-video :stream-manager="state.publisher" />
+          <user-video :stream-manager="state.publisher" :border-color="state.BorderColor"/>
           <user-video
             v-for="sub in state.subscribers"
             :key="sub.stream.connection.connectionId"
@@ -77,8 +64,19 @@
   </div>
 </template>
 <style scoped>
+.join-room{
+  margin-top: 20vh;
+  border-color: black;
+  border-style: solid;
+  width: 100vh;
+  height: 40vh;
+  background-color: rgb(87, 193, 129);
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+}
+
 #join-btn {
-  width: 20vh;
+  width: 15vh;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.25);
 }
 #video-btn {
   width: 10vh;
@@ -87,11 +85,11 @@
 #chat-container {
   position: absolute;
   top: -90px;
-  left: -100px;
+  left: -260px;
   margin-left: 0;
   margin-top: 0;
   z-index: 10;
-  background-color: white;
+  background-color: #36393f;
   width: 125%;
   height: 100vh;
   background-size: cover;
@@ -101,15 +99,53 @@
 }
 
 #close-btn {
-  width: 20vh;
+  width: 10vh;
   height: 7vh;
+  padding-top: 0.35vh;
+  background-color: #b53638;
+  border-style: solid;
+  border-color: black;
+  border-radius: 50px;
+  border-width: 3.5px;
+  cursor: pointer;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
 }
-.toggle-icon{
-  width: 12vh;
-  transform: scale(2) translate(0, 150%);
+.toggle-icon-off{
+  transform: scale(2) translate(-80%, 60%);
+  border-color: black;
+  background-color: #b53638;
+  border-style: solid;
+  border-width: 2px;
+  padding: 0.8vh;
+  width: 5vh;
+  border-radius: 100px;
+  cursor: pointer;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+}
+.toggle-icon-on{
+  transform: scale(2) translate(-80%, 60%);
+  border-color: black;
+  background-color: #3d48c2;
+  border-style: solid;
+  border-width: 2px;
+  padding: 0.8vh;
+  width: 5vh;
+  border-radius: 100px;
+  cursor: pointer;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
 }
 #header{
-  width: 120vh;
+  width: 132vh;
+  margin-bottom: 2vh;
+}
+#header h1{
+  border-color: black;
+  border-style: solid;
+  padding: 1vh;
+  border-radius: 30px;
+  background-color: rgb(85, 174, 121);
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+  width: 60vh;
 }
 </style>
 <script>
@@ -159,6 +195,7 @@ export default {
       userName: "",
       videoStatus: true,
       audioStatus: true,
+      BorderColor: 'black',
     });
     // 페이지 진입시 불리는 훅
     onMounted(() => {
@@ -222,9 +259,20 @@ export default {
       });
 
       // 음성 인지
-      // state.publisher.on('publisherStartSpeaking', (event) => {
-      //       console.log('User ' + event.connection.connectionId + ' start speaking');
-      // });
+      state.session.on('publisherStartSpeaking', (event) => {
+          state.BorderColor = "blue"
+          // subscribers 들의 음성인지는 추가로 알아봐야 함
+          state.subscribers.forEach((subscriber) => {
+            console.log(subscriber)
+            const str_len = event.connection.connectionId.length
+            console.log(event.connection.connectionId)
+            console.log(subscriber.stream.streamId.slice(-str_len))
+          })
+      });
+
+      state.session.on('publisherStopSpeaking', (event) => {
+          state.BorderColor = "black"
+      });
 
       getToken(state.mySessionId).then((token) => {
         state.session
