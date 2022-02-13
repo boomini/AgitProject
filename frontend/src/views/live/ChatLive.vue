@@ -99,8 +99,9 @@ export default {
 .chat-box {
   width: 45vh;
   height: 83vh;
-  border-radius: 3%;
-  background-color: rgb(87, 193, 129);
+  border-radius: 15px;
+  background-color: rgb(85, 174, 121);
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.25);
 }
 .color-g{
   color: #323f45;
@@ -140,7 +141,7 @@ export default {
 .header {
   width: 100%;
   border-radius: 20px;
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.3);
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.45);
   height: 4vh;
 }
 .message-title {

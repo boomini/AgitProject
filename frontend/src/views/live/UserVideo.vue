@@ -19,6 +19,7 @@
     border-width: 2.5px;
     border-style: solid;
     background-color:   rgb(88, 85, 85);
+    box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
   }
 
   #user-video p{

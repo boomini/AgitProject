@@ -27,30 +27,21 @@
       <div class="d-flex offset-1">
         <!-- 비디오 토글 버튼 -->
           <div v-if="state.publisher.stream.videoActive">
-            <i class="fa-solid fa-video-slash toggle-icon cursor" @click="changeVideoState()"></i>
+            <i class="fa-solid fa-video-slash toggle-icon-off mx-5" @click="changeVideoState()"></i>
           </div>
           <div v-else>
-            <i class="fa-solid fa-video toggle-icon cursor" @click="changeVideoState()"></i>
+            <i class="fa-solid fa-video toggle-icon-on mx-5" @click="changeVideoState()"></i>
           </div>
           <!-- 오디오 토글 버튼 -->
           <div v-if="state.publisher.stream.audioActive">
-           <i class="fa-solid fa-microphone-slash toggle-icon cursor" @click="changeAudioState()"></i>
+           <i class="fa-solid fa-microphone-slash toggle-icon-off mx-5" @click="changeAudioState()"></i>
           </div>
           <div v-else>
-            <i class="fa-solid fa-microphone toggle-icon cursor" @click="changeAudioState()"></i>
+            <i class="fa-solid fa-microphone toggle-icon-on mx-5" @click="changeAudioState()"></i>
           </div>
-        <div class="d-flex justify-content-between offset-2" id="header">
-          <h1>Room {{ state.teamName }}</h1>
-            <!-- <input
-              class="btn btn-large btn-danger my-3 mx-4"
-              type="button"
-              id="close-btn"
-              @click="closeSession()"
-              value="방 나가기"
-            /> -->
-          <el-button type="danger" @click="closeSession()">
-            <i class="fa-solid fa-xmark"></i>
-          </el-button>
+        <div class="d-flex justify-content-between offset-1" id="header">
+          <h1 class="text-center">Room: {{ state.teamName }}</h1>
+          <h2 id="close-btn" class="text-center" @click="closeSession()">X</h2>
         </div>
       </div>
       <div class="d-flex justify-content-between">
@@ -80,12 +71,12 @@
   width: 100vh;
   height: 40vh;
   background-color: rgb(87, 193, 129);
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
 }
-.cursor{
-  cursor: pointer;
-}
+
 #join-btn {
   width: 15vh;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.25);
 }
 #video-btn {
   width: 10vh;
@@ -94,11 +85,11 @@
 #chat-container {
   position: absolute;
   top: -90px;
-  left: -110px;
+  left: -260px;
   margin-left: 0;
   margin-top: 0;
   z-index: 10;
-  background-color: #5865f2;
+  background-color: #36393f;
   width: 125%;
   height: 100vh;
   background-size: cover;
@@ -108,12 +99,40 @@
 }
 
 #close-btn {
-  width: 20vh;
+  width: 10vh;
   height: 7vh;
+  padding-top: 0.35vh;
+  background-color: #b53638;
+  border-style: solid;
+  border-color: black;
+  border-radius: 50px;
+  border-width: 3.5px;
+  cursor: pointer;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
 }
-.toggle-icon{
-  width: 12vh;
-  transform: scale(2) translate(20%, 100%);
+.toggle-icon-off{
+  transform: scale(2) translate(-80%, 60%);
+  border-color: black;
+  background-color: #b53638;
+  border-style: solid;
+  border-width: 2px;
+  padding: 0.8vh;
+  width: 5vh;
+  border-radius: 100px;
+  cursor: pointer;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+}
+.toggle-icon-on{
+  transform: scale(2) translate(-80%, 60%);
+  border-color: black;
+  background-color: #3d48c2;
+  border-style: solid;
+  border-width: 2px;
+  padding: 0.8vh;
+  width: 5vh;
+  border-radius: 100px;
+  cursor: pointer;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
 }
 #header{
   width: 132vh;
@@ -123,7 +142,10 @@
   border-color: black;
   border-style: solid;
   padding: 1vh;
-  border-radius: 100px;
+  border-radius: 30px;
+  background-color: rgb(85, 174, 121);
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+  width: 60vh;
 }
 </style>
 <script>
@@ -240,9 +262,11 @@ export default {
       state.session.on('publisherStartSpeaking', (event) => {
           state.BorderColor = "blue"
           // subscribers 들의 음성인지는 추가로 알아봐야 함
-          // console.log(event.connection.connectionId)
           state.subscribers.forEach((subscriber) => {
-            console.log(subscriber.stream.session.remoteConnections.keys())
+            console.log(subscriber)
+            const str_len = event.connection.connectionId.length
+            console.log(event.connection.connectionId)
+            console.log(subscriber.stream.streamId.slice(-str_len))
           })
       });
 
