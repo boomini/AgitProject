@@ -90,9 +90,9 @@ export default {
 </script>
 <style scoped>
 .chat-box {
-  width: 46vh;
-  height: 83vh;
-  margin-right: 7vh;
+  width: 25vw;
+  height: 75vh;
+  margin-right: 2vw;
   border-radius: 15px;
   border-width: 0.35vh;
   border-style: solid;
@@ -111,7 +111,7 @@ export default {
 
 .text-box {
   background-color: #a7a6a6;
-  width: 36vh;
+  width: 20vw;
   border-radius: 12px;
   color: black;
   padding-left: 10px;

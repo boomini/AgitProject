@@ -17,29 +17,7 @@
 
     <div class="d-flex-row justify-content-between my-3" v-if="state.session">
       <div class="d-flex offset-1">
-        <div class="d-flex" id="btn-group">
-          <!-- 비디오 토글 버튼 -->
-            <div>
-              <div v-if="state.publisher.stream.videoActive">
-                <i class="fa-solid fa-video-slash toggle-icon-off text-center" @click="changeVideoState"></i>
-              </div>
-              <div v-else>
-                <i class="fa-solid fa-video toggle-icon-on text-center" style="padding-left: 0.95vh" @click="changeVideoState"></i>
-              </div>
-            </div>
-            <!-- 오디오 토글 버튼 -->
-            <div>
-              <div v-if="state.publisher.stream.audioActive">
-              <i class="fa-solid fa-microphone-slash toggle-icon-off text-center" @click="changeAudioState"></i>
-              </div>
-              <div v-else>
-                <i class="fa-solid fa-microphone toggle-icon-on text-center" style="padding-left: 0.9vh" @click="changeAudioState"></i>
-              </div>
-            </div>
-            <div>
-              <i class="fa-solid fa-share-from-square share-icon text-center" @click="onOpenShareDialog"></i>
-            </div>
-        </div>
+
         <div class="d-flex justify-content-between align-items-center offset-1" id="header">
           <h1 class="text-center">{{ state.teamName }}'s Room</h1>
           <h2 id="close-btn" class="d-flex justify-content-center align-items-center" @click="closeSession">X</h2>
@@ -62,9 +40,38 @@
           <chat-live :session="state.session" @sendMessage="sendMessage" />
         </div>
       </div>
+      <div
+      :height="`80px`"
+      style="position:fixed; height:10%; bottom: 0; width: 100%; background-color: #2f3136;">
+      <div class="d-flex justify-content-center align-items-center" id="btn-group" style="height:100%">
+          <!-- 비디오 토글 버튼 -->
+            <div>
+              <div v-if="state.publisher.stream.videoActive">
+                <i class="fa-solid fa-video-slash toggle-icon-off text-center" @click="changeVideoState"></i>
+              </div>
+              <div v-else>
+                <i class="fa-solid fa-video toggle-icon-on text-center" style="padding-left: 0.95vh" @click="changeVideoState"></i>
+              </div>
+            </div>
+            <!-- 오디오 토글 버튼 -->
+            <div>
+              <div v-if="state.publisher.stream.audioActive">
+              <i class="fa-solid fa-microphone-slash toggle-icon-off text-center" @click="changeAudioState"></i>
+              </div>
+              <div v-else>
+                <i class="fa-solid fa-microphone toggle-icon-on text-center" style="padding-left: 0.9vh" @click="changeAudioState"></i>
+              </div>
+            </div>
+            <div>
+              <i class="fa-solid fa-share-from-square share-icon text-center" @click="onOpenShareDialog"></i>
+            </div>
+        </div>
+      </div>
       <screen-share :open="state.shareDialogOpen"
       @closeShareDialog="onCloseShareDialog"/>
     </div>
+
+
   </div>
 </template>
 <style scoped>
@@ -101,15 +108,15 @@
   margin-top: 0;
   z-index: 10;
   background-color: #36393f;
-  width: 212.85vh;
+  width: 100vw;
   height: 100vh;
   background-size: cover;
 }
 #btn-group{
-  transform: translate(-20%, 30%);
+  /* transform: translate(-20%, 30%); */
 }
 #close-btn {
-  transform: translate(50%, 0);
+  /* transform: translate(50%, 0); */
   font-size: 5vh;
   width: 10vh;
   height: 7vh;
