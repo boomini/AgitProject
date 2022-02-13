@@ -1,16 +1,5 @@
 <template>
   <div id="chat-container">
-    <!-- <div id="img-div"><img src="resources/images/openvidu_grey_bg_transp_cropped.png" /></div> -->
-    <!-- <div class="form-group">
-            <p>
-              <label>이름 설정</label>
-              <input v-model="state.myUserName" class="form-control" type="text" required>
-            </p>
-            <p>
-              <label>세션 이름</label>
-              <input v-model="state.mySessionId" class="form-control" type="text" required>
-            </p>
-          </div> -->
     <div v-if="!state.session">
       <div class="d-flex flex-column justify-content-center align-items-center offset-3 join-room">
         <h1>회의실 참가하기!</h1>
