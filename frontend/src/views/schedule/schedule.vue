@@ -182,46 +182,50 @@
               <el-button type="text" @click="state.afterDialogOpen = true" style="margin-right:100px; font-size: 1.5rem; color: #13C7A3"
                 >다음 약속</el-button>
             </div>
+            <!-- <div class="d-flex justify-content-center">
+              <el-button type="text" style="min-height:10px; padding: 10px; font-size: 1.0rem; margin-top:100px" @click="state.termsDialogOpen = true">이용약관</el-button>
+            </div> -->
           </div>
         </div>
       </div>
       <div class="iphone" style="margin-left: -50px">
         <div class="header">
-          <div class="order-summary">
+          <div class="order-summary" style="position: relative">
             <div class="order-status">ID: {{ state.profileinfo.userId }}</div>
-             <div class="order-date">
+             <!-- <div class="order-date">
             닉네임: {{ state.profileinfo.nickName }}<el-button type="text" style=" min-height: 15px; padding: 10px; font-size: 1.5rem; z-index:9000;" @click="state.nicknameDialogOpen = true">수정하기</el-button>
             </div>
             <div class="order-day">
             {{ state.profileinfo.nickName }}의 생일: {{ state.profileinfo.birthDay }}
-            </div>
-            <!-- <div>
+            </div> -->
+            <div>
               <div class="order-date" v-if="state.profileinfo.nickName == ''">
               닉네임: 오리너구리<el-button type="text" style=" min-height: 15px; padding: 10px; font-size: 1.5rem;" @click="state.nicknameDialogOpen = true">수정하기</el-button>
               </div>
               <div class="order-date" v-else-if="state.profileinfo.nickName != null">
               닉네임: {{ state.profileinfo.nickName }}<el-button type="text" style=" min-height: 15px; padding: 10px; font-size: 1.5rem;" @click="state.nicknameDialogOpen = true">수정하기</el-button>
               </div>
-            </div> -->
-            <!-- <div>
+            </div>
+            <div>
             <div class="order-day" v-if="state.profileinfo.nickName == ''">
             오리너구리의 생일: {{ state.profileinfo.birthDay }}
             </div>
             <div class="order-day" v-else-if="state.profileinfo.nickName != null">
 
-            </div>
             {{ state.profileinfo.nickName }}의 생일: {{ state.profileinfo.birthDay }}
-            </div> -->
+            </div>
+            </div>
           </div>
         </div>
         <div class="hero-img-container">
           <img src="https://drive.google.com/uc?id=15iXUI6DkRr5Zcp0yH5uF2U47ycr-WzUY" class="hero-img">
         </div>
-        <div>
-          <p>들어갈 버튼 궁리(이용약관, 이미지 변경 등)</p>
-          <p>✨🥒🥪</p>
-          <p>이모지<i class="em em-astonished" aria-role="presentation" aria-label="ASTONISHED FACE"></i></p>
-          <el-button type="text" style=" min-height: 15px; padding: 10px; margin-left: 10px; font-size: 1.5rem;" @click="state.termsDialogOpen = true">이용약관</el-button>
+        <div class="d-flex justify-content-end" style="margin-right: 20px;">
+          <el-button type="text" style="min-height:15px; padding: 10px; font-size: 1.5rem;">이미지 변경</el-button>
+        </div>
+
+        <div class="d-flex justify-content-center" style="margin-top: 10vh; position: relative;">
+          <el-button type="text" style=" min-height:15px; padding: 10px; font-size: 1.5rem;" @click="state.termsDialogOpen = true">이용약관 확인하기</el-button>
         </div>
       </div>
     </div>
@@ -231,10 +235,12 @@
   <before-dialog
     :open="state.beforeDialogOpen"
     :info="state.pros.beforepro[0]"
+    :teamP="state.beforeteamPicture"
     @closeBeforeDialog="onCloseBeforeDialog" />
   <after-dialog
     :open="state.afterDialogOpen"
     :info="state.pros.afterpro[0]"
+    :teamP="state.afterteamPicture"
     @closeAfterDialog="onCloseAfterDialog" />
   <nickname-dialog
     :open="state.nicknameDialogOpen"
@@ -316,7 +322,8 @@ export default {
     nicknameDialogOpen : false,
     birthdayDialogOpen : false,
     termsDialogOpen : false,
-    afterteamId : '',
+    beforeteamPicture : '',
+    afterteamPicture : '',
   })
   const beforeschedule = []
   const afterschedule = []
@@ -387,6 +394,7 @@ export default {
         }
         // console.log(beforeday)
         state.pros.beforepro.push(beforeschedule[beforeday])
+        state.beforeteamPicture = 'http://localhost:8080/api/v1/team/profileimg/'+state.pros.beforepro[0].teamId
         // console.log(beforepro)
         let aftermin = 32
         for (var a = 0; a < afterschedule.length; a++) {
@@ -398,6 +406,9 @@ export default {
         }
         // console.log(afterday)
         state.pros.afterpro.push(afterschedule[afterday])
+        state.afterteamPicture = 'http://localhost:8080/api/v1/team/profileimg/'+state.pros.afterpro[0].teamId
+        console.log(state.afterteamPicture)
+        console.log('제발제발')
         // state.infos = computed(() => { return _.orderBy(state.infos, 'dday')} )
         // console.log(state.infos[2].teamName)
       })
@@ -1353,25 +1364,14 @@ a {
   padding-bottom: 20px;
 }
 
-.hero-img-container::before {
-   height: 20px;
-   width: 20px;
-   background-color: #0268EE;
-   position: absolute;
-  top: 25px;
-  right: 150px;
-  content:'';
-  border-radius: 50%;
-}
-
 .hero-img {
   width: 80%;
 }
 
-.img-photo {
+/* .img-photo {
   width: 90px;
   transform: rotate(-35deg)
-}
+} */
 
 
 p{

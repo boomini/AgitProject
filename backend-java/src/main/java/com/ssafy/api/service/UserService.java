@@ -18,4 +18,6 @@ public interface UserService {
 	//googleToken확인
 	UserDto tokenVerify(String idToken);
 	List<TeamDto> getTeamListUserJoined(Long userId);
+
+	User getUserById(Long userId);
 }

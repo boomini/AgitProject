@@ -7,29 +7,48 @@
     </template>
     <el-table-column prop="index" label="글번호" width="80"/>
     <el-table-column prop="title" label="글제목" width="180" />
-    <el-table-column prop="content" label="글내용" />
+    <el-table-column prop="writer" label="작성자" />
   </el-table>
   <el-pagination layout="prev, pager, next" :total="articleList.length" :page-size="state.perPage" @current-change="setCurrentPage" class="mt-3" hide-on-single-page></el-pagination>
-
+  <article-view-dialog
+    :open="state.articleViewOpen"
+    :info="state.article"
+    @closeArticleView="onCloseArticleView"/>
 </template>
 
 <script>
-import {onBeforeMount,computed,reactive} from 'vue'
-import { useStore } from 'vuex'
+import { computed, reactive } from 'vue'
+import ArticleViewDialog from './dialog/article-view-dialog.vue'
+
 export default {
+  name: 'article',
+  components: {
+    ArticleViewDialog,
+  },
   props: {
     articleList:{
       type: Array
     },
   },
   setup(props){
-    const store = useStore()
     const state = reactive({
       currentPage: 1,
       perPage: 5,
       articleTable: computed(function () {
         return props.articleList.slice(state.perPage * (state.currentPage -  1), state.perPage * state.currentPage)
-      })
+      }),
+      articleViewOpen: false,
+      article: {
+        'id': '',
+        'title': '',
+        'content': '',
+        'writer': '',
+        'teamName': '',
+        'uploadDate': '1970-01-01',
+        'updatedDate': new Date(),
+        'createdTime': new Date(),
+        'index': ''
+      }
     })
 
     const setCurrentPage = function (val) {
@@ -37,11 +56,15 @@ export default {
     }
 
     const onCellClick = function (val) {
-      alert(val.content)
-      console.log(val)
+      state.article = val
+      state.articleViewOpen = true
     }
 
-    return { state, setCurrentPage, onCellClick }
+    const onCloseArticleView = function () {
+      state.articleViewOpen = false
+    }
+
+    return { state, setCurrentPage, onCellClick, onCloseArticleView }
   }
 }
 </script>
