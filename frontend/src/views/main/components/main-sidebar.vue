@@ -8,6 +8,7 @@
         :default-active="String(state.activeIndex)"
         active-text-color="#ffd04b"
         class="el-menu-vertical-demo"
+        style="width:80px; height:100%; z-index:3"
         @select="menuSelect">
         <!-- <el-menu-item v-for="(item, index) in state.menuItems" :key="index" :index="index">
           <i v-if="item.icon" :class="['ic', item.icon]"/>
@@ -19,22 +20,11 @@
 
         <div>
           <div style="padding-left: 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #cfcfcf; width: 90%; margin: 1rem auto 0;">
-            <p style="margin-bottom: 0px">가입한 팀 목록</p>
+            <p style="margin-bottom: 0px">팀목록</p>
           </div>
         </div>
-        <el-scrollbar id="sidebar">
-          <el-menu-item v-for="(item, index) in state.userTeams" :key="index + state.menuItems.length" :index="index + state.menuItems.length">
-            <!-- <i v-if="item.icon" :class="['ic', item.icon]"/> -->
-            <!-- <span>{{index + state.menuItems.length}} {{ item.teamName }}</span> -->
-            <span>{{ item.id }} {{ item.teamName }}</span>
-            <!-- <div v-if="index === 4" style="border-top: 1px solid #dcdfe6;"/> -->
-            <!-- <hr v-if="index === 4" style="color: black;"> -->
-            <!-- <hr v-if="index === 4" style="color: black"> -->
-          </el-menu-item>
-          <!-- <el-button @click="state.registerTeamDialogOpen = true">방 생성 버튼</el-button> -->
-        </el-scrollbar>
         <div style="width: 100%;">
-          <div style="border-top: 1px solid #cfcfcf; height: 57px; display: flex; flex-direction: flex-column; justify-content: center; align-items: center; width: 90%; margin: 0 auto;">
+          <div style="height: 57px; display: flex; flex-direction: flex-column; justify-content: center; align-items: center; width: 100%; margin-left:4px">
             <el-tooltip
               effect="dark"
               placement="top"
@@ -51,6 +41,24 @@
             </el-tooltip>
           </div>
         </div>
+        <el-scrollbar id="sidebar">
+
+          <el-menu-item :class="{active: getActive(index)}" id="roomMenuItem" v-for="(item, index) in state.userTeams" :key="index + state.menuItems.length" :index="index + state.menuItems.length">
+            <el-tooltip
+              class="box-item"
+              effect="dark"
+              :content=item.teamName
+              placement="right"
+            >
+            <div style="justify-content: center; align-items: center; width: 90%; margin: 0 auto;">
+              <el-avatar :size="43" :src=item.teamPicture></el-avatar>
+              </div>
+            </el-tooltip>
+            <!-- <p>{{item.id}}{{item.teamName}}!!</p> -->
+          </el-menu-item>
+          <!-- <el-button @click="state.registerTeamDialogOpen = true">방 생성 버튼</el-button> -->
+        </el-scrollbar>
+
       </el-menu>
     </div>
   </el-row>
@@ -70,13 +78,13 @@
 }
 .main-sidebar .el-menu .el-menu-item {
   cursor: pointer;
-  border-right: none;
+  border-right: 1px;
 }
 .main-sidebar .el-menu .el-menu-item .ic {
   margin-right: 5px;
 }
 #sidebar {
-  height: calc(100% - 320px);
+  height: calc(100% - 100px);
 }
 /* #btnCreateRoom {
   text-align: center;
@@ -145,6 +153,34 @@
   transform: translateY(3px);
 }
 
+#roomMenuItem:hover{
+  background-color: #fff !important;
+  border-left:10px solid #36393f;
+  border-radius: 10px;
+}
+
+.el-avatar:active{
+  transform: translateY(3px);
+}
+
+.el-avatar{
+  background-color: #fff;
+}
+
+
+#roomMenuItem:focus{
+  box-sizing: border-box;
+  border-left:10px solid #36393f;
+  border-radius: 10px;
+
+}
+
+.active{
+  box-sizing: border-box;
+  border-left:10px solid #36393f;
+  border-radius: 10px;
+}
+
 
 </style>
 <script>
@@ -195,8 +231,24 @@ export default {
         // console.log(menuArray)
         return menuArray
       }),
+
       activeIndex: computed(() => store.getters['root/getActiveMenuIndex']),
-      userTeams: computed(() => store.state.root.userTeams)
+      userTeams: computed(function(){
+        let userTeams = store.state.root.userTeams;
+        for(let i=0; i<store.state.root.userTeams.length; i++){
+          console.log(userTeams[i]);
+          if(store.state.root.userTeams[i].teamPicture==null){
+            userTeams[i].teamPicture = 'https://i6a403.p.ssafy.io/img/agit_logo.e339fd5c.png'
+          }else{
+             userTeams[i].teamPicture = 'http://localhost:8080/api/v1/team/profileimg/'+userTeams[i].id;
+          }
+        }
+        return userTeams;
+      } ),
+      circleUrl: 'https://i6a403.p.ssafy.io/img/agit_logo.e339fd5c.png',
+
+
+      selectedIndex:-1,
 
     })
 
@@ -209,6 +261,7 @@ export default {
       // store.commit('root/setMenuActive', param)
       console.log('방 클릭')
       console.log(param)
+
       // state.activeIndex = param
       // const MenuItems = [store.getters['root/getMenus'], store.getters['root/getTeams']]
       const getMenus = store.getters['root/getMenus']
@@ -221,12 +274,14 @@ export default {
       // console.log(MenuItems)
       // let keys = Object.keys(MenuItems)
       const commonMenuKeys = Object.keys(MenuItems)
+      state.selectedIndex = param - commonMenuKeys.length
       if (param < commonMenuKeys.length) {
         router.push({
           name: commonMenuKeys[param]
         })
       } else {
         const key = param - commonMenuKeys.length
+        console.log(getTeams[key.toString()])
         const roomId = getTeams[key.toString()].id
         // const roomName = getTeams[key.toString()].teamName
         // const roomDescription = getTeams[key.toString()].teamDescription
@@ -264,30 +319,6 @@ export default {
     const registerTeam = () => {
       emit('openRegisterTeamDialog')
     }
-    // const registerTeam = function () {
-    //   emit('openRegisterTeamDialog')
-    //   const token = store.getters['root/getJWTToken']
-    //   const userId = jwt_decode(token).sub
-    //   console.log(userId)
-    //   const teamDto = {
-    //     'teamBoss': userId,
-    //     'teamDescription': '간단한 소개',
-    //     'teamMember': 0,
-    //     'teamPicture': '',
-    //     'teamName': '연습용 방123',
-    //     'teamPassword': 'qwer1234!'
-    //   }
-
-    //   store.dispatch('root/registerTeam', { 'teamDto': teamDto, 'userId': userId, 'token': token })
-    //   .then(function (result) {
-    //     console.log('성공')
-    //     console.log(result)
-    //   })
-    //   .catch(function (error) {
-    //     console.log('실패')
-    //     console.log(error)
-    //   })
-    // }
 
     const onCloseRegisterTeamDialog = function () {
       // state.registerTeamDialogOpen = false
@@ -297,8 +328,15 @@ export default {
       console.log('adsjfoiasdjfoiasdjfaspjdf')
       console.log(state.userTeams)
     }
+    const getActive = function(index){
+      if(index==state.selectedIndex){
+        return true;
+      }else{
+        return false;
+      }
+    }
 
-    return { state, menuSelect, registerTeam, onCloseRegisterTeamDialog, onRegisterSuccess }
+    return { state, menuSelect, registerTeam, onCloseRegisterTeamDialog, onRegisterSuccess, getActive }
   }
 }
 </script>
