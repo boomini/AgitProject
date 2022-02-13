@@ -30,18 +30,18 @@
             <i class="fa-solid fa-video-slash toggle-icon-off mx-5" @click="changeVideoState()"></i>
           </div>
           <div v-else>
-            <i class="fa-solid fa-video toggle-icon-on mx-5" @click="changeVideoState()"></i>
+            <i class="fa-solid fa-video toggle-icon-on mx-5" style="padding-left: 0.95vh" @click="changeVideoState()"></i>
           </div>
           <!-- 오디오 토글 버튼 -->
           <div v-if="state.publisher.stream.audioActive">
            <i class="fa-solid fa-microphone-slash toggle-icon-off mx-5" @click="changeAudioState()"></i>
           </div>
           <div v-else>
-            <i class="fa-solid fa-microphone toggle-icon-on mx-5" @click="changeAudioState()"></i>
+            <i class="fa-solid fa-microphone toggle-icon-on mx-5" style="padding-left: 1.35vh" @click="changeAudioState()"></i>
           </div>
-        <div class="d-flex justify-content-between offset-1" id="header">
+        <div class="d-flex justify-content-between align-items-center offset-1" id="header">
           <h1 class="text-center">Room: {{ state.teamName }}</h1>
-          <h2 id="close-btn" class="text-center" @click="closeSession()">X</h2>
+          <h2 id="close-btn" class="d-flex justify-content-center align-items-center" @click="closeSession()">X</h2>
         </div>
       </div>
       <div class="d-flex justify-content-between">
@@ -68,6 +68,7 @@
   margin-top: 20vh;
   border-color: black;
   border-style: solid;
+  border-radius: 2vh;
   width: 100vh;
   height: 40vh;
   background-color: rgb(87, 193, 129);
@@ -78,6 +79,11 @@
   width: 15vh;
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.25);
 }
+
+#join-btn i{
+  transform: scale(1.2);
+}
+
 #video-btn {
   width: 10vh;
   height: 7vh;
@@ -99,14 +105,14 @@
 }
 
 #close-btn {
+  font-size: 5vh;
   width: 10vh;
   height: 7vh;
-  padding-top: 0.35vh;
   background-color: #b53638;
   border-style: solid;
   border-color: black;
-  border-radius: 50px;
-  border-width: 3.5px;
+  border-radius: 3vh;
+  border-width: 0.6vh;
   cursor: pointer;
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
 }

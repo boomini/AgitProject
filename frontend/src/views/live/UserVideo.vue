@@ -16,9 +16,9 @@
 <style scoped>
   #user-video{
     width: 45vh;
-    padding: 0.5vh;
-    border-radius: 2%;
-    border-width: 2.5px;
+    padding: 0.65vh;
+    border-radius: 1vh;
+    border-width: 0.5vh;
     border-style: solid;
     background-color:   rgb(88, 85, 85);
     box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
@@ -36,7 +36,7 @@
     height: 5vh;
   }
   .video-mask{
-    border-radius: 2%;
+    border-radius: 1vh;
     height: 32vh;
     overflow: hidden;
   }
