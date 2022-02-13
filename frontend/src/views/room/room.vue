@@ -12,7 +12,13 @@
           <div class="d-flex flex-column">
             <h3>{{ date }}</h3>
             <div>
-              레전드
+              <span>
+                <span class="badge-box-test">
+                  <span class="badge-tag-test schedule me-2">게시글 수</span>
+                  <span class="badge-tag-test picture me-2">사진 수</span>
+                  <span class="badge-tag-test video">동영상 수</span>
+                </span>
+              </span>
             </div>
           </div>
 
@@ -55,11 +61,27 @@
 
         <!-- 달력 날짜 부분 -->
         <template #dateCell="{ data }" >
-          <div class="d-flex flex-column justify-content-between" style="height: 100%" @click="clickOnDate(data)">
+          <div class="d-flex flex-column justify-content-between date-on-calendar" style="height: 100%" @click="clickOnDate(data)">
             <div class="row">
               <!-- {{ data }} -->
-              <span class="col-3">
+              <span class="col-3 test">
                 {{ data.day.split('-')[2] }}
+              </span>
+              <span class="col-3 button-on-calendar">
+                <el-dropdown>
+                  <span class="el-dropdown-link">
+                    <i class="el-icon-plus"></i>
+                  </span>
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item>Action 1</el-dropdown-item>
+                      <el-dropdown-item>Action 2</el-dropdown-item>
+                      <el-dropdown-item>Action 3</el-dropdown-item>
+                      <el-dropdown-item disabled>Action 4</el-dropdown-item>
+                      <el-dropdown-item divided>Action 5</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
               </span>
               <span class="col-9">
                 <!-- <span v-bind="state.dict.articleCntDict"> -->
@@ -68,10 +90,10 @@
                 </span>
                 <!-- </span> -->
                 <span v-if="data.day.toString() in state.dict.imageCntDict" class="badge-box-test">
-                  <span class="badge-tag-test video">{{ state.dict.imageCntDict[data.day.toString()] }}</span>
+                  <span class="badge-tag-test picture">{{ state.dict.imageCntDict[data.day.toString()] }}</span>
                 </span>
                 <span v-if="data.day.toString() in state.dict.videoCntDict" class="badge-box-test">
-                  <span class="badge-tag-test picture">{{ state.dict.videoCntDict[data.day.toString()] }}</span>
+                  <span class="badge-tag-test video">{{ state.dict.videoCntDict[data.day.toString()] }}</span>
                 </span>
               </span>
             </div>
@@ -694,4 +716,17 @@ export default {
   border: 1px solid #6ac7b3d5;
   background-color: #6ac7b3d5;
 }
+
+.button-on-calendar {
+  display: none;
+}
+
+.date-on-calendar:hover .button-on-calendar {
+  display: show;
+}
+
+.date-on-calendar:hover .test {
+  display: none;
+}
+
 </style>

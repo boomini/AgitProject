@@ -50,9 +50,13 @@
 
     <!-- footer -->
     <template #footer>
-      <span>
+      <span v-if="isUpdated">
         <el-button @click="handleClose">취소</el-button>
-        <el-button type="primary" @click="createArticle">약속잡기</el-button>
+        <el-button >수정</el-button>
+      </span>
+      <span v-else>
+        <el-button @click="handleClose">취소</el-button>
+        <el-button type="primary" @click="createArticle">게시글 등록</el-button>
       </span>
     </template>
   </el-dialog>
@@ -73,6 +77,10 @@ export default {
     },
     info: {
       type: Object,
+    },
+    isUpdated : {
+      type: Boolean,
+      default: false
     }
   },
 

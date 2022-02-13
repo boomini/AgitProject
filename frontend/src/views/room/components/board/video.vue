@@ -1,17 +1,16 @@
 <template>
   <el-scrollbar>
-        <div class="scrollbar-flex-content">
-          <p v-for="item in state.srcList.length" :key="item" class="scrollbar-demo-video-item">
-            <div class="demo-image__preview">
-              <video width="450" height="300" controls>
-                <source :src='state.srcList[item-1]' type="video/mp4">
+    <div class="scrollbar-flex-content">
+      <p v-for="item in state.srcList.length" :key="item" class="scrollbar-demo-video-item">
+        <div class="demo-image__preview">
+          <video width="450" height="295" controls>
+            <source :src='state.srcList[item-1]' type="video/mp4">
           </video>
-            </div>
-          </p>
-
         </div>
+      </p>
+    </div>
+  </el-scrollbar>
 
-      </el-scrollbar>
 </template>
 
 <script>
@@ -62,12 +61,16 @@ export default {
   align-items: center;
   justify-content: center;
   width: 450px;
-  height: 250px;
-  margin: 1px;
+  height: 300px;
+  margin: 1px 20px 1px 1px;
   text-align: center;
   border: 0px solid black;
   border-radius: 4px;
   background: var(--el-color-danger-lighter);
   color: var(--el-color-danger);
+}
+
+.is-horizontal {
+  display: none;
 }
 </style>
