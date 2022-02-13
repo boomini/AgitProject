@@ -53,7 +53,7 @@ public class ImageController {
 
         //System.out.println(servletContext.getRealPath("/resources/dist/img"));
         //String realPath = servletContext.getRealPath("/resources/dist/img");
-        String realPath =  System.getProperty("user.dir") + "\\files"+"\\image";
+        String realPath =  System.getProperty("user.home") + "\\files"+"\\image";
         System.out.println(realPath);
         System.out.println(userId);
         StringTokenizer st = new StringTokenizer(uploadDate,"-");
@@ -93,7 +93,7 @@ public class ImageController {
     public ResponseEntity<UrlResource> download (
             @RequestBody ImageDto imageDto, HttpServletRequest request) throws Exception {
 //		System.out.println(param);
-		String filePath = System.getProperty("user.dir") + "\\files"+"\\image"+ File.separator + imageDto.getFilePath() + File.separator + imageDto.getFileName();
+		String filePath = System.getProperty("user.home") + "\\files"+"\\image"+ File.separator + imageDto.getFilePath() + File.separator + imageDto.getFileName();
        // String filePath = servletContext.getRealPath("/resources/dist/img") + File.separator + imageDto.getFilePath() + File.separator + imageDto.getOriginalFileName();
         File target = new File(filePath);
         System.out.println(target);
@@ -134,7 +134,7 @@ public class ImageController {
     @DeleteMapping("/{no}")
     public ResponseEntity<? extends BaseResponseBody>  delete(@PathVariable("no") Long no) throws Exception {
         //String path=servletContext.getRealPath("/resources/dist/img");
-        String path =  System.getProperty("user.dir") + "\\files"+"\\image";
+        String path =  System.getProperty("user.home") + "\\files"+"\\image";
         if(!imageService.deleteNotice(no,
                 path)){
             throw new CFileNotFoundException();
@@ -165,7 +165,7 @@ public class ImageController {
         if(image.isEmpty()){
             System.out.println("빈객체");
         }
-        String filePath = System.getProperty("user.dir") + "\\files"+"\\image"+ File.separator + image.get().getFilePath() + File.separator + image.get().getFileName();
+        String filePath = System.getProperty("user.home") + "\\files"+"\\image"+ File.separator + image.get().getFilePath() + File.separator + image.get().getFileName();
         File target = new File(filePath);
 
         byte[] returnValue = null;
