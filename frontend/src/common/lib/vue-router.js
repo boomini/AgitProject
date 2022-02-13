@@ -55,7 +55,8 @@ function makeRoutesFromMenu () {
   routes.push({
     path: '/profile/profile',
     name: 'Profile',
-    component: Profile
+    component: Profile,
+    // beforeEnter: requireAuth()
   })
 
   routes.push({

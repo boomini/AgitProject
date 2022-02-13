@@ -20,9 +20,11 @@
   </div>
   <div v-else-if="info == undefined">
     <el-dialog custom-class="before-dialog" v-model="state.dialogVisible" title="이전 약속" width="30%" style="margin: 50%">
-      <span>
-      일정을 추가해주세요!!
-      </span>
+      <p>
+      지난 일정이 없습니다.
+      </p>
+      <br>
+      <p>팀 생성 후 일정을 추가할 수 있습니다 <i class="em em-closed_book" aria-role="presentation" aria-label="CLOSED BOOK" style="margin-bottom:4px"></i></p>
       <template #footer>
         <span class="dialog-footer">
           <el-button type="primary" @click="handleClose()"
@@ -61,8 +63,8 @@ export default {
       dialogVisible: computed(() => props.open),
     })
 
-  console.log(props.info)
-  console.log('여기냐')
+  // console.log(props.info)
+  // console.log('여기냐')
 
 
     const handleClose = function () {

@@ -99,8 +99,10 @@ export function getTeamInfo ({ state }, payload) {
 
 //해당팀 정보 가져오기
 export function getTeamInfoDetail ({ state }, payload) {
-  console.log('getTeamInfoDetail', state, payload)
+  console.log(payload)
+  console.log('확인')
   const url = `/team/info/${payload}`
+  console.log(url)
   return $axios({ method: 'get', url: url})
 }
 
@@ -208,7 +210,7 @@ export function addArticle ({ state }, payload) {
 // 유저 한달 일정 가져오기
 export function getSchedule ({ state }, payload) {
   // console.log('getTeamInfo', state, payload)
-  console.log(payload)
+  // console.log(payload)
   const url = 'event/user/month'
   const token = payload
   return $axios({ method: 'get', url: url, headers: { Authorization: `Bearer ${token}`}})
@@ -216,7 +218,7 @@ export function getSchedule ({ state }, payload) {
 
 // 스케줄 추가하기
 export function createSchedule ({ state }, payload) {
-  console.log(payload)
+  // console.log(payload)
   const teamId = payload.teamId
   // const url = `/event/${teamId}`
   const body = payload.body
