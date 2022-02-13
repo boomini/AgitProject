@@ -8,7 +8,7 @@
           <el-button type="primary" @click="joinSession" id="join-btn" class="mx-3">
             <i class="fa-solid fa-right-to-bracket"></i>
           </el-button>
-          <el-button type="danger" @click="closeSession" id="join-btn">
+          <el-button type="danger" @click="outSession" id="join-btn">
             <i class="fa-solid fa-xmark"></i>
           </el-button>
         </div>
@@ -263,6 +263,15 @@ export default {
         },
       });
     };
+    // 세션 진입 전 Exit할 때
+    const outSession = function (){
+        router.push({
+        name: "room-board",
+        params: {
+          roomId: state.roomId,
+        },
+      });
+    }
 
     const joinSession = function () {
       state.OV = new OpenVidu();
@@ -384,7 +393,7 @@ export default {
       state.publisher = undefined;
       state.subscribers = [];
       state.OV = undefined;
-      store.commit("root/clearMessages");
+      store.commit("root/Messages");
       window.removeEventListener("beforeunload", leaveSession);
     };
 
@@ -531,6 +540,7 @@ export default {
       changeAudioState,
       onOpenShareDialog,
       onCloseShareDialog,
+      outSession,
     };
   },
 };
