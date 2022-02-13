@@ -1,14 +1,33 @@
 <template>
   <div v-if="info">
-    <el-dialog custom-class="before-dialog" v-model="state.dialogVisible" title="이전 약속" width="30%" style="margin: 50%">
-      <span>
-      팀 이름: {{ info.teamName }} <br>
-      시작 날짜: {{ info.startDate }} <br>
-      종료 날짜: {{ info.endDate }} <br>
-      D-day: {{ info.dday }}일 <br>
-      약속 제목: {{ info.eventTitle }} <br>
-      약속 내용: {{ info.eventContent }}
-      </span>
+    <el-dialog custom-class="before-dialog" v-model="state.dialogVisible" title="이전 약속" width="30%">
+      <div class="card text-dark" style="margin-bottom: -20px;">
+        <div v-if="teamP">
+          <img :src=teamP class="card-img" onerror="src='https://cdn.pixabay.com/photo/2017/04/10/22/28/residence-2219972_960_720.jpg'" alt="https://i6a403.p.ssafy.io/img/agit_logo.e339fd5c.png" style="opacity: 0.5;">
+          <div class="card-img-overlay" style="color: #464646">
+            <h3 class="card-title">팀명: {{ info.teamName }}</h3>
+            <br>
+            <h5 class="card-text">약속 제목: {{ info.eventTitle }}</h5>
+            <h5 class="card-text">약속 내용: {{ info.eventContent }}</h5>
+            <br>
+            <p class="card-text">시작 날짜: {{ info.startDate }}</p>
+            <p class="card-text">종료 날짜: {{ info.endDate }}</p>
+          </div>
+        </div>
+        <!-- <div v-else-if="store.state.root.props.info.teamId.teamPicture==null">
+          <img src='https://i6a403.p.ssafy.io/img/agit_logo.e339fd5c.png' class="card-img" alt="..." style=" opacity: 0.5;">
+          <div class="card-img-overlay" style="color: #464646">
+            <h3 class="card-title">팀명: {{ info.teamName }}</h3>
+            <br>
+            <h5 class="card-text">약속 제목: {{ info.eventTitle }}</h5>
+            <h5 class="card-text">약속 내용: {{ info.eventContent }}</h5>
+            <br>
+            <p class="card-text">시작 날짜: {{ info.startDate }}</p>
+            <p class="card-text">종료 날짜: {{ info.endDate }}</p>
+          </div>
+        </div> -->
+        </div>
+
       <template #footer>
         <span class="dialog-footer">
           <el-button type="primary" @click="handleClose()"
@@ -55,12 +74,16 @@ export default {
       type: Object,
       required: true,
     },
+    teamP: {
+      type: String,
+    }
   },
   setup(props, {emit}) {
     const store = useStore()
     const router = useRouter()
     const state = reactive({
       dialogVisible: computed(() => props.open),
+      teamP : props.teamP
     })
 
   // console.log(props.info)
@@ -77,5 +100,7 @@ export default {
 </script>
 
 <style>
-
+  .before-dialog{
+    top: -80px;
+  }
 </style>
