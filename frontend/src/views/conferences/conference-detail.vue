@@ -260,15 +260,15 @@ export default {
           // subscribers 들의 음성인지는 추가로 알아봐야 함
           const publisherId = state.publisher.stream.streamId
           // console.log(publisherId)
+          // publisher의 event면 publisher만 변경
+          const str_len = event.connection.connectionId.length
+          if (publisherId.slice(-str_len) === event.connection.connectionId){
+            state.BorderColor = "blue"
+          }
           state.subscribers.forEach((subscriber) => {
-            const str_len = event.connection.connectionId.length
 
-            // publisher의 event면 publisher만 변경
-            if (publisherId.slice(-str_len) === event.connection.connectionId){
-              state.BorderColor = "blue"
-            }
             // subscirber의 event면 subscriber 변경
-            else if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
+            if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
                 subscriber.element = "blue"
             }
           })
@@ -276,15 +276,15 @@ export default {
 
       state.session.on('publisherStopSpeaking', (event) => {
           const publisherId = state.publisher.stream.streamId
+          const str_len = event.connection.connectionId.length
+          if (publisherId.slice(-str_len) === event.connection.connectionId){
+            state.BorderColor = "black"
+          }
           state.subscribers.forEach((subscriber) => {
-            const str_len = event.connection.connectionId.length
 
             // publisher의 event면 publisher만 변경
-            if (publisherId.slice(-str_len) === event.connection.connectionId){
-              state.BorderColor = "black"
-            }
             // subscirber의 event면 subscriber 변경
-           else if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
+           if (subscriber.stream.streamId.slice(-str_len) === event.connection.connectionId){
                 subscriber.element = "black"
             }
           })
