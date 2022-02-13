@@ -40,7 +40,7 @@
             <i class="fa-solid fa-microphone toggle-icon cursor" @click="changeAudioState()"></i>
           </div>
         <div class="d-flex justify-content-between offset-2" id="header">
-          <h1>{{ state.teamName }}의 방입니다.</h1>
+          <h1>Room {{ state.teamName }}</h1>
             <!-- <input
               class="btn btn-large btn-danger my-3 mx-4"
               type="button"
@@ -98,7 +98,7 @@
   margin-left: 0;
   margin-top: 0;
   z-index: 10;
-  background-color: #427b9a;
+  background-color: #5865f2;
   width: 125%;
   height: 100vh;
   background-size: cover;
@@ -118,6 +118,12 @@
 #header{
   width: 132vh;
   margin-bottom: 2vh;
+}
+#header h1{
+  border-color: black;
+  border-style: solid;
+  padding: 1vh;
+  border-radius: 100px;
 }
 </style>
 <script>

@@ -100,7 +100,7 @@ export default {
   width: 45vh;
   height: 83vh;
   border-radius: 3%;
-  background-color: #3e7090;
+  background-color: rgb(87, 193, 129);
 }
 .color-g{
   color: #323f45;

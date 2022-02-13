@@ -14,16 +14,16 @@
 <style scoped>
   #user-video{
     width: 45vh;
-    padding: 0.3vh;
+    padding: 0.4vh;
     border-radius: 2%;
-    border-width: 2px;
+    border-width: 2.5px;
     border-style: solid;
-    background-color:   rgb(99, 97, 97);
+    background-color:   rgb(88, 85, 85);
   }
 
   #user-video p{
     display: inline-block;
-    color: #322f2f;
+    color: #131313;
     font-weight: bold;
     border-bottom-right-radius: 4px;
   }
