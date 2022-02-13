@@ -24,26 +24,10 @@
             오늘의 일정
           </h4>
           <div v-if="state.eventResList.length >= 1">
-            <el-scrollbar>
-              <div>
-                <p v-for="(item, index) in state.eventResList" :key="item" class="event-item">
-                  <span>
-                    {{ index + 1 }}. {{ item.eventTitle }}
-                  </span>
-                  <span v-if="data.uploadDate === item.endDate">
-                    D-day
-                    <!-- {{ data.uploadDate }}
-                    {{ item.startDate }}
-                    {{ item.endDate }}
-                    {{ item.endDate}}
-                    {{ item.dday }} -->
-                  </span>
-                  <span v-else>
-                    약속 시작
-                  </span>
-                </p>
-              </div>
-            </el-scrollbar>
+            <event-page
+              :eventList = state.eventResList
+              :uploadDate = data.uploadDate
+            />
           </div>
           <div v-else>
             <el-empty :image-size="200" description="약속이 없어요.">
@@ -109,6 +93,7 @@ import { reactive, computed, onBeforeMount } from 'vue'
 import ImagePage from './image.vue'
 import VideoPage from './video.vue'
 import ArticlePage from './article.vue'
+import EventPage from './event.vue'
 
 export default {
   name: 'board',
@@ -116,6 +101,7 @@ export default {
     ImagePage,
     VideoPage,
     ArticlePage,
+    EventPage,
   },
   props: {
     data: {
@@ -129,10 +115,6 @@ export default {
   },
 
   setup(props, { emit }) {
-    onBeforeMount(() => {
-      const teamId = props.teamId
-      const uploadDate = props.date
-    })
     const state = reactive({
       boardVisible: computed(() => props.open),
       // teamId: props.teamId,
@@ -194,28 +176,7 @@ export default {
 .scrollbar-flex-content {
   display: flex;
 }
-.event-item {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: calc(100% - 20px);
-  height: 50px;
-  margin: 10px;
-  text-align: center;
-  border: 1px solid #d1d1d1;
-  border-radius: 4px;
-  background-color: #fff9e4;
-  color: var(--el-text-color-regular);
-}
-.event-item:hover {
-  background-color: #e3ddca;
-  transition: 0.1s;
-}
 
-.event-item:active {
-  opacity: 0.5;
-}
 
 .el-drawer {
   border-top-left-radius: 10px;
@@ -225,6 +186,7 @@ export default {
 h4 {
   overflow: hidden;
   text-align: center;
+  margin-bottom: 2rem;
 }
 
 h4:before,

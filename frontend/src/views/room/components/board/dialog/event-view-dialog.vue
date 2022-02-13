@@ -1,7 +1,7 @@
 <template>
   <!-- <p>{{ info }}</p> -->
   <el-dialog
-    custom-class="article-view-dialog"
+    custom-class="event-view-dialog"
     v-model="open"
     @close="handleClose"
     width="30%"
@@ -11,14 +11,17 @@
     <template #title>
       <!-- <span style="font-size: 20px; font-weight: bolder;"> -->
       <span>
-        게시글 상세보기
+        일정 상세보기
       </span>
     </template>
 
     <!-- content -->
     <div class="d-flex flex-column justify-content-around">
-      <h1 style="text-align: center; margin-bottom: 5rem;">{{ info.title }}</h1>
-      <div class="d-flex justify-content-between">
+      <h1 style="text-align: center; margin-bottom: 5rem;">{{ info.eventTitle }}</h1>
+      <p style="font-size: 18px;">
+        기간 : {{ info.startDate }} ~ {{ info.endDate }}
+      </p>
+      <!-- <div class="d-flex justify-content-between">
         <div>
           <p style="font-size: 1.1rem;">
             {{ info.writer }}
@@ -26,17 +29,20 @@
         </div>
         <div style="font-size: 40%;">
           <p>
-            최초 작성일 : {{ timeFormat(info.createdTime) }}
+            언제부터? {{ info.startDate }}
           </p>
           <p>
-            최종 수정일 : {{ timeFormat(info.updatedDate) }}
+            언제까지? {{ info.endDate }}
           </p>
         </div>
-      </div>
+      </div> -->
 
       <div style="border-top: 1px solid black; padding-top: 1.5rem;">
-        <p style="font-size: 20px;">
-          {{ info.content }}
+        <p>
+          내용
+        </p>
+        <p style="font-size: 25px;">
+          {{ info.eventContent }}
         </p>
       </div>
     </div>
@@ -67,6 +73,21 @@ export default {
     const router = useRouter()
     const state = reactive({
       userId: computed(() => jwt_decode(store.getters['root/getJWTToken']).sub),
+      // dDay: computed(function () {
+      //   const dday = props.info.dday
+      //   console.log('디데이')
+      //   console.log(dday)
+      //   let result = ''
+      //   if (dday < 0) {
+      //     result = `D + ${-dday}`
+      //   } else if (dday > 0) {
+      //     result = `D - ${dday}`
+      //   } else {
+      //     result = `D - day`
+      //   }
+
+      //   return result
+      // })
     })
 
     const handleClose = function () {
