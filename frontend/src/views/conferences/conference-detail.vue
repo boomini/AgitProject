@@ -26,17 +26,17 @@
     <div class="d-flex-row justify-content-between my-3" v-if="state.session">
       <div class="d-flex offset-1">
         <!-- 비디오 토글 버튼 -->
-          <div v-if="state.publisher.stream.videoActive">
+          <div v-if="state.publisher.stream.videoActive" class="d-flex justify-content-center align-items-center">
             <i class="fa-solid fa-video-slash toggle-icon-off mx-5" @click="changeVideoState()"></i>
           </div>
-          <div v-else>
+          <div v-else class="d-flex justify-content-center align-items-center">
             <i class="fa-solid fa-video toggle-icon-on mx-5" style="padding-left: 0.95vh" @click="changeVideoState()"></i>
           </div>
           <!-- 오디오 토글 버튼 -->
-          <div v-if="state.publisher.stream.audioActive">
+          <div v-if="state.publisher.stream.audioActive" class="d-flex justify-content-center align-items-center">
            <i class="fa-solid fa-microphone-slash toggle-icon-off mx-5" @click="changeAudioState()"></i>
           </div>
-          <div v-else>
+          <div v-else class="d-flex justify-content-center align-items-center">
             <i class="fa-solid fa-microphone toggle-icon-on mx-5" style="padding-left: 1.35vh" @click="changeAudioState()"></i>
           </div>
         <div class="d-flex justify-content-between align-items-center offset-1" id="header">
