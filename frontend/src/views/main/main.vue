@@ -27,9 +27,10 @@
       style="position:fixed; top: 0; background-color: white;"
       />
     <div class="main-container" style="position: fixed; top: 70px;">
-      <div class="hide-on-small" width="240px" style="height: calc(100vh - 150px)">
+      <div class="hide-on-small" width="90px;" style="height: calc(100vh - 150px);">
         <main-sidebar
-          :width="`240px`"
+          :width="`90px`"
+          style="position : fixed; z-index:10;"
           @openRegisterTeamDialog="onOpenRegisterTeamDialog"/>
       </div>
     </div>
@@ -37,7 +38,7 @@
       :height="`80px`"
       style="position:fixed; bottom: 0; width: 100%; background-color: white;"/>
   <!-- </div> -->
-  <div style="position: absolute; top: 90px; left: 110px; width: 80%;">
+  <div style="position: absolute; top: 90px; left: 100px; width: 90%;">
     <router-view @openLoginDialog="onOpenLoginDialog" @openSignupDialog="onOpenSignupDialog" @openAuthDialog="onOpenAuthDialog" @openRegisterTeamDialog="onOpenRegisterTeamDialog" :key="$route.fullPath"></router-view>
 
   </div>

@@ -1,7 +1,9 @@
 <template>
 <div v-if="streamManager">
-  <div class="d-flex flex-column align-items-center mx-2 my-2" id="user-video">
-    <ov-video :stream-manager="streamManager"/>
+  <div class="d-flex flex-column align-items-center mx-2 my-2" id="user-video" :style="{ borderColor: this.borderColor}">
+    <div class="video-mask">
+      <ov-video :stream-manager="streamManager"/>
+    </div>
     <div class="d-flex justify-content-center" id="user-bar">
       <div>
        <p>이름: {{ clientData }}</p>
@@ -14,25 +16,29 @@
 <style scoped>
   #user-video{
     width: 45vh;
-    padding: 0.3vh;
-    border-radius: 2%;
-    border-color: black;
-    border-width: 2px;
+    padding: 0.65vh;
+    border-radius: 1vh;
+    border-width: 0.5vh;
     border-style: solid;
+    background-color:   rgb(88, 85, 85);
+    box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
   }
 
   #user-video p{
     display: inline-block;
-    background: #f8f8f8;
-    color: #3e3b3b;
+    color: #131313;
     font-weight: bold;
-    border-bottom-right-radius: 4px;
   }
 
   #user-bar{
     margin-top: 1vh;
     width: 40vh;
     height: 5vh;
+  }
+  .video-mask{
+    border-radius: 1vh;
+    height: 32vh;
+    overflow: hidden;
   }
 </style>
 
@@ -48,6 +54,7 @@ export default {
 
 	props: {
 		streamManager: Object,
+    borderColor: String,
 	},
 
 	computed: {
