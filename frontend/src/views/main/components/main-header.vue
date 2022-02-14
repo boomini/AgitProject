@@ -4,7 +4,11 @@
     :gutter="10"
     :style="{ 'height': height }">
     <div class="hide-on-small">
-      <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"/></div>
+      <div class="d-flex align-items-center" @click="clickLogo">
+        <div class="logo-wrapper"><div class="ic ic-logo"/></div>
+        <p id="logo-text">Agit</p>
+        <p id="logo-sub">our secret space</p>
+      </div>
       <div class="tool-wrapper">
         <!-- <div class="search-field">
           <el-input
@@ -17,12 +21,15 @@
           <el-button type="success" @click="clickSignup">회원가입</el-button>
           <el-button type="primary" @click="clickLogin">로그인</el-button>
         </div>
+          <!-- <el-button type="danger" @click="clickIntro">소개페이지</el-button> -->
+          <!-- <el-button type="warning" @click="clickCenter">고객센터</el-button> -->
+          <!-- <el-button type="info" @click="clickSchedule">일정관리</el-button> -->
+          <!-- <el-button type="success" @click="clickProfile">마이 페이지</el-button> -->
         <div v-else class="button-wrapper">
-          <el-button type="danger" @click="clickIntro">소개페이지</el-button>
-          <el-button type="warning" @click="clickCenter">고객센터</el-button>
-          <el-button type="info" @click="clickSchedule">일정관리</el-button>
-          <el-button type="success" @click="clickProfile">마이 페이지</el-button>
-          <el-button type="primary" @click="clickLogout">로그아웃</el-button>
+          <p class="text-center" @click="clickSchedule">마이페이지</p>
+          <p class="text-center" @click="clickCenter">고객센터</p>
+          <p class="text-center" @click="clickLogout">로그아웃</p>
+          <!-- <el-button type="primary" @click="clickLogout">로그아웃</el-button> -->
         </div>
       </div>
 
@@ -211,6 +218,7 @@ export default {
 <style>
   .main-header {
     padding: 10px 20px;
+    height: 9.5vh !important;
   }
   /*Mobile, Tablet*/
   .menu-icon-wrapper {
@@ -248,7 +256,7 @@ export default {
   .mobile-sidebar-wrapper .mobile-sidebar .mobile-sidebar-tool-wrapper {
     padding-bottom: 20px;
   }
-  .mobile-sidebar-wrapper .mobile-sidebar .mobile-sidebar-btn {
+  .mobile-sidebar-wrapper .mobile-sidebar .mobile-sidebar-wn {
     display: block;
     margin: 0 auto;
     margin-top: 25px;
@@ -290,12 +298,12 @@ export default {
 
   /*Desktop - Need to add Class if Need*/
   .hide-on-small{
-    width: 100%;
+    width: 100vw;
     display: flex;
   }
 
   .main-header .hide-on-small .logo-wrapper {
-    width: 20%;
+    width: 6vw;
     cursor: pointer;
   }
   .main-header .hide-on-small .logo-wrapper .ic.ic-logo {
@@ -314,11 +322,22 @@ export default {
     float: right;
     display: flex;
   }
-  .main-header .hide-on-small .tool-wrapper .button-wrapper .el-button {
+  /* .main-header .hide-on-small .tool-wrapper .button-wrapper .el-button {
     width: 120px;
     height: 50px;
     cursor: pointer;
     margin-right: 1%;
+  } */
+  .main-header .hide-on-small .tool-wrapper .button-wrapper p {
+    width: 6vw;
+    font-size: 2.3vh;
+    cursor: pointer;
+    margin-top: 1.7vh;
+    transform: translate(-40%);
+  }
+  .main-header .hide-on-small .tool-wrapper .button-wrapper p:hover {
+    transform: translate(-40%) scale(0.96);
+    color: #3bb8b8;
   }
   .main-header .hide-on-small .tool-wrapper .search-field {
     width: 50%;
@@ -346,6 +365,22 @@ export default {
     animation: unfoldIn 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
   }
 
+  .select{
+    color: #3bb8b8;
+  }
+  #logo-text{
+    font-weight: bold;
+    font-size: 4vh;
+    color: #78ccbb;
+    text-shadow:0.15vh 0.15vh 0.3vh #162d42;
+    cursor: pointer;
+  }
+  #logo-sub{
+    font-size: 1.4vh;
+    color: #78ccbb;
+    text-shadow:0.09vh 0.09vh 0.15vh #162d42;
+    cursor: pointer;
+  }
   /* .el-overlay .el-overlay-dialog {
     background-color: white;
   } */
