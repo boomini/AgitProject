@@ -371,15 +371,15 @@ export default {
     font-weight: bold;
     font-size: 4vh;
     color: #78ccbb;
-    text-shadow:1px 1.2px 1.2px #162d42;
+    text-shadow:0.15vh 0.15vh 0.3vh #162d42;
     transform: translate(-20%);
     cursor: pointer;
   }
   #logo-sub{
-    font-size: 1.2vh;
+    font-size: 1.4vh;
     color: #78ccbb;
-    text-shadow:0.9px 0.9px 0.9px #162d42;
-    transform: translate(-15%, 70%);
+    text-shadow:0.09vh 0.09vh 0.15vh #162d42;
+    transform: translate(-10%, 70%);
     cursor: pointer;
   }
   /* .el-overlay .el-overlay-dialog {
