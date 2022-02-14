@@ -21,7 +21,7 @@
           팀: {{ info.teamName }} <br><br>
           약속 제목: {{ info.eventTitle }} <br>
           약속 내용: {{ info.eventContent }} <br><br>
-          약속 날짜: {{ info.endDate.slice(5, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br>
+          약속 날짜: {{ info.endDate.slice(6, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br>
           D-day: {{ info.dday }}일 <br>
         </h5>
       </el-carousel-item>
@@ -35,7 +35,7 @@
           팀: {{ info.teamName }} <br><br>
           약속 제목: {{ info.eventTitle }} <br>
           약속 내용: {{ info.eventContent }} <br><br>
-          약속 날짜: {{ info.endDate.slice(5, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br>
+          약속 날짜: {{ info.endDate.slice(6, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br>
           D-day: {{ info.dday }}일 <br>
         </h5>
       </el-carousel-item>
@@ -44,7 +44,7 @@
     </div>
     <!-- 확인필요! -->
     <div v-else-if = "state.infos.length === 0">
-      <el-empty :image-size="200"><p>일정을 추가해주세요</p></el-empty>
+      <el-empty :image-size="80"><p><i class="em em-alarm_clock" style="margin-bottom:4px" aria-role="presentation" aria-label="ALARM CLOCK"></i> 일정을 추가해주세요</p></el-empty>
     </div>
   </div>
   <div style="width:100%;">
@@ -65,10 +65,10 @@
           </div>
           <div class="mountain-scene">
             <div id="clouds">
-              <div class="cloud"></div>
-              <div class="cloud"></div>
-              <div class="cloud"></div>
-              <div class="cloud"></div>
+              <div class="cloud" style="z-index: 0"></div>
+              <div class="cloud" style="z-index: 0"></div>
+              <div class="cloud" style="z-index: 0"></div>
+              <div class="cloud" style="z-index: 0"></div>
 
             </div>
             <!-- background mountains -->
@@ -132,10 +132,11 @@
           </div>
           <div class="mountain-scene">
             <div id="clouds">
-              <div class="cloud"></div>
-              <div class="cloud"></div>
-              <div class="cloud"></div>
-              <div class="cloud"></div>
+              <div class="cloud" style="z-index: 0"></div>
+              <div class="cloud" style="z-index: 0"></div>
+              <div class="cloud" style="z-index: 0"></div>
+              <div class="cloud" style="z-index: 0"></div>
+
 
             </div>
             <!-- background mountains -->
@@ -389,28 +390,36 @@ export default {
             beforeschedule.push(state.infos[i])
           } else {
             afterschedule.push(state.infos[i])
+            console.log(afterschedule)
+            console.log('yesss')
           }
         }
         let beforemax = -31
-        for (var b = 0; b < beforeschedule.length; b++) {
-          if (beforeschedule[b].dday >= beforemax) {
-            beforemax = beforeschedule[b].dday
-            beforeday = b
+        if (beforeschedule.length >= 1) {
+          for (var b = 0; b < beforeschedule.length; b++) {
+            if (beforeschedule[b].dday >= beforemax) {
+              beforemax = beforeschedule[b].dday
+              beforeday = b
+            }
           }
-        }
         state.pros.beforepro.push(beforeschedule[beforeday])
-        console.log(state.pros.beforepro[0])
-        console.log('dfdfdf')
         state.beforeteamPicture = 'http://localhost:8080/api/v1/team/profileimg/'+state.pros.beforepro[0].teamId
-        let aftermin = 32
-        for (var a = 0; a < afterschedule.length; a++) {
-          if (afterschedule[a].dday <= aftermin) {
-            aftermin = afterschedule[a].dday
-            afterday = a
-          }
         }
-        state.pros.afterpro.push(afterschedule[afterday])
-        state.afterteamPicture = 'http://localhost:8080/api/v1/team/profileimg/'+state.pros.afterpro[0].teamId
+        console.log(state.pros.beforepro)
+        console.log('dfdfdf')
+        let aftermin = 32
+        if (afterschedule.length >= 1) {
+          for (var a = 0; a < afterschedule.length; a++) {
+            if (afterschedule[a].dday <= aftermin) {
+              aftermin = afterschedule[a].dday
+              afterday = a
+            }
+          }
+          console.log(afterday)
+          console.log('yessssss')
+          state.pros.afterpro.push(afterschedule[afterday])
+          state.afterteamPicture = 'http://localhost:8080/api/v1/team/profileimg/'+state.pros.afterpro[0].teamId
+        }
       })
       .catch(err => {
         console.log(err)
