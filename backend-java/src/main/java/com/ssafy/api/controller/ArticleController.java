@@ -120,7 +120,8 @@ public class ArticleController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<? extends  BaseResponseBody> updateArticleDetail(@ApiParam(value = "id", required = true) @PathVariable("id") Long id, ArticleDto articleDto){
+    public ResponseEntity<? extends  BaseResponseBody> updateArticleDetail(@ApiParam(value = "id", required = true) @PathVariable("id") Long id,
+                                                                           @RequestBody @ApiParam(value="로그인 정보", required = true) ArticleDto articleDto){
         if(!articleService.updateArticleDetailById(id, articleDto)){
             // 수정하려는 글이 없으면 예외처리
             throw new CArticleNotFoundException();
