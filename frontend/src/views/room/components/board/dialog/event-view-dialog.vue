@@ -57,7 +57,7 @@ import { useRouter } from 'vue-router'
 import jwt_decode from 'jwt-decode'
 
 export default {
-  name: 'article-view-dialog',
+  name: 'event-view-dialog',
   props: {
     open: {
       type: Boolean,
@@ -91,7 +91,7 @@ export default {
     })
 
     const handleClose = function () {
-      emit('closeArticleView')
+      emit('closeEventView')
     }
 
     const timeFormat = function (time) {

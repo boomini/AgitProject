@@ -221,3 +221,4 @@ plugins.forEach(plugin => {
 })
 
 app.mount('#app')
+
