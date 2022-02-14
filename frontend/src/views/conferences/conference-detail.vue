@@ -133,12 +133,14 @@ export default {
       audioStatus: true,
       BorderColor: 'black',
       shareDialogOpen: false,
+      isLogin: computed(() => store.getters['root/getJWTToken']),
       backImgDialogOpen: false,
     });
     // 페이지 진입시 불리는 훅
     onMounted(() => {
       state.conferenceId = route.params.conferenceId;
       store.commit("root/setMenuActiveMenuName", "home");
+      checkUserState()
     });
 
     // 페이지 이탈시 불리는 훅
@@ -165,6 +167,21 @@ export default {
         },
       });
     }
+
+    const checkUserState = function(){
+      if(state.isLogin==null){
+        setTimeout(() => {
+                swal({
+                  title: "로그인 필요한 페이지",
+                  text: "로그인 후 이용해주세요.",
+                  icon: "success",
+                  button: "확인",
+                });
+              }, 500)
+       router.push({
+        name: 'intro',
+        })
+      }}
 
     const joinSession = function () {
       state.OV = new OpenVidu();
