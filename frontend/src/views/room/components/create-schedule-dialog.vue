@@ -97,6 +97,10 @@ export default {
       type: Object,
       required: true,
     },
+    registerDate: {
+      type: String,
+      default: '1970-01-01'
+    }
   },
 
   setup(props, { emit }) {
@@ -108,8 +112,8 @@ export default {
       form: {
         align: 'left',
         content: '',
-        startdate: '',
-        enddate: '',
+        startdate: computed(() => props.registerDate),
+        enddate: props.registerDate,
         title: '',
         teamId: '',
       },
@@ -133,7 +137,6 @@ export default {
     const handleClose = function () {
       state.form.content = ''
       state.form.title = ''
-      state.form.startdate = ''
       state.form.enddate = ''
       emit('closeCreateScheduleDialog')
     }

@@ -134,8 +134,10 @@ export default {
 methods: {
     async handleClickSignIn(){
       try {
+        this.loading = true
         const googleUser = await this.$gAuth.signIn();
         if (!googleUser) {
+          this.loading = false
           return null;
         }
         const authuser = await this.$gAuth.instance;
@@ -150,6 +152,7 @@ methods: {
       } catch (error) {
         //on fail do something
         console.error(error);
+        this.loading = false
         return null;
       }
     },
@@ -280,8 +283,6 @@ methods: {
       emit('closeLoginDialog')
     }
     const tokenVerify = function(){
-
-      loading.value = true
 
       const params = new URLSearchParams();
       params.append('idToken', this.idToken);
