@@ -56,6 +56,7 @@
                   content="카메라 OFF"
                   placement="top"
                 >
+
                 <i class="fa-solid fa-video-slash custom-icon toggle-icon-off text-center" @click="changeVideoState"></i>
                 </el-tooltip>
               </div>
@@ -112,7 +113,30 @@
                   content="배경 이미지 변경"
                   placement="top"
                 >
-              <i class="fa-solid fa-image custom-icon share-icon text-center" @click="onOpenBackImgDialog"></i>
+                <div class="custom-icon share-icon text-center"><i class="fa-solid fa-image" @click="onOpenBackImgDialog"></i></div>
+
+                </el-tooltip>
+            </div>
+            <!--사진캡쳐 버튼-->
+            <div>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="화면 캡쳐"
+                  placement="top"
+                >
+              <i class="fa-solid fa-camera custom-icon share-icon text-center" id="capture" @click="takeSnapshot"></i>
+                </el-tooltip>
+            </div>
+            <!--그림그리기 버튼-->
+            <div>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="그림그리기"
+                  placement="top"
+                >
+              <i class="fa-solid fa-pen custom-icon share-icon text-center"  @click="onOpenBackImgDialog"></i>
                 </el-tooltip>
             </div>
         </div>
@@ -120,6 +144,10 @@
       <select-back-img-dialog :open="state.backImgDialogOpen"
       @closeBackImgDialog="onCloseBackImgDialog"
       @backImg="setBackImg"/>
+      <capture-img
+      :open="state.captureImgDialogOpen"
+      :captureImg="state.captureImg"
+      @closeCaptureImgDialog="onCloseCaptureImgDialog"/>
     </div>
 
 
@@ -127,15 +155,17 @@
 </template>
 
 <script>
-import { reactive, onMounted, onUnmounted, computed } from 'vue';
+import { reactive, onMounted, onUnmounted, computed,ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/live/UserVideo.vue';
 import ChatLive from '@/views/live/ChatLive.vue';
+import CaptureImg from '@/views/live/CaptureIMG.vue'
 import SelectBackImgDialog from '@/views/live/SelectBackImgDialog.vue';
 import axios from 'axios';
 import moment from 'moment';
+import html2canvas from 'html2canvas'
 
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
@@ -146,8 +176,8 @@ export default {
     UserVideo,
     ChatLive,
     SelectBackImgDialog,
+    CaptureImg
   },
-
   setup() {
     const route = useRoute();
     const router = useRouter();
@@ -182,7 +212,9 @@ export default {
       BorderColor: 'black',
       isLogin: computed(() => store.getters['root/getJWTToken']),
       backImgDialogOpen: false,
+      captureImgDialogOpen: false,
       backImg:'https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1',
+      captureImg:'',
     });
     // 페이지 진입시 불리는 훅
     onMounted(() => {
@@ -475,6 +507,9 @@ export default {
     const onCloseBackImgDialog = function (){
       state.backImgDialogOpen = false
     };
+    const onCloseCaptureImgDialog = function (){
+      state.captureImgDialogOpen = false
+    };
     const setBackImg = function(imgsrc){
       state.backImg = imgsrc;
     }
@@ -545,11 +580,27 @@ export default {
     }
     // 녹화 중단
 
+    const takeSnapshot = function(){
+      html2canvas(document.querySelector('#chat-container')).then(canvas=>{
+        var myImg = canvas.toDataURL('image/png');
+        // myImg = myImg.replace('data:image/png;base64,', '');
+        // console.log(URL.createObjectURL(myImg));
+        canvas.toBlob(function(blob){
+          const url = URL.createObjectURL(blob);
+          console.log(blob);
+          state.captureImg = url;
+          state.captureImgDialogOpen=true;
+        })
+
+        // canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({'image/png':blob})]))
+        // canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({'image/png':blob})]))
+      })
+    }
     getTeamInfo()
     takeProfile()
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager, getToken, createSession,
       createToken, sendMessage, closeSession, takeProfile, getTeamInfo, changeVideoState, changeAudioState, onOpenBackImgDialog, onCloseBackImgDialog,
-      outSession, setBackImg, startRecording, recordScreen, saveFile };
+      outSession, setBackImg, startRecording, recordScreen, saveFile,takeSnapshot, onCloseCaptureImgDialog };
   },
 };
 </script>
