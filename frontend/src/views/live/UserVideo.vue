@@ -15,7 +15,8 @@
 
 <style scoped>
   #user-video{
-    width: 45vh;
+    width: 23vw;
+    height: 30vh;
     padding: 0.65vh;
     border-radius: 1vh;
     border-width: 0.5vh;
