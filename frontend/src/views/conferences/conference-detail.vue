@@ -37,6 +37,8 @@
             :border-color="sub.element"
           />
         </div>
+        <div id="rec-test">
+        </div>
         <div>
           <chat-live :session="state.session" @sendMessage="sendMessage" />
         </div>
@@ -48,33 +50,82 @@
           <!-- 비디오 토글 버튼 -->
             <div>
               <div v-if="state.publisher.stream.videoActive">
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="카메라 OFF"
+                  placement="top"
+                >
                 <i class="fa-solid fa-video-slash custom-icon toggle-icon-off text-center" @click="changeVideoState"></i>
+                </el-tooltip>
               </div>
               <div v-else>
-                <i class="fa-solid fa-video custom-icon toggle-icon-on text-center" style="padding-left: 0.95vh" @click="changeVideoState"></i>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="카메라 ON"
+                  placement="top"
+                >
+                <i class="fa-solid fa-video custom-icon toggle-icon-on text-center"  @click="changeVideoState"></i>
+                </el-tooltip>
               </div>
             </div>
             <!-- 오디오 토글 버튼 -->
             <div>
               <div v-if="state.publisher.stream.audioActive">
-              <i class="fa-solid fa-microphone-slash custom-icon toggle-icon-off text-center" @click="changeAudioState"></i>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="마이크 OFF"
+                  placement="top"
+                >
+              <i class="fa-solid fa-microphone-slash custom-icon toggle-icon-off text-center" style="padding-left: 0.8vh" @click="changeAudioState"></i>
+                </el-tooltip>
               </div>
               <div v-else>
-                <i class="fa-solid fa-microphone custom-icon toggle-icon-on text-center" style="padding-left: 0.9vh" @click="changeAudioState"></i>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="마이크 ON"
+                  placement="top"
+                >
+                <i class="fa-solid fa-microphone custom-icon toggle-icon-on text-center" @click="changeAudioState"></i>
+                </el-tooltip>
               </div>
             </div>
             <!--녹화 하기 버튼-->
             <div>
               <div v-if="state.recordStatus">
-
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="녹화 중단"
+                  placement="top"
+                >
+                <i class="fa-solid fa-stop custom-icon share-icon text-center" @click="stopRecording" style="background-color: #b53638; color: #1c2023;" id="stop"></i>
+                </el-tooltip>
               </div>
               <div v-else>
-                <i class="fa-solid fa-share-from-square custom-icon share-icon text-center" @click="startRecording"></i>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="녹화 시작"
+                  placement="top"
+                >
+                <i class="fa-solid fa-film custom-icon share-icon text-center" @click="startRecording" id="start"></i>
+                </el-tooltip>
               </div>
             </div>
             <!--화면변경 버튼-->
             <div>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="배경 이미지 변경"
+                  placement="top"
+                >
               <i class="fa-solid fa-image custom-icon share-icon text-center" @click="onOpenBackImgDialog"></i>
+                </el-tooltip>
             </div>
         </div>
       </div>
@@ -121,6 +172,10 @@ export default {
         "Content-Type": "application/json",
       },
     });
+    // screen record
+    let startRec = document.getElementById('start')
+    let stopRec = document.getElementById('stop')
+    let mediaRecorder
 
     const state = reactive({
       conferenceId: '',
@@ -178,10 +233,10 @@ export default {
       if(state.isLogin==null){
         setTimeout(() => {
                 swal({
-                  title: "로그인 필요한 페이지",
-                  text: "로그인 후 이용해주세요.",
-                  icon: "success",
-                  button: "확인",
+                  title: '로그인 필요한 페이지',
+                  text: '로그인 후 이용해주세요.',
+                  icon: 'success',
+                  button: '확인',
                 });
               }, 500)
        router.push({
@@ -274,9 +329,9 @@ export default {
               videoSource: undefined, // The source of video. If undefined default webcam
               publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
               publishVideo: true, // Whether you want to start publishing with your video enabled or not
-              resolution: "640x480", // The resolution of your video
+              resolution: '640x480', // The resolution of your video
               frameRate: 30, // The frame rate of your video
-              insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
+              insertMode: 'APPEND', // How the video is inserted in the target element 'video-container'
               mirror: false, // Whether to mirror your local video or not
             });
 
@@ -291,14 +346,14 @@ export default {
           })
           .catch((error) => {
             console.log(
-              "There was an error connecting to the session:",
+              'There was an error connecting to the session:',
               error.code,
               error.message
             );
           });
       });
 
-      window.addEventListener("beforeunload", leaveSession);
+      window.addEventListener('beforeunload', leaveSession);
     };
 
     const leaveSession = function () {
@@ -309,8 +364,8 @@ export default {
       state.publisher = undefined;
       state.subscribers = [];
       state.OV = undefined;
-      store.commit("root/Messages");
-      window.removeEventListener("beforeunload", leaveSession);
+      store.commit('root/Messages');
+      window.removeEventListener('beforeunload', leaveSession);
     };
 
     const updateMainVideoStreamManager = function (stream) {
@@ -334,7 +389,7 @@ export default {
             }),
             {
               auth: {
-                username: "OPENVIDUAPP",
+                username: 'OPENVIDUAPP',
                 password: OPENVIDU_SERVER_SECRET,
               },
             }
@@ -369,7 +424,7 @@ export default {
             {},
             {
               auth: {
-                username: "OPENVIDUAPP",
+                username: 'OPENVIDUAPP',
                 password: OPENVIDU_SERVER_SECRET,
               },
             }
@@ -382,19 +437,19 @@ export default {
     const sendMessage = function (message) {
       var messageData = {
         content: message,
-        secretName: store.getters["root/getSecretName"],
+        secretName: store.getters['root/getSecretName'],
       };
       state.session.signal({
-        type: "chat",
+        type: 'chat',
         data: JSON.stringify(messageData),
         to: [],
       });
     };
 
     const takeProfile = function () {
-      const token = store.getters["root/getJWTToken"];
+      const token = store.getters['root/getJWTToken'];
       store
-        .dispatch("root/getProfile", token)
+        .dispatch('root/getProfile', token)
         .then((res) => {
           state.userName = res.data.nickName;
         })
@@ -404,7 +459,7 @@ export default {
     };
     const getTeamInfo = function () {
       store
-        .dispatch("root/getTeamInfoDetail", route.params.conferenceId)
+        .dispatch('root/getTeamInfoDetail', route.params.conferenceId)
         .then((res) => {
           state.teamName = res.data.teamName;
         })
@@ -436,12 +491,66 @@ export default {
     const setBackImg = function(imgsrc){
       state.backImg = imgsrc;
     }
+    // screen 레코딩
+    const recordScreen = async function (){
+      return await navigator.mediaDevices.getDisplayMedia({
+        audio: true,
+        video: { mediaSource: 'screen'}
+    });
+    }
+    const createRecorder = function (stream, mimeType){
+      // the stream data is stored in this array
+      let recordedChunks = [];
+
+      const mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = function (e) {
+        if (e.data.size > 0) {
+          recordedChunks.push(e.data);
+        }
+      };
+      mediaRecorder.onstop = function () {
+          saveFile(recordedChunks);
+          recordedChunks = [];
+      };
+      mediaRecorder.start(200); // For every 200ms the stream data will be stored in a separate chunk.
+      return mediaRecorder;
+    }
+
+    const saveFile = function (recordedChunks){
+      const blob = new Blob(recordedChunks, {
+          type: 'video/mp4'
+        });
+        let filename = window.prompt('Enter file name'),
+            downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = `${filename}.mp4`;
+        const dev = document.getElementById('rec-test')
+        dev.appendChild(downloadLink);
+        downloadLink.click();
+        URL.revokeObjectURL(blob); // clear from memory
+        dev.removeChild(downloadLink);
+    }
+
+    // 녹화 시작
+    const startRecording = async function (){
+      state.recordStatus = true
+      let stream = await recordScreen();
+      let mimeType = 'video/webm  '
+      mediaRecorder = createRecorder(stream, mimeType)
+    }
+    // 녹화 중단
+    const stopRecording = function (){
+      state.recordStatus =false
+      mediaRecorder.stop();
+
+    }
+
     getTeamInfo()
     takeProfile()
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager, getToken, createSession,
       createToken, sendMessage, closeSession, takeProfile, getTeamInfo, changeVideoState, changeAudioState, onOpenBackImgDialog, onCloseBackImgDialog,
-      outSession, setBackImg,
-    };
+      outSession, setBackImg, startRecording, stopRecording, recordScreen, saveFile };
   },
 };
 </script>
@@ -482,9 +591,6 @@ export default {
   width: 100vw;
   height: 100vh;
   background-size: cover;
-}
-#btn-group{
-  /* transform: translate(-20%, 30%); */
 }
 #conference-name{
   transform: translate(0, 0);

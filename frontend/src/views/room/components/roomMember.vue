@@ -3,11 +3,26 @@
 
   <div id="memberboard" class="col-2 d-flex flex-column justify-content-start" style="border: 1px solid; border-color:#dadadb; border-radius: 10px; margin-top: 45px;margin-bottom: 180px;">
     <div class="d-flex justify-content-center">
-      <i class="fa-solid fa-user-plus" @click="state.inviteDialogOpen = true"></i>
-      <i class="fa-solid fa-chalkboard-user" @click="joinConference(state.teamId)"></i>
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="멤버 추가"
+        placement="top"
+      >
+      <i class="fa-solid fa-user-plus member-icon mx-4" @click="state.inviteDialogOpen = true"></i>
+      </el-tooltip>
+      <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="회의 참석"
+        placement="top"
+      >
+      <i class="fa-solid fa-chalkboard-user member-icon mx-4" @click="joinConference(state.teamId)"></i>
+      </el-tooltip>
     </div>
       <div>
         <!-- <div>멤 버</div> -->
+        <p class="mt-3">멤버 목록</p>
         <div v-for="member in state.teamMembers" :key="member.id" class="d-flex align-items-center">
           <div class="d-flex align-items-center mt-2" style="margin-left:10px">
             <el-avatar :size="43" :src=member.profileImg></el-avatar>
@@ -96,6 +111,16 @@ export default {
 <style>
 #memberboard{
   /* background-color: #dfdfdf; */
-  color:#858687;
+  color:#747576;
+}
+.member-icon{
+  transform: scale(1.5);
+  margin-top: 4vh;
+  margin-bottom: 2vh;
+  cursor: pointer;
+  border-radius: 2vh;
+}
+.member-icon:hover{
+  transform: scale(1.6);
 }
 </style>
