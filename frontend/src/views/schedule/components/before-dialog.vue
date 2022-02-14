@@ -4,7 +4,7 @@
       <div class="card text-dark" style="margin-bottom: -20px;">
         <div v-if="teamP">
           <img :src=teamP class="card-img" onerror="src='https://cdn.pixabay.com/photo/2017/04/10/22/28/residence-2219972_960_720.jpg'" alt="https://i6a403.p.ssafy.io/img/agit_logo.e339fd5c.png" style="opacity: 0.5;">
-          <div class="card-img-overlay" style="color: #464646">
+          <div class="card-img-overlay" style="color: #464646; opacity: 0.7;">
             <h3 class="card-title">팀명: {{ info.teamName }}</h3>
             <br>
             <h5 class="card-text">약속 제목: {{ info.eventTitle }}</h5>

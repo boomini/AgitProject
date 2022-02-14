@@ -2,40 +2,43 @@
   <div style="dispaly: flex; justify-content: center; align-items:center; width: 99.2%; margin-bottom: 20px">
     <div v-if = "state.infos.length >= 3">
       <el-carousel :interval="4000" type="card" height="200px">
-        <el-carousel-item v-for="info in state.infos" :key="info.startDate">
-          <h3>팀 이름: {{ info.teamName }} <br>
-              시작 날짜: {{ info.startDate }} <br>
-              종료 날짜: {{ info.endDate }} <br>
-              D-day: {{ info.dday }}일 <br>
-              약속 제목: {{ info.eventTitle }} <br>
-              약속 내용: {{ info.eventContent }}
-          </h3>
+        <el-carousel-item v-for="info in state.infos" :key="info.endDate">
+          <h5>
+            <br>
+            팀 이름: {{ info.teamName }}<br><br>
+            약속 제목: {{ info.eventTitle }}<br>
+            약속 내용: {{ info.eventContent }}<br><br>
+            약속 날짜: {{ info.endDate.slice(5, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br>
+            D-day: {{ info.dday }}일 <br>
+          </h5>
         </el-carousel-item>
       </el-carousel>
     </div>
     <div v-else-if = "state.infos.length === 2">
       <el-carousel height="200px" direction="vertical" :autoplay="false">
         <el-carousel-item v-for="info in state.infos" :key="info.startDate">
-        <h3>팀 이름: {{ info.teamName }} <br>
-            시작 날짜: {{ info.startDate }} <br>
-            종료 날짜: {{ info.endDate }} <br>
-            D-day: {{ info.dday }}일 <br>
-            약속 제목: {{ info.eventTitle }} <br>
-            약속 내용: {{ info.eventContent }}
-        </h3>
+        <h5>
+          <br>
+          팀 이름: {{ info.teamName }} <br><br>
+          약속 제목: {{ info.eventTitle }} <br>
+          약속 내용: {{ info.eventContent }} <br><br>
+          약속 날짜: {{ info.endDate.slice(5, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br>
+          D-day: {{ info.dday }}일 <br>
+        </h5>
       </el-carousel-item>
     </el-carousel>
     </div>
     <div v-else-if = "state.infos.length === 1">
       <el-carousel height="200px" direction="vertical" :autoplay="false">
         <el-carousel-item v-for="info in state.infos" :key="info.startDate">
-        <h3>팀 이름: {{ info.teamName }} <br>
-            시작 날짜: {{ info.startDate }} <br>
-            종료 날짜: {{ info.endDate }} <br>
-            D-day: {{ info.dday }}일 <br>
-            약속 제목: {{ info.eventTitle }} <br>
-            약속 내용: {{ info.eventContent }}
-        </h3>
+        <h5>
+          <br>
+          팀 이름: {{ info.teamName }} <br><br>
+          약속 제목: {{ info.eventTitle }} <br>
+          약속 내용: {{ info.eventContent }} <br><br>
+          약속 날짜: {{ info.endDate.slice(5, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br>
+          D-day: {{ info.dday }}일 <br>
+        </h5>
       </el-carousel-item>
     </el-carousel>
 
@@ -221,9 +224,12 @@
           <img src="https://drive.google.com/uc?id=15iXUI6DkRr5Zcp0yH5uF2U47ycr-WzUY" class="hero-img">
         </div>
         <div class="d-flex justify-content-end" style="margin-right: 20px;">
-          <el-button type="text" style="min-height:15px; padding: 10px; font-size: 1.5rem;">이미지 변경</el-button>
+          <el-button type="text" style="min-height:15px; padding: 10px; font-size: 1.5rem;"  @click="state.photoDialogOpen = true">이미지 변경</el-button>
         </div>
-
+        <!-- <div>
+          <img :src=state.check alt="">
+          <p>{{ state.check }}</p>
+        </div> -->
         <div class="d-flex justify-content-center" style="margin-top: 10vh; position: relative;">
           <el-button type="text" style=" min-height:15px; padding: 10px; font-size: 1.5rem;" @click="state.termsDialogOpen = true">이용약관 확인하기</el-button>
         </div>
@@ -258,11 +264,15 @@
   :open="state.termsDialogOpen"
   @closeTermsDialog="onCloseTermsDialog"
   />
+  <photo-dialog
+    :open="state.photoDialogOpen"
+    @closePhotoDialog="onClosePhotoDialog"
+   />
 
 </template>
 
 <script>
-import { reactive, ref} from 'vue'
+import { reactive, ref, onBeforeMount, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import BeforeDialog from './components/before-dialog.vue'
@@ -270,6 +280,7 @@ import AfterDialog from './components/after-dialog.vue'
 import NicknameDialog from './components/nickname-dialog.vue'
 import BirthdayDialog from './components/birthday-dialog.vue'
 import TermsDialog from './components/terms-dialog.vue'
+import PhotoDialog from './components/photo-dialog.vue'
 import _ from 'lodash'
 
 export default {
@@ -280,6 +291,7 @@ export default {
     NicknameDialog,
     BirthdayDialog,
     TermsDialog,
+    PhotoDialog,
   },
 
   setup() {
@@ -322,8 +334,11 @@ export default {
     nicknameDialogOpen : false,
     birthdayDialogOpen : false,
     termsDialogOpen : false,
+    photoDialogOpen : false,
     beforeteamPicture : '',
     afterteamPicture : '',
+    check: JSON.parse(localStorage.getItem('photoUrl')),
+    isLogin: computed(() => store.getters['root/getJWTToken'])
   })
   const beforeschedule = []
   const afterschedule = []
@@ -336,29 +351,29 @@ export default {
   var timerID = setInterval(updateTime, 1000);
   const value = ref(true)
 
+  const checkUserState = function(){
+      if(state.isLogin==null){
+        setTimeout(() => {
+                swal({
+                  title: "로그인 필요한 페이지",
+                  text: "로그인 후 이용해주세요.",
+                  icon: "success",
+                  button: "확인",
+                });
+              }, 500)
+       router.push({
+        name: 'intro',
+        })
+      }}
+
 
   const takeSchdule = function () {
       const token = store.getters['root/getJWTToken']
       store.dispatch('root/getSchedule', token)
-      // console.log(token)
       .then(res => {
-        // console.log(res.data.length)
-        // console.log(res.data)
-        // console.log('하이')
         let today = new Date().toISOString().slice(0,10)
-        // console.log(today) //2022-02-12
-        // console.log(typeof(today)) //string
         state.schedulelength = res.data.length
         state.infos = res.data.slice().reverse()
-        // console.log(typeof(state.infos))
-        // console.log(state.infos)
-        // console.log('로데시 장전!')
-        // console.log(_.sortBy(state.infos, 'dday'))
-        // let year = today.getFullYear()
-        // let month = today.getMonth() + 1
-        // let date = today.getDate()
-        // let realday = `${year}-${month}-${date}`
-        // console.log(realday)
         state.infos = _.sortBy(state.infos, 'dday')
         for (var i = 0; i < state.schedulelength; i++) {
           // console.log(state.infos[i].startDate)
@@ -394,7 +409,10 @@ export default {
         }
         // console.log(beforeday)
         state.pros.beforepro.push(beforeschedule[beforeday])
+        console.log(state.pros.beforepro[0])
+        console.log('dfdfdf')
         state.beforeteamPicture = 'http://localhost:8080/api/v1/team/profileimg/'+state.pros.beforepro[0].teamId
+        // console.log(state.beforeteamPicture)
         // console.log(beforepro)
         let aftermin = 32
         for (var a = 0; a < afterschedule.length; a++) {
@@ -563,8 +581,16 @@ export default {
     state.termsDialogOpen = false
   }
 
+  const onClosePhotoDialog = function () {
+    state.photoDialogOpen = false
+  }
 
-    return {  value, router, takeProfile, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog, onCloseNicknameDialog, editNickname, onCloseBirthdayDialog, createBirthday, onCloseTermsDialog, todayschedule, week, timerID, updateTime, zeroPadding }
+  onBeforeMount(() => {
+      checkUserState();
+    })
+
+
+    return {  value, router, takeProfile, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog, onCloseNicknameDialog, editNickname, onCloseBirthdayDialog, createBirthday, onCloseTermsDialog, todayschedule, week, timerID, updateTime, zeroPadding, onClosePhotoDialog }
   }
 }
 
