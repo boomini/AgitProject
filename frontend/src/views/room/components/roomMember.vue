@@ -1,18 +1,10 @@
 <template>
 
 
-  <div id="memberboard" class="col-2 d-flex flex-column justify-content-start" style="border: 1px solid; border-color:#dadadb; border-radius: 10px; margin-top: 85px;margin-bottom: 180px;">
-    <div style="text-align: center; margin-bottom: 1rem" class="d-flex justify-content-center mt-3">
-      <div>
-        <el-button style="width: 100%;" @click="state.inviteDialogOpen = true">
-          초대하기
-        </el-button>
-      </div>
-      <div>
-        <el-button style="width: 100%" @click="joinConference(state.teamId)">
-          회의하기
-        </el-button>
-      </div>
+  <div id="memberboard" class="col-2 d-flex flex-column justify-content-start" style="border: 1px solid; border-color:#dadadb; border-radius: 10px; margin-top: 45px;margin-bottom: 180px;">
+    <div class="d-flex justify-content-center">
+      <i class="fa-solid fa-user-plus" @click="state.inviteDialogOpen = true"></i>
+      <i class="fa-solid fa-chalkboard-user" @click="joinConference(state.teamId)"></i>
     </div>
       <div>
         <!-- <div>멤 버</div> -->

@@ -436,31 +436,11 @@ export default {
     const setBackImg = function(imgsrc){
       state.backImg = imgsrc;
     }
-
-
-    getTeamInfo();
-    takeProfile();
-    return {
-      state,
-      OPENVIDU_SERVER_URL,
-      OPENVIDU_SERVER_SECRET,
-      instance,
-      joinSession,
-      leaveSession,
-      updateMainVideoStreamManager,
-      getToken,
-      createSession,
-      createToken,
-      sendMessage,
-      closeSession,
-      takeProfile,
-      getTeamInfo,
-      changeVideoState,
-      changeAudioState,
-      onOpenBackImgDialog,
-      onCloseBackImgDialog,
-      outSession,
-      setBackImg,
+    getTeamInfo()
+    takeProfile()
+    return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager, getToken, createSession,
+      createToken, sendMessage, closeSession, takeProfile, getTeamInfo, changeVideoState, changeAudioState, onOpenBackImgDialog, onCloseBackImgDialog,
+      outSession, setBackImg,
     };
   },
 };
