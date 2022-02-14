@@ -1,157 +1,155 @@
 <template>
-  <div id="chat-container" v-bind:style="{ 'background-image': 'url(' + state.backImg + ')' }">
-    <div v-if="!state.session">
-      <div class="d-flex flex-column justify-content-center align-items-center join-room">
-        <h1>아지트 참석하기</h1>
-        <h3 class="my-3">현재 접속하려는 방: {{ state.teamName }}의 방</h3>
-        <div>
-          <el-button type="primary" @click="joinSession" id="join-btn" class="mx-3">
-            <i class="fa-solid fa-right-to-bracket"></i>
-          </el-button>
-          <el-button type="danger" @click="outSession" id="join-btn">
-            <i class="fa-solid fa-xmark"></i>
-          </el-button>
+    <div id="chat-container" v-bind:style="{ 'background-image': 'url(' + state.backImg + ')' }">
+      <div v-if="!state.session">
+        <div class="d-flex flex-column justify-content-center align-items-center join-room">
+          <h1>아지트 참석하기</h1>
+          <h3 class="my-3">현재 접속하려는 방: {{ state.teamName }}의 방</h3>
+          <div>
+            <el-button type="primary" @click="joinSession" id="join-btn" class="mx-3">
+              <i class="fa-solid fa-right-to-bracket"></i>
+            </el-button>
+            <el-button type="danger" @click="outSession" id="join-btn">
+              <i class="fa-solid fa-xmark"></i>
+            </el-button>
+          </div>
         </div>
+      </div>
+
+      <div class="d-flex-row justify-content-between my-3" v-if="state.session">
+
+          <div class="d-flex justify-content-between align-items-center offset-4" id="header">
+            <h1 id="conference-name" class="text-center">{{ state.teamName }}'s Room</h1>
+              <!-- <div class="logo" id="neon" style="width: 100%; height: 35vh;">
+                <b><span>a</span><span>g</span>i<span>t</span></b>
+              </div> -->
+            <h2 id="close-btn" class="d-flex justify-content-center align-items-center" @click="closeSession">X</h2>
+          </div>
+        <div class="d-flex justify-content-between">
+          <!-- <div id="main-video" class="col-3 mx-3">
+                <user-video :stream-manager="state.mainStreamManager"/>
+              </div> -->
+          <div class="d-flex flex-wrap mx-3">
+            <user-video :stream-manager="state.publisher" :border-color="state.BorderColor"/>
+            <user-video
+              v-for="sub in state.subscribers"
+              :key="sub.stream.connection.connectionId"
+              :stream-manager="sub"
+              :border-color="sub.element"
+            />
+          </div>
+          <div id="rec-test">
+          </div>
+          <div>
+            <chat-live :session="state.session" @sendMessage="sendMessage" />
+          </div>
+        </div>
+        <div
+        :height="`80px`"
+        style="position:fixed; height:10%; bottom: 0; width: 100%; background-color: #2f3136; opacity:0.8">
+        <div class="d-flex justify-content-center align-items-center" id="btn-group" style="height:100% ">
+            <!-- 비디오 토글 버튼 -->
+              <div>
+                <div v-if="state.publisher.stream.videoActive">
+                  <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="카메라 OFF"
+                    placement="top"
+                  >
+
+                  <i class="fa-solid fa-video-slash custom-icon toggle-icon-off text-center" @click="changeVideoState"></i>
+                  </el-tooltip>
+                </div>
+                <div v-else>
+                  <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="카메라 ON"
+                    placement="top"
+                  >
+                  <i class="fa-solid fa-video custom-icon toggle-icon-on text-center"  @click="changeVideoState"></i>
+                  </el-tooltip>
+                </div>
+              </div>
+              <!-- 오디오 토글 버튼 -->
+              <div>
+                <div v-if="state.publisher.stream.audioActive">
+                  <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="마이크 OFF"
+                    placement="top"
+                  >
+                <i class="fa-solid fa-microphone-slash custom-icon toggle-icon-off text-center" style="padding-left: 0.8vh" @click="changeAudioState"></i>
+                  </el-tooltip>
+                </div>
+                <div v-else>
+                  <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="마이크 ON"
+                    placement="top"
+                  >
+                  <i class="fa-solid fa-microphone custom-icon toggle-icon-on text-center" @click="changeAudioState"></i>
+                  </el-tooltip>
+                </div>
+              </div>
+              <!--녹화 하기 버튼-->
+              <div>
+                  <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="레코딩"
+                    placement="top"
+                  >
+                  <i class="fa-solid fa-film custom-icon share-icon text-center" @click="startRecording" id="start"></i>
+                  </el-tooltip>
+              </div>
+              <!--화면변경 버튼-->
+              <div>
+                  <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="배경 이미지 변경"
+                    placement="top"
+                  >
+                  <div class="custom-icon share-icon text-center"><i class="fa-solid fa-image" @click="onOpenBackImgDialog"></i></div>
+
+                  </el-tooltip>
+              </div>
+              <!--사진캡쳐 버튼-->
+              <div>
+                  <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="화면 캡쳐"
+                    placement="top"
+                  >
+                <i class="fa-solid fa-camera custom-icon share-icon text-center" id="capture" @click="takeSnapshot"></i>
+                  </el-tooltip>
+              </div>
+              <!--그림그리기 버튼-->
+              <div>
+                  <el-tooltip
+                    class="box-item"
+                    effect="dark"
+                    content="그림그리기"
+                    placement="top"
+                  >
+                <i class="fa-solid fa-pen custom-icon share-icon text-center"  @click="onOpenBackImgDialog"></i>
+                  </el-tooltip>
+              </div>
+          </div>
+        </div>
+        <select-back-img-dialog :open="state.backImgDialogOpen"
+        @closeBackImgDialog="onCloseBackImgDialog"
+        @backImg="setBackImg"/>
+        <capture-img
+        :open="state.captureImgDialogOpen"
+        :captureImg="state.captureImg"
+        @closeCaptureImgDialog="onCloseCaptureImgDialog"/>
       </div>
     </div>
-
-    <div class="d-flex-row justify-content-between my-3" v-if="state.session">
-
-        <div class="d-flex justify-content-between align-items-center offset-4" id="header">
-          <h1 id="conference-name" class="text-center">{{ state.teamName }}'s Room</h1>
-            <!-- <div class="logo" id="neon" style="width: 100%; height: 35vh;">
-              <b><span>a</span><span>g</span>i<span>t</span></b>
-            </div> -->
-          <h2 id="close-btn" class="d-flex justify-content-center align-items-center" @click="closeSession">X</h2>
-        </div>
-      <div class="d-flex justify-content-between">
-        <!-- <div id="main-video" class="col-3 mx-3">
-              <user-video :stream-manager="state.mainStreamManager"/>
-            </div> -->
-        <div class="d-flex flex-wrap mx-3">
-          <user-video :stream-manager="state.publisher" :border-color="state.BorderColor"/>
-          <user-video
-            v-for="sub in state.subscribers"
-            :key="sub.stream.connection.connectionId"
-            :stream-manager="sub"
-            :border-color="sub.element"
-          />
-        </div>
-        <div id="rec-test">
-        </div>
-        <div>
-          <chat-live :session="state.session" @sendMessage="sendMessage" />
-        </div>
-      </div>
-      <div
-      :height="`80px`"
-      style="position:fixed; height:10%; bottom: 0; width: 100%; background-color: #2f3136; opacity:0.8">
-      <div class="d-flex justify-content-center align-items-center" id="btn-group" style="height:100% ">
-          <!-- 비디오 토글 버튼 -->
-            <div>
-              <div v-if="state.publisher.stream.videoActive">
-                <el-tooltip
-                  class="box-item"
-                  effect="dark"
-                  content="카메라 OFF"
-                  placement="top"
-                >
-
-                <i class="fa-solid fa-video-slash custom-icon toggle-icon-off text-center" @click="changeVideoState"></i>
-                </el-tooltip>
-              </div>
-              <div v-else>
-                <el-tooltip
-                  class="box-item"
-                  effect="dark"
-                  content="카메라 ON"
-                  placement="top"
-                >
-                <i class="fa-solid fa-video custom-icon toggle-icon-on text-center"  @click="changeVideoState"></i>
-                </el-tooltip>
-              </div>
-            </div>
-            <!-- 오디오 토글 버튼 -->
-            <div>
-              <div v-if="state.publisher.stream.audioActive">
-                <el-tooltip
-                  class="box-item"
-                  effect="dark"
-                  content="마이크 OFF"
-                  placement="top"
-                >
-              <i class="fa-solid fa-microphone-slash custom-icon toggle-icon-off text-center" style="padding-left: 0.8vh" @click="changeAudioState"></i>
-                </el-tooltip>
-              </div>
-              <div v-else>
-                <el-tooltip
-                  class="box-item"
-                  effect="dark"
-                  content="마이크 ON"
-                  placement="top"
-                >
-                <i class="fa-solid fa-microphone custom-icon toggle-icon-on text-center" @click="changeAudioState"></i>
-                </el-tooltip>
-              </div>
-            </div>
-            <!--녹화 하기 버튼-->
-            <div>
-                <el-tooltip
-                  class="box-item"
-                  effect="dark"
-                  content="레코딩"
-                  placement="top"
-                >
-                <i class="fa-solid fa-film custom-icon share-icon text-center" @click="startRecording" id="start"></i>
-                </el-tooltip>
-            </div>
-            <!--화면변경 버튼-->
-            <div>
-                <el-tooltip
-                  class="box-item"
-                  effect="dark"
-                  content="배경 이미지 변경"
-                  placement="top"
-                >
-                <div class="custom-icon share-icon text-center"><i class="fa-solid fa-image" @click="onOpenBackImgDialog"></i></div>
-
-                </el-tooltip>
-            </div>
-            <!--사진캡쳐 버튼-->
-            <div>
-                <el-tooltip
-                  class="box-item"
-                  effect="dark"
-                  content="화면 캡쳐"
-                  placement="top"
-                >
-              <i class="fa-solid fa-camera custom-icon share-icon text-center" id="capture" @click="takeSnapshot"></i>
-                </el-tooltip>
-            </div>
-            <!--그림그리기 버튼-->
-            <div>
-                <el-tooltip
-                  class="box-item"
-                  effect="dark"
-                  content="그림그리기"
-                  placement="top"
-                >
-              <i class="fa-solid fa-pen custom-icon share-icon text-center"  @click="onOpenBackImgDialog"></i>
-                </el-tooltip>
-            </div>
-        </div>
-      </div>
-      <select-back-img-dialog :open="state.backImgDialogOpen"
-      @closeBackImgDialog="onCloseBackImgDialog"
-      @backImg="setBackImg"/>
-      <capture-img
-      :open="state.captureImgDialogOpen"
-      :captureImg="state.captureImg"
-      @closeCaptureImgDialog="onCloseCaptureImgDialog"/>
-    </div>
-
-
-  </div>
 </template>
 
 <script>
