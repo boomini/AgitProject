@@ -14,7 +14,7 @@
       <el-tooltip
         class="box-item"
         effect="dark"
-        content="회의 참석"
+        content="아지트 참석"
         placement="top"
       >
       <i class="fa-solid fa-chalkboard-user member-icon mx-4" @click="joinConference(state.teamId)"></i>

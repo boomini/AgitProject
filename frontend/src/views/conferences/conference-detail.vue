@@ -2,7 +2,7 @@
   <div id="chat-container" v-bind:style="{ 'background-image': 'url(' + state.backImg + ')' }">
     <div v-if="!state.session">
       <div class="d-flex flex-column justify-content-center align-items-center join-room">
-        <h1>회의실 참가하기!</h1>
+        <h1>아지트 참석하기</h1>
         <h3 class="my-3">현재 접속하려는 방: {{ state.teamName }}의 방</h3>
         <div>
           <el-button type="primary" @click="joinSession" id="join-btn" class="mx-3">
@@ -98,7 +98,7 @@
                 <el-tooltip
                   class="box-item"
                   effect="dark"
-                  content="녹화 시작"
+                  content="레코딩"
                   placement="top"
                 >
                 <i class="fa-solid fa-film custom-icon share-icon text-center" @click="startRecording" id="start"></i>
@@ -149,7 +149,7 @@ export default {
   },
 
   setup() {
-    const route =useRoute();
+    const route = useRoute();
     const router = useRouter();
     const store = useStore();
     const OPENVIDU_SERVER_URL = "https://i6a403.p.ssafy.io:5443";
@@ -503,26 +503,44 @@ export default {
       mediaRecorder.start(200); // For every 200ms the stream data will be stored in a separate chunk.
       return mediaRecorder;
     }
-
+    // team 게시글에 저장
     const saveFile = function (recordedChunks){
       const blob = new Blob(recordedChunks, {
           type: 'video/mp4'
         });
-        let filename = window.prompt('Enter file name'),
-            downloadLink = document.createElement('a');
-        downloadLink.href = URL.createObjectURL(blob);
-        downloadLink.download = `${filename}.mp4`;
-        const dev = document.getElementById('rec-test')
-        dev.appendChild(downloadLink);
-        downloadLink.click();
-        URL.revokeObjectURL(blob); // clear from memory
-        dev.removeChild(downloadLink);
+      let filename = window.prompt('저장할 동영상의 이름을 입력하세요.')
+      // const videoPath = URL.createObjectURL(blob)
+      // const videoName = `${filename}.mp4`
+      let formData = new FormData()
+      formData.append('upfile', blob, 'file.mp4')
+      formData.append('teamId', state.roomId)
+      const today = new Date()
+      const year = today.getFullYear()
+      const month = ('0' + (today.getMonth() + 1)).slice(-2)
+      const day = ('0' + today.getDate()).slice(-2)
+      const dateString = `${year}-${month}-${day}`
+      formData.append('uploadDate', dateString)
+      store.dispatch('root/uploadVideo', { 'formData': formData, 'token': state.isLogin})
+      .then(res => {
+        setTimeout(() => {
+          swal({
+            title: '팀 게시판 영상 등록',
+            text: '녹화된 영상이 팀 게시판에 등록 되었습니다.',
+            icon: 'success',
+            button: '확인',
+          })
+        }, 200)
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+
     }
 
     // 녹화 시작
     const startRecording = async function (){
       let stream = await recordScreen();
-      let mimeType = 'video/webm  '
+      let mimeType = 'video/mp4  '
       mediaRecorder = createRecorder(stream, mimeType)
     }
     // 녹화 중단
