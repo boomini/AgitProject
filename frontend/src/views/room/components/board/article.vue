@@ -56,6 +56,7 @@ export default {
     }
 
     const onCellClick = function (val) {
+      console.log(val)
       state.article = val
       state.articleViewOpen = true
     }

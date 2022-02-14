@@ -81,6 +81,10 @@ export default {
     isUpdated : {
       type: Boolean,
       default: false
+    },
+    registerDate: {
+      type: String,
+      default: '1970-01-01'
     }
   },
 
@@ -93,7 +97,7 @@ export default {
         align: 'left',
         content: '',
         title: '',
-        uploadDate: '',
+        uploadDate: computed(() => props.registerDate),
       },
       rules: {
         schedule: [
@@ -108,7 +112,6 @@ export default {
 
     const handleClose = function () {
       state.form.content = ''
-      state.form.uploadDate = ''
       state.form.title = ''
       emit('closeCreateArticleDialog')
     }

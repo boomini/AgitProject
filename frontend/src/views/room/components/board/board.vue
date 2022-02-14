@@ -4,6 +4,7 @@
       v-model="state.boardVisible"
       :direction="rtl"
       :before-close="handleClose"
+      lock-scroll
     >
       <template #title>
         <!-- <div width="50%">
