@@ -1,5 +1,5 @@
 <template>
-  <div id="chat-container">
+  <div id="chat-container" v-bind:style="{ 'background-image': 'url(' + state.backImg + ')' }">
     <div v-if="!state.session">
       <div class="d-flex flex-column justify-content-center align-items-center join-room">
         <h1>회의실 참가하기!</h1>
@@ -19,6 +19,9 @@
 
         <div class="d-flex justify-content-between align-items-center offset-4" id="header">
           <h1 id="conference-name" class="text-center">{{ state.teamName }}'s Room</h1>
+            <!-- <div class="logo" id="neon" style="width: 100%; height: 35vh;">
+              <b><span>a</span><span>g</span>i<span>t</span></b>
+            </div> -->
           <h2 id="close-btn" class="d-flex justify-content-center align-items-center" @click="closeSession">X</h2>
         </div>
       <div class="d-flex justify-content-between">
@@ -40,8 +43,8 @@
       </div>
       <div
       :height="`80px`"
-      style="position:fixed; height:10%; bottom: 0; width: 100%; background-color: #2f3136;">
-      <div class="d-flex justify-content-center align-items-center" id="btn-group" style="height:100%">
+      style="position:fixed; height:10%; bottom: 0; width: 100%; background-color: #2f3136; opacity:0.8">
+      <div class="d-flex justify-content-center align-items-center" id="btn-group" style="height:100% ">
           <!-- 비디오 토글 버튼 -->
             <div>
               <div v-if="state.publisher.stream.videoActive">
@@ -73,7 +76,8 @@
       <screen-share :open="state.shareDialogOpen"
       @closeShareDialog="onCloseShareDialog"/>
       <select-back-img-dialog :open="state.backImgDialogOpen"
-      @closeBackImgDialog="onCloseBackImgDialog"/>
+      @closeBackImgDialog="onCloseBackImgDialog"
+      @backImg="setBackImg"/>
     </div>
 
 
@@ -118,7 +122,7 @@ export default {
     });
 
     const state = reactive({
-      conferenceId: "",
+      conferenceId: '',
       OV: undefined,
       session: undefined,
       mainStreamManager: undefined,
@@ -127,13 +131,14 @@ export default {
       mySessionId: "SessionA",
       myUserName: "Person1",
       roomId: computed(() => route.params.conferenceId),
-      teamName: "",
-      userName: "",
+      teamName: '',
+      userName: '',
       videoStatus: true,
       audioStatus: true,
       BorderColor: 'black',
       shareDialogOpen: false,
       backImgDialogOpen: false,
+      backImg:'https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1',
     });
     // 페이지 진입시 불리는 훅
     onMounted(() => {
@@ -418,6 +423,9 @@ export default {
     const onCloseBackImgDialog = function (){
       state.backImgDialogOpen = false
     };
+    const setBackImg = function(imgsrc){
+      state.backImg = imgsrc;
+    }
 
 
     getTeamInfo();
@@ -444,6 +452,7 @@ export default {
       onCloseShareDialog,
       onCloseBackImgDialog,
       outSession,
+      setBackImg,
     };
   },
 };
@@ -482,7 +491,6 @@ export default {
   margin-top: 0;
   z-index: 10;
   background-color: #36393f;
-  background-image: url("https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1");
   width: 100vw;
   height: 100vh;
   background-size: cover;
@@ -557,5 +565,34 @@ export default {
 }
 #conf-img{
   z-index: 9000;
+}
+
+/* 로고 */
+.logo {
+  text-align: center;
+  width:100%;
+  height: 15vh;
+  margin: auto;
+  position: relative;
+  /* margin-top: 0px; */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+   user-select: none;
+}
+
+.logo b{
+  font: 50 13vh "Vibur";
+  color: #fee;
+  text-shadow: 0 -40px 100px, 0 0 2px, 0 0 1em #FFEB5A, 0 0 0.5em #FFEB5A, 0 0 0.1em #FFEB5A, 0 10px 3px #000;
+}
+.logo b span{
+  animation: blink linear infinite 2s;
+  font: 50  13vh "Vibur";
+}
+.logo b span:nth-of-type(2){
+  animation: blink linear infinite 3s;
+  font: 50 13vh "Vibur";
 }
 </style>

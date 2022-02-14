@@ -36,7 +36,7 @@
     height: 6vh;
   }
   .video-mask{
-    border-radius: 1vh;
+    border-radius: 2vh;
     height: 32vh;
     overflow: hidden;
   }
