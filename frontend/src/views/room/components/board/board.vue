@@ -76,6 +76,7 @@
           <div style="margin: 20px 10px 10px 10px;">
             <article-page
               :articleList = state.articleList
+              @updateArticle="onUpdateArticle"
             />
             <!-- <el-table :data="state.articleList" height="40vh" style="width: 100%">
               <el-table-column prop="index" label="글번호" width="80" />
@@ -165,7 +166,11 @@ export default {
       console.log(data)
     }
 
-    return { state, handleClose, boardClick }
+    const onUpdateArticle = function (data) {
+      emit('updateArticle', data)
+    }
+
+    return { state, handleClose, boardClick, onUpdateArticle }
   }
 }
 </script>

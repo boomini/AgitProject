@@ -18,11 +18,21 @@
         글을 작성해보세요.
       </div>
       <div>
-        <el-form :model="state.form" :rules="state.rules" ref="createArticleForm" :label-position="state.form.align">
+        <el-form :model="article" :rules="state.rules" ref="createArticleForm" :label-position="state.form.align">
           <el-form-item prop="uploadDate" label="날짜">
             <el-date-picker
               style="width: 100%;"
-              v-model="state.form.uploadDate"
+              v-model="article.uploadDate"
+              type="date"
+              v-if="isUpdated"
+              value-format="YYYY-MM-DD"
+              placeholder="일자를 선택해주세요."
+            >
+            </el-date-picker>
+            <el-date-picker
+              style="width: 100%;"
+              v-model="registerDate"
+              v-else
               type="date"
               value-format="YYYY-MM-DD"
               placeholder="일자를 선택해주세요."
@@ -30,11 +40,11 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item prop="title" label="제목" :label-width="state.formLabelWidth" >
-            <el-input v-model="state.form.title" autocomplete="off" placeholder="제목을 입력해주세요."></el-input>
+            <el-input v-model="article.title" autocomplete="off" placeholder="제목을 입력해주세요."></el-input>
           </el-form-item>
           <el-form-item prop="content" label="본문" :label-width="state.formLabelWidth">
             <el-input
-              v-model="state.form.content"
+              v-model="article.content"
               maxlength="500"
               placeholder="내용을 입력해주세요."
               show-word-limit
@@ -52,7 +62,7 @@
     <template #footer>
       <span v-if="isUpdated">
         <el-button @click="handleClose">취소</el-button>
-        <el-button >수정</el-button>
+        <el-button @click="updateArticle">수정하기</el-button>
       </span>
       <span v-else>
         <el-button @click="handleClose">취소</el-button>
@@ -85,6 +95,9 @@ export default {
     registerDate: {
       type: String,
       default: '1970-01-01'
+    },
+    article: {
+      type: Object,
     }
   },
 
@@ -111,8 +124,18 @@ export default {
     })
 
     const handleClose = function () {
-      state.form.content = ''
-      state.form.title = ''
+      props.article = {
+        content: '',
+        createdTime: '',
+        id: '',
+        index: '',
+        nickName: '',
+        teamName: '',
+        title: '',
+        updatedDate: '',
+        uploadDate: '',
+        writer: '',
+      }
       emit('closeCreateArticleDialog')
     }
 
@@ -120,16 +143,18 @@ export default {
       const token = store.getters['root/getJWTToken']
       const writer = jwt_decode(token).sub
       const teamName = props.info.teamName
-      const title = state.form.title
-      const content = state.form.content
+      const title = props.article.title
+      const content = props.article.content
       const uploadDate = state.form.uploadDate
+      const nickName = store.state.root.nickName
       const payload = {
         'body': {
           'writer': writer,
           'teamName': teamName,
           'title': title,
           'content': content,
-          'uploadDate': uploadDate
+          'uploadDate': uploadDate,
+          'nickName': nickName
         }
       }
       // console.log('게시글 작성')
@@ -150,6 +175,44 @@ export default {
       .catch(function (error) {
         console.log('게시글 등록 실패')
       })
+      handleClose()
+    }
+
+    const updateArticle = function () {
+      const writer = props.article.writer
+      const teamName = props.article.teamName
+      const title = props.article.title
+      const content = props.article.content
+      const uploadDate = props.article.uploadDate
+      const nickName = props.article.nickName
+      const id = props.article.id
+      const payload = {
+        'id' : id,
+        'body': {
+          'writer': writer,
+          'teamName': teamName,
+          'title': title,
+          'content': content,
+          'uploadDate': uploadDate,
+          'nickName': nickName
+        }
+      }
+
+      store.dispatch('root/updateArticle', payload)
+      .then(function (result) {
+        console.log('게시글 수정 완료')
+        emit('createArticle')
+        swal({
+          title: "게시글 등록",
+          text: "게시글이 등록되었습니다.",
+          icon: "success",
+          button: "확인",
+        })
+      })
+      .catch(function (error) {
+        console.log('게시글 등록 실패')
+      })
+
       handleClose()
     }
 

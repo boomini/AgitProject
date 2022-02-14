@@ -1,4 +1,5 @@
 // API
+import axios from 'axios'
 import $axios from 'axios'
 
 // User
@@ -204,6 +205,18 @@ export function addArticle ({ state }, payload) {
   const body = payload.body
   return $axios({
     method: 'post',
+    url: url,
+    data: body
+  })
+}
+
+// 게시글 수정
+export function updateArticle ({ state }, payload) {
+  const id = payload.id
+  const url = `/article/${id}`
+  const body = payload.body
+  return $axios({
+    method: 'put',
     url: url,
     data: body
   })

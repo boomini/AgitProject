@@ -208,6 +208,8 @@
   <!-- 게시글 추가 다이얼로그 -->
   <create-article-dialog
     :open="state.createArticleDialogOpen"
+    :article="state.article"
+    :isUpdated="state.isUpdated"
     :info="state.team"
     :registerDate="state.registerDate"
     @closeCreateArticleDialog="onCloseCreateArticleDialog"
@@ -217,6 +219,7 @@
   <board
     :data="state.boardData"
     :open="state.boardOpen"
+    @updateArticle="onUpdateArticle"
     @closeBoard="onCloseBoard"/>
   <!-- <el-drawer
     v-model="drawer"
@@ -459,6 +462,19 @@ export default {
         imageList: [],
         uploadDate: '1970-01-01'
       },
+      article: {
+        content: '',
+        createdTime: '',
+        id: '',
+        index: '',
+        nickName: '',
+        teamName: '',
+        title: '',
+        updatedDate: '',
+        uploadDate: '',
+        writer: '',
+      },
+      isUpdated: false,
       registerDate: '1970-01-01',
       createScheduleDialogOpen: false,
       createArticleDialogOpen: false,
@@ -530,6 +546,25 @@ export default {
 
     const onCloseCreateArticleDialog = function () {
       state.createArticleDialogOpen = false
+      state.isUpdated = false
+      state.article = {
+        content: '',
+        createdTime: '',
+        id: '',
+        index: '',
+        nickName: '',
+        teamName: '',
+        title: '',
+        updatedDate: '',
+        uploadDate: '',
+        writer: '',
+      }
+    }
+
+    const onUpdateArticle = function (data) {
+      state.article = data
+      state.createArticleDialogOpen = true
+      state.isUpdated = true
     }
 
     const onCreateEvent = function () {
@@ -648,7 +683,7 @@ export default {
     })
 
     return { clickOnDate, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, onCloseBoard, onCreateEvent,
-            onOpenCreateArticleDialog }
+            onOpenCreateArticleDialog, onUpdateArticle }
   }
 
 }

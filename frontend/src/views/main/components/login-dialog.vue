@@ -248,8 +248,13 @@ methods: {
               console.log(result.data)
             })
 
-
-
+            store.dispatch('root/getProfile', token)
+              .then(function (result) {
+                store.commit('root/setNickName', result.data.nickName)
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
 
             handleClose() // 로그인 모달 끄기
           })
@@ -304,6 +309,14 @@ methods: {
               console.log('회원 팀정보 가져오기')
               console.log(result.data);
             })
+
+            store.dispatch('root/getProfile', token)
+              .then(function (result) {
+                store.commit('root/setNickName', result.data.nickName)
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
 
             handleClose()
             // store.dispatch('root/getProfile', token)

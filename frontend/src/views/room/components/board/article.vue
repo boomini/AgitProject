@@ -47,7 +47,7 @@ export default {
       type: Array
     },
   },
-  setup(props){
+  setup(props, { emit }){
 
 
     const store = useStore()
@@ -89,6 +89,7 @@ export default {
     }
 
     const onUpdateArticle = function (data) {
+      state.articleViewOpen = false
       emit('updateArticle', data)
     }
 
