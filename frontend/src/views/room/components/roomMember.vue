@@ -1,5 +1,19 @@
 <template>
-  <div id="memberboard" class="col-2 d-flex flex-column justify-content-between" style="border: 1px solid; border-color:#dadadb; border-radius: 10px; margin-bottom: 180px;">
+
+
+  <div id="memberboard" class="col-2 d-flex flex-column justify-content-start" style="border: 1px solid; border-color:#dadadb; border-radius: 10px; margin-top: 85px;margin-bottom: 180px;">
+    <div style="text-align: center; margin-bottom: 1rem" class="d-flex justify-content-center mt-3">
+      <div>
+        <el-button style="width: 100%;" @click="state.inviteDialogOpen = true">
+          초대하기
+        </el-button>
+      </div>
+      <div>
+        <el-button style="width: 100%" @click="joinConference(state.teamId)">
+          회의하기
+        </el-button>
+      </div>
+    </div>
       <div>
         <!-- <div>멤 버</div> -->
         <div v-for="member in state.teamMembers" :key="member.id" class="d-flex align-items-center">
@@ -9,18 +23,6 @@
               {{ member.name }}
             </span>
           </div>
-        </div>
-      </div>
-      <div style="text-align: center; margin-bottom: 1rem">
-        <div>
-          <el-button style="width: 100%; margin-bottom: 0.5rem;" @click="state.inviteDialogOpen = true">
-            초대하기
-          </el-button>
-        </div>
-        <div>
-          <el-button style="width: 100%" @click="joinConference(state.teamId)">
-            회의하기
-          </el-button>
         </div>
       </div>
     </div>

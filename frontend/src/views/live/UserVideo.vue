@@ -15,10 +15,10 @@
 
 <style scoped>
   #user-video{
-    width: 23vw;
+    width: 22vw;
     height: 30vh;
     padding: 0.65vh;
-    border-radius: 1vh;
+    border-radius: 1.5vh;
     border-width: 0.5vh;
     border-style: solid;
     background-color:   rgb(88, 85, 85);
@@ -36,7 +36,7 @@
     height: 6vh;
   }
   .video-mask{
-    border-radius: 2vh;
+    border-radius: 1.5vh;
     height: 32vh;
     overflow: hidden;
   }
