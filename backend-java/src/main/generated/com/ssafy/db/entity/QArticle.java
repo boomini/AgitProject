@@ -31,6 +31,8 @@ public class QArticle extends EntityPathBase<Article> {
     //inherited
     public final NumberPath<Long> id = _super.id;
 
+    public final StringPath nickName = createString("nickName");
+
     public final QTeam team;
 
     public final StringPath teamName = createString("teamName");
