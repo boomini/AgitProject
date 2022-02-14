@@ -44,7 +44,7 @@
             class="send-btn"
             @click="clickSendMessage"
           >
-            <i class="fas fa-paper-plane color-g"></i>
+            <i class="fas fa-paper-plane color-g text-center"></i>
           </button>
         </div>
       </div>
@@ -90,9 +90,9 @@ export default {
 </script>
 <style scoped>
 .chat-box {
-  width: 22vw;
-  height: 83vh;
-  margin-right: 7vh;
+  width: 23vw;
+  height: 72vh;
+  margin-right: 2vw;
   border-radius: 15px;
   border-width: 0.35vh;
   border-style: solid;
@@ -111,15 +111,22 @@ export default {
 
 .text-box {
   background-color: #a7a6a6;
-  width: 17vw;
+  width: 18vw;
   border-radius: 12px;
   color: black;
   padding-left: 0.8vw;
-  height: 5vh;
+  height: 4.8vh;
 }
 
 .text-box:focus {
   outline: none;
+}
+
+.send-btn {
+  border-radius: 1.5vh;
+  height: 4.8vh;
+  width: 2.5vw;
+  color: #f6f6f6;
 }
 
 .title {
@@ -147,10 +154,6 @@ export default {
   color: black;
 }
 
-.send-btn {
-  border-radius: 1.5vh;
-  color: #f6f6f6;
-}
 
 #chat-area {
   overflow-y: auto;

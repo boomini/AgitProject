@@ -2,17 +2,21 @@
   <div id="container">
     <div class="hello">
       <!-- 회원가입, 로그인 버튼 -->
-      <div class="d-flex justify-content-end" style="margin-top:20px; margin-right: 250px;">
+      <div class="d-flex justify-content-end" style="margin-right: 250px;">
         <el-row :gutter="20">
           <!-- v-if문으로 수정 예정 -->
-          <div v-if="state.isLogin === null" class="button-wrapper d-flex flex-row" style="position:fixed;right:200px">
-            <el-button @click="clickSignup" style="background-color:#112; color: white;">회원가입</el-button>
+          <div v-if="state.isLogin === null" class="button-wrapper d-flex flex-row" style="position:fixed;right:50px">
+            <!-- <el-button @click="clickSignup" style="background-color:#112; color: white;">회원가입</el-button> -->
             <!--<el-button @click="clickAuth" style="background-color:#112; color: white;">인증w</el-button>-->
-            <el-button @click="clickLogin " style="background-color:#112; color: white;">로그인</el-button>
+            <!-- <el-button @click="clickLogin" style="background-color:#112; color: white;">로그인</el-button> -->
+            <p @click="clickSignup" class="intro-btn">회원가입</p>
+            <p @click="clickLogin" class="intro-btn">로그인</p>
           </div>
           <div v-else class="button-wrapper d-flex flex-row" style="position:fixed">
-            <el-button @click="clickHome" style="background-color:#112; color: white;">홈으로</el-button>
-            <el-button @click="clickLogout" style="background-color:#112; color: white;">로그아웃</el-button>
+            <p @click="clickHome" class="intro-btn">홈으로</p>
+            <p @click="clickLogout" class="intro-btn">로그아웃</p>
+            <!-- <el-button @click="clickHome" style="background-color:#112; color: white;">홈으로</el-button>
+            <el-button @click="clickLogout" style="background-color:#112; color: white;">로그아웃</el-button> -->
           </div>
          </el-row>
       <!-- 로고(네온사인)!! -->
@@ -290,7 +294,6 @@ export default {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&family=Noto+Sans+KR:wght@300&display=swap');
-
 #container {
   position: absolute;
   top: -90px;
@@ -332,6 +335,17 @@ html,body{
   margin:0;
   z-index: -3;
 } */
+.intro-btn{
+  font-size: 2.3vh;
+  transform: translate(30%);
+  width: 6vw;
+  margin-top: 3vh;
+  cursor: pointer;
+}
+.intro-btn:hover{
+  color: #3bb8b8;
+  transform: scale(0.95) translate(30%);
+}
 .logo {
   text-align: center;
   width: 65%;

@@ -5,6 +5,7 @@
     v-model="state.dialogVisible"
     @close="handleClose"
     width="30%"
+    style="height: 150px"
   >
 
     <!-- header -->
@@ -16,20 +17,23 @@
     </template>
 
     <!-- content -->
-    <div class="d-flex flex-column justify-content-around" style="height: 150px;">
-      <div style="border: 1px solid black; background-color: black; border-radius: 5px; font-size: 20px; padding: 5px 1rem;">
-        수정할 닉네임을 적어주세요.
-      </div>
-      <div class="d-flex justify-content-between">
-        <div style="width: 100%" class="me-2">
-          <el-input placeholder="ex)멋진 홍길동" v-model="state.form.inputNickname" clearable></el-input>
-        </div>
+    <div class="d-flex flex-column justify-content-around" style="height: 100px;">
+      <el-form :model="state.form" status-icon :rules="state.rules" :label-position="state.form.align">
+        <el-form-item prop="inputNickname" label="닉네임" :label-width="state.formLabelWidth" >
+          <el-input v-model="state.form.inputNickname" autocomplete="off" placeholder="Nickname"></el-input>
+        </el-form-item>
+      </el-form>
+      <div class="d-flex justify-content-end">
         <div>
           <el-button @click="editNickname">닉네임 수정</el-button>
         </div>
       </div>
     </div>
+
     <!-- footer -->
+    <!-- <template #footer>
+      <el-button @click="editNickname">닉네임 수정</el-button>
+    </template> -->
   </el-dialog>
 </template>
 
@@ -58,6 +62,13 @@ export default {
       dialogVisible: computed(() => props.open),
       form : {
         inputNickname: null,
+      },
+      rules: {
+        inputNickname: [
+          { required: true, message: '닉네임을 입력해주세요.', trigger: 'blur' },
+          { min: 2, max: 10, message: '2 ~ 10자 이내로 해주세요.', trigger: 'change' },
+          { pattern: /^[a-zA-zㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,10}$/, message: '한글과 영문 대 소문자를 사용하세요. (특수기호, 공백 사용 불가)'}
+        ],
       }
     })
 
@@ -67,7 +78,7 @@ export default {
     }
 
     const editNickname = function () {
-      if (state.form.inputNickname) {
+      if (state.form.inputNickname.length >= 2) {
         emit('edit-nickname', {
           nickname: state.form.inputNickname,
         })
@@ -103,6 +114,13 @@ export default {
         .catch(err => {
           console.log(err)
         })
+      } else {
+        swal({
+            title: "닉네임 수정 실패",
+            text: "올바르게 닉네임을 입력해주세요",
+            icon: "error",
+            button: "확인",
+          });
       }
     }
 
@@ -120,6 +138,6 @@ export default {
 <style>
   .nickname-dialog {
     width: 700px;
-    height: 300px;
+    height: 150px !important
   }
 </style>

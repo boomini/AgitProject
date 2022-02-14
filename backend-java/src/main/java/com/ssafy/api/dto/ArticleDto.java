@@ -18,6 +18,7 @@ public class ArticleDto {
     String title;
     String content;
     String writer;
+    String nickName;
     String teamName;
     // yyyy-mm-dd 형식 스트링으로 받아옴
     LocalDate uploadDate;
@@ -30,6 +31,7 @@ public class ArticleDto {
                 .title(title)
                 .content(content)
                 .writer(writer)
+                .nickName(nickName)
                 .teamName(teamName)
                 .uploadDate(uploadDate)
                 .build();
@@ -42,6 +44,7 @@ public class ArticleDto {
         this.title = article.getTitle();
         this.content = article.getContent();
         this.writer = article.getWriter();
+        this.nickName = article.getNickName();
         this.teamName = article.getTeamName();
         this.createdTime = article.getCreatedDate();
         this.updatedDate = article.getUpdatedDate();

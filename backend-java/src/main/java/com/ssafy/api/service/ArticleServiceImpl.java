@@ -39,7 +39,9 @@ public class ArticleServiceImpl implements ArticleService {
         List<ArticleDto> articleDtoList = new ArrayList<>();
 
         for(Article article : articleList){
+            User user = userRepositorySupport.findUserByUserId(article.getWriter()).get();
             ArticleDto articleDto = new ArticleDto(article);
+            articleDto.setNickName(user.getNickName());
             articleDtoList.add(articleDto);
         }
         return articleDtoList;
@@ -52,6 +54,7 @@ public class ArticleServiceImpl implements ArticleService {
         List<Article> articles = user.getArticles();
         for(Article article : articles){
             ArticleDto articleDto = new ArticleDto(article);
+            articleDto.setNickName(user.getNickName());
             articleDtoList.add(articleDto);
         }
         return articleDtoList;
@@ -61,8 +64,10 @@ public class ArticleServiceImpl implements ArticleService {
     public List<ArticleDto> getUsersArticleListAtDate(String cDate, String userId) {
         List<ArticleDto> articleDtoList = new ArrayList<>();
         List<Article> articles = articleRepositorySupport.findUsersArticleListByDate(cDate, userId).get();
+        User user = userRepositorySupport.findUserByUserId(userId).get();
         for(Article article : articles){
             ArticleDto articleDto = new ArticleDto(article);
+            articleDto.setNickName(user.getNickName());
             articleDtoList.add(articleDto);
         }
         return articleDtoList;
@@ -74,7 +79,9 @@ public class ArticleServiceImpl implements ArticleService {
         Team team = teamRepositorySupport.findTeamByTeamId(teamId).get();
         List<Article> articles = team.getArticles();
         for(Article article : articles){
+            User user = userRepositorySupport.findUserByUserId(article.getWriter()).get();
             ArticleDto articleDto = new ArticleDto(article);
+            articleDto.setNickName(user.getNickName());
             articleDtoList.add(articleDto);
         }
         return articleDtoList;
@@ -86,7 +93,9 @@ public class ArticleServiceImpl implements ArticleService {
         Team team = teamRepositorySupport.findTeamByTeamId(teamId).get();
         List<Article> articles = team.getArticles();
         for(Article article : articles){
+            User user = userRepositorySupport.findUserByUserId(article.getWriter()).get();
             ArticleDto articleDto = new ArticleDto(article);
+            articleDto.setNickName(user.getNickName());
             articleDtoList.add(articleDto);
         }
         return articleDtoList;
@@ -104,7 +113,9 @@ public class ArticleServiceImpl implements ArticleService {
         //Optional<List<Article>> articles = Optional.ofNullable(articleRepositorySupport.findTeamsArticleListByDate(cDate, teamId).get());
         List<Article> articles = articleRepositorySupport.findTeamsArticleListByDate(cDate, teamId).get();
         for(Article article : articles){
+            User user = userRepositorySupport.findUserByUserId(article.getWriter()).get();
             ArticleDto articleDto = new ArticleDto(article);
+            articleDto.setNickName(user.getNickName());
             articleDtoList.add(articleDto);
         }
 
