@@ -20,7 +20,7 @@
 
         <div>
           <div style="padding-left: 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #cfcfcf; width: 90%; margin: 1rem auto 0;">
-            <p style="margin-bottom: 0px" class="ms-2 mb-2">팀 목록</p>
+            <p style="margin-bottom: 0px" class="ms-2 mt-1">팀 목록</p>
           </div>
         </div>
         <div style="width: 100%;">

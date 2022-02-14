@@ -63,9 +63,14 @@
                 <i class="fa-solid fa-microphone custom-icon toggle-icon-on text-center" style="padding-left: 0.9vh" @click="changeAudioState"></i>
               </div>
             </div>
-            <!--공유하기 버튼-->
+            <!--녹화 하기 버튼-->
             <div>
-              <i class="fa-solid fa-share-from-square custom-icon share-icon text-center" @click="onOpenShareDialog"></i>
+              <div v-if="state.recordStatus">
+
+              </div>
+              <div v-else>
+                <i class="fa-solid fa-share-from-square custom-icon share-icon text-center" @click="startRecording"></i>
+              </div>
             </div>
             <!--화면변경 버튼-->
             <div>
@@ -73,8 +78,6 @@
             </div>
         </div>
       </div>
-      <screen-share :open="state.shareDialogOpen"
-      @closeShareDialog="onCloseShareDialog"/>
       <select-back-img-dialog :open="state.backImgDialogOpen"
       @closeBackImgDialog="onCloseBackImgDialog"
       @backImg="setBackImg"/>
@@ -91,7 +94,6 @@ import { useRoute, useRouter } from 'vue-router';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/live/UserVideo.vue';
 import ChatLive from '@/views/live/ChatLive.vue';
-import ScreenShare from '@/views/live/ScreenShare.vue';
 import SelectBackImgDialog from '@/views/live/SelectBackImgDialog.vue';
 import axios from 'axios';
 import moment from 'moment';
@@ -104,7 +106,6 @@ export default {
   components: {
     UserVideo,
     ChatLive,
-    ScreenShare,
     SelectBackImgDialog,
   },
 
@@ -135,8 +136,8 @@ export default {
       userName: '',
       videoStatus: true,
       audioStatus: true,
+      recordStatus: false,
       BorderColor: 'black',
-      shareDialogOpen: false,
       isLogin: computed(() => store.getters['root/getJWTToken']),
       backImgDialogOpen: false,
       backImg:'https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1',
@@ -424,18 +425,10 @@ export default {
     };
 
 
-    // 화면공유 모달창
-    const onOpenShareDialog = function (){
-      state.shareDialogOpen = true
-    };
-
+    // 배경이미지 변경
     const onOpenBackImgDialog = function(){
       state.backImgDialogOpen = true
     }
-
-    const onCloseShareDialog = function (){
-      state.shareDialogOpen = false
-    };
 
     const onCloseBackImgDialog = function (){
       state.backImgDialogOpen = false

@@ -4,7 +4,7 @@
     :gutter="10"
     :style="{ 'height': height }">
     <div class="hide-on-small">
-      <div class="d-flex justify-content-between align-items-center" @click="clickLogo">
+      <div class="d-flex align-items-center" @click="clickLogo">
         <div class="logo-wrapper"><div class="ic ic-logo"/></div>
         <p id="logo-text">Agit</p>
         <p id="logo-sub">our secret space</p>
@@ -218,6 +218,7 @@ export default {
 <style>
   .main-header {
     padding: 10px 20px;
+    height: 9.5vh !important;
   }
   /*Mobile, Tablet*/
   .menu-icon-wrapper {
@@ -372,14 +373,12 @@ export default {
     font-size: 4vh;
     color: #78ccbb;
     text-shadow:0.15vh 0.15vh 0.3vh #162d42;
-    transform: translate(-20%);
     cursor: pointer;
   }
   #logo-sub{
     font-size: 1.4vh;
     color: #78ccbb;
     text-shadow:0.09vh 0.09vh 0.15vh #162d42;
-    transform: translate(-10%, 70%);
     cursor: pointer;
   }
   /* .el-overlay .el-overlay-dialog {
