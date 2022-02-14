@@ -10,8 +10,7 @@
             <h5 class="card-text">약속 제목: {{ info.eventTitle }}</h5>
             <h5 class="card-text">약속 내용: {{ info.eventContent }}</h5>
             <br>
-            <p class="card-text">시작 날짜: {{ info.startDate }}</p>
-            <p class="card-text">종료 날짜: {{ info.endDate }}</p>
+            <p class="card-text">약속 날짜: {{ info.endDate }}</p>
           </div>
         </div>
         <!-- <div v-else-if="store.state.root.props.info.teamId.teamPicture==null">
