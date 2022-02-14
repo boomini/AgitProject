@@ -70,6 +70,10 @@ export default {
       type:Object,
       required:true,
     },
+    registerDate: {
+      type: String,
+      default: '1970-01-01'
+    }
   },
 
   setup(props, { emit }) {
@@ -80,7 +84,7 @@ export default {
       form: {
         align: 'left',
         images: [],
-        schedule: '',
+        schedule: computed(() => props.registerDate),
       },
       rules: {
         schedule: [
@@ -96,7 +100,6 @@ export default {
 
     const handleClose = function () {
       state.form.content = ''
-      state.form.schedule = ''
       state.form.images = []
       emit('closeUploadImageDialog')
     }
