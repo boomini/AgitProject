@@ -9,6 +9,7 @@ import Room from '@/views/room/room'
 import Profile from '@/views/profile/profile'
 import Error from '@/views/error/error'
 import RoomConfirm from '@/views/room/roomConfirm'
+import chatting from '@/views/Chat/chatting'
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
@@ -36,6 +37,12 @@ function makeRoutesFromMenu () {
     path: '/conferences/:conferenceId',
     name: 'conference-detail',
     component: ConferencesDetail
+  })
+
+  routes.push({
+    path: '/chat',
+    name: 'chatting',
+    component: chatting,
   })
 
   routes.push({
