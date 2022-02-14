@@ -1,6 +1,6 @@
+
 <template>
   <el-dialog
-    custom-class="screen-share"
     v-model="state.dialogVisible"
     @close="handleClose"
     title="Tips"
@@ -8,7 +8,7 @@
   >
   <template #title>
     <span>
-      공유 화면 선택
+      배경화면선택
     </span>
   </template>
 
@@ -52,7 +52,7 @@ export default {
       // console.log(loginForm.value)
     })
     const handleClose = function (){
-      emit("closeShareDialog")
+      emit("closeBackImgDialog")
     }
 
     return { state, handleClose }
@@ -61,11 +61,5 @@ export default {
 </script>
 
 <style>
-  .screen-share{
-    position: relative;
-    background-color: aliceblue;
-    width: 42vw;
-    height: 70vh;
-    transform: translate(0, -20%);
-  }
+
 </style>

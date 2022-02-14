@@ -22,22 +22,34 @@
             </div>
           </div>
 
-          <span>
+          <div class="d-flex justify-content-between align-items-end">
+              <el-button size="small" @click="selectDate('prev-year')"
+                >&lt;&lt;</el-button
+              >
+              <el-button size="small" @click="selectDate('prev-month')"
+                >&lt;</el-button
+              >
+              <el-button size="small" @click="selectDate('today')">Today</el-button>
+              <el-button size="small" @click="selectDate('next-month')"
+                >&gt;</el-button
+              >
+              <el-button size="small" @click="selectDate('next-year')"
+                >&gt;&gt;</el-button
+              >
+            </div>
+
+          <!-- <span>
             <div class="d-flex justify-content-between mb-2">
               <el-button type="danger" @click="state.createArticleDialogOpen = true">
-                <!-- 게시글 작성 -->
                 <i class="fa-regular fa-pen-to-square"></i>
               </el-button>
               <el-button type="success" @click="state.createScheduleDialogOpen = true">
-                <!-- 일정 추가 -->
                 <i class="fa-regular fa-calendar-days"></i>
               </el-button>
               <el-button type="warning" @click="state.uploadImageDialogOpen = true">
-                <!-- 사진 등록 -->
                 <i class="fa-regular fa-images"></i>
               </el-button>
               <el-button type="warning" @click="state.uploadVideoDialogOpen = true">
-                <!-- 동영상 등록 -->
                 <i class="fa-solid fa-video"></i>
               </el-button>
             </div>
@@ -56,7 +68,7 @@
                 >&gt;&gt;</el-button
               >
             </div>
-          </span>
+          </span> -->
         </template>
 
         <!-- 달력 날짜 부분 -->
@@ -74,11 +86,26 @@
                   </span>
                   <template #dropdown>
                     <el-dropdown-menu>
-                      <el-dropdown-item>Action 1</el-dropdown-item>
-                      <el-dropdown-item>Action 2</el-dropdown-item>
-                      <el-dropdown-item>Action 3</el-dropdown-item>
-                      <el-dropdown-item disabled>Action 4</el-dropdown-item>
-                      <el-dropdown-item divided>Action 5</el-dropdown-item>
+                      <el-dropdown-item @click="onOpenCreateArticleDialog(data.day)">
+                        <i class="fa-regular fa-pen-to-square"></i>
+                        게시글 추가
+                      </el-dropdown-item>
+                      <!-- <el-dropdown-item @click="state.createArticleDialogOpen = true">
+                        <i class="fa-regular fa-pen-to-square"></i>
+                        게시글 추가
+                      </el-dropdown-item> -->
+                      <el-dropdown-item @click="state.createScheduleDialogOpen = true">
+                        <i class="fa-regular fa-calendar-days"></i>
+                        일정 추가
+                      </el-dropdown-item>
+                      <el-dropdown-item @click="state.uploadImageDialogOpen = true">
+                        <i class="fa-regular fa-images"></i>
+                        사진 추가
+                      </el-dropdown-item>
+                      <el-dropdown-item @click="state.uploadVideoDialogOpen = true">
+                        <i class="fa-solid fa-video"></i>
+                        동영상 추가
+                      </el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
                 </el-dropdown>
@@ -158,6 +185,7 @@
   <create-schedule-dialog
     :open="state.createScheduleDialogOpen"
     :info="state.team"
+    :registerDate="state.registerDate"
     @closeCreateScheduleDialog="onCloseCreateScheduleDialog"
     @createSchedule="onCreateEvent"/>
 
@@ -165,6 +193,7 @@
   <upload-image-dialog
     :open="state.uploadImageDialogOpen"
     :info="state.team.teamId"
+    :registerDate="state.registerDate"
     @closeUploadImageDialog="onCloseUploadImageDialog"
     @createImage="onCreateEvent"/>
 
@@ -172,6 +201,7 @@
   <upload-video-dialog
     :open="state.uploadVideoDialogOpen"
     :info="state.team.teamId"
+    :registerDate="state.registerDate"
     @closeUploadVideoDialog="onCloseUploadVideoDialog"
     @createVideo="onCreateEvent"/>
 
@@ -179,6 +209,7 @@
   <create-article-dialog
     :open="state.createArticleDialogOpen"
     :info="state.team"
+    :registerDate="state.registerDate"
     @closeCreateArticleDialog="onCloseCreateArticleDialog"
     @createArticle="onCreateEvent"/>
 
@@ -428,6 +459,7 @@ export default {
         imageList: [],
         uploadDate: '1970-01-01'
       },
+      registerDate: '1970-01-01',
       createScheduleDialogOpen: false,
       createArticleDialogOpen: false,
       uploadImageDialogOpen: false,
@@ -489,6 +521,11 @@ export default {
 
     const onCloseCreateScheduleDialog = function () {
       state.createScheduleDialogOpen = false
+    }
+
+    const onOpenCreateArticleDialog = function (val) {
+      state.registerDate = val
+      state.createArticleDialogOpen = true
     }
 
     const onCloseCreateArticleDialog = function () {
@@ -610,7 +647,8 @@ export default {
 
     })
 
-    return { clickOnDate, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, onCloseBoard, onCreateEvent }
+    return { clickOnDate, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, onCloseBoard, onCreateEvent,
+            onOpenCreateArticleDialog }
   }
 
 }
@@ -634,8 +672,62 @@ export default {
 
 /* 달력 날짜 한 칸이 너무 작아서 높이 설정 */
 .el-calendar .el-calendar-table > tbody > tr > td .el-calendar-day{
-  height: 180px;
+  height: 200px;
 }
+
+.el-calendar .el-calendar__body .el-calendar-table thead th {
+  text-align: center;
+}
+
+.el-calendar-table thead th:first-child,
+.el-calendar-table__row td:first-child {
+  color: #ff6629;
+}
+
+.el-calendar-table thead th:last-child,
+.el-calendar-table__row td:last-child {
+  color: #4e4ebb;
+}
+
+.el-calendar-table tr:first-child td:first-child {
+  border-top: 3px solid #ff6629;
+}
+
+.el-calendar-table tr:first-child td:last-child {
+  border-top: 3px solid #4e4ebb;
+}
+
+.el-calendar-table tr:first-child td {
+  border-top: 3px solid #606266;
+}
+
+.el-calendar-table:not(.is-range) td.next,
+.el-calendar-table:not(.is-range) td.prev {
+  color: #c0c4cc;
+}
+
+.el-calendar-table tr td {
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid #606266;
+}
+
+.el-calendar-table tr td:first-child {
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid #ff6629;
+}
+
+.el-calendar-table tr td:last-child {
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid #4e4ebb;
+}
+
+/*
+.el-calendar-table__row td:first-child {
+  color: red;
+} */
 
 /* 게시판 내에 존재하는 일정, 사진, 동영상 등의 뱃지 css */
 .badge-tag {
@@ -722,11 +814,20 @@ export default {
 }
 
 .date-on-calendar:hover .button-on-calendar {
-  display: show;
+  display: inline;
 }
 
 .date-on-calendar:hover .test {
   display: none;
 }
 
+.el-dropdown {
+  border: 1px solid #bfc3c8;
+  border-radius: 5px;
+}
+
+.el-dropdown:hover {
+  background-color: #cbced4;
+  color: #ffffff;
+}
 </style>

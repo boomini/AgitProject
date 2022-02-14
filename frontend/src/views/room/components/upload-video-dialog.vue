@@ -66,6 +66,10 @@ export default {
       type:Object,
       required:true,
     },
+    registerDate: {
+      type: String,
+      default: '1970-01-01'
+    }
   },
 
   setup(props, { emit }) {
@@ -76,7 +80,7 @@ export default {
       form: {
         align: 'left',
         content: '',
-        schedule: '',
+        schedule: computed(() => props.registerDate),
         videos:[]
       },
       rules: {
@@ -93,7 +97,6 @@ export default {
 
     const handleClose = function () {
       state.form.content = ''
-      state.form.schedule = ''
       emit('closeUploadVideoDialog')
     }
 
