@@ -12,7 +12,9 @@
     </span>
   </template>
 
-  <span>This is a message</span>
+  <div>
+    <div id="list-of-screens"></div>
+  </div>
   <template #footer>
     <span class="dialog-footer">
       <el-button>Cancel</el-button>
@@ -25,9 +27,10 @@
 </template>
 
 <script>
-import { reactive, computed, onMounted } from 'vue'
+import { reactive, computed, onMounted} from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+
 
 export default {
   name: 'ScreenShare',
