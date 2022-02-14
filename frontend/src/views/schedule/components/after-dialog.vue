@@ -81,11 +81,7 @@ export default {
     const router = useRouter()
     const state = reactive({
       dialogVisible: computed(() => props.open),
-<<<<<<< HEAD
-      teamP : props.teamP,
-=======
       teamP : computed(()=>props.teamP),
->>>>>>> 750514fa045c049da6f69f0ad0d858941a684a76
       // teamPicture : 'http://localhost:8080/api/v1/team/profileimg/'+ props.info.teamId,
     })
 
