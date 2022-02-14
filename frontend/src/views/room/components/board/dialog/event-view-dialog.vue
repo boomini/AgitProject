@@ -120,22 +120,22 @@ export default {
 </script>
 
 <style>
-.article-view-dialog {
+.event-view-dialog {
   width: 700px;
   height: 700px;
 }
 
-.el-overlay-dialog {
+.event-view-dialog .el-overlay-dialog {
   background-color: rgba(0,0,0,.5) !important;
 }
 
-.el-dialog,
-.el-dialog__body,
-.el-dialog__body div {
+.event-view-dialog .el-dialog,
+.event-view-dialog .el-dialog__body,
+.event-view-dialog .el-dialog__body div {
   background-color: white !important;
 }
 
-.el-dialog__body {
+.event-view-dialog .el-dialog__body {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
 }

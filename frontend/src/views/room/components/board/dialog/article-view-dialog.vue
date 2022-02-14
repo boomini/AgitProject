@@ -34,13 +34,20 @@
         </div>
       </div>
 
-      <div style="border-top: 1px solid black; padding-top: 1.5rem;">
+      <div style="border-top: 1px solid black; padding-top: 1.5rem; height: 370px;">
         <p style="font-size: 20px;">
           {{ info.content }}
+          {{ info}}
         </p>
       </div>
     </div>
     <!-- footer -->
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="primary" @click="updateArticle">수정</el-button>
+        <el-button>삭제</el-button>
+      </span>
+    </template>
   </el-dialog>
 </template>
 
@@ -92,7 +99,11 @@ export default {
       }
     }
 
-    return { state, handleClose, timeFormat }
+    const updateArticle = function () {
+      emit('updateArticle', props.info)
+    }
+
+    return { state, handleClose, timeFormat, updateArticle }
   }
 
 }
@@ -104,19 +115,23 @@ export default {
   height: 700px;
 }
 
-.el-overlay-dialog {
+.article-view-dialog .el-overlay-dialog {
   background-color: rgba(0,0,0,.5) !important;
 }
 
-.el-dialog,
-.el-dialog__body,
-.el-dialog__body div {
+.article-view-dialog .el-dialog,
+.article-view-dialog .el-dialog__body,
+.article-view-dialog .el-dialog__body div {
   background-color: white !important;
 }
 
-.el-dialog__body {
+.article-view-dialog .el-dialog__body {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
+}
+
+.article-view-dialog .el-dialog__footer {
+  background-color: transparent;
 }
 
 /* .el-dialog__footer {
