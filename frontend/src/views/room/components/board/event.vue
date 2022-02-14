@@ -34,7 +34,7 @@ export default {
       type: String
     }
   },
-  setup(props){
+  setup (props) {
     const state = reactive({
       eventViewOpen: false,
       event: {
@@ -56,16 +56,7 @@ export default {
       state.eventViewOpen = false
     }
 
-    const getToday = function () {
-      const today = new Date()
-      const year = today.getFullYear()
-      const month = ("0" + (1 + today.getMonth())).slice(-2);
-      const day = ("0" + today.getDate()).slice(-2);
-
-      return `${year}-${month}-${day}`
-    }
-
-    return { state, onCellClick, getToday }
+    return { state, onCellClick, onCloseEventView }
   }
 }
 </script>
