@@ -591,11 +591,8 @@ export default {
   height: 100vh;
   background-size: cover;
 }
-#conference-name{
-  transform: translate(0, 0);
-}
+
 #close-btn {
-  transform: translate(0, 0);
   font-size: 5vh;
   width: 4.5vw;
   height: 7vh;
