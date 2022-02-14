@@ -16,11 +16,35 @@
     </div>
 
     <div class="d-flex-row justify-content-between my-3" v-if="state.session">
-
-        <div class="d-flex justify-content-between align-items-center offset-4" id="header">
-          <h1 id="conference-name" class="text-center">{{ state.teamName }}'s Room</h1>
+      <div class="d-flex offset-1">
+        <div class="d-flex" id="btn-group">
+          <!-- 비디오 토글 버튼 -->
+            <div>
+              <div v-if="state.publisher.stream.videoActive">
+                <i class="fa-solid fa-video-slash toggle-icon-off text-center" @click="changeVideoState"></i>
+              </div>
+              <div v-else>
+                <i class="fa-solid fa-video toggle-icon-on text-center" style="padding-left: 0.95vh" @click="changeVideoState"></i>
+              </div>
+            </div>
+            <!-- 오디오 토글 버튼 -->
+            <div>
+              <div v-if="state.publisher.stream.audioActive">
+              <i class="fa-solid fa-microphone-slash toggle-icon-off text-center" @click="changeAudioState"></i>
+              </div>
+              <div v-else>
+                <i class="fa-solid fa-microphone toggle-icon-on text-center" style="padding-left: 0.9vh" @click="changeAudioState"></i>
+              </div>
+            </div>
+            <div>
+              <i class="fa-solid fa-share-from-square share-icon text-center" @click="onOpenShareDialog"></i>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center offset-1" id="header">
+          <h1 class="text-center">{{ state.teamName }}'s Room</h1>
           <h2 id="close-btn" class="d-flex justify-content-center align-items-center" @click="closeSession">X</h2>
         </div>
+      </div>
       <div class="d-flex justify-content-between">
         <!-- <div id="main-video" class="col-3 mx-3">
               <user-video :stream-manager="state.mainStreamManager"/>
@@ -38,74 +62,158 @@
           <chat-live :session="state.session" @sendMessage="sendMessage" />
         </div>
       </div>
-      <div
-      :height="`80px`"
-      style="position:fixed; height:10%; bottom: 0; width: 100%; background-color: #2f3136;">
-      <div class="d-flex justify-content-center align-items-center" id="btn-group" style="height:100%">
-          <!-- 비디오 토글 버튼 -->
-            <div>
-              <div v-if="state.publisher.stream.videoActive">
-                <i class="fa-solid fa-video-slash custom-icon toggle-icon-off text-center" @click="changeVideoState"></i>
-              </div>
-              <div v-else>
-                <i class="fa-solid fa-video custom-icon toggle-icon-on text-center" style="padding-left: 0.95vh" @click="changeVideoState"></i>
-              </div>
-            </div>
-            <!-- 오디오 토글 버튼 -->
-            <div>
-              <div v-if="state.publisher.stream.audioActive">
-              <i class="fa-solid fa-microphone-slash custom-icon toggle-icon-off text-center" @click="changeAudioState"></i>
-              </div>
-              <div v-else>
-                <i class="fa-solid fa-microphone custom-icon toggle-icon-on text-center" style="padding-left: 0.9vh" @click="changeAudioState"></i>
-              </div>
-            </div>
-            <!--공유하기 버튼-->
-            <div>
-              <i class="fa-solid fa-share-from-square custom-icon share-icon text-center" @click="onOpenShareDialog"></i>
-            </div>
-            <!--화면변경 버튼-->
-            <div>
-              <i class="fa-solid fa-image custom-icon share-icon text-center" @click="onOpenBackImgDialog"></i>
-            </div>
-        </div>
-      </div>
       <screen-share :open="state.shareDialogOpen"
       @closeShareDialog="onCloseShareDialog"/>
-      <select-back-img-dialog :open="state.backImgDialogOpen"
-      @closeBackImgDialog="onCloseBackImgDialog"/>
     </div>
-
-
   </div>
 </template>
+<style scoped>
+.join-room{
+  margin-top: 20vh;
+  margin-left: 29vw;
+  border-color: black;
+  border-style: solid;
+  border-radius: 15px;
+  width: 100vh;
+  height: 40vh;
+  background-color: rgb(87, 193, 129);
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+}
 
+#join-btn {
+  width: 8vw;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.25);
+}
+
+#join-btn i{
+  transform: scale(1.2);
+}
+
+#video-btn {
+  width: 10vh;
+  height: 7vh;
+}
+#chat-container {
+  position: absolute;
+  top: -90px;
+  left: -100px;
+  margin-left: 0;
+  margin-top: 0;
+  z-index: 10;
+  background-color: #36393f;
+  width: 100vw;
+  height: 100vh;
+  background-size: cover;
+}
+#btn-group{
+  transform: translate(-20%, 30%);
+}
+#close-btn {
+  transform: translate(50%, 0);
+  font-size: 5vh;
+  width: 4.5vw;
+  height: 7vh;
+  background-color: #b53638;
+  border-style: solid;
+  border-color: black;
+  border-radius: 3vh;
+  border-width: 0.6vh;
+  cursor: pointer;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+}
+#close-btn:hover{
+  background-color: #c44749;
+}
+.toggle-icon-off{
+  margin-right: 3.2vw;
+  transform: scale(2);
+  border-color: black;
+  background-color: #b53638;
+  border-style: solid;
+  border-width: 0.3vh;
+  padding: 0.8vh;
+  width: 2.5vw;
+  border-radius: 100px;
+  cursor: pointer;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+}
+.toggle-icon-off:hover{
+  background-color: #c44749;
+}
+.toggle-icon-on{
+  margin-right: 3.2vw;
+  transform: scale(2);
+  border-color: black;
+  background-color: #3d48c2;
+  border-style: solid;
+  border-width: 0.3vh;
+  padding: 0.8vh;
+  width: 2.5vw;
+  border-radius: 100px;
+  cursor: pointer;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+}
+.toggle-icon-on:hover{
+  background-color: #4753d3;
+}
+.share-icon{
+  margin-right: 2.5vw;
+  transform: scale(2);
+  border-color: black;
+  border-style: solid;
+  border-width: 0.3vh;
+  padding: 0.8vh;
+  width: 2.5vw;
+  border-radius: 100px;
+  cursor: pointer;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+  background-color: rgb(27, 26, 26);
+  color: #f6f6f6;
+}
+.share-icon:hover{
+  background-color: rgb(44, 43, 43);
+}
+#header{
+  width: 132vh;
+  margin-bottom: 2vh;
+}
+#header h1{
+  border-color: black;
+  border-style: solid;
+  padding: 1vh;
+  border-radius: 30px;
+  background-color: rgb(85, 174, 121);
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+  width: 60vh;
+}
+#conf-img{
+  z-index: 9000;
+}
+</style>
 <script>
-import { reactive, onMounted, onUnmounted, computed } from 'vue';
-import { useStore } from 'vuex';
-import { useRoute, useRouter } from 'vue-router';
-import { OpenVidu } from 'openvidu-browser';
-import UserVideo from '@/views/live/UserVideo.vue';
-import ChatLive from '@/views/live/ChatLive.vue';
-import ScreenShare from '@/views/live/ScreenShare.vue';
-import SelectBackImgDialog from '@/views/live/SelectBackImgDialog.vue';
-import axios from 'axios';
-import moment from 'moment';
+import { reactive, onMounted, onUnmounted, computed } from "vue";
+import { useStore } from "vuex";
+import { useRoute, useRouter } from "vue-router";
+import { OpenVidu } from "openvidu-browser";
+import UserVideo from "@/views/live/UserVideo.vue";
+import ChatLive from "@/views/live/ChatLive.vue";
+import ScreenShare from "@/views/live/ScreenShare.vue"
+import axios from "axios";
+import moment from "moment";
 
-axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers.post["Content-Type"] = "application/json";
 
 export default {
-  name: 'conference-detail',
+  name: "conference-detail",
 
   components: {
     UserVideo,
     ChatLive,
     ScreenShare,
-    SelectBackImgDialog,
   },
 
   setup() {
-    const route =useRoute();
+    const route = useRoute();
     const router = useRouter();
     const store = useStore();
     const OPENVIDU_SERVER_URL = "https://i6a403.p.ssafy.io:5443";
@@ -133,14 +241,11 @@ export default {
       audioStatus: true,
       BorderColor: 'black',
       shareDialogOpen: false,
-      isLogin: computed(() => store.getters['root/getJWTToken']),
-      backImgDialogOpen: false,
     });
     // 페이지 진입시 불리는 훅
     onMounted(() => {
       state.conferenceId = route.params.conferenceId;
       store.commit("root/setMenuActiveMenuName", "home");
-      checkUserState()
     });
 
     // 페이지 이탈시 불리는 훅
@@ -167,21 +272,6 @@ export default {
         },
       });
     }
-
-    const checkUserState = function(){
-      if(state.isLogin==null){
-        setTimeout(() => {
-                swal({
-                  title: "로그인 필요한 페이지",
-                  text: "로그인 후 이용해주세요.",
-                  icon: "success",
-                  button: "확인",
-                });
-              }, 500)
-       router.push({
-        name: 'intro',
-        })
-      }}
 
     const joinSession = function () {
       state.OV = new OpenVidu();
@@ -424,16 +514,8 @@ export default {
       state.shareDialogOpen = true
     };
 
-    const onOpenBackImgDialog = function(){
-      state.backImgDialogOpen = true
-    }
-
     const onCloseShareDialog = function (){
       state.shareDialogOpen = false
-    };
-
-    const onCloseBackImgDialog = function (){
-      state.backImgDialogOpen = false
     };
 
 
@@ -457,122 +539,10 @@ export default {
       changeVideoState,
       changeAudioState,
       onOpenShareDialog,
-      onOpenBackImgDialog,
       onCloseShareDialog,
-      onCloseBackImgDialog,
       outSession,
     };
   },
 };
 </script>
-<style scoped>
-.join-room{
-  margin-top: 20vh;
-  margin-left: 29vw;
-  border-color: black;
-  border-style: solid;
-  border-radius: 15px;
-  width: 100vh;
-  height: 40vh;
-  background-color: rgb(87, 193, 129);
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
-}
 
-#join-btn {
-  width: 8vw;
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.25);
-}
-
-#join-btn i{
-  transform: scale(1.2);
-}
-
-#video-btn {
-  width: 10vh;
-  height: 7vh;
-}
-#chat-container {
-  position: absolute;
-  top: -90px;
-  left: -100px;
-  margin-left: 0;
-  margin-top: 0;
-  z-index: 10;
-  background-color: #36393f;
-  background-image: url("https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1");
-  width: 100vw;
-  height: 100vh;
-  background-size: cover;
-}
-#btn-group{
-  /* transform: translate(-20%, 30%); */
-}
-#conference-name{
-  transform: translate(0, 0);
-}
-#close-btn {
-  transform: translate(0, 0);
-  font-size: 5vh;
-  width: 4.5vw;
-  height: 7vh;
-  background-color: #b53638;
-  border-style: solid;
-  border-color: black;
-  border-radius: 3vh;
-  border-width: 0.6vh;
-  cursor: pointer;
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
-}
-#close-btn:hover{
-  background-color: #c44749;
-}
-.custom-icon{
-  margin-right: 3.2vw;
-  transform: scale(2);
-  border-color: black;
-  border-style: solid;
-  border-width: 0.3vh;
-  padding: 0.8vh;
-  width: 2.5vw;
-  border-radius: 100px;
-  cursor: pointer;
-}
-.toggle-icon-off{
-  background-color: #b53638;
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
-}
-.toggle-icon-off:hover{
-  background-color: #c44749;
-}
-.toggle-icon-on{
-  background-color: #3d48c2;
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
-}
-.toggle-icon-on:hover{
-  background-color: #4753d3;
-}
-.share-icon{
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
-  background-color: rgb(27, 26, 26);
-  color: #f6f6f6;
-}
-.share-icon:hover{
-  background-color: rgb(44, 43, 43);
-}
-#header{
-  width: 132vh;
-  margin-bottom: 2vh;
-}
-#header h1{
-  border-color: black;
-  border-style: solid;
-  padding: 1vh;
-  border-radius: 30px;
-  background-color: rgb(85, 174, 121);
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
-  width: 60vh;
-}
-#conf-img{
-  z-index: 9000;
-}
-</style>
