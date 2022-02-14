@@ -95,17 +95,6 @@
             </div>
             <!--녹화 하기 버튼-->
             <div>
-              <div v-if="state.recordStatus">
-                <el-tooltip
-                  class="box-item"
-                  effect="dark"
-                  content="녹화 중단"
-                  placement="top"
-                >
-                <i class="fa-solid fa-stop custom-icon share-icon text-center" @click="stopRecording" style="background-color: #b53638; color: #1c2023;" id="stop"></i>
-                </el-tooltip>
-              </div>
-              <div v-else>
                 <el-tooltip
                   class="box-item"
                   effect="dark"
@@ -114,7 +103,6 @@
                 >
                 <i class="fa-solid fa-film custom-icon share-icon text-center" @click="startRecording" id="start"></i>
                 </el-tooltip>
-              </div>
             </div>
             <!--화면변경 버튼-->
             <div>
@@ -191,7 +179,6 @@ export default {
       userName: '',
       videoStatus: true,
       audioStatus: true,
-      recordStatus: false,
       BorderColor: 'black',
       isLogin: computed(() => store.getters['root/getJWTToken']),
       backImgDialogOpen: false,
@@ -534,23 +521,17 @@ export default {
 
     // 녹화 시작
     const startRecording = async function (){
-      state.recordStatus = true
       let stream = await recordScreen();
       let mimeType = 'video/webm  '
       mediaRecorder = createRecorder(stream, mimeType)
     }
     // 녹화 중단
-    const stopRecording = function (){
-      state.recordStatus =false
-      mediaRecorder.stop();
-
-    }
 
     getTeamInfo()
     takeProfile()
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager, getToken, createSession,
       createToken, sendMessage, closeSession, takeProfile, getTeamInfo, changeVideoState, changeAudioState, onOpenBackImgDialog, onCloseBackImgDialog,
-      outSession, setBackImg, startRecording, stopRecording, recordScreen, saveFile };
+      outSession, setBackImg, startRecording, recordScreen, saveFile };
   },
 };
 </script>
