@@ -5,10 +5,9 @@
         <el-carousel-item v-for="info in state.infos" :key="info.endDate">
           <h5>
             <br>
-            팀 이름: {{ info.teamName }}<br><br>
-            약속 제목: {{ info.eventTitle }}<br>
-            약속 내용: {{ info.eventContent }}<br><br>
-            약속 날짜: {{ info.endDate.slice(5, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br>
+            팀: {{ info.teamName }}<br><br>
+            약속 제목: {{ info.eventTitle }}<br><br>
+            약속 날짜: {{ info.endDate.slice(6, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br><br>
             D-day: {{ info.dday }}일 <br>
           </h5>
         </el-carousel-item>
@@ -19,7 +18,7 @@
         <el-carousel-item v-for="info in state.infos" :key="info.startDate">
         <h5>
           <br>
-          팀 이름: {{ info.teamName }} <br><br>
+          팀: {{ info.teamName }} <br><br>
           약속 제목: {{ info.eventTitle }} <br>
           약속 내용: {{ info.eventContent }} <br><br>
           약속 날짜: {{ info.endDate.slice(5, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br>
@@ -33,7 +32,7 @@
         <el-carousel-item v-for="info in state.infos" :key="info.startDate">
         <h5>
           <br>
-          팀 이름: {{ info.teamName }} <br><br>
+          팀: {{ info.teamName }} <br><br>
           약속 제목: {{ info.eventTitle }} <br>
           약속 내용: {{ info.eventContent }} <br><br>
           약속 날짜: {{ info.endDate.slice(5, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br>
@@ -62,6 +61,7 @@
               inactive-text="밤"
               inactive-color="#20B2AA"
             />
+
           </div>
           <div class="mountain-scene">
             <div id="clouds">
@@ -110,9 +110,9 @@
                   </div>
                   <div class="shadow"></div>
                 </div>
-                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px; z-index: 2;"  v-if="todayschedule.length == 0">푹 쉬세요 <i style="margin-bottom:3px" class="em em-stuck_out_tongue_closed_eyes" aria-role="presentation" aria-label="FACE WITH STUCK-OUT TONGUE AND TIGHTLY-CLOSED EYES"></i></div>
-                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px; z-index: 2;" v-else-if="1 <= todayschedule.length && todayschedule.length <= 2">좋은 추억<br>쌓으세요 <i style="margin-bottom:3px" class="em em-sunglasses" aria-role="presentation" aria-label="SMILING FACE WITH SUNGLASSES"></i></div>
-                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px; z-index: 2;" v-else-if="todayschedule.length >= 3">오늘은<br>바쁘네요 <i style="margin-bottom:3px" class="em em-cry" aria-role="presentation" aria-label="CRYING FACE"></i></div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;"  v-if="todayschedule.length == 0">푹 쉬세요 <i style="margin-bottom:3px" class="em em-stuck_out_tongue_closed_eyes" aria-role="presentation" aria-label="FACE WITH STUCK-OUT TONGUE AND TIGHTLY-CLOSED EYES"></i></div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;" v-else-if="1 <= todayschedule.length && todayschedule.length <= 2">좋은 추억<br>쌓으세요 <i style="margin-bottom:3px" class="em em-sunglasses" aria-role="presentation" aria-label="SMILING FACE WITH SUNGLASSES"></i></div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;" v-else-if="todayschedule.length >= 3">오늘은<br>바쁘네요 <i style="margin-bottom:3px" class="em em-cry" aria-role="presentation" aria-label="CRYING FACE"></i></div>
               </div>
             <div>
               <el-button type="text" @click="state.afterDialogOpen = true" style="margin-right:100px; font-size: 1.5rem; color: #13C7A3"
@@ -177,9 +177,9 @@
                   </div>
                   <div class="shadow"></div>
                 </div>
-                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px; z-index: 2;"  v-if="todayschedule.length == 0">푹 쉬세요 <i style="margin-bottom:3px" class="em em-stuck_out_tongue_closed_eyes" aria-role="presentation" aria-label="FACE WITH STUCK-OUT TONGUE AND TIGHTLY-CLOSED EYES"></i></div>
-                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px; z-index: 2;" v-else-if="1 <= todayschedule.length && todayschedule.length <= 2">좋은 추억<br>쌓으세요 <i style="margin-bottom:3px" class="em em-sunglasses" aria-role="presentation" aria-label="SMILING FACE WITH SUNGLASSES"></i></div>
-                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px; z-index: 2;" v-else-if="todayschedule.length >= 3">오늘은<br>바쁘네요 <i style="margin-bottom:3px" class="em em-cry" aria-role="presentation" aria-label="CRYING FACE"></i></div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;"  v-if="todayschedule.length == 0">푹 쉬세요 <i style="margin-bottom:3px" class="em em-stuck_out_tongue_closed_eyes" aria-role="presentation" aria-label="FACE WITH STUCK-OUT TONGUE AND TIGHTLY-CLOSED EYES"></i></div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;" v-else-if="1 <= todayschedule.length && todayschedule.length <= 2">좋은 추억<br>쌓으세요 <i style="margin-bottom:3px" class="em em-sunglasses" aria-role="presentation" aria-label="SMILING FACE WITH SUNGLASSES"></i></div>
+                <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;" v-else-if="todayschedule.length >= 3">오늘은<br>바쁘네요 <i style="margin-bottom:3px" class="em em-cry" aria-role="presentation" aria-label="CRYING FACE"></i></div>
               </div>
             <div>
               <el-button type="text" @click="state.afterDialogOpen = true" style="margin-right:100px; font-size: 1.5rem; color: #13C7A3"
@@ -376,26 +376,17 @@ export default {
         state.infos = res.data.slice().reverse()
         state.infos = _.sortBy(state.infos, 'dday')
         for (var i = 0; i < state.schedulelength; i++) {
-          // console.log(state.infos[i].startDate)
-          // let tempday = Number(state.infos[i].startDate.slice(8,12))
-          let tempstartday = state.infos[i].startDate
           let tempendday = state.infos[i].endDate
-          let startdayday = Number(tempstartday.slice(8,10))
           let enddayday = Number(tempendday.slice(8,10))
-          // console.log(startdayday)
-          // console.log(enddayday)
-          // console.log(Number(today.slice(8,10)))
-          if ( startdayday <= Number(today.slice(8,10)) && Number(today.slice(8,10)) <= enddayday) {
+          if (Number(today.slice(8,10)) == enddayday) {
             todayschedule.push(state.infos[i])
           }
           else {
             console.log('No')
           }
           let tempday = state.infos[i].dday
-          // console.log(tempday)
           if (0 >= tempday) {
             beforeschedule.push(state.infos[i])
-            console.log(state.infos[i].startDate)
           } else {
             afterschedule.push(state.infos[i])
           }
@@ -407,66 +398,28 @@ export default {
             beforeday = b
           }
         }
-        // console.log(beforeday)
         state.pros.beforepro.push(beforeschedule[beforeday])
         console.log(state.pros.beforepro[0])
         console.log('dfdfdf')
         state.beforeteamPicture = 'http://localhost:8080/api/v1/team/profileimg/'+state.pros.beforepro[0].teamId
-        // console.log(state.beforeteamPicture)
-        // console.log(beforepro)
         let aftermin = 32
         for (var a = 0; a < afterschedule.length; a++) {
           if (afterschedule[a].dday <= aftermin) {
-            // console.log(a)
             aftermin = afterschedule[a].dday
             afterday = a
           }
         }
-        // console.log(afterday)
         state.pros.afterpro.push(afterschedule[afterday])
         state.afterteamPicture = 'http://localhost:8080/api/v1/team/profileimg/'+state.pros.afterpro[0].teamId
-        console.log(state.afterteamPicture)
-        console.log('제발제발')
-        // state.infos = computed(() => { return _.orderBy(state.infos, 'dday')} )
-        // console.log(state.infos[2].teamName)
       })
       .catch(err => {
         console.log(err)
       })
     }
 
-  // let today = new Date()
-  // let year = today.getFullYear()
-  // let month = today.getMonth() + 1
-  // let date = today.getDate()
-  // let realday = `${year}-${month}-${date}`
-  // console.log(realday)
-  // console.log('맞냐')
-  // console.log(beforeschedule.sort())
-  // console.log(afterschedule.sort())
-  // console.log(state.pros.beforepro)
-  // console.log(beforepro)
-  // console.log(afterpro)
 
   takeSchdule()
-  // console.log(beforeday)
-  // console.log('애프터')
-  // console.log(state.afterteamId)
 
-  // const calcdate = function () {
-  //   for (var i = 0; i < state.schedulelength; i++) {
-  //     console.log(i)
-  //   }
-  // }
-  // const takeTeam = function () {
-  //     const token = store.getters['root/getJWTToken']
-  //     store.dispatch('root/getTeamInfoDetail', token)
-  //     .then(function(res){
-  //       console.log(result.data);
-  //       console.log('어디')
-  //       state.team.teamPicture = result.data.teamPicture;
-  //     })
-  //   }
 
   const takeProfile = function () {
       const token = store.getters['root/getJWTToken']
@@ -491,38 +444,7 @@ export default {
       state.profileinfo.birthDay = birthday.birthday
     }
 
-    // const deleteuserId = function () {
-    //   const token = store.getters['root/getJWTToken']
-    //   const body = {
-    //     'userId': state.profileinfo.userId,
-    //   }
-    //   store.dispatch('root/deleteUser',{ 'body': body, 'token': token})
-    //   .then(res => {
-    //       setTimeout(() => {
-    //             swal({
-    //               title: '회원탈퇴',
-    //               text: '이용해주셔서 감사합니다.',
-    //               icon: 'success',
-    //               button: '확인',
-    //             });
-    //           }, 500)
 
-    //           console.log(res)
-
-    //           store.commit('root/setJWTTokenReset')
-    //           localStorage.removeItem('JWT')
-    //           store.commit('root/setMenuActive', 0)
-    //           router.push({
-    //             name: 'home',
-    //           })
-
-    //           // router.go(router.currentRoute)
-
-    //     })
-    //     .catch(err => {
-    //       console.log(err)
-    //     })
-    // }
 
   takeProfile()
 
@@ -541,22 +463,6 @@ export default {
   }
 
   updateTime()
-
-  // console.log('어디')
-  // console.log(state.pros.afterpro[-1])
-
-  // const takeTeam = function () {
-  //   const temp = state.pros.beforepro[0].teamId
-  //   store.dispatch('root/getTeamInfoDetail', temp)
-  //   .then(function(result){
-  //     console.log(result.data);
-  //     console.log('어디')
-  //   })
-  //   }
-
-
-  // takeTeam()
-
 
 
   const onCloseNicknameDialog = function () {

@@ -10,22 +10,9 @@
             <h5 class="card-text">약속 제목: {{ info.eventTitle }}</h5>
             <h5 class="card-text">약속 내용: {{ info.eventContent }}</h5>
             <br>
-            <p class="card-text">시작 날짜: {{ info.startDate }}</p>
-            <p class="card-text">종료 날짜: {{ info.endDate }}</p>
+            <p class="card-text">약속 날짜: {{ info.endDate }}</p>
           </div>
         </div>
-        <!-- <div v-else-if="store.state.root.props.info.teamId.teamPicture==null">
-          <img src='https://i6a403.p.ssafy.io/img/agit_logo.e339fd5c.png' class="card-img" alt="..." style=" opacity: 0.5;">
-          <div class="card-img-overlay" style="color: #464646">
-            <h3 class="card-title">팀명: {{ info.teamName }}</h3>
-            <br>
-            <h5 class="card-text">약속 제목: {{ info.eventTitle }}</h5>
-            <h5 class="card-text">약속 내용: {{ info.eventContent }}</h5>
-            <br>
-            <p class="card-text">시작 날짜: {{ info.startDate }}</p>
-            <p class="card-text">종료 날짜: {{ info.endDate }}</p>
-          </div>
-        </div> -->
         </div>
 
       <template #footer>
