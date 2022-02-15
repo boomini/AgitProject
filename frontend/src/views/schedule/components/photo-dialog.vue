@@ -65,7 +65,7 @@ export default {
       form: {
         images: [],
       },
-
+      isLogin: computed(() => store.getters['root/getJWTToken']),
     })
     const handleClose = function () {
       emit('closePhotoDialog')
@@ -82,42 +82,39 @@ export default {
         preview: URL.createObjectURL(inputImage.value.files[0])
       })
       // blob:http://localhost:8083/e8fade0c-2908-4ac6-9ea8-f322fd0da008
-      console.log(state.form.images[0].preview.slice(5,))
     }
 
 
     // 개인 이미지 등록
-    // const uploadImage = function(){
-    //     let formData = new FormData();
-    //     for (let i=0; i<state.form.images.length; i++){
-    //       formData.append('upfile', state.form.images[i].file);
-    //     }
-    //     // formData.append('uploadDate',state.form.schedule);
-    //     // formData.append('teamId',props.info)
+    const editMyPhoto = function(){
+        let formData = new FormData();
+        for (let i=0; i<state.form.images.length; i++){
+          formData.append('upfile', state.form.images[i].file);
+        }
 
-    //     // store.dispatch('root/uploadImage',{ 'formData': formData, 'token': state.isLogin})
-    //   .then(res => {
-    //       setTimeout(() => {
-    //             swal({
-    //               title: '사진 등록',
-    //               text: '사진이 일정에 등록되었습니다.',
-    //               icon: 'success',
-    //               button: '확인',
-    //             });
-    //           }, 500)
+        store.dispatch('root/changeUserProfileImage',{ 'formData': formData, 'token': state.isLogin})
+      .then(res => {
+          setTimeout(() => {
+                swal({
+                  title: '프로필 수정',
+                  text: '프로필 수정이 완료되었습니다..',
+                  icon: 'success',
+                  button: '확인',
+                });
+              }, 500)
 
-    //           // router.go(router.currentRoute)
-    //           console.log(res)
-    //           // console.log(swal)
-    //           // emit('createImage')
-    //           handleClose()
-    //     })
-    //     .catch(err => {
-    //       console.log(err)
-    //     })
-    //   }
+              // router.go(router.currentRoute)
+              console.log(res)
+              // console.log(swal)
+              // emit('createImage')
+              handleClose()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      }
 
-    return { store, router, state, handleClose, selectedImage, inputImage }
+    return { store, router, state, handleClose, selectedImage, inputImage, editMyPhoto }
 
   }
 }
