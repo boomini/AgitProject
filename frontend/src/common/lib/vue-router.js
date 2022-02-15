@@ -9,6 +9,8 @@ import Room from '@/views/room/room'
 import Profile from '@/views/profile/profile'
 import Error from '@/views/error/error'
 import RoomConfirm from '@/views/room/roomConfirm'
+// vue-canvas 테스트 용
+import ScreenShare from '@/views/live/ScreenShare'
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
@@ -71,6 +73,13 @@ function makeRoutesFromMenu () {
     component: RoomConfirm,
     props: true
   })
+
+  routes.push({
+    path: '/vue-canvas',
+    name: 'ScreenShare',
+    component: ScreenShare,
+  })
+
   return routes
 }
 

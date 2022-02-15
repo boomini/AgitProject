@@ -337,14 +337,15 @@ html,body{
 } */
 .intro-btn{
   font-size: 2.3vh;
-  transform: translate(30%);
-  width: 6vw;
+  width: 5.5vw;
   margin-top: 3vh;
+  margin-bottom: 3vh;
+  transform: translate(-20%);
   cursor: pointer;
 }
 .intro-btn:hover{
   color: #3bb8b8;
-  transform: scale(0.95) translate(30%);
+  transform: scale(0.95) translate(-20%);
 }
 .logo {
   text-align: center;

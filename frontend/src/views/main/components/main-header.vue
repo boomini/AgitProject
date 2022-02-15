@@ -4,7 +4,7 @@
     :gutter="10"
     :style="{ 'height': height }">
     <div class="hide-on-small">
-      <div class="d-flex justify-content-between align-items-center" @click="clickLogo">
+      <div class="d-flex align-items-center" @click="clickLogo">
         <div class="logo-wrapper"><div class="ic ic-logo"/></div>
         <p id="logo-text">Agit</p>
         <p id="logo-sub">our secret space</p>
@@ -18,8 +18,8 @@
           </el-input>
         </div> -->
         <div v-if="state.isLogin === null" class="button-wrapper">
-          <el-button type="success" @click="clickSignup">회원가입</el-button>
-          <el-button type="primary" @click="clickLogin">로그인</el-button>
+          <p class="text-center" @click="clickSignup">회원가입</p>
+          <p class="text-center" @click="clickLogin">로그인</p>
         </div>
           <!-- <el-button type="danger" @click="clickIntro">소개페이지</el-button> -->
           <!-- <el-button type="warning" @click="clickCenter">고객센터</el-button> -->
@@ -218,6 +218,7 @@ export default {
 <style>
   .main-header {
     padding: 10px 20px;
+    height: 9.5vh !important;
   }
   /*Mobile, Tablet*/
   .menu-icon-wrapper {
@@ -372,14 +373,13 @@ export default {
     font-size: 4vh;
     color: #78ccbb;
     text-shadow:0.15vh 0.15vh 0.3vh #162d42;
-    transform: translate(-20%);
     cursor: pointer;
   }
   #logo-sub{
     font-size: 1.4vh;
     color: #78ccbb;
     text-shadow:0.09vh 0.09vh 0.15vh #162d42;
-    transform: translate(-10%, 70%);
+    transform: translate(0, 60%);
     cursor: pointer;
   }
   /* .el-overlay .el-overlay-dialog {
