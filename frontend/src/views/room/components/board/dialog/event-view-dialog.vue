@@ -19,7 +19,7 @@
     <div class="d-flex flex-column justify-content-around">
       <h1 style="text-align: center; margin-bottom: 5rem;">{{ info.eventTitle }}</h1>
       <p style="font-size: 18px;">
-        기간 : {{ info.startDate }} ~ {{ info.endDate }}
+        기간 : {{ info.endDate }} ({{ state.dDay }})
       </p>
       <!-- <div class="d-flex justify-content-between">
         <div>
@@ -73,21 +73,21 @@ export default {
     const router = useRouter()
     const state = reactive({
       userId: computed(() => jwt_decode(store.getters['root/getJWTToken']).sub),
-      // dDay: computed(function () {
-      //   const dday = props.info.dday
-      //   console.log('디데이')
-      //   console.log(dday)
-      //   let result = ''
-      //   if (dday < 0) {
-      //     result = `D + ${-dday}`
-      //   } else if (dday > 0) {
-      //     result = `D - ${dday}`
-      //   } else {
-      //     result = `D - day`
-      //   }
+      dDay: computed(function () {
+        const dday = props.info.dday
+        console.log('디데이')
+        console.log(dday)
+        let result = ''
+        if (dday < 0) {
+          result = `D + ${-dday}`
+        } else if (dday > 0) {
+          result = `D - ${dday}`
+        } else {
+          result = `D - day`
+        }
 
-      //   return result
-      // })
+        return result
+      })
     })
 
     const handleClose = function () {
@@ -120,22 +120,22 @@ export default {
 </script>
 
 <style>
-.article-view-dialog {
+.event-view-dialog {
   width: 700px;
   height: 700px;
 }
 
-.el-overlay-dialog {
+.event-view-dialog .el-overlay-dialog {
   background-color: rgba(0,0,0,.5) !important;
 }
 
-.el-dialog,
-.el-dialog__body,
-.el-dialog__body div {
+.event-view-dialog .el-dialog,
+.event-view-dialog .el-dialog__body,
+.event-view-dialog .el-dialog__body div {
   background-color: white !important;
 }
 
-.el-dialog__body {
+.event-view-dialog .el-dialog__body {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
 }

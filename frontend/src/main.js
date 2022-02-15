@@ -10,7 +10,8 @@ import i18n from './common/lib/i18n'
 import router from './common/lib/vue-router'
 import GAuth from 'vue3-google-oauth2'
 import AOS from 'aos';
-import "aos/dist/aos.css";
+import 'aos/dist/aos.css';
+import Vue from 'vue'
 
 import 'element-plus/packages/theme-chalk/src/base.scss'
 
@@ -221,4 +222,3 @@ plugins.forEach(plugin => {
 })
 
 app.mount('#app')
-

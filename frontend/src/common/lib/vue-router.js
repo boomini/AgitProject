@@ -11,6 +11,7 @@ import Error from '@/views/error/error'
 import RoomConfirm from '@/views/room/roomConfirm'
 // vue-canvas 테스트 용
 import ScreenShare from '@/views/live/ScreenShare'
+import chatting from '@/views/chat/chatting'
 
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
@@ -38,6 +39,13 @@ function makeRoutesFromMenu () {
     path: '/conferences/:conferenceId',
     name: 'conference-detail',
     component: ConferencesDetail
+  })
+
+  routes.push({
+    path: '/chat',
+    name: 'chatting',
+    component: chatting,
+    props:true
   })
 
   routes.push({
