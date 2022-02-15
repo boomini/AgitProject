@@ -24,10 +24,10 @@
         <!-- <div>멤 버</div> -->
         <p class="mt-3">멤버 목록</p>
         <div v-for="member in state.teamMembers" :key="member.id" class="d-flex align-items-center">
-          <div class="d-flex align-items-center mt-2" style="margin-left:10px">
+          <div class="d-flex align-items-center mt-2" style="margin-left:10px" @click="clickChat(member.id)">
             <el-avatar :size="43" :src=member.profileImg></el-avatar>
             <span style="height: 50px; line-height: 50px; margin-left:10px">
-              {{ member.name }}
+              {{ member.name }} (나) {{member.id}} (다)
             </span>
           </div>
         </div>
@@ -64,6 +64,11 @@ export default {
       teamMembers: null,
       teamId: computed(()=> props.teamId),
       inviteDialogOpen: false,
+      profileinfo:{
+        id:'',
+        userId:'',
+        nickName:''
+      },
     })
     function takeMember () {
       const token = store.getters['root/getJWTToken']
@@ -103,7 +108,36 @@ export default {
       takeMember();
     })
 
-    return{onBeforeMount, state, joinConference, onCloseInviteDialog}
+    const takeProfile = function () {
+      const token = store.getters['root/getJWTToken']
+      store.dispatch('root/getProfile', token)
+      .then(res => {
+        state.profileinfo = res.data
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    }
+
+    takeProfile()
+
+    const clickChat = function (memberId) {
+      const numberA = memberId>state.profileinfo.id?state.profileinfo.id:memberId;
+      const numberB = memberId>state.profileinfo.id?memberId:state.profileinfo.id;
+      const userId = state.profileinfo.userId;
+      const nickName = state.profileinfo.nickName;
+      router.push({
+        name: 'chatting',
+        params : {
+          session: numberA+'a'+numberB ,
+          userId: userId,
+          nickName: nickName,
+          }
+      })
+    }
+
+
+    return{onBeforeMount, state, joinConference, clickChat, onCloseInviteDialog, takeProfile}
   }
 }
 </script>

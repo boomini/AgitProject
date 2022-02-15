@@ -4,10 +4,15 @@
       <el-calendar ref="calendar">
         <!-- 달력 헤더 부분 -->
         <template #header="{ date }">
-          <span>
-            <h3>{{ state.team.teamName }}</h3>
-            <div>{{ state.team.teamDescription }}</div>
-          </span>
+          <div class="d-flex align-items-center">
+            <div class="me-2">
+              <el-avatar :size="70" :src="`http://localhost:8080/api/v1/team/profileimg/${state.team.teamId}`"></el-avatar>
+            </div>
+            <div>
+              <h3>{{ state.team.teamName }}</h3>
+              <p>{{ state.team.teamDescription }}</p>
+            </div>
+          </div>
 
           <div class="d-flex flex-column">
             <h3>{{ date }}</h3>
@@ -37,38 +42,6 @@
                 >&gt;&gt;</el-button
               >
             </div>
-
-          <!-- <span>
-            <div class="d-flex justify-content-between mb-2">
-              <el-button type="danger" @click="state.createArticleDialogOpen = true">
-                <i class="fa-regular fa-pen-to-square"></i>
-              </el-button>
-              <el-button type="success" @click="state.createScheduleDialogOpen = true">
-                <i class="fa-regular fa-calendar-days"></i>
-              </el-button>
-              <el-button type="warning" @click="state.uploadImageDialogOpen = true">
-                <i class="fa-regular fa-images"></i>
-              </el-button>
-              <el-button type="warning" @click="state.uploadVideoDialogOpen = true">
-                <i class="fa-solid fa-video"></i>
-              </el-button>
-            </div>
-            <div class="d-flex justify-content-between">
-              <el-button size="small" @click="selectDate('prev-year')"
-                >&lt;&lt;</el-button
-              >
-              <el-button size="small" @click="selectDate('prev-month')"
-                >&lt;</el-button
-              >
-              <el-button size="small" @click="selectDate('today')">Today</el-button>
-              <el-button size="small" @click="selectDate('next-month')"
-                >&gt;</el-button
-              >
-              <el-button size="small" @click="selectDate('next-year')"
-                >&gt;&gt;</el-button
-              >
-            </div>
-          </span> -->
         </template>
 
         <!-- 달력 날짜 부분 -->
@@ -94,18 +67,30 @@
                         <i class="fa-regular fa-pen-to-square"></i>
                         게시글 추가
                       </el-dropdown-item> -->
-                      <el-dropdown-item @click="state.createScheduleDialogOpen = true">
+                      <el-dropdown-item @click="onOpenCreateScheduleDialog(data.day)">
                         <i class="fa-regular fa-calendar-days"></i>
                         일정 추가
                       </el-dropdown-item>
-                      <el-dropdown-item @click="state.uploadImageDialogOpen = true">
+                      <!-- <el-dropdown-item @click="state.createScheduleDialogOpen = true">
+                        <i class="fa-regular fa-calendar-days"></i>
+                        일정 추가
+                      </el-dropdown-item> -->
+                      <el-dropdown-item @click="onOpenUploadImageDialog(data.day)">
                         <i class="fa-regular fa-images"></i>
                         사진 추가
                       </el-dropdown-item>
-                      <el-dropdown-item @click="state.uploadVideoDialogOpen = true">
+                      <!-- <el-dropdown-item @click="state.uploadImageDialogOpen = true">
+                        <i class="fa-regular fa-images"></i>
+                        사진 추가
+                      </el-dropdown-item> -->
+                      <el-dropdown-item @click="onOpenUploadVideoDialog(data.day)">
                         <i class="fa-solid fa-video"></i>
                         동영상 추가
                       </el-dropdown-item>
+                      <!-- <el-dropdown-item @click="state.uploadVideoDialogOpen = true">
+                        <i class="fa-solid fa-video"></i>
+                        동영상 추가
+                      </el-dropdown-item> -->
                     </el-dropdown-menu>
                   </template>
                 </el-dropdown>
@@ -139,11 +124,13 @@
                     {{ item.title }}
                   </div>
                   <div class="me-3">
-                    <span class="badge">D-day</span>
+                    <span class="badge" v-if="parseInt(item.dday) > 0">D-{{ item.dday }}</span>
+                    <span class="badge" v-else-if="item.dday < 0">D+{{ -item.dday }}</span>
+                    <span class="badge" v-else>D-day</span>
                   </div>
                 </div>
               </div>
-              <div v-if="data.day.toString() in state.dict.eventDictStart && data.type === 'current-month'">
+              <!-- <div v-if="data.day.toString() in state.dict.eventDictStart && data.type === 'current-month'">
                 <div class="badge-tag article" v-for="(item, index) in state.dict.eventDictStart[data.day.toString()]" :key="index">
                   <div class="ms-3">
                     {{ item.title }}
@@ -152,7 +139,7 @@
                     <span class="badge">Start</span>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <!-- <div v-if="parseInt(data.day.split('-').slice(2)[0], 10) <= 10 && !(data.type === 'prev-month' || data.type === 'next-month')" class="badge-tag picture">
                 <div class="ms-3">
                   사진
@@ -208,8 +195,11 @@
   <!-- 게시글 추가 다이얼로그 -->
   <create-article-dialog
     :open="state.createArticleDialogOpen"
+    :article="state.article"
+    :isUpdated="state.isUpdated"
     :info="state.team"
     :registerDate="state.registerDate"
+    @updateArticle="reloadBoardData"
     @closeCreateArticleDialog="onCloseCreateArticleDialog"
     @createArticle="onCreateEvent"/>
 
@@ -217,6 +207,8 @@
   <board
     :data="state.boardData"
     :open="state.boardOpen"
+    @updateArticle="onUpdateArticle"
+    @deleteArticle="onCreateEvent"
     @closeBoard="onCloseBoard"/>
   <!-- <el-drawer
     v-model="drawer"
@@ -304,9 +296,11 @@ export default {
         const dictKey = list[i][key.toString()]
         const dictValue = list[i][value.toString()]
         const title = list[i].eventTitle
+        const dday = list[i].dday
         const content = {
           'value': dictValue,
           'title': title,
+          'dday': dday
         }
         if (dictKey in dict) {
           dict[dictKey].push(content)
@@ -341,8 +335,7 @@ export default {
         // console.log(result.data);
         state.team = result.data;
         state.team.teamId = result.data.id;
-        // console.log(state.team.teamId);
-        // console.log(state.team.teamName)
+
       })
       const payload = {
         'teamId': state.team.teamId,
@@ -350,8 +343,6 @@ export default {
       }
       store.dispatch('root/getCategoryCount', payload)
       .then(function (result) {
-        console.log('해당 달의 개요 가져오기 성공')
-        console.log(result.data)
         convertListToDict(result.data.articleCntList, state.dict.articleCntDict)
         convertListToDict(result.data.imageCntList, state.dict.imageCntDict)
         convertListToDict(result.data.videoCntList, state.dict.videoCntDict)
@@ -368,9 +359,7 @@ export default {
         'teamId': state.team.teamId,
         'reqDate': state.team.uploadDate
       }
-      console.log('fiiciciciciicic')
-      console.log(state.team.teamId)
-      console.log(state.team.uploadDate)
+
       store.dispatch('root/getEventCount', payload)
       .then(function (result) {
         console.log('일정 가져오는데 성공하였습니다.')
@@ -378,8 +367,6 @@ export default {
         state.dict.eventDictEnd = {}
         convertEventToDict(result.data, state.dict.eventDictStart, 'startDate', 'endDate')
         convertEventToDict(result.data, state.dict.eventDictEnd, 'endDate', 'startDate')
-        console.log(state.dict.eventDictEnd)
-        console.log(state.dict.eventDictStart)
       })
       .catch(function (error) {
         console.log('일정 가져오는데 실패하였습니다.')
@@ -459,6 +446,19 @@ export default {
         imageList: [],
         uploadDate: '1970-01-01'
       },
+      article: {
+        content: '',
+        createdTime: '',
+        id: '',
+        index: '',
+        nickName: '',
+        teamName: '',
+        title: '',
+        updatedDate: '',
+        uploadDate: '',
+        writer: '',
+      },
+      isUpdated: false,
       registerDate: '1970-01-01',
       createScheduleDialogOpen: false,
       createArticleDialogOpen: false,
@@ -519,6 +519,11 @@ export default {
       state.inviteDialogOpen = false
     }
 
+    const onOpenCreateScheduleDialog = function (val) {
+      state.registerDate = val
+      state.createScheduleDialogOpen = true
+    }
+
     const onCloseCreateScheduleDialog = function () {
       state.createScheduleDialogOpen = false
     }
@@ -530,6 +535,25 @@ export default {
 
     const onCloseCreateArticleDialog = function () {
       state.createArticleDialogOpen = false
+      state.isUpdated = false
+      state.article = {
+        content: '',
+        createdTime: '',
+        id: '',
+        index: '',
+        nickName: '',
+        teamName: '',
+        title: '',
+        updatedDate: '',
+        uploadDate: '',
+        writer: '',
+      }
+    }
+
+    const onUpdateArticle = function (data) {
+      state.article = data
+      state.createArticleDialogOpen = true
+      state.isUpdated = true
     }
 
     const onCreateEvent = function () {
@@ -542,8 +566,18 @@ export default {
       reloadEvent()
     }
 
+    const onOpenUploadImageDialog = function (val) {
+      state.registerDate = val
+      state.uploadImageDialogOpen = true
+    }
+
     const onCloseUploadImageDialog = function () {
       state.uploadImageDialogOpen = false
+    }
+
+    const onOpenUploadVideoDialog = function (val) {
+      state.registerDate = val
+      state.uploadVideoDialogOpen = true
     }
 
     const onCloseUploadVideoDialog = function () {
@@ -552,6 +586,23 @@ export default {
 
     const onCloseBoard = function () {
       state.boardOpen = false
+    }
+
+    const reloadBoardData = function (uploadDate) {
+      const teamId = state.team.teamId
+      const payload = {
+          'teamId': teamId,
+          'uploadDate': uploadDate
+        }
+      store.dispatch('root/getBoardDetail', payload)
+      .then(function (result) {
+        state.boardData = result.data
+        state.boardData['uploadDate'] = uploadDate
+      })
+      .catch(function (error) {
+        console.log('게시판 상세조회 실패')
+      })
+
     }
 
     // const getTeamDetail = function(){
@@ -648,7 +699,7 @@ export default {
     })
 
     return { clickOnDate, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, onCloseBoard, onCreateEvent,
-            onOpenCreateArticleDialog }
+            onOpenCreateArticleDialog, onUpdateArticle, reloadBoardData, onOpenCreateScheduleDialog, onOpenUploadImageDialog, onOpenUploadVideoDialog }
   }
 
 }

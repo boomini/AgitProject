@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar>
+  <el-scrollbar native>
     <div class="scrollbar-flex-content">
       <p v-for="item in state.srcList.length" :key="item" class="scrollbar-demo-image-item">
         <el-image
@@ -12,7 +12,6 @@
         </el-image>
       </p>
     </div>
-
   </el-scrollbar>
 </template>
 
@@ -58,6 +57,9 @@ export default {
   width: 100%;
   height: 200px;
 }
+.scrollbar-flex-content {
+  display: flex;
+}
 .scrollbar-demo-image-item {
   flex-shrink: 0;
   display: flex;
@@ -73,7 +75,11 @@ export default {
   color: var(--el-color-danger);
 }
 
-.is-horizontal {
-  display: none;
+.el-scrollbar__bar {
+  background-color: black;
+  --el-scrollbar-background-color: black;
 }
+/* .is-horizontal {
+  color: black;
+} */
 </style>

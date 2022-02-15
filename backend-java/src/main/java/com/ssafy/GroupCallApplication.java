@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
+import javax.websocket.server.ServerEndpoint;
 import java.nio.charset.StandardCharsets;
 
 @EnableJpaAuditing
@@ -28,5 +30,10 @@ public class GroupCallApplication {
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
         return characterEncodingFilter;
+    }
+
+    @Bean
+    public ServerEndpointExporter serverEndpointExporter(){
+        return new ServerEndpointExporter();
     }
 }

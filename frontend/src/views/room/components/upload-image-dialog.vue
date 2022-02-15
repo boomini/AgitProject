@@ -22,16 +22,18 @@
           <el-form-item prop="schedule" label="일자">
             <el-date-picker
               style="width: 100%;"
-              v-model="state.form.schedule"
+              v-model="registerDate"
               type="date"
               value-format="YYYY-MM-DD"
               placeholder="일자를 선택해주세요."
+              disabled
             >
             </el-date-picker>
           </el-form-item>
           <el-form-item prop="content" label="내용">
           </el-form-item>
           <input
+            id="uploadImage"
             type="file"
             accept="image/*"
             multiple
@@ -101,6 +103,7 @@ export default {
     const handleClose = function () {
       state.form.content = ''
       state.form.images = []
+      document.getElementById('uploadImage').value = ''
       emit('closeUploadImageDialog')
     }
 
@@ -127,7 +130,7 @@ export default {
         formData.append('teamId',props.info)
 
         store.dispatch('root/uploadImage',{ 'formData': formData, 'token': state.isLogin})
-      .then(res => {
+        .then(res => {
           setTimeout(() => {
                 swal({
                   title: '사진 등록',
@@ -142,10 +145,10 @@ export default {
               // console.log(swal)
               emit('createImage')
               handleClose()
-        })
-        .catch(err => {
-          console.log(err)
-        })
+          })
+          .catch(err => {
+            console.log(err)
+          })
       }
 
     return { state, handleClose, uploadImageForm, inputImage, selectedImage, uploadImage }

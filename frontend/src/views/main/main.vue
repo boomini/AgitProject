@@ -146,6 +146,11 @@ export default {
       .then(function (result) {
         store.commit('root/setUserTeam', result.data)
       })
+
+      store.dispatch('root/getProfile', token)
+      .then(function (result) {
+        store.commit('root/setNickName', result.data.nickName)
+      })
     }
   }
 }
