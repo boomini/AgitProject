@@ -1,6 +1,5 @@
 <template>
 
-
   <div class="main-container chat-container" id="chat-container" v-bind:style="{ 'background-image': 'url(' + state.backImg + ')' }">
     <div v-if="!state.session">
       <div class="d-flex flex-column justify-content-center align-items-center join-room">
