@@ -132,5 +132,4 @@ export default {
   transition: 0.1s;
 }
 
-.deadline-item:
 </style>
