@@ -26,7 +26,7 @@
           <div class="d-flex align-items-center mt-2" style="margin-left:10px" @click="clickChat(member.id)">
             <el-avatar :size="43" :src=member.profileImg></el-avatar>
             <span style="height: 50px; line-height: 50px; margin-left:10px">
-              {{ member.name }} (나) {{member.id}} (다)
+              {{ member.name }} {{member.id}}
             </span>
           </div>
         </div>
@@ -76,7 +76,7 @@ export default {
       }
       store.dispatch('root/takeMember', {'body': body, 'token': token})
       .then(res=> {
-        console.log(res.data)
+        console.log("takemember!!!!!!!!!!!!!!!!!!!!!!!!!"+res.data)
         state.teamMembers = res.data
         for(let i=0; i<state.teamMembers.length; i++){
           if(state.teamMembers[i].profileImg==null){
