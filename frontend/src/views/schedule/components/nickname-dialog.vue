@@ -138,6 +138,6 @@ export default {
 <style>
   .nickname-dialog {
     width: 700px;
-    height: 150px !important
+    height: 200px !important
   }
 </style>
