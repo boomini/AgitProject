@@ -17,15 +17,15 @@
 
   <div class="view chat" v-else>
     <header>
-      <button class="logout" @click="Logout">Logout</button>
-      <h1>Welcome, {{ state.username }}</h1>
+      <!-- <button class="logout" @click="Logout">Logout</button> -->
+      <h1>Welcome, {{ state.nickName }}</h1>
     </header>
 
     <section class="chat-box">
       <div
         v-for="message in state.messages"
         :key="message.key"
-        :class="(message.username == state.username ? 'message current-user' : 'message')">
+        :class="(message.username == state.nickName ? 'message current-user' : 'message')">
         <div class="message-inner">
           <div class="username">{{ message.username }}</div>
           <div class="content">{{ message.content }}</div>
@@ -50,18 +50,21 @@
 <script>
 import { reactive, onMounted, ref } from 'vue';
 import db from '../../db';
-
+import { useRoute } from 'vue-router'
 export default {
 
   name:'chatting',
 
   setup () {
+    const route = useRoute()
     const inputUsername = ref('');
     const inputMessage = ref('');
 
     const state = reactive({
-      username: '',
-      messages: []
+      chatId : route.params.session,
+      username: route.params.userId,
+      messages: [],
+      nickName: route.params.nickName
     });
 
     const Login = () => {
@@ -75,15 +78,16 @@ export default {
       state.username = '';
     }
 
+
     const SendMessage = () => {
-      const messagesRef = db.database().ref('messages');
+      const messagesRef = db.database().ref(state.chatId);
 
       if (inputMessage.value === '' || inputMessage.value === null) {
         return;
       }
 
       const message = {
-        username: state.username,
+        username: state.nickName,
         content: inputMessage.value
       }
 
@@ -92,7 +96,7 @@ export default {
     }
 
     onMounted(() => {
-      const messagesRef = db.database().ref('messages');
+      const messagesRef = db.database().ref(state.chatId);
 
       messagesRef.on('value', snapshot => {
         const data = snapshot.val();
@@ -135,6 +139,7 @@ export default {
 
 .view {
 	display: flex;
+  border-radius: 24px 24px 0px 0px;
 	justify-content: center;
 	min-height: 100vh;
 	background-color: #ea526f;
@@ -310,7 +315,7 @@ export default {
 
 		footer {
 			position: sticky;
-			bottom: 0px;
+			bottom: 50px;
 			background-color: #FFF;
 			padding: 30px;
 			box-shadow: 0px 0px 12px rgba(100, 100, 100, 0.2);
