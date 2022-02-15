@@ -29,4 +29,9 @@ export function getSecretName (state) {
   return state.secretName
 }
 
+// 채팅방 아이디 가져오기
+export function getChattingRoomId (state) {
+  return state.chattingRoomId
+}
+
 

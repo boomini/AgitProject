@@ -1,8 +1,8 @@
-import firebase from 'firebase/app';
-import 'firebase/database';
+import firebase from "firebase/app";
+import "firebase/database";
 
 const config = {
-	apiKey: 'AIzaSyChofLeXXMEbV3TYaqy8E1kMBeTBU07LVA',
+    apiKey: 'AIzaSyChofLeXXMEbV3TYaqy8E1kMBeTBU07LVA',
   authDomain: 'fir-2992b.firebaseapp.com',
   projectId: 'fir-2992b',
   storageBucket: 'fir-2992b.appspot.com',
