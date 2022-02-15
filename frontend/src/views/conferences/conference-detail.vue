@@ -1,6 +1,6 @@
 <template>
 
-  <div class="main-container chat-container" id="chat-container" v-bind:style="{ 'background-image': 'url(' + state.backImg + ')' }">
+  <div id="chat-container"  v-bind:style="{ 'background-image': 'url(' + state.backImg + ')' }">
     <div v-if="!state.session">
       <div class="d-flex flex-column justify-content-center align-items-center join-room">
         <h1>아지트 참석하기</h1>
@@ -114,7 +114,7 @@
                   content="배경 이미지 변경"
                   placement="top"
                 >
-                <div class="custom-icon share-icon text-center"><i class="fa-solid fa-image" @click="onOpenBackImgDialog"></i></div>
+                <i class="fa-solid fa-image custom-icon share-icon text-center" @click="onOpenBackImgDialog"></i>
 
                 </el-tooltip>
             </div>
@@ -179,7 +179,7 @@
   width: 10vh;
   height: 7vh;
 }
-.chat-container {
+#chat-container {
   position: absolute;
   top: -90px;
   left: -100px;
@@ -189,6 +189,7 @@
   background-color: #36393f;
   width: 100vw;
   height: 100vh;
+  background-size:cover;
 }
 #conference-name{
   transform: translate(0, 0);
