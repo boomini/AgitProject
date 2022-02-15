@@ -20,6 +20,7 @@
     "firebase": "^8.10.1",
     "google": "^2.1.0",
     "html2canvas": "^1.4.1",
+    "jquery": "^3.6.0",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
@@ -61,6 +62,9 @@
     "root": true,
     "env": {
       "node": true
+    },
+    "globals": {
+      "todoEventBus":"writable"
     },
     "extends": [
       "plugin:vue/vue3-essential",

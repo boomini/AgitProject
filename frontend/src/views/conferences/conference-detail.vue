@@ -1,156 +1,341 @@
 <template>
-    <div id="chat-container" v-bind:style="{ 'background-image': 'url(' + state.backImg + ')' }">
-      <div v-if="!state.session">
-        <div class="d-flex flex-column justify-content-center align-items-center join-room">
-          <h1>아지트 참석하기</h1>
-          <h3 class="my-3">현재 접속하려는 방: {{ state.teamName }}의 방</h3>
-          <div>
-            <el-button type="primary" @click="joinSession" id="join-btn" class="mx-3">
-              <i class="fa-solid fa-right-to-bracket"></i>
-            </el-button>
-            <el-button type="danger" @click="outSession" id="join-btn">
-              <i class="fa-solid fa-xmark"></i>
-            </el-button>
-          </div>
+
+  <div class="main-container chat-container" id="chat-container" v-bind:style="{ 'background-image': 'url(' + state.backImg + ')' }">
+    <div v-if="!state.session">
+      <div class="d-flex flex-column justify-content-center align-items-center join-room">
+        <h1>아지트 참석하기</h1>
+        <h3 class="my-3">현재 접속하려는 방: {{ state.teamName }}의 방</h3>
+        <div>
+          <el-button type="primary" @click="joinSession" id="join-btn" class="mx-3">
+            <i class="fa-solid fa-right-to-bracket"></i>
+          </el-button>
+          <el-button type="danger" @click="outSession" id="join-btn">
+            <i class="fa-solid fa-xmark"></i>
+          </el-button>
+
         </div>
-      </div>
-
-      <div class="d-flex-row justify-content-between my-3" v-if="state.session">
-
-          <div class="d-flex justify-content-between align-items-center offset-4" id="header">
-            <h1 id="conference-name" class="text-center">{{ state.teamName }}'s Room</h1>
-              <!-- <div class="logo" id="neon" style="width: 100%; height: 35vh;">
-                <b><span>a</span><span>g</span>i<span>t</span></b>
-              </div> -->
-            <h2 id="close-btn" class="d-flex justify-content-center align-items-center" @click="closeSession">X</h2>
-          </div>
-        <div class="d-flex justify-content-between">
-          <!-- <div id="main-video" class="col-3 mx-3">
-                <user-video :stream-manager="state.mainStreamManager"/>
-              </div> -->
-          <div class="d-flex flex-wrap mx-3">
-            <user-video :stream-manager="state.publisher" :border-color="state.BorderColor"/>
-            <user-video
-              v-for="sub in state.subscribers"
-              :key="sub.stream.connection.connectionId"
-              :stream-manager="sub"
-              :border-color="sub.element"
-            />
-          </div>
-          <div id="rec-test">
-          </div>
-          <div>
-            <chat-live :session="state.session" @sendMessage="sendMessage" />
-          </div>
-        </div>
-        <div
-        :height="`80px`"
-        style="position:fixed; height:10%; bottom: 0; width: 100%; background-color: #2f3136; opacity:0.8">
-        <div class="d-flex justify-content-center align-items-center" id="btn-group" style="height:100% ">
-            <!-- 비디오 토글 버튼 -->
-              <div>
-                <div v-if="state.publisher.stream.videoActive">
-                  <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    content="카메라 OFF"
-                    placement="top"
-                  >
-
-                  <i class="fa-solid fa-video-slash custom-icon toggle-icon-off text-center" @click="changeVideoState"></i>
-                  </el-tooltip>
-                </div>
-                <div v-else>
-                  <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    content="카메라 ON"
-                    placement="top"
-                  >
-                  <i class="fa-solid fa-video custom-icon toggle-icon-on text-center"  @click="changeVideoState"></i>
-                  </el-tooltip>
-                </div>
-              </div>
-              <!-- 오디오 토글 버튼 -->
-              <div>
-                <div v-if="state.publisher.stream.audioActive">
-                  <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    content="마이크 OFF"
-                    placement="top"
-                  >
-                <i class="fa-solid fa-microphone-slash custom-icon toggle-icon-off text-center" style="padding-left: 0.8vh" @click="changeAudioState"></i>
-                  </el-tooltip>
-                </div>
-                <div v-else>
-                  <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    content="마이크 ON"
-                    placement="top"
-                  >
-                  <i class="fa-solid fa-microphone custom-icon toggle-icon-on text-center" @click="changeAudioState"></i>
-                  </el-tooltip>
-                </div>
-              </div>
-              <!--녹화 하기 버튼-->
-              <div>
-                  <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    content="레코딩"
-                    placement="top"
-                  >
-                  <i class="fa-solid fa-film custom-icon share-icon text-center" @click="startRecording" id="start"></i>
-                  </el-tooltip>
-              </div>
-              <!--화면변경 버튼-->
-              <div>
-                  <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    content="배경 이미지 변경"
-                    placement="top"
-                  >
-                  <div class="custom-icon share-icon text-center"><i class="fa-solid fa-image" @click="onOpenBackImgDialog"></i></div>
-
-                  </el-tooltip>
-              </div>
-              <!--사진캡쳐 버튼-->
-              <div>
-                  <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    content="화면 캡쳐"
-                    placement="top"
-                  >
-                <i class="fa-solid fa-camera custom-icon share-icon text-center" id="capture" @click="takeSnapshot"></i>
-                  </el-tooltip>
-              </div>
-              <!--그림그리기 버튼-->
-              <div>
-                  <el-tooltip
-                    class="box-item"
-                    effect="dark"
-                    content="그림그리기"
-                    placement="top"
-                  >
-                <i class="fa-solid fa-pen custom-icon share-icon text-center"  @click="onOpenBackImgDialog"></i>
-                  </el-tooltip>
-              </div>
-          </div>
-        </div>
-        <select-back-img-dialog :open="state.backImgDialogOpen"
-        @closeBackImgDialog="onCloseBackImgDialog"
-        @backImg="setBackImg"/>
-        <capture-img
-        :open="state.captureImgDialogOpen"
-        :captureImg="state.captureImg"
-        @closeCaptureImgDialog="onCloseCaptureImgDialog"/>
       </div>
     </div>
+    <div class="d-flex-row justify-content-between my-3" v-if="state.session">
+
+        <div class="d-flex justify-content-between align-items-center offset-4" id="header">
+          <h1 id="conference-name" class="text-center">{{ state.teamName }}'s Room</h1>
+            <!-- <div class="logo" id="neon" style="width: 100%; height: 35vh;">
+              <b><span>a</span><span>g</span>i<span>t</span></b>
+            </div> -->
+          <h2 id="close-btn" class="d-flex justify-content-center align-items-center" @click="closeSession">X</h2>
+        </div>
+      <div class="d-flex justify-content-between">
+        <!-- <div id="main-video" class="col-3 mx-3">
+              <user-video :stream-manager="state.mainStreamManager"/>
+            </div> -->
+        <div class="d-flex flex-wrap mx-3">
+          <user-video :stream-manager="state.publisher" :border-color="state.BorderColor"/>
+          <user-video
+            v-for="sub in state.subscribers"
+            :key="sub.stream.connection.connectionId"
+            :stream-manager="sub"
+            :border-color="sub.element"
+          />
+        </div>
+        <div id="rec-test">
+        </div>
+        <div>
+          <chat-live :session="state.session" @sendMessage="sendMessage" />
+        </div>
+      </div>
+      <div
+      :height="`80px`"
+      style="position:fixed; height:10%; bottom: 0; width: 100%; background-color: #2f3136; opacity:0.8">
+      <div class="d-flex justify-content-center align-items-center" id="btn-group" style="height:100% ">
+          <!-- 비디오 토글 버튼 -->
+            <div>
+              <div v-if="state.publisher.stream.videoActive">
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="카메라 OFF"
+                  placement="top"
+                >
+
+                <i class="fa-solid fa-video-slash custom-icon toggle-icon-off text-center" @click="changeVideoState"></i>
+                </el-tooltip>
+              </div>
+              <div v-else>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="카메라 ON"
+                  placement="top"
+                >
+                <i class="fa-solid fa-video custom-icon toggle-icon-on text-center"  @click="changeVideoState"></i>
+                </el-tooltip>
+              </div>
+            </div>
+            <!-- 오디오 토글 버튼 -->
+            <div>
+              <div v-if="state.publisher.stream.audioActive">
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="마이크 OFF"
+                  placement="top"
+                >
+              <i class="fa-solid fa-microphone-slash custom-icon toggle-icon-off text-center" style="padding-left: 0.8vh" @click="changeAudioState"></i>
+                </el-tooltip>
+              </div>
+              <div v-else>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="마이크 ON"
+                  placement="top"
+                >
+                <i class="fa-solid fa-microphone custom-icon toggle-icon-on text-center" @click="changeAudioState"></i>
+                </el-tooltip>
+              </div>
+            </div>
+            <!--녹화 하기 버튼-->
+            <div>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="레코딩"
+                  placement="top"
+                >
+                <i class="fa-solid fa-film custom-icon share-icon text-center" @click="startRecording" id="start"></i>
+                </el-tooltip>
+            </div>
+            <!--화면변경 버튼-->
+            <div>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="배경 이미지 변경"
+                  placement="top"
+                >
+                <div class="custom-icon share-icon text-center"><i class="fa-solid fa-image" @click="onOpenBackImgDialog"></i></div>
+
+                </el-tooltip>
+            </div>
+            <!--사진캡쳐 버튼-->
+            <div>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="화면 캡쳐"
+                  placement="top"
+                >
+              <i class="fa-solid fa-camera custom-icon share-icon text-center" id="capture" @click="takeSnapshot"></i>
+                </el-tooltip>
+            </div>
+            <!--그림그리기 버튼-->
+            <div>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="그림그리기"
+                  placement="top"
+                >
+              <i class="fa-solid fa-pen custom-icon share-icon text-center"  @click="screenshot"></i>
+                </el-tooltip>
+            </div>
+        </div>
+      </div>
+      <select-back-img-dialog :open="state.backImgDialogOpen"
+      @closeBackImgDialog="onCloseBackImgDialog"
+      @backImg="setBackImg"/>
+      <capture-img
+      :open="state.captureImgDialogOpen"
+      :captureImg="state.captureImg"
+      @closeCaptureImgDialog="onCloseCaptureImgDialog"/>
+    </div>
+
+  </div>
 </template>
+<style>
+.join-room{
+  margin-top: 20vh;
+  margin-left: 29vw;
+  border-color: black;
+  border-style: solid;
+  border-radius: 15px;
+  width: 100vh;
+  height: 40vh;
+  background-color: rgb(87, 193, 129);
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+}
+
+#join-btn {
+  width: 8vw;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.25);
+}
+
+#join-btn i{
+  transform: scale(1.2);
+}
+
+#video-btn {
+  width: 10vh;
+  height: 7vh;
+}
+.chat-container {
+  position: absolute;
+  top: -90px;
+  left: -100px;
+  margin-left: 0;
+  margin-top: 0;
+  z-index: 10;
+  background-color: #36393f;
+  width: 100vw;
+  height: 100vh;
+}
+#conference-name{
+  transform: translate(0, 0);
+}
+#close-btn {
+  transform: translate(0, 0);
+  font-size: 5vh;
+  width: 4.5vw;
+  height: 7vh;
+  background-color: #b53638;
+  border-style: solid;
+  border-color: black;
+  border-radius: 3vh;
+  border-width: 0.6vh;
+  cursor: pointer;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+}
+#close-btn:hover{
+  background-color: #c44749;
+}
+.custom-icon{
+  margin-right: 3.2vw;
+  transform: scale(2);
+  border-color: black;
+  border-style: solid;
+  border-width: 0.3vh;
+  padding: 0.8vh;
+  width: 2.5vw;
+  border-radius: 100px;
+  cursor: pointer;
+}
+.toggle-icon-off{
+  background-color: #b53638;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+}
+.toggle-icon-off:hover{
+  background-color: #c44749;
+}
+.toggle-icon-on{
+  background-color: #3d48c2;
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+}
+.toggle-icon-on:hover{
+  background-color: #4753d3;
+}
+.share-icon{
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+  background-color: rgb(27, 26, 26);
+  color: #f6f6f6;
+}
+.share-icon:hover{
+  background-color: rgb(44, 43, 43);
+}
+#header{
+  width: 132vh;
+  margin-bottom: 2vh;
+}
+#header h1{
+  border-color: black;
+  border-style: solid;
+  padding: 1vh;
+  border-radius: 30px;
+  background-color: rgb(85, 174, 121);
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
+  width: 60vh;
+}
+#conf-img{
+  z-index: 9000;
+}
+
+/* 로고 */
+.logo {
+  text-align: center;
+  width:100%;
+  height: 15vh;
+  margin: auto;
+  position: relative;
+  /* margin-top: 0px; */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+   user-select: none;
+}
+
+.logo b{
+  font: 50 13vh "Vibur";
+  color: #fee;
+  text-shadow: 0 -40px 100px, 0 0 2px, 0 0 1em #FFEB5A, 0 0 0.5em #FFEB5A, 0 0 0.1em #FFEB5A, 0 10px 3px #000;
+}
+.logo b span{
+  animation: blink linear infinite 2s;
+  font: 50  13vh "Vibur";
+}
+.logo b span:nth-of-type(2){
+  animation: blink linear infinite 3s;
+  font: 50 13vh "Vibur";
+}
+
+#screenshot_background{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  display: block;
+  opacity: 0.3;
+  text-align: center;
+  box-sizing: border-box;
+  z-index: 99999;
+  border-color: black;
+  border-style: solid;
+}
+
+#screenshot::before, #screenshot::after{
+  border: none !important;
+  content: "" !important;
+  height: 100% !important;
+  position : absolute !important;
+  width: 100% !important;
+}
+
+#screenshot::before{
+  border-right: 1px solid white !important;
+  border-bottom: 1px solid white !important;
+  left: -100% !important;
+  top: -100% !important;
+}
+
+#screenshot::after{
+  border-top: 1px solid white !important;
+  border-left: 1px solid white !important;
+  left: 0 !important;
+  top: 0 !important;
+}
+
+#screenshot{
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 99999 !important;
+}
+
+body.edit_cursor{
+  cursor: crosshair;
+}
+</style>
 
 <script>
 import { reactive, onMounted, onUnmounted, computed,ref } from 'vue';
@@ -594,144 +779,114 @@ export default {
         // canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({'image/png':blob})]))
       })
     }
-    getTeamInfo()
+
+    const screenshot = function(){
+      document.querySelector('body').classList.add('edit_cursor');
+
+      var $bigcont = document.querySelector('#chat-container');
+      var startX, startY;
+      var height = window.innerHeight;
+      var width = window.innerWidth;
+
+      //배경을 어둡게 깔아주기 위한 div객체 생성
+      var $screenBg = document.createElement('div');
+      $screenBg.id='screenshot_background';
+      $screenBg.style.borderWidth = '0 0 ' + height + 'px 0';
+
+      //마우스 이동하면서 선택한 영역의 크기를 보여주기위한 div 객체 생성
+      var $screenshot = document.createElement('div');
+      $screenshot.id = 'screenshot';
+      document.querySelector('body').appendChild($screenBg);
+      document.querySelector('body').appendChild($screenshot);
+
+      var selectArea = false;
+      var body = document.querySelector('body');
+      var test = document.querySelector('#screenshot_background');
+
+
+
+      // window.addEventListener()
+      const mousedown = function(e){
+        e.preventDefault();
+        selectArea = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        console.log(startX, startY);
+        body.removeEventListener('mousedown', mousedown);
+
+      }
+      //마우스 누르는 이벤트 등록
+      body.addEventListener('mousedown', mousedown);
+
+      //클릭한 마우스 떼는 이벤트 함수
+      var mouseup = function(e){
+        selectArea = false;
+        body.removeEventListener('mousemove', mousemove);
+        $screenshot.parentNode.removeChild($screenshot);
+        $screenBg.parentNode.removeChild($screenBg);
+        var x = e.clientX;
+        var y = e.clientY;
+        var top = Math.min(y, startY);
+        var left = Math.min(x, startX);
+        var width = Math.max(x, startX) - left;
+        var height = Math.max(y, startY) - top;
+        html2canvas(document.body).then(
+          function(canvas){
+            //전체화면 캡쳐
+            //선택 영역만큼 crop
+            canvas.style.backgroundImage = state.backImg;
+            canvas.style.backgroundSize= 'cover'
+            console.log(canvas.style.backgroundImage);
+            canvas.getContext('2d').fillStyle=state.backImg;
+            var img = canvas.getContext('2d').getImageData(left, top, width, height);
+            var c = document.createElement('canvas');
+            c.width = width;
+            c.height = height;
+
+            c.getContext('2d').putImageData(img, 0, 0);
+            save(c);
+            //crop한 이미지 저장
+          }
+        );
+        body.removeEventListener('mouseup', mouseup);
+        document.querySelector('body').classList.remove('edit_cursor');
+      }
+
+      body.addEventListener('mouseup', mouseup);
+
+      //마우스무브 이벤트 함수
+      function mousemove(e){
+        var x = e.clientX;
+        var y = e.clientY;
+        $screenshot.style.left = x;
+        $screenshot.style.top = y;
+        if(selectArea){
+          var top = Math.min(y,startY);
+          var right = width - Math.max(x, startX);
+          var bottom = height - Math.max(y, startY);
+          var left = Math.min(x, startX);
+          $screenBg.style.borderWidth = top + 'px ' + right + 'px ' + bottom + 'px ' + left + 'px ';
+        }
+      }
+      body.addEventListener('mousemove',mousemove);
+      console.log(body);
+    }
+
+    const save = function(canvas){
+      if(navigator.msSaveBlob){
+        var blob = canvas.msToBlob();
+        return navigator.msSaveBlob(blob, '파일명.jpg');
+      }else{
+        var el = document.getElementById('target');
+        state.captureImg = canvas.toDataURL('image/jpeg');
+          state.captureImgDialogOpen=true;
+      }
+    }
+    getTeamInfo();
     takeProfile()
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager, getToken, createSession,
       createToken, sendMessage, closeSession, takeProfile, getTeamInfo, changeVideoState, changeAudioState, onOpenBackImgDialog, onCloseBackImgDialog,
-      outSession, setBackImg, startRecording, recordScreen, saveFile,takeSnapshot, onCloseCaptureImgDialog };
+      outSession, setBackImg, startRecording, recordScreen, saveFile,takeSnapshot, onCloseCaptureImgDialog, screenshot };
   },
 };
 </script>
-<style scoped>
-.join-room{
-  margin-top: 20vh;
-  margin-left: 29vw;
-  border-color: black;
-  border-style: solid;
-  border-radius: 15px;
-  width: 100vh;
-  height: 40vh;
-  background-color: rgb(87, 193, 129);
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
-}
-
-#join-btn {
-  width: 8vw;
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.25);
-}
-
-#join-btn i{
-  transform: scale(1.2);
-}
-
-#video-btn {
-  width: 10vh;
-  height: 7vh;
-}
-#chat-container {
-  position: absolute;
-  top: -90px;
-  left: -100px;
-  margin-left: 0;
-  margin-top: 0;
-  z-index: 10;
-  background-color: #36393f;
-  width: 100vw;
-  height: 100vh;
-  background-size: cover;
-}
-
-#close-btn {
-  font-size: 5vh;
-  width: 4.5vw;
-  height: 7vh;
-  background-color: #b53638;
-  border-style: solid;
-  border-color: black;
-  border-radius: 3vh;
-  border-width: 0.6vh;
-  cursor: pointer;
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
-}
-#close-btn:hover{
-  background-color: #c44749;
-}
-.custom-icon{
-  margin-right: 3.2vw;
-  transform: scale(2);
-  border-color: black;
-  border-style: solid;
-  border-width: 0.3vh;
-  padding: 0.8vh;
-  width: 2.5vw;
-  border-radius: 100px;
-  cursor: pointer;
-}
-.toggle-icon-off{
-  background-color: #b53638;
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
-}
-.toggle-icon-off:hover{
-  background-color: #c44749;
-}
-.toggle-icon-on{
-  background-color: #3d48c2;
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
-}
-.toggle-icon-on:hover{
-  background-color: #4753d3;
-}
-.share-icon{
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
-  background-color: rgb(27, 26, 26);
-  color: #f6f6f6;
-}
-.share-icon:hover{
-  background-color: rgb(44, 43, 43);
-}
-#header{
-  width: 132vh;
-  margin-bottom: 2vh;
-}
-#header h1{
-  border-color: black;
-  border-style: solid;
-  padding: 1vh;
-  border-radius: 30px;
-  background-color: rgb(85, 174, 121);
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
-  width: 60vh;
-}
-#conf-img{
-  z-index: 9000;
-}
-
-/* 로고 */
-.logo {
-  text-align: center;
-  width:100%;
-  height: 15vh;
-  margin: auto;
-  position: relative;
-  /* margin-top: 0px; */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-   user-select: none;
-}
-
-.logo b{
-  font: 50 13vh "Vibur";
-  color: #fee;
-  text-shadow: 0 -40px 100px, 0 0 2px, 0 0 1em #FFEB5A, 0 0 0.5em #FFEB5A, 0 0 0.1em #FFEB5A, 0 10px 3px #000;
-}
-.logo b span{
-  animation: blink linear infinite 2s;
-  font: 50  13vh "Vibur";
-}
-.logo b span:nth-of-type(2){
-  animation: blink linear infinite 3s;
-  font: 50 13vh "Vibur";
-}
-</style>
