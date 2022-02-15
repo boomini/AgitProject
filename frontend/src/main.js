@@ -10,8 +10,14 @@ import i18n from './common/lib/i18n'
 import router from './common/lib/vue-router'
 import GAuth from 'vue3-google-oauth2'
 import AOS from 'aos';
+<<<<<<< HEAD
 import "aos/dist/aos.css";
+import jQuery from 'jquery'
+=======
+import 'aos/dist/aos.css';
+import Vue from 'vue'
 
+>>>>>>> 5dc50f63609e5a9bb7a16d43254ca74c09ca9009
 import 'element-plus/packages/theme-chalk/src/base.scss'
 
 // Element UI Components [시작]
@@ -221,4 +227,9 @@ plugins.forEach(plugin => {
 })
 
 app.mount('#app')
+<<<<<<< HEAD
+// eslint-disable-next-line no-undef
+global.$ = jQuery;
 
+=======
+>>>>>>> 5dc50f63609e5a9bb7a16d43254ca74c09ca9009

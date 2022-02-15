@@ -21,7 +21,7 @@
       <div class="d-flex justify-content-between">
         <div>
           <p style="font-size: 1.1rem;">
-            {{ info.writer }}
+            {{ info.nickName }}
           </p>
         </div>
         <div style="font-size: 40%;">
@@ -34,13 +34,23 @@
         </div>
       </div>
 
-      <div style="border-top: 1px solid black; padding-top: 1.5rem;">
+      <div style="border-top: 1px solid black; padding-top: 1.5rem; height: 370px;">
         <p style="font-size: 20px;">
           {{ info.content }}
         </p>
       </div>
     </div>
     <!-- footer -->
+    <template #footer v-if="info.writer === state.userId">
+      <span class="dialog-footer">
+        <el-button type="info" @click="updateArticle" circle>
+          <i class="fa-regular fa-pen-to-square"></i>
+        </el-button>
+        <el-button @click="deleteArticle(info.index)" circle type="danger">
+          <i class="fa-regular fa-trash-can"></i>
+        </el-button>
+      </span>
+    </template>
   </el-dialog>
 </template>
 
@@ -48,6 +58,7 @@
 import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import jwt_decode from 'jwt-decode'
 
 export default {
@@ -92,7 +103,21 @@ export default {
       }
     }
 
-    return { state, handleClose, timeFormat }
+    const updateArticle = function () {
+      emit('updateArticle', props.info)
+    }
+
+    const deleteArticle = function (index) {
+      console.log('데이터 확인')
+      console.log(props.info.id)
+      const data = {
+        'index': index,
+        'id': props.info.id
+      }
+      emit('deleteArticle', data)
+    }
+
+    return { state, handleClose, timeFormat, updateArticle, deleteArticle}
   }
 
 }
@@ -104,19 +129,23 @@ export default {
   height: 700px;
 }
 
-.el-overlay-dialog {
+.article-view-dialog .el-overlay-dialog {
   background-color: rgba(0,0,0,.5) !important;
 }
 
-.el-dialog,
-.el-dialog__body,
-.el-dialog__body div {
+.article-view-dialog .el-dialog,
+.article-view-dialog .el-dialog__body,
+.article-view-dialog .el-dialog__body div {
   background-color: white !important;
 }
 
-.el-dialog__body {
+.article-view-dialog .el-dialog__body {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
+}
+
+.article-view-dialog .el-dialog__footer {
+  background-color: transparent;
 }
 
 /* .el-dialog__footer {

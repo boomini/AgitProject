@@ -17,7 +17,10 @@
     "core-js": "^3.6.5",
     "element-plus": "^1.1.0-beta.10",
     "elementscss": "^0.1.8",
+    "firebase": "^8.10.1",
     "google": "^2.1.0",
+    "html2canvas": "^1.4.1",
+    "jquery": "^3.6.0",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
@@ -51,6 +54,7 @@
     "sass": "^1.49.7",
     "stylus": "^0.54.8",
     "vue-cli-plugin-vuetify": "~2.4.0",
+    "vue-drawing-canvas": "^1.0.9",
     "webpack": "^4.46.0",
     "webpack-cli": "^4.7.0"
   },
@@ -59,6 +63,9 @@
     "env": {
       "node": true
     },
+    "globals": {
+      "todoEventBus":"writable"
+    },
     "extends": [
       "plugin:vue/vue3-essential",
       "eslint:recommended"
@@ -66,7 +73,9 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "no-unused-vars": "off"
+    }
   },
   "browserslist": [
     "> 1%",

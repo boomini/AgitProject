@@ -26,12 +26,14 @@
               type="date"
               value-format="YYYY-MM-DD"
               placeholder="일자를 선택해주세요."
+              disabled
             >
             </el-date-picker>
           </el-form-item>
           <el-form-item prop="content" label="내용">
           </el-form-item>
           <input
+            id="uploadVideo"
             type="file"
             accept="video/*"
             @change="selectedVideo"
@@ -96,7 +98,9 @@ export default {
     })
 
     const handleClose = function () {
+      state.form.videos = []
       state.form.content = ''
+      document.getElementById('uploadVideo').value = ''
       emit('closeUploadVideoDialog')
     }
 

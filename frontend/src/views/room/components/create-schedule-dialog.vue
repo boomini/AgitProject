@@ -4,6 +4,7 @@
     v-model="state.dialogVisible"
     @close="handleClose"
     width="30%"
+    :destroy-on-close="true"
   >
     <!-- header -->
     <template #title>
@@ -19,23 +20,24 @@
       </div>
       <div>
         <el-form :model="state.form" :rules="state.rules" ref="createScheduleForm" :label-position="state.form.align">
-          <el-form-item prop="startdate" label="시작일자">
+          <!-- <el-form-item prop="startdate" label="시작일자">
             <el-date-picker
               style="width: 100%;"
-              v-model="state.form.startdate"
+              v-model="registerDate"
               type="date"
               value-format="YYYY-MM-DD"
               placeholder="일자를 선택해주세요."
             >
             </el-date-picker>
-          </el-form-item>
-          <el-form-item prop="enddate" label="종료일자">
+          </el-form-item> -->
+          <el-form-item prop="enddate" label="날짜">
             <el-date-picker
               style="width: 100%;"
               v-model="state.form.enddate"
               type="date"
               value-format="YYYY-MM-DD"
               placeholder="일자를 선택해주세요."
+              disabled
             >
             </el-date-picker>
           </el-form-item>
@@ -113,7 +115,7 @@ export default {
         align: 'left',
         content: '',
         startdate: computed(() => props.registerDate),
-        enddate: props.registerDate,
+        enddate: computed(() => props.registerDate),
         title: '',
         teamId: '',
       },
@@ -137,7 +139,7 @@ export default {
     const handleClose = function () {
       state.form.content = ''
       state.form.title = ''
-      state.form.enddate = ''
+      // state.form.enddate = ''
       emit('closeCreateScheduleDialog')
     }
 
