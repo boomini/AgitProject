@@ -296,7 +296,7 @@ html,body{
   z-index: -3;
 } */
 .intro-btn{
-  font-size: 18px;
+  font-size: 17px;
   width: 5.5vw;
   transform: translate(0, -50%);
   cursor: pointer;
