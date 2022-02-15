@@ -130,7 +130,7 @@ export default {
   .selectback-screen-share{
     position: relative;
     background-color: aliceblue;
-    width: 650px;
+    width: 660px;
     height: 500px;
     transform: translate(0, -20%);
   }
