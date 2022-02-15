@@ -28,7 +28,7 @@
     </el-carousel>
     </div>
     <div v-else-if = "state.infos.length === 1">
-      <el-carousel height="200px" direction="vertical" :autoplay="false">
+      <el-carousel height="100px" direction="vertical" :autoplay="false">
         <el-carousel-item v-for="info in state.infos" :key="info.startDate">
         <h5>
           <br>
@@ -61,9 +61,14 @@
               inactive-text="밤"
               inactive-color="#20B2AA"
             />
+            <!-- <div class="box sb5 rounded-pill" style="z-index:2; left: 30px;">오늘은 일정이<br> 없어요!</div> -->
 
           </div>
+
+
+
           <div class="mountain-scene">
+            <!-- <div class="box sb5 rounded-pill" style="z-index:2; top:16vh; left: 420px;">오늘은 일정이<br> 없어요!</div> -->
             <div id="clouds">
               <div class="cloud" style="z-index: 0"></div>
               <div class="cloud" style="z-index: 0"></div>
@@ -97,36 +102,38 @@
                 >이전 약속</el-button
               >
             </div>
-              <div class="page-wrapper">
-
+              <div class="page-wrapper" style="margin-right: 140px;">
+                <div class="box sb5 rounded-pill" style="z-index:2; left: 270px; bottom: 200px;">저를<br>눌러보세요:)</div>
                 <div class="box sb4 rounded-pill" style="margin-bottom: 200px;" v-if="todayschedule.length >= 1">오늘 일정이<br>{{ todayschedule.length }}개 있어요!</div>
                 <div class="box sb4 rounded-pill" style="margin-bottom: 200px;" v-else-if="todayschedule.length == 0">오늘은 일정이<br> 없어요!</div>
                 <div class="loader">
-                  <div v-if="jcolor == 1" class="jelly">
+                  <div v-if="jcolor == 1" class="jelly" @click="state.colorDialogOpen = true">
+
                     <div class="body1"></div>
+
                     <div class="eye"></div>
                     <div class="eye"></div>
                     <div class="mouth"></div>
                   </div>
-                  <div v-else-if="jcolor == 2" class="jelly">
+                  <div v-else-if="jcolor == 2" class="jelly"  @click="state.colorDialogOpen = true">
                     <div class="body2"></div>
                     <div class="eye"></div>
                     <div class="eye"></div>
                     <div class="mouth"></div>
                   </div>
-                  <div v-else-if="jcolor == 3" class="jelly">
+                  <div v-else-if="jcolor == 3" class="jelly"  @click="state.colorDialogOpen = true">
                     <div class="body3"></div>
                     <div class="eye"></div>
                     <div class="eye"></div>
                     <div class="mouth"></div>
                   </div>
-                  <div v-else-if="jcolor == 4" class="jelly">
+                  <div v-else-if="jcolor == 4" class="jelly"  @click="state.colorDialogOpen = true">
                     <div class="body4"></div>
                     <div class="eye"></div>
                     <div class="eye"></div>
                     <div class="mouth"></div>
                   </div>
-                  <div v-else-if="jcolor == 5" class="jelly">
+                  <div v-else-if="jcolor == 5" class="jelly"  @click="state.colorDialogOpen = true">
                     <div class="body5"></div>
                     <div class="eye"></div>
                     <div class="eye"></div>
@@ -134,7 +141,6 @@
                   </div>
                   <div class="shadow"></div>
 
-                  <el-button type="text" @click="state.colorDialogOpen = true" style="font-size: 1.0rem; color: #13C7A3">넣을까</el-button>
                 </div>
                 <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;"  v-if="todayschedule.length == 0">푹 쉬세요 <i style="margin-bottom:3px" class="em em-stuck_out_tongue_closed_eyes" aria-role="presentation" aria-label="FACE WITH STUCK-OUT TONGUE AND TIGHTLY-CLOSED EYES"></i></div>
                 <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;" v-else-if="1 <= todayschedule.length && todayschedule.length <= 2">좋은 추억<br>쌓으세요 <i style="margin-bottom:3px" class="em em-sunglasses" aria-role="presentation" aria-label="SMILING FACE WITH SUNGLASSES"></i></div>
@@ -191,43 +197,42 @@
                 >이전 약속</el-button
               >
             </div>
-              <div class="page-wrapper">
-
+              <div class="page-wrapper" style="margin-right: 140px;">
+                <div class="box sb5 rounded-pill" style="z-index:2; left: 270px; bottom: 200px;">저를<br>눌러보세요:)</div>
                 <div class="box sb4 rounded-pill" style="margin-bottom: 200px;" v-if="todayschedule.length >= 1">오늘 일정이<br>{{ todayschedule.length }}개 있어요!</div>
                 <div class="box sb4 rounded-pill" style="margin-bottom: 200px;" v-else-if="todayschedule.length == 0">오늘은 일정이<br> 없어요!</div>
                 <div class="loader">
-                  <div v-if="jcolor == 1" class="jelly">
+                  <div v-if="jcolor == 1" class="jelly"  @click="state.colorDialogOpen = true">
                     <div class="body1"></div>
                     <div class="eye"></div>
                     <div class="eye"></div>
                     <div class="mouth"></div>
                   </div>
-                  <div v-else-if="jcolor == 2" class="jelly">
+                  <div v-else-if="jcolor == 2" class="jelly"  @click="state.colorDialogOpen = true">
                     <div class="body2"></div>
                     <div class="eye"></div>
                     <div class="eye"></div>
                     <div class="mouth"></div>
                   </div>
-                  <div v-else-if="jcolor == 3" class="jelly">
+                  <div v-else-if="jcolor == 3" class="jelly"  @click="state.colorDialogOpen = true">
                     <div class="body3"></div>
                     <div class="eye"></div>
                     <div class="eye"></div>
                     <div class="mouth"></div>
                   </div>
-                  <div v-else-if="jcolor == 4" class="jelly">
+                  <div v-else-if="jcolor == 4" class="jelly"  @click="state.colorDialogOpen = true">
                     <div class="body4"></div>
                     <div class="eye"></div>
                     <div class="eye"></div>
                     <div class="mouth"></div>
                   </div>
-                  <div v-else-if="jcolor == 5" class="jelly">
+                  <div v-else-if="jcolor == 5" class="jelly"  @click="state.colorDialogOpen = true">
                     <div class="body5"></div>
                     <div class="eye"></div>
                     <div class="eye"></div>
                     <div class="mouth"></div>
                   </div>
                   <div class="shadow"></div>
-                  <el-button type="text" @click="state.colorDialogOpen = true" style="font-size: 1.0rem; color: #13C7A3">넣을까</el-button>
                 </div>
                 <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;"  v-if="todayschedule.length == 0">푹 쉬세요 <i style="margin-bottom:3px" class="em em-stuck_out_tongue_closed_eyes" aria-role="presentation" aria-label="FACE WITH STUCK-OUT TONGUE AND TIGHTLY-CLOSED EYES"></i></div>
                 <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;" v-else-if="1 <= todayschedule.length && todayschedule.length <= 2">좋은 추억<br>쌓으세요 <i style="margin-bottom:3px" class="em em-sunglasses" aria-role="presentation" aria-label="SMILING FACE WITH SUNGLASSES"></i></div>
@@ -663,6 +668,19 @@ border-top: 10px solid #20B2AA;
 border-bottom: 10px solid transparent;
 right: 25px;
 bottom: -21px;
+}
+
+.sb5:before {
+content: "";
+width: 0px;
+height: 0px;
+position: absolute;
+border-left: 10px solid transparent;
+border-right: 10px solid transparent;
+border-top: 10px solid #20B2AA;
+border-bottom: 10px solid transparent;
+left: 60px;
+bottom: -25px;
 }
 
   @keyframes bounce-in {

@@ -27,7 +27,6 @@
           <!-- <el-button type="success" @click="clickProfile">마이 페이지</el-button> -->
         <div v-else class="button-wrapper">
           <p class="text-center" @click="clickSchedule">마이페이지</p>
-          <p class="text-center" @click="clickChat">채팅</p>
           <p class="text-center" @click="clickCenter">고객센터</p>
           <p class="text-center" @click="clickLogout">로그아웃</p>
           <!-- <el-button type="primary" @click="clickLogout">로그아웃</el-button> -->
