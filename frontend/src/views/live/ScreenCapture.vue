@@ -103,9 +103,9 @@ setup(){
         videoElement.srcObject = state.captureStream;
 
         const track = videoElement.srcObject.getVideoTracks()[0]
-      const imageCapture = new ImageCapture(track)
-      const image = await imageCapture.grabFrame()
-        let blob = new Blob([new ArrayBuffer(image)], { type: "image/png" });
+        const imageCapture = new ImageCapture(track)
+        const image = await imageCapture.grabFrame()
+        let blob = new Blob([new ArrayBuffer(image)], { type: 'image/png' });
               const url = window.URL.createObjectURL(blob);
               console.log(blob);
               console.log(URL.createObjectURL(blob))
@@ -115,30 +115,30 @@ setup(){
               const snapshotimg = document.querySelector('#snapshotimg');
               snapshotimg.src = state.imgsrc;
 
-let formData = new FormData()
-      formData.append('upfile', blob, 'file.png')
-      formData.append('teamId', 1)
-      const today = new Date()
-      const year = today.getFullYear()
-      const month = ('0' + (today.getMonth() + 1)).slice(-2)
-      const day = ('0' + today.getDate()).slice(-2)
-      const dateString = `${year}-${month}-${day}`
-      formData.append('uploadDate', dateString)
-      console.log(formData);
-      store.dispatch('root/uploadImage', { 'formData': formData, 'token': state.isLogin})
-      .then(res => {
-        setTimeout(() => {
-          swal({
-            title: '팀 게시판 영상 등록',
-            text: '녹화된 영상이 팀 게시판에 등록 되었습니다.',
-            icon: 'success',
-            button: '확인',
-          })
-        }, 200)
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
+      let formData = new FormData()
+            formData.append('upfile', blob, 'file.png')
+            formData.append('teamId', 1)
+            const today = new Date()
+            const year = today.getFullYear()
+            const month = ('0' + (today.getMonth() + 1)).slice(-2)
+            const day = ('0' + today.getDate()).slice(-2)
+            const dateString = `${year}-${month}-${day}`
+            formData.append('uploadDate', dateString)
+            console.log(formData);
+            store.dispatch('root/uploadImage', { 'formData': formData, 'token': state.isLogin})
+            .then(res => {
+              setTimeout(() => {
+                swal({
+                  title: '팀 게시판 영상 등록',
+                  text: '녹화된 영상이 팀 게시판에 등록 되었습니다.',
+                  icon: 'success',
+                  button: '확인',
+                })
+              }, 200)
+              console.log(res)
+            }).catch(err => {
+              console.log(err)
+            })
 
       // console.log(URL.createObjectURL(image));
 
