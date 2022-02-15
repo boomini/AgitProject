@@ -1,7 +1,7 @@
 <template>
     <div id="chat-container" v-bind:style="{ 'background-image': 'url(' + state.backImg + ')' }">
       <div v-if="!state.session">
-        <div class="d-flex flex-column justify-content-center align-items-center join-room">
+        <div class="d-flex flex-column justify-content-center align-items-center join-room" data-html2canvas-ignore="true">
           <h1>아지트 참석하기</h1>
           <h3 class="my-3">현재 접속하려는 방: {{ state.teamName }}의 방</h3>
           <div>
@@ -14,10 +14,8 @@
           </div>
         </div>
       </div>
-
       <div class="d-flex-row justify-content-between my-3" v-if="state.session">
-
-          <div class="d-flex justify-content-between align-items-center offset-4" id="header">
+          <div class="d-flex justify-content-between align-items-center offset-4" id="header" data-html2canvas-ignore="true">
             <h1 id="conference-name" class="text-center">{{ state.teamName }}'s Room</h1>
               <!-- <div class="logo" id="neon" style="width: 100%; height: 35vh;">
                 <b><span>a</span><span>g</span>i<span>t</span></b>
@@ -46,7 +44,7 @@
         <div
         :height="`80px`"
         style="position:fixed; height:10%; bottom: 0; width: 100%; background-color: #2f3136; opacity:0.8">
-        <div class="d-flex justify-content-center align-items-center" id="btn-group" style="height:100% ">
+        <div class="d-flex justify-content-center align-items-center" id="btn-group" style="height:100% " data-html2canvas-ignore="true">
             <!-- 비디오 토글 버튼 -->
               <div>
                 <div v-if="state.publisher.stream.videoActive">
@@ -113,8 +111,7 @@
                     content="배경 이미지 변경"
                     placement="top"
                   >
-                  <div class="custom-icon share-icon text-center"><i class="fa-solid fa-image" @click="onOpenBackImgDialog"></i></div>
-
+                  <i class="fa-solid fa-image custom-icon share-icon text-center" @click="onOpenBackImgDialog"></i>
                   </el-tooltip>
               </div>
               <!--사진캡쳐 버튼-->
@@ -153,7 +150,7 @@
 </template>
 
 <script>
-import { reactive, onMounted, onUnmounted, computed,ref } from 'vue';
+import { reactive, onMounted, onUnmounted, computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { OpenVidu } from 'openvidu-browser';
@@ -579,7 +576,8 @@ export default {
     // 녹화 중단
 
     const takeSnapshot = function(){
-      html2canvas(document.querySelector('#chat-container')).then(canvas=>{
+      html2canvas(document.getElementById('chat-container')).then(canvas=>{
+        console.log(canvas)
         var myImg = canvas.toDataURL('image/png');
         // myImg = myImg.replace('data:image/png;base64,', '');
         // console.log(URL.createObjectURL(myImg));

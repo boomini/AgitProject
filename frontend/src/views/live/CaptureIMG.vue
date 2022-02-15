@@ -12,16 +12,11 @@
   </template>
 
   <div>
-    <img :src="state.captureImg" id="screenCapture" style="width:40vw !important; height:60vh !important;"/>
+      <img :src="state.captureImg" id="screenCapture" style="width:40vw !important; height:60vh !important;"/>
+      <div>
+        <button>저장</button>
+      </div>
   </div>
-  <template #footer>
-    <span class="dialog-footer">
-      <el-button>Cancel</el-button>
-      <el-button type="primary"
-        >Confirm</el-button
-      >
-    </span>
-  </template>
 </el-dialog>
 </template>
 
@@ -30,10 +25,8 @@ import { reactive, computed, onMounted} from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 
-
 export default {
   name: 'ScreenShare',
-
   props: {
     open: {
       type: Boolean,
@@ -47,7 +40,6 @@ export default {
   setup(props, { emit }) {
     const store = useStore()
     const router = useRouter()
-
     const state = reactive({
       dialogVisible: computed(() => props.open),
       formLabelWidth: '120px',
