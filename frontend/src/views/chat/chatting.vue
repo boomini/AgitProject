@@ -150,7 +150,7 @@ export default {
 	justify-content: center;
 	min-height: 100vh;
   margin-bottom: 30px;
-	background-color: #ea526f;
+	background-color: #78ccbb;
 
 	&.login {
 		align-items: center;
@@ -215,7 +215,7 @@ export default {
 					display: block;
 					width: 100%;
 					padding: 10px 15px;
-					background-color: #ea526f;
+					background-color: #78ccbb;
 					border-radius: 8px;
 
 					color: #FFF;
@@ -225,7 +225,7 @@ export default {
 
 				&:focus-within {
 					label {
-						color: #ea526f;
+						color: #78ccbb;
 					}
 
 					input[type="text"] {
@@ -314,7 +314,7 @@ export default {
 						.content {
 							color: #FFF;
 							font-weight: 600;
-							background-color: #ea526f;
+							background-color: #78ccbb;
 						}
 					}
 				}
@@ -368,7 +368,7 @@ export default {
 					padding: 10px 15px;
 					border-radius: 0px 8px 8px 0px;
 
-					background-color: #ea526f;
+					background-color: #78ccbb;
 
 					color: #FFF;
 					font-size: 18px;
