@@ -38,6 +38,7 @@ public class ImageController {
 
     @Autowired
     ServletContext servletContext;
+
     @PostMapping()
     @ApiOperation(value="이미지 업로드", notes="이미지 업로드 api")
     @ApiResponses({
@@ -81,6 +82,39 @@ public class ImageController {
                 mfile.transferTo(new File(folder, saveFileName));
             }
             imageService.addImage(imageDto,userId,teamId);
+        }
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+    }
+
+    @PostMapping("/back")
+    @ApiOperation(value="배경이미지 업로드", notes="이미지 업로드 api")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "성공"),
+    })
+    public ResponseEntity<? extends BaseResponseBody> addBackImage (
+            @RequestParam(value="image", required = true) MultipartFile[] files) throws Exception {
+
+
+        String realPath =  System.getProperty("user.home") + "\\files"+"\\backimage";
+        System.out.println(realPath);
+
+
+        String saveFolder = realPath;
+
+        File folder = new File(saveFolder);
+        if(!folder.exists())
+            folder.mkdirs();
+
+        for(MultipartFile mfile : files){
+            ImageDto imageDto = new ImageDto();
+            String originalFileName = mfile.getOriginalFilename();
+            if(!originalFileName.isEmpty()){
+                String saveFileName = UUID.randomUUID().toString() + originalFileName.substring(originalFileName.lastIndexOf('.'));
+                //유일한 식별자를 생성한다.
+
+                System.out.println("원본 파일 이름 : "+ mfile.getOriginalFilename() + " 실제 저장 파일이름 : " + saveFileName);
+                mfile.transferTo(new File(folder, saveFileName));
+            }
         }
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }

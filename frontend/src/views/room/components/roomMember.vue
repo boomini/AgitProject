@@ -1,6 +1,5 @@
 <template>
 
-
   <div id="memberboard" class="col-2 d-flex flex-column justify-content-start" style="border: 1px solid; border-color:#dadadb; border-radius: 10px; margin-top: 45px;margin-bottom: 180px;">
     <div class="d-flex justify-content-center">
       <el-tooltip

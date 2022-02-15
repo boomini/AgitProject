@@ -3,7 +3,7 @@
     class="main-header"
     :gutter="10"
     :style="{ 'height': height }">
-    <div class="hide-on-small">
+    <div class="hide-on-small mb-3">
       <div class="d-flex align-items-center" @click="clickLogo">
         <div class="logo-wrapper"><div class="ic ic-logo"/></div>
         <p id="logo-text">Agit</p>
@@ -335,10 +335,10 @@ export default {
     margin-right: 1%;
   } */
   .main-header .hide-on-small .tool-wrapper .button-wrapper p {
-    width: 6vw;
-    font-size: 2.3vh;
+    width: 90px;
+    font-size: 15px;
     cursor: pointer;
-    margin-top: 1.7vh;
+    margin-top: 15px;
     transform: translate(-40%);
   }
   .main-header .hide-on-small .tool-wrapper .button-wrapper p:hover {
@@ -376,16 +376,17 @@ export default {
   }
   #logo-text{
     font-weight: bold;
-    font-size: 4vh;
+    font-size: 35px;
     color: #78ccbb;
-    text-shadow:0.15vh 0.15vh 0.3vh #162d42;
+    text-shadow: 1px 1px 2px #162d42;
+    transform: translate(0, -5%);
     cursor: pointer;
   }
   #logo-sub{
-    font-size: 1.4vh;
+    font-size: 12px;
     color: #78ccbb;
-    text-shadow:0.09vh 0.09vh 0.15vh #162d42;
-    transform: translate(0, 60%);
+    text-shadow: 0.8px 0.8px 1px #162d42;
+    transform: translate(0, 50%);
     cursor: pointer;
   }
   /* .el-overlay .el-overlay-dialog {
