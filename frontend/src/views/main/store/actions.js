@@ -276,6 +276,15 @@ export function getListImage ({state}, payload){
     url: url
   })
 }
+// 업로드 이미지
+export function changeUserProfileImage ({state}, payload){
+  const header = {
+    Authorization : `Bearer ${payload.token}`,
+    'Content-Type' : 'multipart/form-data',
+  }
+  return $axios({ method: 'post', url: '/user/image', data: payload.formData, headers: header})
+}
+
 
 // 비디오
 // 업로드 비디오
