@@ -44,5 +44,6 @@ export default {
     'http://localhost:8080/dist/img/backImg2.jpg',
     'http://localhost:8080/dist/img/backImg3.PNG'
   ],
-  chattingRoomId: ''
+  chattingRoomId: '',
+  nickName: ''
 }

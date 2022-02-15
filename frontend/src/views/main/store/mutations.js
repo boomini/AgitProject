@@ -43,3 +43,6 @@ export function setChattingRoomId(state, value){
   state.chattingRoomId = value
 }
 
+export function setNickName (state, value) {
+  state.nickName = value
+}

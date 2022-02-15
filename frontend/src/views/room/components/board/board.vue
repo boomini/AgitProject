@@ -4,7 +4,7 @@
       v-model="state.boardVisible"
       :direction="rtl"
       :before-close="handleClose"
-      lock-scroll
+      :lock-scroll="true"
     >
       <template #title>
         <!-- <div width="50%">
@@ -76,6 +76,8 @@
           <div style="margin: 20px 10px 10px 10px;">
             <article-page
               :articleList = state.articleList
+              @updateArticle="onUpdateArticle"
+              @deleteArticle="onDeleteArticle"
             />
             <!-- <el-table :data="state.articleList" height="40vh" style="width: 100%">
               <el-table-column prop="index" label="글번호" width="80" />
@@ -159,13 +161,15 @@ export default {
       emit('closeBoard')
     }
 
-    const boardClick = function (data) {
-      alert('board click')
-      console.log('여기 집중')
-      console.log(data)
+    const onDeleteArticle = function () {
+      emit('deleteArticle')
     }
 
-    return { state, handleClose, boardClick }
+    const onUpdateArticle = function (data) {
+      emit('updateArticle', data)
+    }
+
+    return { state, handleClose, onDeleteArticle, onUpdateArticle }
   }
 }
 </script>
