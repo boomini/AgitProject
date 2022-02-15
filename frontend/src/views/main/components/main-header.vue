@@ -379,13 +379,14 @@ export default {
     font-size: 35px;
     color: #78ccbb;
     text-shadow: 1px 1px 2px #162d42;
+    transform: translate(0, -5%);
     cursor: pointer;
   }
   #logo-sub{
     font-size: 12px;
     color: #78ccbb;
-    text-shadow: 0.8px 0.8px 1.5px #162d42;
-    transform: translate(0, 60%);
+    text-shadow: 0.8px 0.8px 1px #162d42;
+    transform: translate(0, 50%);
     cursor: pointer;
   }
   /* .el-overlay .el-overlay-dialog {
