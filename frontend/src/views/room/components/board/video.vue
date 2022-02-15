@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar>
+  <el-scrollbar native>
     <div class="scrollbar-flex-content">
       <p v-for="item in state.srcList.length" :key="item" class="scrollbar-demo-video-item">
         <div class="demo-image__preview">
@@ -71,6 +71,6 @@ export default {
 }
 
 .is-horizontal {
-  display: none;
+  color: black;
 }
 </style>

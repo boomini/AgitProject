@@ -1,4 +1,5 @@
 <template>
+<div class="chatting-container">
   <div class="view login" v-if="state.username === '' || state.username === null">
     <form class="login-form" @submit.prevent="Login">
       <div class="form-inner">
@@ -45,6 +46,7 @@
       </form>
     </footer>
   </div>
+</div>
 </template>
 
 <script>
@@ -127,10 +129,10 @@ export default {
 </script>
 
 <style lang="scss">
-* {
-	// font-family: Avenir, Helvetica, Arial, sans-serif;
-	// -webkit-font-smoothing: antialiased;
-	// -moz-osx-font-smoothing: grayscale;
+.chatting-container {
+	font-family: Avenir, Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 
 	margin: 0;
 	padding: 0;

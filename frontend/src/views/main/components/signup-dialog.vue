@@ -16,14 +16,14 @@
 
       </el-form-item>
       <el-form-item prop="authNumber" label="인증번호" ref="authForm" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.authNumber" autocomplete="off" style="width:70%" :disabled="state.form.isValidatedAuth" show-authNumber placeholder="인증번호"></el-input>
+        <el-input id="auth-number" v-model="state.form.authNumber" autocomplete="off" style="width:70%" :disabled="state.form.isValidatedAuth" show-authNumber placeholder="인증번호"></el-input>
         <el-button size="small" style="float: right; margin-top:5px;" @click="clickAuthup" :disabled="state.form.isValidatedAuth">인증 체크</el-button>
       </el-form-item>
       <el-form-item prop="password" label="비밀번호" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.password" autocomplete="off" show-password placeholder="Password"></el-input>
+        <el-input v-model="state.form.password" autocomplete="off" show-password placeholder="Password" id="password"></el-input>
       </el-form-item>
       <el-form-item prop="passwordConfirm" label="비밀번호 재확인" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.passwordConfirm" autocomplete="off" show-password placeholder="Password Confirmation"></el-input>
+        <el-input v-model="state.form.passwordConfirm" autocomplete="off" show-password placeholder="Password Confirmation" id="password-confirmation"></el-input>
       </el-form-item>
       <el-form-item prop="name" label="이름" :label-width="state.formLabelWidth" >
         <el-input v-model="state.form.name" autocomplete="off" placeholder="Name"></el-input>
@@ -41,16 +41,7 @@
       <el-form-item prop="nickname" label="별명" :label-width="state.formLabelWidth" >
         <el-input v-model="state.form.nickname" autocomplete="off" placeholder="Nickname"></el-input>
       </el-form-item>
-      <el-form-item prop="agreement" style="margin: 0 auto 20px; width: 100%;" class="checkbox">
-        <el-checkbox v-model="state.form.agreement">
-          가입 시, 인프런의
-            <router-link to="/customercenter" @click="clickCustomercenter">이용약관</router-link>,
-            <!-- <a target="_blank" href="https://www.inflearn.com/policy/terms-of-service">이용약관</a>, -->
-            <a target="_blank" href="https://www.inflearn.com/policy/privacy">개인정보취급방침</a>
-          에 동의합니다
-        </el-checkbox>
-        <!-- <el-button type="text" center>가입 시, 가제의 이용약관 개인정보취급방침에 동의합니다.</el-button> -->
-      </el-form-item>
+
     </el-form>
 
     <!-- footer -->
@@ -65,7 +56,7 @@
 .signup-dialog {
   transform: translate(0, -10%) !important;
   width: 500px !important;
-  height: 600px !important;
+  height: 550px !important;
 }
 .signup-dialog .checkbox .el-form-item__content {
   float: left;
@@ -220,13 +211,13 @@ export default {
         ],
         name: [
           { required: true, message: '이름을 입력해주세요.', trigger: 'blur' },
-          { min: 2, max: 10, message: '2 ~ 10자 이내로 해주세요.', trigger: 'change' },
+          // { min: 2, max: 10, message: '2 ~ 10자 이내로 해주세요.', trigger: 'change' },
           { pattern: /^[a-zA-zㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,10}$/, message: '한글과 영문 대 소문자를 사용하세요. (특수기호, 공백 사용 불가)'}
         ],
         nickname: [
-          { required: true, message: '이름을 입력해주세요.', trigger: 'blur' },
-          { min: 2, max: 10, message: '2 ~ 10자 이내로 해주세요.', trigger: 'change' },
-          { pattern: /^[a-zA-zㄱ-ㅎ|ㅏ-ㅣ|가-힣]{2,10}$/, message: '한글과 영문 대 소문자를 사용하세요. (특수기호, 공백 사용 불가)'}
+          { required: true, message: '별명을 입력해주세요.', trigger: 'blur' },
+          // { min: 2, max: 10, message: '2 ~ 10자 이내로 해주세요.', trigger: 'change' },
+          { pattern: /^[a-zA-zㄱ-ㅎ|ㅏ-ㅣ|가-힣\d]{2,10}$/, message: '한글, 영문(대, 소문자)와 숫자를 사용하세요. (특수기호, 공백 사용 불가)'}
         ],
         birthDate: [
           { required: true, message: '생년월일을 선택해주세요.', trigger: 'blur'}
@@ -260,6 +251,7 @@ export default {
       } else {
         if(state.form.authNumber==state.auth.str){
           console.log("일치 확인");
+          document.getElementById("password").focus()
           swal({
                   title: "인증 성공",
                   text: "회원가입을 진행해주세요.",
@@ -332,8 +324,8 @@ export default {
               setTimeout(() => {
                 loading.value = false
                 swal({
-                  title: "회원가입 성공",
-                  text: "아지트의 일원이 되신 것을 축하합니다.",
+                  title: "아지트의 일원이 되신 것을 축하합니다.",
+                  text: "로그인 후 이용해주세요.",
                   icon: "success",
                   button: "확인",
                 });
@@ -400,6 +392,7 @@ export default {
               icon: "success",
               button: "확인",
             });
+            document.getElementById("auth-number").focus()
             sendAuthEmail();
         })
         .catch(err => {
@@ -417,6 +410,7 @@ export default {
         .then(res => {
           state.form.isValidatedId = true
           state.auth = res.data;
+
           swal({
               title: "인증번호를 성공적으로 보냈습니다.",
               icon: "success",
