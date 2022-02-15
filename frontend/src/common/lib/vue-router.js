@@ -12,7 +12,7 @@ import RoomConfirm from '@/views/room/roomConfirm'
 // vue-canvas 테스트 용
 import ScreenShare from '@/views/live/ScreenShare'
 import chatting from '@/views/chat/chatting'
-
+import ScreenCapture from '@/views/live/ScreenCapture'
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
   let routes = Object.keys(fullMenu).map((key) => {
@@ -86,6 +86,12 @@ function makeRoutesFromMenu () {
     path: '/vue-canvas',
     name: 'ScreenShare',
     component: ScreenShare,
+  })
+
+  routes.push({
+    path: '/snapshot',
+    name: 'ScreenCapture',
+    component: ScreenCapture,
   })
 
   return routes
