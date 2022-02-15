@@ -41,16 +41,7 @@
       <el-form-item prop="nickname" label="별명" :label-width="state.formLabelWidth" >
         <el-input v-model="state.form.nickname" autocomplete="off" placeholder="Nickname"></el-input>
       </el-form-item>
-      <el-form-item prop="agreement" style="margin: 0 auto 20px; width: 100%;" class="checkbox">
-        <el-checkbox v-model="state.form.agreement">
-          가입 시, 인프런의
-            <router-link to="/customercenter" @click="clickCustomercenter">이용약관</router-link>,
-            <!-- <a target="_blank" href="https://www.inflearn.com/policy/terms-of-service">이용약관</a>, -->
-            <a target="_blank" href="https://www.inflearn.com/policy/privacy">개인정보취급방침</a>
-          에 동의합니다
-        </el-checkbox>
-        <!-- <el-button type="text" center>가입 시, 가제의 이용약관 개인정보취급방침에 동의합니다.</el-button> -->
-      </el-form-item>
+
     </el-form>
 
     <!-- footer -->
@@ -65,7 +56,7 @@
 .signup-dialog {
   transform: translate(0, -10%) !important;
   width: 500px !important;
-  height: 600px !important;
+  height: 550px !important;
 }
 .signup-dialog .checkbox .el-form-item__content {
   float: left;

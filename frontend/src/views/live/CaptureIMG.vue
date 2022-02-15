@@ -50,7 +50,7 @@ export default {
       // console.log(loginForm.value)
     })
     const handleClose = function (){
-      emit('closeShareDialog')
+      emit('closeCaptureImgDialog')
     }
 
     return { state, handleClose }
