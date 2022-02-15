@@ -1,6 +1,6 @@
 <template>
 <div class="chatting-container">
-  <div class="view login" v-if="state.username === '' || state.username === null">
+  <!-- <div class="view login" v-if="state.username === '' || state.username === null">
     <form class="login-form" @submit.prevent="Login">
       <div class="form-inner">
         <h1>Login to FireChat</h1>
@@ -14,9 +14,10 @@
           value="Login" />
       </div>
     </form>
-  </div>
+  </div> -->
 
-  <div class="view chat" v-else>
+  <!-- <div class="view chat" v-else> -->
+  <div class="view chat" style="margin-bottom: 130px" >
     <header>
       <!-- <button class="logout" @click="Logout">Logout</button> -->
       <h1>Welcome, {{ state.nickName }}</h1>
@@ -95,7 +96,12 @@ export default {
 
       messagesRef.push(message);
       inputMessage.value = '';
+      const height = document.querySelector('.chatting-container').clientHeight;
+
+      window.scrollTo(0, height);
     }
+
+
 
     onMounted(() => {
       const messagesRef = db.database().ref(state.chatId);
@@ -133,7 +139,6 @@ export default {
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
@@ -144,7 +149,8 @@ export default {
   border-radius: 24px 24px 0px 0px;
 	justify-content: center;
 	min-height: 100vh;
-	background-color: #ea526f;
+  margin-bottom: 30px;
+	background-color: #78ccbb;
 
 	&.login {
 		align-items: center;
@@ -209,7 +215,7 @@ export default {
 					display: block;
 					width: 100%;
 					padding: 10px 15px;
-					background-color: #ea526f;
+					background-color: #78ccbb;
 					border-radius: 8px;
 
 					color: #FFF;
@@ -219,7 +225,7 @@ export default {
 
 				&:focus-within {
 					label {
-						color: #ea526f;
+						color: #78ccbb;
 					}
 
 					input[type="text"] {
@@ -308,7 +314,7 @@ export default {
 						.content {
 							color: #FFF;
 							font-weight: 600;
-							background-color: #ea526f;
+							background-color: #78ccbb;
 						}
 					}
 				}
@@ -362,7 +368,7 @@ export default {
 					padding: 10px 15px;
 					border-radius: 0px 8px 8px 0px;
 
-					background-color: #ea526f;
+					background-color: #78ccbb;
 
 					color: #FFF;
 					font-size: 18px;
