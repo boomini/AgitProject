@@ -339,7 +339,7 @@ body.edit_cursor{
 </style>
 
 <script>
-import { reactive, onMounted, onUnmounted, computed,ref } from 'vue';
+import { reactive, onMounted, onUnmounted, computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router';
 import { OpenVidu } from 'openvidu-browser';
@@ -765,7 +765,8 @@ export default {
     // 녹화 중단
 
     const takeSnapshot = function(){
-      html2canvas(document.querySelector('#chat-container')).then(canvas=>{
+      html2canvas(document.getElementById('chat-container')).then(canvas=>{
+        console.log(canvas)
         var myImg = canvas.toDataURL('image/png');
         // myImg = myImg.replace('data:image/png;base64,', '');
         // console.log(URL.createObjectURL(myImg));
