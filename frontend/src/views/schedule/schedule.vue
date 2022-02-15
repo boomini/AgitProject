@@ -102,13 +102,39 @@
                 <div class="box sb4 rounded-pill" style="margin-bottom: 200px;" v-if="todayschedule.length >= 1">오늘 일정이<br>{{ todayschedule.length }}개 있어요!</div>
                 <div class="box sb4 rounded-pill" style="margin-bottom: 200px;" v-else-if="todayschedule.length == 0">오늘은 일정이<br> 없어요!</div>
                 <div class="loader">
-                  <div class="jelly">
-                    <div class="body"></div>
+                  <div v-if="jcolor == 1" class="jelly">
+                    <div class="body1"></div>
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                    <div class="mouth"></div>
+                  </div>
+                  <div v-else-if="jcolor == 2" class="jelly">
+                    <div class="body2"></div>
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                    <div class="mouth"></div>
+                  </div>
+                  <div v-else-if="jcolor == 3" class="jelly">
+                    <div class="body3"></div>
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                    <div class="mouth"></div>
+                  </div>
+                  <div v-else-if="jcolor == 4" class="jelly">
+                    <div class="body4"></div>
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                    <div class="mouth"></div>
+                  </div>
+                  <div v-else-if="jcolor == 5" class="jelly">
+                    <div class="body5"></div>
                     <div class="eye"></div>
                     <div class="eye"></div>
                     <div class="mouth"></div>
                   </div>
                   <div class="shadow"></div>
+
+                  <el-button type="text" @click="state.colorDialogOpen = true" style="font-size: 1.0rem; color: #13C7A3">넣을까</el-button>
                 </div>
                 <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;"  v-if="todayschedule.length == 0">푹 쉬세요 <i style="margin-bottom:3px" class="em em-stuck_out_tongue_closed_eyes" aria-role="presentation" aria-label="FACE WITH STUCK-OUT TONGUE AND TIGHTLY-CLOSED EYES"></i></div>
                 <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;" v-else-if="1 <= todayschedule.length && todayschedule.length <= 2">좋은 추억<br>쌓으세요 <i style="margin-bottom:3px" class="em em-sunglasses" aria-role="presentation" aria-label="SMILING FACE WITH SUNGLASSES"></i></div>
@@ -170,13 +196,38 @@
                 <div class="box sb4 rounded-pill" style="margin-bottom: 200px;" v-if="todayschedule.length >= 1">오늘 일정이<br>{{ todayschedule.length }}개 있어요!</div>
                 <div class="box sb4 rounded-pill" style="margin-bottom: 200px;" v-else-if="todayschedule.length == 0">오늘은 일정이<br> 없어요!</div>
                 <div class="loader">
-                  <div class="jelly">
-                    <div class="body"></div>
+                  <div v-if="jcolor == 1" class="jelly">
+                    <div class="body1"></div>
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                    <div class="mouth"></div>
+                  </div>
+                  <div v-else-if="jcolor == 2" class="jelly">
+                    <div class="body2"></div>
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                    <div class="mouth"></div>
+                  </div>
+                  <div v-else-if="jcolor == 3" class="jelly">
+                    <div class="body3"></div>
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                    <div class="mouth"></div>
+                  </div>
+                  <div v-else-if="jcolor == 4" class="jelly">
+                    <div class="body4"></div>
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                    <div class="mouth"></div>
+                  </div>
+                  <div v-else-if="jcolor == 5" class="jelly">
+                    <div class="body5"></div>
                     <div class="eye"></div>
                     <div class="eye"></div>
                     <div class="mouth"></div>
                   </div>
                   <div class="shadow"></div>
+                  <el-button type="text" @click="state.colorDialogOpen = true" style="font-size: 1.0rem; color: #13C7A3">넣을까</el-button>
                 </div>
                 <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;"  v-if="todayschedule.length == 0">푹 쉬세요 <i style="margin-bottom:3px" class="em em-stuck_out_tongue_closed_eyes" aria-role="presentation" aria-label="FACE WITH STUCK-OUT TONGUE AND TIGHTLY-CLOSED EYES"></i></div>
                 <div class="box sb3 rounded-pill" style="margin-bottom: 250px; margin-left:-20px;" v-else-if="1 <= todayschedule.length && todayschedule.length <= 2">좋은 추억<br>쌓으세요 <i style="margin-bottom:3px" class="em em-sunglasses" aria-role="presentation" aria-label="SMILING FACE WITH SUNGLASSES"></i></div>
@@ -268,7 +319,12 @@
   <photo-dialog
     :open="state.photoDialogOpen"
     @closePhotoDialog="onClosePhotoDialog"
-   />
+  />
+  <color-dialog
+   :open="state.colorDialogOpen"
+   @closeColorDialog="onCloseColorDialog"
+   @edit-color="editColor"
+  />
 
 </template>
 
@@ -283,6 +339,7 @@ import BirthdayDialog from './components/birthday-dialog.vue'
 import TermsDialog from './components/terms-dialog.vue'
 import PhotoDialog from './components/photo-dialog.vue'
 import _ from 'lodash'
+import ColorDialog from './components/color-dialog.vue'
 
 export default {
   name: 'schedule',
@@ -293,6 +350,8 @@ export default {
     BirthdayDialog,
     TermsDialog,
     PhotoDialog,
+    ColorDialog,
+
   },
 
   setup() {
@@ -336,10 +395,12 @@ export default {
     birthdayDialogOpen : false,
     termsDialogOpen : false,
     photoDialogOpen : false,
+    colorDialogOpen : false,
     beforeteamPicture : '',
     afterteamPicture : '',
     check: JSON.parse(localStorage.getItem('photoUrl')),
-    isLogin: computed(() => store.getters['root/getJWTToken'])
+    isLogin: computed(() => store.getters['root/getJWTToken']),
+
   })
   const beforeschedule = []
   const afterschedule = []
@@ -351,6 +412,8 @@ export default {
   var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   var timerID = setInterval(updateTime, 1000);
   const value = ref(true)
+  var jcolor = ref(1)
+
 
   const checkUserState = function(){
       if(state.isLogin==null){
@@ -376,11 +439,14 @@ export default {
         state.schedulelength = res.data.length
         state.infos = res.data.slice().reverse()
         state.infos = _.sortBy(state.infos, 'dday')
+        console.log(state.infos)
         for (var i = 0; i < state.schedulelength; i++) {
           let tempendday = state.infos[i].endDate
           let enddayday = Number(tempendday.slice(8,10))
-          if (Number(today.slice(8,10)) == enddayday) {
+          if (Number(today.slice(8,10)) === enddayday) {
             todayschedule.push(state.infos[i])
+            console.log(todayschedule)
+            console.log('확인해봐')
           }
           else {
             console.log('No')
@@ -453,6 +519,15 @@ export default {
       state.profileinfo.birthDay = birthday.birthday
     }
 
+    const editColor = (jellyc) =>{
+      jcolor = jellyc.jellyc
+      console.log(jellyc.jellyc)
+      console.log('되는겁니까형씨')
+      console.log(jcolor)
+    }
+
+
+
 
 
   takeProfile()
@@ -472,6 +547,22 @@ export default {
   }
 
   updateTime()
+
+  const changeColor = function () {
+    if (JSON.parse(localStorage.getItem('jelly')) != null) {
+      jcolor = JSON.parse(localStorage.getItem('jelly'))
+    } else {
+      jcolor = 1
+    }
+
+  }
+
+
+
+  console.log(JSON.parse(localStorage.getItem('jelly')))
+  console.log('durldurl')
+
+  changeColor()
 
 
   const onCloseNicknameDialog = function () {
@@ -500,12 +591,17 @@ export default {
     state.photoDialogOpen = false
   }
 
+  const onCloseColorDialog = function () {
+    state.colorDialogOpen = false
+  }
+
   onBeforeMount(() => {
       checkUserState();
+
     })
 
 
-    return {  value, router, takeProfile, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog, onCloseNicknameDialog, editNickname, onCloseBirthdayDialog, createBirthday, onCloseTermsDialog, todayschedule, week, timerID, updateTime, zeroPadding, onClosePhotoDialog }
+    return { editColor, jcolor, value, router, takeProfile, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog, onCloseNicknameDialog, editNickname, onCloseBirthdayDialog, createBirthday, onCloseTermsDialog, todayschedule, week, timerID, updateTime, zeroPadding, onClosePhotoDialog, onCloseColorDialog }
   }
 }
 
@@ -620,11 +716,43 @@ bottom: -21px;
     animation: jumping 1s infinite;
   }
 
-  .loader .body {
+  .loader .body1 {
     width: 80px;
     height: 160px;
     border-radius: 40px;
     background: linear-gradient( to bottom,#32BEBE 60%, yellow);
+    animation: body 1s infinite;
+  }
+
+  .loader .body2 {
+    width: 80px;
+    height: 160px;
+    border-radius: 40px;
+    background: linear-gradient( to bottom,#1E90FF, white);
+    animation: body 1s infinite;
+  }
+
+  .loader .body3 {
+    width: 80px;
+    height: 160px;
+    border-radius: 40px;
+    background: linear-gradient( to bottom,pink 60%, white);
+    animation: body 1s infinite;
+  }
+
+   .loader .body4 {
+    width: 80px;
+    height: 160px;
+    border-radius: 40px;
+    background: linear-gradient( to bottom,#FF5A5A 60%, white);
+    animation: body 1s infinite;
+  }
+
+   .loader .body5 {
+    width: 80px;
+    height: 160px;
+    border-radius: 40px;
+    background: linear-gradient( to bottom,#FFAF0A 60%, white);
     animation: body 1s infinite;
   }
 

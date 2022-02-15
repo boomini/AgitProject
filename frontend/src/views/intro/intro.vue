@@ -64,20 +64,7 @@
           <p class="card-text" style="color: #808080">
             나의 스케줄을 한 눈에 확인 해보세요.
           </p>
-          <div class="demo-collapse">
-            <el-collapse v-model="activeName" accordion>
-              <el-collapse-item title="누르면 실제 서비스 스샷" name="1">
-                <div>
-                  Consistent within interface: all elements should be consistent, such
-                  as: design style, icons and texts, position of elements, etc.
-                </div>
-                <div>
-                  Consistent within interface: all elements should be consistent, such
-                  as: design style, icons and texts, position of elements, etc.
-                </div>
-              </el-collapse-item>
-            </el-collapse>
-          </div>
+
 
         </div>
         <img
@@ -108,20 +95,6 @@
           <p class="card-text" style="color: #808080; width:100%;">
             화상으로 반가운 얼굴들을 만날 수 있습니다.
           </p>
-          <div class="demo-collapse">
-            <el-collapse v-model="activeName" accordion>
-              <el-collapse-item title="누르면 실제 서비스 스샷" name="1">
-                <div>
-                  Consistent within interface: all elements should be consistent, such
-                  as: design style, icons and texts, position of elements, etc.
-                </div>
-                <div>
-                  Consistent within interface: all elements should be consistent, such
-                  as: design style, icons and texts, position of elements, etc.
-                </div>
-              </el-collapse-item>
-            </el-collapse>
-          </div>
 
 
         </div>
@@ -142,20 +115,7 @@
             사진, 동영상, 일정 등을 앨범에 담아보세요.
           </p>
 
-          <div class="demo-collapse">
-            <el-collapse v-model="activeName" accordion>
-              <el-collapse-item title="누르면 실제 서비스 스샷" name="1">
-                <div>
-                  Consistent within interface: all elements should be consistent, such
-                  as: design style, icons and texts, position of elements, etc.
-                </div>
-                <div>
-                  Consistent within interface: all elements should be consistent, such
-                  as: design style, icons and texts, position of elements, etc.
-                </div>
-              </el-collapse-item>
-            </el-collapse>
-          </div>
+
 
         </div>
         <img
