@@ -11,7 +11,7 @@ import router from './common/lib/vue-router'
 import GAuth from 'vue3-google-oauth2'
 import AOS from 'aos';
 import "aos/dist/aos.css";
-
+import jQuery from 'jquery'
 import 'element-plus/packages/theme-chalk/src/base.scss'
 
 // Element UI Components [시작]
@@ -221,4 +221,6 @@ plugins.forEach(plugin => {
 })
 
 app.mount('#app')
+// eslint-disable-next-line no-undef
+global.$ = jQuery;
 

@@ -1,7 +1,7 @@
 
 <template>
   <el-dialog
-    custom-class="screen-share"
+    custom-class="selectback-screen-share"
     v-model="state.dialogVisible"
     @close="handleClose"
     title="Tips"
@@ -127,11 +127,11 @@ export default {
 </script>
 
 <style>
-  .screen-share{
+  .selectback-screen-share{
     position: relative;
     background-color: aliceblue;
-    width: 42vw;
-    height: 70vh;
+    width: 650px;
+    height: 500px;
     transform: translate(0, -20%);
   }
 
