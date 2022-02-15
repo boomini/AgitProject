@@ -77,6 +77,7 @@
             <article-page
               :articleList = state.articleList
               @updateArticle="onUpdateArticle"
+              @deleteArticle="onDeleteArticle"
             />
             <!-- <el-table :data="state.articleList" height="40vh" style="width: 100%">
               <el-table-column prop="index" label="글번호" width="80" />
@@ -160,17 +161,15 @@ export default {
       emit('closeBoard')
     }
 
-    const boardClick = function (data) {
-      alert('board click')
-      console.log('여기 집중')
-      console.log(data)
+    const onDeleteArticle = function () {
+      emit('deleteArticle')
     }
 
     const onUpdateArticle = function (data) {
       emit('updateArticle', data)
     }
 
-    return { state, handleClose, boardClick, onUpdateArticle }
+    return { state, handleClose, onDeleteArticle, onUpdateArticle }
   }
 }
 </script>

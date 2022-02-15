@@ -21,7 +21,7 @@
       <div class="d-flex justify-content-between">
         <div>
           <p style="font-size: 1.1rem;">
-            {{ info.writer }}
+            {{ info.nickName }}
           </p>
         </div>
         <div style="font-size: 40%;">
@@ -37,15 +37,18 @@
       <div style="border-top: 1px solid black; padding-top: 1.5rem; height: 370px;">
         <p style="font-size: 20px;">
           {{ info.content }}
-          {{ info}}
         </p>
       </div>
     </div>
     <!-- footer -->
-    <template #footer>
+    <template #footer v-if="info.writer === state.userId">
       <span class="dialog-footer">
-        <el-button type="primary" @click="updateArticle">수정</el-button>
-        <el-button>삭제</el-button>
+        <el-button type="info" @click="updateArticle" circle>
+          <i class="fa-regular fa-pen-to-square"></i>
+        </el-button>
+        <el-button @click="deleteArticle(info.index)" circle type="danger">
+          <i class="fa-regular fa-trash-can"></i>
+        </el-button>
       </span>
     </template>
   </el-dialog>
@@ -55,6 +58,7 @@
 import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import jwt_decode from 'jwt-decode'
 
 export default {
@@ -103,7 +107,17 @@ export default {
       emit('updateArticle', props.info)
     }
 
-    return { state, handleClose, timeFormat, updateArticle }
+    const deleteArticle = function (index) {
+      console.log('데이터 확인')
+      console.log(props.info.id)
+      const data = {
+        'index': index,
+        'id': props.info.id
+      }
+      emit('deleteArticle', data)
+    }
+
+    return { state, handleClose, timeFormat, updateArticle, deleteArticle}
   }
 
 }

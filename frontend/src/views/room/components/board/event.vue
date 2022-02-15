@@ -1,13 +1,17 @@
 <template>
   <div>
-    <p v-for="(item, index) in eventList" :key="item" :class="[uploadDate === item.endDate ? 'event-item deadline-item' : 'event-item normal-item']" style="text-align: center;" @click="onCellClick(item)">
-    <!-- <p v-for="(item, index) in eventList" :key="item" :class="{'event-item end-item': getToday() > item.endDate, 'event-item deadline-item': getToday() === item.endDate, 'event-item normal-item': getToday() < item.endDate}" style="text-align: center;" @click="onCellClick(item)"> -->
+    <!-- <p v-for="(item, index) in eventList" :key="item" :class="[uploadDate === item.endDate ? 'event-item deadline-item' : 'event-item normal-item']" style="text-align: center;" @click="onCellClick(item)"> -->
+    <p v-for="(item, index) in eventList" :key="item" :class="{'event-item end-item': item.dday < 0, 'event-item deadline-item': item.dday >= 0 && item.dday <= 3, 'event-item normal-item': item.dday > 3}" style="text-align: center;" @click="onCellClick(item)">
       <p>
         {{ item.eventTitle }}
       </p>
-      <p v-if="uploadDate === item.endDate" class="ms-2">
+      <p v-if="item.dday >= 0 && item.dday <= 3" class="ms-2">
         <img :src="require(`@/assets/images/deadline.png`)" alt="" height="30">
       </p>
+      <p v-if="item.dday < 0" class="ms-2">
+        <img :src="require(`@/assets/images/thumbs-up.png`)" alt="" height="30">
+      </p>
+
     </p>
   </div>
   <event-view-dialog
@@ -56,7 +60,23 @@ export default {
       state.eventViewOpen = false
     }
 
-    return { state, onCellClick, onCloseEventView }
+    const getToday = function () {
+      const today = new Date()
+      const year = today.getFullYear()
+      const month = ("0" + (1 + today.getMonth())).slice(-2);
+      const day = ("0" + today.getDate()).slice(-2);
+
+      return `${year}-${month}-${day}`
+    }
+
+    const dayDiff = function(sd, ed) {
+      var sdt = new Date(sd);
+      var edt = new Date(ed);
+      var dateDiff = Math.ceil((edt.getTime() - sdt.getTime()) / (1000*3600*24));
+      return dateDiff
+    }
+
+    return { state, onCellClick, onCloseEventView, getToday, dayDiff }
   }
 }
 </script>
@@ -102,11 +122,13 @@ export default {
 }
 
 .end-item {
-  background-color: green;
+  background-color: #31cd31;
+  color: white;
+  border: 1px solid #28ad28;
 }
 
 .end-item:hover {
-  background-color: black;
+  background-color: #1d871d;
   transition: 0.1s;
 }
 

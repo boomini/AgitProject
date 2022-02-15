@@ -222,6 +222,16 @@ export function updateArticle ({ state }, payload) {
   })
 }
 
+// 게시글 삭제
+export function deleteArticle ({ state }, payload) {
+  const id = payload
+  const url = `article/${id}`
+  return $axios({
+    method: 'delete',
+    url: url
+  })
+}
+
 // 유저 한달 일정 가져오기
 export function getSchedule ({ state }, payload) {
   // console.log('getTeamInfo', state, payload)

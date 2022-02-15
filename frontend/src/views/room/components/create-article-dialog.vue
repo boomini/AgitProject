@@ -4,6 +4,7 @@
     v-model="state.dialogVisible"
     @close="handleClose"
     width="30%"
+    :destroy-on-close="true"
   >
     <!-- header -->
     <template #title>
@@ -27,15 +28,17 @@
               v-if="isUpdated"
               value-format="YYYY-MM-DD"
               placeholder="일자를 선택해주세요."
+              disabled
             >
             </el-date-picker>
             <el-date-picker
               style="width: 100%;"
-              v-model="registerDate"
+              v-model="state.form.uploadDate"
               v-else
               type="date"
               value-format="YYYY-MM-DD"
               placeholder="일자를 선택해주세요."
+              disabled
             >
             </el-date-picker>
           </el-form-item>
@@ -62,7 +65,7 @@
     <template #footer>
       <span v-if="isUpdated">
         <el-button @click="handleClose">취소</el-button>
-        <el-button @click="updateArticle">수정하기</el-button>
+        <el-button type="info" @click="updateArticle">게시글 수정</el-button>
       </span>
       <span v-else>
         <el-button @click="handleClose">취소</el-button>
@@ -113,8 +116,11 @@ export default {
         uploadDate: computed(() => props.registerDate),
       },
       rules: {
-        schedule: [
+        uploadDate: [
           { required: true, message: '날짜 선택은 필수입니다.', trigger: 'blur'}
+        ],
+        title: [
+          { required: true, message: '제목 입력은 필수입니다.', trigger: 'blur'}
         ],
         content: [
           { required: true, message: '내용 입력은 필수입니다.', trigger: 'blur'}
@@ -124,6 +130,7 @@ export default {
     })
 
     const handleClose = function () {
+      emit('closeCreateArticleDialog')
       props.article = {
         content: '',
         createdTime: '',
@@ -136,7 +143,6 @@ export default {
         uploadDate: '',
         writer: '',
       }
-      emit('closeCreateArticleDialog')
     }
 
     const createArticle = function () {
@@ -201,10 +207,10 @@ export default {
       store.dispatch('root/updateArticle', payload)
       .then(function (result) {
         console.log('게시글 수정 완료')
-        emit('createArticle')
+        emit('updateArticle', uploadDate)
         swal({
-          title: "게시글 등록",
-          text: "게시글이 등록되었습니다.",
+          title: "게시글 수정",
+          text: "게시글이 수정되었습니다.",
           icon: "success",
           button: "확인",
         })
@@ -216,7 +222,7 @@ export default {
       handleClose()
     }
 
-    return { state, handleClose, createArticleForm, createArticle }
+    return { state, handleClose, createArticleForm, createArticle, updateArticle }
   }
 }
 </script>

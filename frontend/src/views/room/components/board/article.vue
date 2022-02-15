@@ -7,7 +7,7 @@
     </template>
     <el-table-column prop="index" label="글번호" width="80" type="a"/>
     <el-table-column prop="title" label="글제목" width="180"/>
-    <el-table-column prop="writer" label="작성자" />
+    <el-table-column prop="nickName" label="작성자" />
     <!-- <el-table-column fixed="right" width="120">
       <template #default="scope">
         <el-button
@@ -27,6 +27,7 @@
     :open="state.articleViewOpen"
     :info="state.article"
     @closeArticleView="onCloseArticleView"
+    @deleteArticle="onDeleteArticle"
     @updateArticle="onUpdateArticle"/>
 </template>
 
@@ -93,8 +94,10 @@ export default {
       emit('updateArticle', data)
     }
 
-    const deleteRow = function (index, data) {
-      onCloseArticleView()
+    const onDeleteArticle = function (data) {
+      console.log('게시글 삭제 article.vue')
+      // console.log(props.articleList.splice(data.index - 1, 1))
+      console.log(data.id)
 
       ElMessageBox.confirm(
         '해당 게시글을 삭제하시겠습니까?',
@@ -106,27 +109,34 @@ export default {
         }
       )
         .then(() => {
-          props.articleList.splice(index, 1)
-          ElMessage({
-            type: 'success',
-            message: 'Delete completed',
+          onCloseArticleView()
+          props.articleList.splice(data.index - 1, 1)
+          store.dispatch('root/deleteArticle', data.id)
+          .then(function (result) {
+            console.log('게시글 삭제')
+            console.log(result)
+            emit('deleteArticle')
+            ElMessage({
+              type: 'success',
+              message: '게시글이 삭제되었습니다.',
+            })
           })
         })
         .catch(() => {
           ElMessage({
             type: 'info',
-            message: 'Delete canceled',
+            message: '삭제 실패',
           })
         })
+
       // console.log('버튼 클릭')
 
       // console.log(state.articleTable)
       // console.log(index)
-      console.log(data)
       // preventDe
     }
 
-    return { state, setCurrentPage, onCellClick, onCloseArticleView, deleteRow, onUpdateArticle }
+    return { state, setCurrentPage, onCellClick, onCloseArticleView, onDeleteArticle, onUpdateArticle }
   }
 }
 </script>
@@ -149,6 +159,7 @@ export default {
 .el-table .el-table__body tr:hover {
   transition: 0.1s;
   font-size: 15px;
+  cursor: default;
 }
 
 .el-pagination {

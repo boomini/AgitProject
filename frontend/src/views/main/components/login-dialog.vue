@@ -106,6 +106,7 @@
 .kakao-btn{
   background-image: url('../../../assets/images/kakaoicon.png');
 }
+
 </style>
 <script>
 import { reactive, computed, ref, onMounted } from 'vue'
