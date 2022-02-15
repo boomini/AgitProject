@@ -225,7 +225,6 @@ export default {
 <style>
   .main-header {
     padding: 10px 20px;
-    height: 9.5vh !important;
   }
   /*Mobile, Tablet*/
   .menu-icon-wrapper {
