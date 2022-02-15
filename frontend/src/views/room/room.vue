@@ -53,7 +53,7 @@
                 {{ data.day.split('-')[2] }}
               </span>
               <span class="col-3 button-on-calendar">
-                <el-dropdown>
+                <el-dropdown trigger="click">
                   <span class="el-dropdown-link">
                     <i class="el-icon-plus"></i>
                   </span>

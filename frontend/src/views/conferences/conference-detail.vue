@@ -154,6 +154,9 @@
   </div>
 </template>
 <style>
+#conference-name {
+  text-align: center;
+}
 .join-room{
   margin-top: 20vh;
   margin-left: 29vw;
