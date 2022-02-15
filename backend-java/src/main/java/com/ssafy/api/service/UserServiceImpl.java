@@ -155,5 +155,10 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	@Override
+	public void updateUserProfileByUserId(String userId, User user) {
+		userRepository.save(user);
+	}
+
 
 }
