@@ -210,7 +210,7 @@ export default {
 </script>
 
 <style scoped>
-  @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,700&display=swap');
+  /* @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,700&display=swap');
   body {
     font-family: 'Roboto', sans-serif;
   }
@@ -225,5 +225,5 @@ export default {
   .button-container > * {
     margin-top: 15px;
     margin-right: 10px;
-  }
+  } */
 </style>

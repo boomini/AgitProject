@@ -19,7 +19,7 @@
   <!-- <div class="view chat" v-else> -->
   <div class="view chat" style="margin-bottom: 130px" >
     <header>
-      <!-- <button class="logout" @click="Logout">Logout</button> -->
+      <button class="logout" @click="Logout">Logout</button>
       <h1>Welcome, {{ state.nickName }}</h1>
     </header>
 
@@ -53,13 +53,14 @@
 <script>
 import { reactive, onMounted, ref } from 'vue';
 import db from '../../db';
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 export default {
 
   name:'chatting',
 
   setup () {
     const route = useRoute()
+    const router = useRouter()
     const inputUsername = ref('');
     const inputMessage = ref('');
 
@@ -78,7 +79,12 @@ export default {
     }
 
     const Logout = () => {
-      state.username = '';
+      router.push({
+        name: 'room-board',
+        params:{
+          roomId: route.params.roomId,
+        }
+      })
     }
 
 
