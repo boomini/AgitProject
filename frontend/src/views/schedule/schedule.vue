@@ -285,7 +285,7 @@
         </div>
         <div class="hero-img-container rounded-3" style="margin-top: 60px">
           <img :src=state.profileinfo.profileImg v-if="state.profileinfo.profileImg!=null" class="hero-img rounded-3">
-          <img src='https://drive.google.com/uc?id=15iXUI6DkRr5Zcp0yH5uF2U47ycr-WzUY' v-else-if="state.profileinfo.profileImg==null" class="hero-img rounded-3">
+          <img :src="require('@/assets/images/agit_logo.png')" v-else-if="state.profileinfo.profileImg==null" class="hero-img rounded-3">
         </div>
         <div class="d-flex justify-content-center">
           <el-button type="text" style="min-height:15px; padding: 10px; font-size: 1.5rem;"  @click="state.photoDialogOpen = true"><i class="em em-camera_with_flash" style="margin-bottom:6px" aria-role="presentation" aria-label="CAMERA WITH FLASH"></i> 이미지 변경</el-button>

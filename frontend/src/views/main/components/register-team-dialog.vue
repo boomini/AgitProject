@@ -122,6 +122,7 @@ export default {
       state.form.teamName = ''
     //  state.form.teamPassword = ''
       state.form.teamDescription = ''
+      state.form.teamPicture=''
     //  state.form.teamPicture = null
     //  state.form.teamMember = ''
     inputImage.value.clearFiles()
