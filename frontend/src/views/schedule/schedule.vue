@@ -484,7 +484,7 @@ export default {
             }
           }
         state.pros.beforepro.push(beforeschedule[beforeday])
-        state.beforeteamPicture = 'http://localhost:8080/api/v1/team/profileimg/'+state.pros.beforepro[0].teamId
+        state.beforeteamPicture = 'https://i6a403.p.ssafy.io/api/v1/team/profileimg/'+state.pros.beforepro[0].teamId
         }
         console.log(state.pros.beforepro)
         console.log('dfdfdf')
@@ -499,7 +499,7 @@ export default {
           console.log(afterday)
           console.log('yessssss')
           state.pros.afterpro.push(afterschedule[afterday])
-          state.afterteamPicture = 'http://localhost:8080/api/v1/team/profileimg/'+state.pros.afterpro[0].teamId
+          state.afterteamPicture = 'https://i6a403.p.ssafy.io/api/v1/team/profileimg/'+state.pros.afterpro[0].teamId
         }
       })
       .catch(err => {
@@ -520,7 +520,7 @@ export default {
         /*이미지 가져오기!!!!!!!!!!!! */
         if(state.profileinfo.profileImg.slice(0,4)!='http'){
           //구글에서가져오지 않고, 저장된 이미지가 있을때
-          state.profileinfo.profileImg = 'http://localhost:8080/api/v1/user/profileimg/'+state.profileinfo.id;
+          state.profileinfo.profileImg = 'https://i6a403.p.ssafy.io/api/v1/user/profileimg/'+state.profileinfo.id;
         }else {
           //저장된 이미지 없이 default img
           state.profileinfo.profileImg = require('@/assets/images/agit_logo.png')
@@ -544,9 +544,8 @@ export default {
     }
 
     const editMyPhoto = () => {
-      state.profileinfo.profileImg = 'http://localhost:8080/api/v1/user/profileimg/'+state.profileinfo.id
+      state.profileinfo.profileImg = 'https://i6a403.p.ssafy.io/api/v1/user/profileimg/'+state.profileinfo.id
       console.log(state.profileinfo.profileImg)
-      console.log('흠흠 되고잇나')
     }
 
     const createBirthday = (birthday) => {
