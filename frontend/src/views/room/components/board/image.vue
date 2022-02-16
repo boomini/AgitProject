@@ -75,10 +75,7 @@ export default {
   color: var(--el-color-danger);
 }
 
-.el-scrollbar__bar {
-  background-color: black;
-  --el-scrollbar-background-color: black;
-}
+
 /* .is-horizontal {
   color: black;
 } */

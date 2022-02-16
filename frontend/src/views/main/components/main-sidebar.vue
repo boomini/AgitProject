@@ -181,7 +181,11 @@
   border-left:10px solid #36393f;
   border-radius: 10px;
 }
-
+.el-scrollbar__bar {
+  /* background-color: black;
+  --el-scrollbar-background-color: black; */
+  display: none;
+}
 
 </style>
 <script>

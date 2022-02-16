@@ -132,7 +132,7 @@
                 </el-tooltip>
             </div>
             <!--그림그리기 버튼-->
-            <div>
+            <!-- <div>
                 <el-tooltip
                   class="box-item"
                   effect="dark"
@@ -141,7 +141,7 @@
                 >
               <i class="fa-solid fa-pen custom-icon share-icon text-center"  @click="screenshot"></i>
                 </el-tooltip>
-            </div>
+            </div> -->
         </div>
       </div>
       <select-back-img-dialog :open="state.backImgDialogOpen"
