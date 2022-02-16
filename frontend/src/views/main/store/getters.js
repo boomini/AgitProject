@@ -15,3 +15,7 @@ export function getActiveMenuIndex (state) {
 export function getJWTToken (state) {
   return state.JWTToken
 }
+
+export function getTeams (state) {
+  return state.userTeams
+}

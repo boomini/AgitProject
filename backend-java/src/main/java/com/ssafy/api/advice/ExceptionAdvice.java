@@ -1,11 +1,8 @@
 package com.ssafy.api.advice;
 
 
-import com.ssafy.api.advice.exception.CArticleNotFoundException;
-import com.ssafy.api.advice.exception.CTokenForbiddenException;
+import com.ssafy.api.advice.exception.*;
 
-import com.ssafy.api.advice.exception.CUserDuplicateException;
-import com.ssafy.api.advice.exception.CUserNotFoundException;
 import com.ssafy.common.model.response.BaseResponseBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -49,5 +46,11 @@ public class ExceptionAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ResponseEntity<? extends BaseResponseBody> articleNotFoundException(HttpServletRequest request, CArticleNotFoundException e){
         return ResponseEntity.status(401).body(BaseResponseBody.of(401, "해당 게시글이 존재하지 않습니다."));
+    }
+
+    @ExceptionHandler(CFileNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    protected ResponseEntity<? extends BaseResponseBody> fileNotFoundException(HttpServletRequest request, CArticleNotFoundException e){
+        return ResponseEntity.status(401).body(BaseResponseBody.of(401, "해당 파일이 존재하지 않습니다."));
     }
 }
