@@ -7,7 +7,7 @@
             <br>
             팀: {{ info.teamName }}<br><br>
             약속 제목: {{ info.eventTitle }}<br><br>
-            약속 날짜: {{ info.endDate.slice(6, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br><br>
+            약속 날짜: {{ info.endDate.slice(5, 7) }}월 {{ info.endDate.slice(8, 11) }}일<br><br>
             D-day: {{ info.dday }}일 <br>
           </h5>
         </el-carousel-item>
@@ -21,7 +21,7 @@
           팀: {{ info.teamName }} <br><br>
           약속 제목: {{ info.eventTitle }} <br>
           약속 내용: {{ info.eventContent }} <br><br>
-          약속 날짜: {{ info.endDate.slice(6, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br>
+          약속 날짜: {{ info.endDate.slice(5, 7) }}월 {{ info.endDate.slice(8, 11) }}일<br>
           D-day: {{ info.dday }}일 <br>
         </h5>
       </el-carousel-item>
@@ -35,7 +35,7 @@
           팀: {{ info.teamName }} <br><br>
           약속 제목: {{ info.eventTitle }} <br>
           약속 내용: {{ info.eventContent }} <br><br>
-          약속 날짜: {{ info.endDate.slice(6, 7) }}월 {{ info.endDate.slice(9, 11) }}일<br>
+          약속 날짜: {{ info.endDate.slice(5, 7) }}월 {{ info.endDate.slice(8, 11) }}일<br>
           D-day: {{ info.dday }}일 <br>
         </h5>
       </el-carousel-item>

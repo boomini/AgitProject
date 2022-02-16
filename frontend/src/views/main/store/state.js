@@ -40,9 +40,9 @@ export default {
   secretName: null,
   currentMode: 'anonymous',
   imageList:[
-    'http://localhost:8080/dist/img/backImg1.png',
-    'http://localhost:8080/dist/img/backImg2.jpg',
-    'http://localhost:8080/dist/img/backImg3.PNG'
+    require('@/assets/images/backImg1.png'),
+    require('@/assets/images/backImg2.jpg'),
+    require('@/assets/images/backImg3.png')
   ],
   chattingRoomId: '',
   nickName: ''

@@ -17,8 +17,8 @@
           <div class="d-flex flex-wrap mx-3">
             <div :class="{selectedActive:getActive(index)}" class = "d-flex flex-column align-items-center mx-3 my-2 backimglist" v-for="(item, index) in store.state.root.imageList"
             :key="item">
-              <img :src=item style="width:150px; height:100px;"  @click="imageSelect(index,item)"/>
-              <div v-if="index>=3" class="d-flex align-items-right" id="imgDeleteBtn" @click="deleteImg(index)"><i  class="fa-solid fa-xmark"></i></div>
+              <img :src="item" style="width:150px; height:100px;"  @click="imageSelect(index,item)"/>
+              <div class="d-flex align-items-right" id="imgDeleteBtn" @click="deleteImg(index)"><i  class="fa-solid fa-xmark"></i></div>
             </div>
             <div v-if="store.state.root.imageList.length<6" class = "d-flex flex-column align-items-center mx-3 my-2">
                 <el-upload
