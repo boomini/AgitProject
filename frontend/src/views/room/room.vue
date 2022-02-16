@@ -79,7 +79,7 @@
                 {{ data.day.split('-')[2] }}
               </span>
               <span class="col-3 button-on-calendar">
-                <el-dropdown trigger="click">
+                <el-dropdown>
                   <span class="el-dropdown-link">
                     <i class="el-icon-plus"></i>
                   </span>
@@ -546,8 +546,17 @@ export default {
     }
 
     const onOpenCreateScheduleDialog = function (val) {
-      state.registerDate = val
-      state.createScheduleDialogOpen = true
+      if (val in state.dict.eventDictEnd && state.dict.eventDictEnd[val].length >= 3) {
+        swal({
+          title: "약속이 너무 많아요...",
+          text: "바쁘게 사는 것도 좋지만, 여유를 가져보는 것은 어떨까요?",
+          icon: "warning",
+          button: "쉬러가기",
+        })
+      } else {
+        state.registerDate = val
+        state.createScheduleDialogOpen = true
+      }
     }
 
     const onCloseCreateScheduleDialog = function () {

@@ -154,6 +154,6 @@ export default {
 <style>
 .upload-video-dialog {
   width: 700px;
-  height: 600px;
+  height: 350px !important;
 }
 </style>

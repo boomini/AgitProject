@@ -44,7 +44,7 @@
           <el-form-item prop="title" label="제목">
             <el-input
               v-model="state.form.title"
-              maxlength="20"
+              maxlength="12"
               placeholder="약속의 제목을 입력해주세요."
               show-word-limit
               rows="1"
@@ -189,7 +189,7 @@ export default {
 <style>
 .create-schedule-dialog {
   width: 700px;
-  height: 1200px;
+  height: 450px !important;
 }
 
 
