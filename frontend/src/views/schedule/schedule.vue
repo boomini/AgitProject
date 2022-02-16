@@ -28,7 +28,7 @@
     </el-carousel>
     </div>
     <div v-else-if = "state.infos.length === 1">
-      <el-carousel height="100px" direction="vertical" :autoplay="false">
+      <el-carousel height="200px" direction="vertical" :autoplay="false">
         <el-carousel-item v-for="info in state.infos" :key="info.startDate">
         <h5>
           <br>
@@ -249,8 +249,8 @@
         </div>
       </div>
       <div class="iphone" style="margin-left: -50px">
-        <div class="header">
-          <div class="order-summary" style="position: relative">
+        <div class="header" >
+          <div class="order-summary" style="position: relative; margin-top: 130px;">
             <div class="order-status">ID: {{ state.profileinfo.userId }}</div>
              <!-- <div class="order-date">
             닉네임: {{ state.profileinfo.nickName }}<el-button type="text" style=" min-height: 15px; padding: 10px; font-size: 1.5rem; z-index:9000;" @click="state.nicknameDialogOpen = true">수정하기</el-button>
@@ -269,27 +269,34 @@
             <div>
             <div class="order-day" v-if="state.profileinfo.nickName == ''">
             오리너구리의 생일: {{ state.profileinfo.birthDay }}
+            <div class="order-day">
+              <el-button type="text" style=" min-height:15px;font-size: 1.5rem;" @click="state.termsDialogOpen = true"><i style="margin-bottom: 5px" class="em em-book" aria-role="presentation" aria-label="OPEN BOOK"></i> 이용약관 확인하기</el-button>
+            </div>
             </div>
             <div class="order-day" v-else-if="state.profileinfo.nickName != null">
-
             {{ state.profileinfo.nickName }}의 생일: {{ state.profileinfo.birthDay }}
+            <div class="order-day">
+              <el-button type="text" style=" min-height:15px;font-size: 1.5rem;" @click="state.termsDialogOpen = true"><i style="margin-bottom: 5px" class="em em-book" aria-role="presentation" aria-label="OPEN BOOK"></i> 이용약관 확인하기</el-button>
             </div>
             </div>
+            </div>
+
           </div>
         </div>
-        <div class="hero-img-container">
-          <img src="https://drive.google.com/uc?id=15iXUI6DkRr5Zcp0yH5uF2U47ycr-WzUY" class="hero-img">
+        <div class="hero-img-container rounded-3" style="margin-top: 60px">
+          <img :src=state.profileinfo.profileImg v-if="state.profileinfo.profileImg!=null" class="hero-img rounded-3">
+          <img src='https://drive.google.com/uc?id=15iXUI6DkRr5Zcp0yH5uF2U47ycr-WzUY' v-else-if="state.profileinfo.profileImg==null" class="hero-img rounded-3">
         </div>
-        <div class="d-flex justify-content-end" style="margin-right: 20px;">
-          <el-button type="text" style="min-height:15px; padding: 10px; font-size: 1.5rem;"  @click="state.photoDialogOpen = true">이미지 변경</el-button>
+        <div class="d-flex justify-content-center">
+          <el-button type="text" style="min-height:15px; padding: 10px; font-size: 1.5rem;"  @click="state.photoDialogOpen = true"><i class="em em-camera_with_flash" style="margin-bottom:6px" aria-role="presentation" aria-label="CAMERA WITH FLASH"></i> 이미지 변경</el-button>
         </div>
         <!-- <div>
           <img :src=state.check alt="">
           <p>{{ state.check }}</p>
         </div> -->
-        <div class="d-flex justify-content-center" style="margin-top: 10vh; position: relative;">
-          <el-button type="text" style=" min-height:15px; padding: 10px; font-size: 1.5rem;" @click="state.termsDialogOpen = true">이용약관 확인하기</el-button>
-        </div>
+        <!-- <div class="d-flex justify-content-center" style="margin-top:10%; position: relative;">
+          <el-button type="text" style=" min-height:15px; padding: 10px; font-size: 1.5rem;" @click="state.termsDialogOpen = true"><i class="em em-book" aria-role="presentation" aria-label="OPEN BOOK"></i> 이용약관 확인하기></el-button>
+        </div> -->
       </div>
     </div>
 
@@ -324,6 +331,7 @@
   <photo-dialog
     :open="state.photoDialogOpen"
     @closePhotoDialog="onClosePhotoDialog"
+    @edit-my-photo="editMyPhoto"
   />
   <color-dialog
    :open="state.colorDialogOpen"
@@ -384,7 +392,7 @@ export default {
         cdate: '1970-01-01',
         emailType: '',
         password: '',
-        profileImg:''
+        profileImg:'https://drive.google.com/uc?id=15iXUI6DkRr5Zcp0yH5uF2U47ycr-WzUY'
       },
     clock : {
         time: '',
@@ -508,15 +516,16 @@ export default {
       store.dispatch('root/getProfile', token)
       .then(res => {
         state.profileinfo = res.data
-
-
+        console.log(state.profileinfo)
         /*이미지 가져오기!!!!!!!!!!!! */
         if(state.profileinfo.profileImg.slice(0,4)!='http'){
           //구글에서가져오지 않고, 저장된 이미지가 있을때
           state.profileinfo.profileImg = 'http://localhost:8080/api/v1/user/profileimg/'+state.profileinfo.id;
-        }else if(state.profileinfo.profileImg==null){
+        }else {
           //저장된 이미지 없이 default img
-          state.profileinfo.profileImg = 'http://localhost:8080/api/v1/user/profileimg/0';
+          state.profileinfo.profileImg = 'https://drive.google.com/uc?id=15iXUI6DkRr5Zcp0yH5uF2U47ycr-WzUY'
+          console.log(state.profileinfo.profileImg)
+          console.log('디폴트');
         }
         console.log("이런식으로 이미지 가져와!!!!")
         console.log(state.profileinfo.profileImg);
@@ -534,15 +543,18 @@ export default {
       state.profileinfo.nickName = nickname.nickname
     }
 
+    const editMyPhoto = () => {
+      state.profileinfo.profileImg = 'http://localhost:8080/api/v1/user/profileimg/'+state.profileinfo.id
+      console.log(state.profileinfo.profileImg)
+      console.log('흠흠 되고잇나')
+    }
+
     const createBirthday = (birthday) => {
       state.profileinfo.birthDay = birthday.birthday
     }
 
     const editColor = (jellyc) =>{
       jcolor = jellyc.jellyc
-      console.log(jellyc.jellyc)
-      console.log('되는겁니까형씨')
-      console.log(jcolor)
     }
 
 
@@ -577,10 +589,6 @@ export default {
   }
 
 
-
-  console.log(JSON.parse(localStorage.getItem('jelly')))
-  console.log('durldurl')
-
   changeColor()
 
 
@@ -608,7 +616,7 @@ export default {
 
   const onClosePhotoDialog = function () {
     state.photoDialogOpen = false
-    takeProfile();
+
   }
 
   const onCloseColorDialog = function () {
@@ -617,11 +625,12 @@ export default {
 
   onBeforeMount(() => {
       checkUserState();
+      takeProfile();
 
     })
 
 
-    return { editColor, jcolor, value, router, takeProfile, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog, onCloseNicknameDialog, editNickname, onCloseBirthdayDialog, createBirthday, onCloseTermsDialog, todayschedule, week, timerID, updateTime, zeroPadding, onClosePhotoDialog, onCloseColorDialog }
+    return { editMyPhoto, editColor, jcolor, value, router, takeProfile, state, beforeschedule, afterschedule, beforeday, afterday, takeSchdule, onCloseAfterDialog, onCloseBeforeDialog, onCloseNicknameDialog, editNickname, onCloseBirthdayDialog, createBirthday, onCloseTermsDialog, todayschedule, week, timerID, updateTime, zeroPadding, onClosePhotoDialog, onCloseColorDialog }
   }
 }
 
@@ -747,6 +756,7 @@ bottom: -25px;
 
   .loader .jelly {
     animation: jumping 1s infinite;
+    cursor:pointer
   }
 
   .loader .body1 {
@@ -1065,7 +1075,7 @@ bottom: -25px;
   margin: auto;
   display: block;
   width: 100%;
-  height: 67vh;
+  height: 65vh;
   background: rgb(190, 231, 232);
   background: linear-gradient(
     158deg,
@@ -1080,7 +1090,7 @@ bottom: -25px;
   margin: auto;
   display: block;
   width: 100%;
-  height: 67vh;
+  height: 65vh;
   background: rgb(190, 231, 232);
   background: linear-gradient(
     158deg,
@@ -1410,7 +1420,7 @@ a {
 
 .iphone {
   background-color: #F4F4FB;
-  height:83.7vh;
+  height:81.3vh;
   width: 78vh;
   /* overflow: hidden; */
   position: relative;
@@ -1467,7 +1477,9 @@ a {
 }
 
 .hero-img {
-  width: 80%;
+  width: 80% !important;
+  height: 80% !important;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
 }
 
 /* .img-photo {
