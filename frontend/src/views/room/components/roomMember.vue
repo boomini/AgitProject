@@ -23,7 +23,7 @@
         <!-- <div>멤 버</div> -->
         <p class="mt-3">멤버 목록</p>
         <div v-for="member in state.teamMembers" :key="member.id" class="d-flex align-items-center">
-          <div class="d-flex align-items-center mt-2" style="margin-left:10px" @click="clickChat(member.id)">
+          <div class="d-flex align-items-center mt-2 pointer" style="margin-left:10px" @click="clickChat(member.id)">
             <el-avatar :size="43" :src=member.profileImg></el-avatar>
             <span style="height: 50px; line-height: 50px; margin-left:10px">
               {{ member.name }}
@@ -156,5 +156,8 @@ export default {
 }
 .member-icon:hover{
   transform: scale(1.6);
+}
+.pointer{
+  cursor: pointer;
 }
 </style>
