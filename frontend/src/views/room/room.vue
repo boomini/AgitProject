@@ -12,6 +12,10 @@
               <h3>{{ state.team.teamName }}</h3>
               <p>{{ state.team.teamDescription }}</p>
             </div>
+            <div>
+              <div v-if="state.team.confState" id="agit-on" class="d-flex justify-content-center align-items-center">아지트 ON</div>
+              <div v-else id="agit-off" class="d-flex justify-content-center align-items-center">아지트 OFF</div>
+            </div>
           </div>
 
           <div class="d-flex flex-column">
@@ -880,5 +884,23 @@ export default {
 .el-dropdown:hover {
   background-color: #cbced4;
   color: #ffffff;
+}
+#agit-on{
+  border-style: solid;
+  border-radius: 20px;
+  font-size: 12px;
+  width: 80px;
+  height: 30px;
+  background-color: #f56c6c;
+  margin-left: 1.5vh;
+}
+#agit-off{
+  border-style: solid;
+  border-radius: 20px;
+  font-size: 12px;
+  width: 80px;
+  height: 30px;
+  background-color: #717275;
+  margin-left: 1.5vh;
 }
 </style>
