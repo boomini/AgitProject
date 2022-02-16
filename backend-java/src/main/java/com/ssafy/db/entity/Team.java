@@ -30,6 +30,8 @@ public class Team extends BaseEntity{
     String teamPicture; // 팀 썸네일
     String teamBoss; //팀장 이름
 
+    Boolean confState; // 회의 개설 여부
+
     public Team(){}
 
     @OneToMany(mappedBy = "team")
@@ -86,12 +88,13 @@ public class Team extends BaseEntity{
     }
 
     @Builder
-    public Team(Long id, String teamName,  String teamDescription, String teamPicture,  String teamBoss){
+    public Team(Long id, String teamName,  String teamDescription, String teamPicture,  String teamBoss, Boolean confState){
         this.id = id;
         this.teamName = teamName;
         this.teamDescription = teamDescription;
         this.teamPicture = teamPicture;
         this.teamBoss = teamBoss;
+        this.confState = confState;
     }
 
 }

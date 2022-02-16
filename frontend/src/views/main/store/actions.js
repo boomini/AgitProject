@@ -160,6 +160,20 @@ export function takeMember ({ state }, payload) {
   return $axios({ method: 'get', url: url})
 }
 
+// 회의실 상태 변경
+export function changeConfStateTrue({ state }, payload){
+  const teamId = payload.teamId
+  const url = `/team/${teamId}/confState/true`
+
+  return $axios({ method: 'post', url: url})
+}
+
+export function changeConfStateFalse({ state }, payload){
+  const teamId = payload.teamId
+  const url = `/team/${teamId}/confState/false`
+
+  return $axios({ method: 'post', url: url})
+}
 
 // 게시판
 // 특정 달의 달력 개요(일정) 가져오기

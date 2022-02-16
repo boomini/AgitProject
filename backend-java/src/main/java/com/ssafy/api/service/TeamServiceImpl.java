@@ -41,6 +41,7 @@ public class TeamServiceImpl implements TeamService{
         if (user == null){
             return false;
         }
+        teamDto.setConfState(false);
         Team team = teamDto.toEntity();
         System.out.println(team);
         UserTeam userTeam = new UserTeam();
@@ -146,6 +147,20 @@ public class TeamServiceImpl implements TeamService{
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void changeConfStateToTrue(Long teamId) {
+        Team team = teamRepositorySupport.findTeamByTeamId(teamId).get();
+        team.setConfState(true);
+        teamRepository.save(team);
+    }
+
+    @Override
+    public void changeConfStateToFalse(Long teamId) {
+        Team team = teamRepositorySupport.findTeamByTeamId(teamId).get();
+        team.setConfState(false);
+        teamRepository.save(team);
     }
 
 }

@@ -329,4 +329,18 @@ public class TeamController {
         return ResponseEntity.status(200).body(eventResDtoList);
 
     }
+
+    @PostMapping("/{teamId}/confState/true")
+    @ApiOperation(value = "회의 상태 true로 변경", notes = "teamId로 접근")
+    public ResponseEntity<? extends BaseResponseBody> changeConfStateTrue(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId){
+        teamService.changeConfStateToTrue(teamId);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+    }
+
+    @PostMapping("/{teamId}/confState/false")
+    @ApiOperation(value = "회의 상태 false로 변경", notes = "teamId로 접근")
+    public ResponseEntity<? extends BaseResponseBody> changeConfStateFalse(@ApiParam(value = "teamId", required = true) @PathVariable("teamId") Long teamId){
+        teamService.changeConfStateToFalse(teamId);
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+    }
 }

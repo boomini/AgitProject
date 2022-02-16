@@ -22,4 +22,8 @@ public interface TeamService {
     void changeTeamMemberReject(Long teamId, String userId);
 
     boolean checkStateIfTeamPossible(Long teamId);
+
+    void changeConfStateToTrue(Long teamId);
+    void changeConfStateToFalse(Long teamID);
+
 }

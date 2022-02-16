@@ -50,6 +50,7 @@ import { useRouter } from 'vue-router'
 
 export default {
   name: 'photo-dialog',
+  emits: ['edit-my-photo'],
   props: {
     open: {
       type: Boolean,
@@ -91,6 +92,8 @@ export default {
         for (let i=0; i<state.form.images.length; i++){
           formData.append('upfile', state.form.images[i].file);
         }
+        console.log(state.form.images[0])
+        console.log('ㅇㅇㅇ')
 
         store.dispatch('root/changeUserProfileImage',{ 'formData': formData, 'token': state.isLogin})
       .then(res => {
@@ -102,12 +105,15 @@ export default {
                   button: '확인',
                 });
               }, 500)
-
-              // router.go(router.currentRoute)
+              console.log('요기요')
               console.log(res)
               // console.log(swal)
               // emit('createImage')
+              emit('edit-my-photo', {
+                nickname: 1,
+              })
               handleClose()
+              router.go(router.currentRoute)
         })
         .catch(err => {
           console.log(err)

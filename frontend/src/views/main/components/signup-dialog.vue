@@ -54,7 +54,7 @@
 </template>
 <style>
 .signup-dialog {
-  transform: translate(0, -10%) !important;
+  /* transform: translate(0, -10%) !important; */
   width: 500px !important;
   height: 550px !important;
 }

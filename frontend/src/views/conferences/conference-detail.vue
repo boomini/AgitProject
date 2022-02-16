@@ -156,6 +156,9 @@
   </div>
 </template>
 <style>
+#conference-name {
+  text-align: center;
+}
 .join-room{
   margin-top: 20vh;
   margin-left: 29vw;
@@ -424,6 +427,9 @@ export default {
     const closeSession = function () {
       // publisher가 본인 ////
       // 나머지가 subscirbers == 0//
+      if (state.subscribers.length === 0){
+        changeConfStateFalse()
+      }
       leaveSession();
       router.push({
         name: "room-board",
@@ -460,6 +466,7 @@ export default {
     const joinSession = function () {
       // 팀정보 0 = > 1로 바꾸어줌
       // vuex store에서 해당 팀에 상태 toggle (본인이 팀 추가할때마다 vuex store에 추가)
+      changeConfStateTrue()
       state.OV = new OpenVidu();
       state.session = state.OV.initSession();
       state.session.on("streamCreated", ({ stream }) => {
@@ -904,11 +911,31 @@ export default {
           state.captureImgDialogOpen=true;
       }
     }
+    // 회의실 상태 toggle
+    const changeConfStateTrue = function (){
+      console.log("도전")
+      store.dispatch('root/changeConfStateTrue', { 'teamId': route.params.conferenceId })
+      .then((res) => {
+        console.log(res)
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+
+    const changeConfStateFalse = function (){
+      store.dispatch('root/changeConfStateFalse', { 'teamId': route.params.conferenceId })
+      .then((res) => {
+        console.log(res)
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+
     getTeamInfo();
     takeProfile()
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager, getToken, createSession,
       createToken, sendMessage, closeSession, takeProfile, getTeamInfo, changeVideoState, changeAudioState, onOpenBackImgDialog, onCloseBackImgDialog,
-      outSession, setBackImg, startRecording, recordScreen, saveFile,takeSnapshot, onCloseCaptureImgDialog, screenshot };
+      outSession, setBackImg, startRecording, recordScreen, saveFile,takeSnapshot, onCloseCaptureImgDialog, screenshot, changeConfStateTrue, changeConfStateFalse };
   },
 };
 </script>
