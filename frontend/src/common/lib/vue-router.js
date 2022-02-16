@@ -8,7 +8,11 @@ import Schedule from '@/views/schedule/schedule'
 import Room from '@/views/room/room'
 import Profile from '@/views/profile/profile'
 import Error from '@/views/error/error'
-
+import RoomConfirm from '@/views/room/roomConfirm'
+// vue-canvas 테스트 용
+import ScreenShare from '@/views/live/ScreenShare'
+import chatting from '@/views/chat/chatting'
+import ScreenCapture from '@/views/live/ScreenCapture'
 const fullMenu = require('@/views/main/menu.json')
 function makeRoutesFromMenu () {
   let routes = Object.keys(fullMenu).map((key) => {
@@ -38,6 +42,13 @@ function makeRoutesFromMenu () {
   })
 
   routes.push({
+    path: '/chat',
+    name: 'chatting',
+    component: chatting,
+    props:true
+  })
+
+  routes.push({
     path: '/room/:roomId',
     name: 'room-board',
     component: Room,
@@ -45,9 +56,17 @@ function makeRoutesFromMenu () {
   })
 
   routes.push({
+    path: '/',
+    name: 'Intro',
+    component: Intro,
+    props: true,
+  })
+
+  routes.push({
     path: '/profile/profile',
     name: 'Profile',
-    component: Profile
+    component: Profile,
+    // beforeEnter: requireAuth()
   })
 
   routes.push({
@@ -55,6 +74,26 @@ function makeRoutesFromMenu () {
     name: 'Error',
     component: Error
   })
+
+  routes.push({
+    path: '/room/confirm/:roomId',
+    name:'RoomConfirm',
+    component: RoomConfirm,
+    props: true
+  })
+
+  routes.push({
+    path: '/vue-canvas',
+    name: 'ScreenShare',
+    component: ScreenShare,
+  })
+
+  routes.push({
+    path: '/snapshot',
+    name: 'ScreenCapture',
+    component: ScreenCapture,
+  })
+
   return routes
 }
 

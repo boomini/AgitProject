@@ -17,21 +17,20 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Table(name = "team", uniqueConstraints = {@UniqueConstraint(
-        name = "TEAM_ID_UNIQUE", columnNames = {"teamName"}
-)})
+@Table(name = "team")
 @EntityListeners(AuditingEntityListener.class)
 @DynamicUpdate
 public class Team extends BaseEntity{
     @Column(columnDefinition="varchar(100)")
     String teamName; //팀명
-    String teamPassword; //인증코드
+
     @CreatedDate
     LocalDateTime teamCdate; //생성일
     String teamDescription; //한줄소개
     String teamPicture; // 팀 썸네일
-    int teamMember; //인원수
     String teamBoss; //팀장 이름
+
+    Boolean confState; // 회의 개설 여부
 
     public Team(){}
 
@@ -89,14 +88,13 @@ public class Team extends BaseEntity{
     }
 
     @Builder
-    public Team(Long id, String teamName, String teamPassword, String teamDescription, String teamPicture, int teamMember, String teamBoss){
+    public Team(Long id, String teamName,  String teamDescription, String teamPicture,  String teamBoss, Boolean confState){
         this.id = id;
         this.teamName = teamName;
-        this.teamPassword = teamPassword;
         this.teamDescription = teamDescription;
         this.teamPicture = teamPicture;
-        this.teamMember = teamMember;
         this.teamBoss = teamBoss;
+        this.confState = confState;
     }
 
 }

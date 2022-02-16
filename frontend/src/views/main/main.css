@@ -37,9 +37,12 @@
 }
 
 .el-dialog {
+  transform: translateY(-50%) !important;
+  top: 50%;
   border-radius: 15px;
   border: 1px solid #808080;
-  margin-top: 20vh;
+  /* margin-top: 20vh; */
+  background-color: white !important;
 }
 
 .el-dialog > .el-dialog__header {
@@ -73,14 +76,26 @@
 }
 
 .el-dialog > .el-dialog__header > .el-dialog__headerbtn > .el-dialog__close {
-  border: 1px solid #dd5a4e;
+  /* border: 1px solid #dd5a4e; */
   border-radius: 50%;
   background-color: #ff6053;
   color: black;
   font-size: 10px;
+  text-align: center;
 }
 
 .el-dialog > .el-dialog__header > .el-dialog__headerbtn > .el-dialog__close:hover {
   color: white;
   transition: 0.2s;
+}
+
+.el-overlay {
+  background-color: rgba(0,0,0,.5) !important;
+  animation: unfoldIn 0.1s cubic-bezier(.165,.84,.44,1) forwards;
+  -webkit-animation: unfoldIn 0.1s cubic-bezier(.165,.84,.44,1) forwards;
+}
+
+.el-overlay-dialog {
+  background-color: rgba(0,0,0,.5) !important;
+
 }

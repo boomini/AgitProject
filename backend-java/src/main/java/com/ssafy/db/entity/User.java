@@ -37,6 +37,7 @@ public class User extends BaseEntity{
     String nickName;
     //생일
     LocalDate birthDay;
+    String profileImg;
 
     @Enumerated(EnumType.STRING)
     private EmailType emailType;
@@ -109,7 +110,7 @@ public class User extends BaseEntity{
     public User(){}
 
     @Builder
-    public User(Long id, String userId, String name, String nickName, LocalDate birthDay, String password, EmailType emailType){
+    public User(Long id, String userId, String name, String nickName, LocalDate birthDay, String password, EmailType emailType, String profileImg){
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -117,6 +118,7 @@ public class User extends BaseEntity{
         this.nickName = nickName;
         this.password = password;
         this.emailType = emailType;
+        this.profileImg = profileImg;
     }
 
 }

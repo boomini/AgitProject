@@ -36,6 +36,14 @@ export default {
   JWTToken: localStorage.getItem('JWT'), // JWT Token을 저장해둠.
   userTeams: [],
   isChatPanel: false,
-  message: [],
+  messages: [],
   secretName: null,
+  currentMode: 'anonymous',
+  imageList:[
+    require('@/assets/images/backImg1.png'),
+    require('@/assets/images/backImg2.jpg'),
+    require('@/assets/images/backImg3.png')
+  ],
+  chattingRoomId: '',
+  nickName: ''
 }

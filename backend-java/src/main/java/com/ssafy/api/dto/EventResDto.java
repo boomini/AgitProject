@@ -18,6 +18,7 @@ import java.time.LocalDate;
 public class EventResDto {
 
     Long dDay;
+    Long teamId;
     String eventTitle;
     String eventContent;
     String teamName;
@@ -25,12 +26,13 @@ public class EventResDto {
     LocalDate endDate;
 
     @QueryProjection
-    public EventResDto(String eventTitle, String eventContent, String teamName, LocalDate startDate, LocalDate endDate, Long dDay){
+    public EventResDto(String eventTitle, String eventContent, String teamName, LocalDate startDate, LocalDate endDate, Long dDay, Long teamId){
         this.eventTitle = eventTitle;
         this.eventContent = eventContent;
         this.teamName = teamName;
         this.startDate = startDate;
         this.endDate = endDate;
         this.dDay = dDay;
+        this.teamId = teamId;
     }
 }

@@ -1,5 +1,6 @@
 <template>
-  <el-dialog custom-class="login-dialog" v-model="state.dialogVisible" @close="handleClose" :modal="state.form.modalStatus">
+  <div>
+  <el-dialog custom-class="login-dialog" v-model="open" @close="handleClose" :modal="state.form.modalStatus">
     <!-- header -->
     <template #title>
       <span>
@@ -19,21 +20,21 @@
 
     <!-- footer -->
     <template #footer>
-      <span class="dialog-footer">
+      <div class="dialog-footer">
         <el-button type="primary" @click="clickLogin" v-loading.fullscreen="loading">로그인</el-button>
         <div class="easy-login">
-          <div class="line"></div>
-          <div style="text-align:center">간편로그인</div>
-          <div>
+          <div class="login-title">간편로그인</div>
+          <div class="login-btn-wrap">
             <button @click="handleClickSignIn" class='easy-custom-btn google-btn'></button>
             <button @click="handleClickSignIn" class='easy-custom-btn naver-btn'></button>
             <button @click="handleClickSignIn" class='easy-custom-btn kakao-btn'></button>
           </div>
         </div>
-
-      </span>
+      </div>
     </template>
   </el-dialog>
+
+  </div>
 </template>
 <style>
 .login-dialog {
@@ -45,8 +46,7 @@
 }
 .login-dialog .el-form-item__content {
   margin-left: 0 !important;
-  float: right;
-  width: 200px;
+  width: 220px;
   display: inline-block;
 }
 .login-dialog .el-form-item {
@@ -60,30 +60,39 @@
   display: none;
 }
 .login-dialog .el-dialog__footer {
-  margin: 0 calc(50% - 80px);
+  width: 100%;
   padding-top: 0;
   display: inline-block;
+}
+.login-dialog .dialog-footer{
+  text-align: center;
 }
 .login-dialog .dialog-footer .el-button {
   width: 120px;
 }
 .easy-login{
-  font-size:11px;
+  font-size: 11px;
+  margin-top: 5%;
 }
-.line {
-  width: 30px;
-  height: 30px;
-  border:1px solid var(--el-border-color-base);
+
+.easy-login .login-title{
+  font-size: 0.95rem;
 }
+
 .easy-custom-btn{
-  width: 25px !important;
-  height: 30px !important;
-  margin:auto;
+  width: 40px !important;
+  height: 35px !important;
+  margin: auto;
   margin-top: 15px;
   background-size: contain;
   background-repeat: no-repeat;
   border: 0px;
-  text-align:center;
+  text-align: center;
+  background-color: #fff;
+}
+
+.easy-custom-btn:nth-child(2){
+  margin: 0 5px;
 }
 
 .google-btn{
@@ -97,6 +106,7 @@
 .kakao-btn{
   background-image: url('../../../assets/images/kakaoicon.png');
 }
+
 </style>
 <script>
 import { reactive, computed, ref, onMounted } from 'vue'
@@ -125,8 +135,10 @@ export default {
 methods: {
     async handleClickSignIn(){
       try {
+        this.loading = true
         const googleUser = await this.$gAuth.signIn();
         if (!googleUser) {
+          this.loading = false
           return null;
         }
         const authuser = await this.$gAuth.instance;
@@ -141,6 +153,7 @@ methods: {
       } catch (error) {
         //on fail do something
         console.error(error);
+        this.loading = false
         return null;
       }
     },
@@ -165,6 +178,7 @@ methods: {
     },
     handleClickDisconnect() {
       window.location.href = `https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=${window.location.href}`;
+      console.log('빠이')
     },
 
   },
@@ -181,6 +195,9 @@ methods: {
       // rules의 객체 키 값과 form의 객체 키 값이 같아야 매칭되어 적용됨
       //
     */
+
+    console.log('로그인 다이얼로그 상태 in logindialog setup')
+    console.log(props.open)
 
 
     const state = reactive({
@@ -217,7 +234,7 @@ methods: {
           const userPw = state.form.password
           store.dispatch('root/requestLogin', { userId: userId, password: userPw })
           .then(function (result) {
-            router.push({ name: 'home' })
+            router.push({ name: 'schedule' })
             store.commit('root/setMenuActive', 0)
 
             localStorage.setItem('JWT', result.data.accessToken)
@@ -229,10 +246,16 @@ methods: {
             .then(function (result) {
               store.commit('root/setUserTeam', result.data)
               console.log('회원 팀정보 가져오기')
+              console.log(result.data)
             })
 
-
-
+            store.dispatch('root/getProfile', token)
+              .then(function (result) {
+                store.commit('root/setNickName', result.data.nickName)
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
 
             handleClose() // 로그인 모달 끄기
           })
@@ -261,6 +284,8 @@ methods: {
     const handleClose = function () {
       state.form.id = ''
       state.form.password = ''
+      console.log('로그인 다이얼로그 종료')
+      console.log(state.dialogVisible)
       emit('closeLoginDialog')
     }
     const tokenVerify = function(){
@@ -271,7 +296,7 @@ methods: {
 
       store.dispatch('root/verifyToken', {accessToken:this.idToken})
           .then(function (result) {
-            router.push({ name: 'home' })
+            router.push({ name: 'schedule' })
             store.commit('root/setMenuActive', 0)
 
             localStorage.setItem('JWT', result.data.accessToken)
@@ -283,22 +308,56 @@ methods: {
             .then(function (result) {
               store.commit('root/setUserTeam', result.data)
               console.log('회원 팀정보 가져오기')
+              console.log(result.data);
             })
 
+            store.dispatch('root/getProfile', token)
+              .then(function (result) {
+                store.commit('root/setNickName', result.data.nickName)
+              })
+              .catch(function (error) {
+                console.log(error)
+              })
+
             handleClose()
+            // store.dispatch('root/getProfile', token)
+            // .then(function (result) {
+            //   console.log(result.data.birthDay)
+            //   if (result.data.birthDay == '' || result.data.birthDay == null || result.data.birthDay == undefined) {
+            //     console.log('하아')
+            //     router.push({
+            //     name: 'Profile',
+            //   })
+            //   }
+            // })
+
+
           })
           // 로딩 스피너를 바로 꺼버리면 사용자가 볼 수 없으므로
           // 작업 중인 것을 볼 수 있도록 조금의 여유를 주고 로딩 스피너를 끔.
           .then(() => {
+            store.dispatch('root/getProfile', token)
+            .then(function (result) {
+              console.log(result.data.birthDay)
+              if (result.data.birthDay == '' || result.data.birthDay == null || result.data.birthDay == undefined) {
+                console.log('하아')
+                router.push({
+                name: 'Profile',
+              })
+              }
+            })
             setTimeout(() => {
               loading.value = false
-            }, 500)
+
+            }, 1000)
           })
           .catch(function (err) {
             console.log(err);
+            loading.value = false
           })
     }
     return { loginForm, state, clickLogin, handleClose, loading,tokenVerify }
   }
 }
 </script>
+

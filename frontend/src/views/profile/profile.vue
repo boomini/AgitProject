@@ -7,13 +7,13 @@
         </div>
         <div class="col-md-9" style="margin-left: 0px;">
           <div class="card-body">
-            <h5 class="card-title" style="margin-bottom: 5%;">{{ state.info.name }}님의 프로필</h5>
-            <p style="margin-bottom: 10px;">ID : {{ state.info.userId }}</p>
+            <h5 class="card-title" style="margin-bottom: 5%;">{{ state.profileinfo.userId }}님의 프로필</h5>
+            <p style="margin-bottom: 10px;">ID : {{ state.profileinfo.userId }}</p>
             <div style="margin-bottom: 10px;">
-              <span>Nickname : {{ state.info.nickName }}</span> <el-button style=" min-height: 15px; padding: 10px; margin-left: 10px" @click="state.nicknameDialogOpen = true">수정하기</el-button>
+              <span>Nickname : {{ state.profileinfo.nickName }}</span> <el-button style=" min-height: 15px; padding: 10px; margin-left: 10px" @click="state.nicknameDialogOpen = true">수정하기</el-button>
             </div>
-            <p>Birthday : {{ state.info.year}}년 {{ state.info.month}}월 {{ state.info.day}}일</p>
-            <p class="card-text"><small class="text-muted">최초 가입일 : {{state.info.cdate.slice(2, 10)}} </small></p>
+            <p>Birthday : {{ state.profileinfo.birthDay }}</p>
+            <p class="card-text"><small class="text-muted">최초 가입일 : {{state.profileinfo.cdate.slice(2, 10)}} </small></p>
             <el-button type="danger" @click="deleteuserId">회원 탈퇴</el-button>
           </div>
         </div>
@@ -32,76 +32,73 @@
       <div>
       </div>
     </div>
-    <div style="max-width: 1200px; margin-top: 20px; margin-left: 100px margin-bottom: 100px; z-index: -1">
+    <!-- <div style="max-width: 1200px; margin-top: 20px; margin-left: 100px margin-bottom: 100px; z-index: -1">
       <el-carousel :interval="4000" type="card" height="200px">
       <el-carousel-item v-for="item in 6" :key="item">
         <h3>{{ item }}</h3>
       </el-carousel-item>
       </el-carousel>
-    </div>
-
-
-
-
-
+    </div> -->
 
     <nickname-dialog
       :open="state.nicknameDialogOpen"
-      :info="state.info"
+      :info="state.profileinfo"
       @closeNicknameDialog="onCloseNicknameDialog"
       @edit-nickname="editNickname"
       />
+
+    <birthday-dialog
+    :open="state.birthdayDialogOpen"
+    :info="state.profileinfo"
+    @closeBirthdayDialog="onCloseBirthdayDialog"
+    @create-birthday="createBirthday"
+    />
   </div>
 </template>
 
 
 <script>
-import { reactive, onBeforeMount } from 'vue'
+import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import NicknameDialog from './components/nickname-dialog.vue'
+import BirthdayDialog from './components/birthday-dialog.vue'
 
 export default {
   name: 'Profile',
   components: {
     NicknameDialog,
+    BirthdayDialog,
   },
 
   setup() {
     const store = useStore()
     const router = useRouter()
     const state = reactive({
-      info: {
+      profileinfo: {
+        birthDay: '1970-01-01',
         name: '',
         nickName: '',
         userId: '',
-        year: '',
-        month: '',
-        day: '',
-        cdate: '1970-01-01'
+        id: '',
+        cdate: '1970-01-01',
+        emailType: '',
+        password: ''
       },
-      // info: null,
+      // profileinfo: null,
       nicknameDialogOpen : false,
+      birthdayDialogOpen : false,
     })
-
-    // onBeforeMount(() => {
-    //   const token = store.getters['root/getJWTToken']
-    //   store.dispatch('root/getProfile', token)
-    //   .then(res => {
-    //     state.info = res.data
-    //     console.log(state.info)
-    //   })
-    //   .catch(err => {
-    //     console.log(err)
-    //   })
-    // })
 
     const takeProfile = function () {
       const token = store.getters['root/getJWTToken']
       store.dispatch('root/getProfile', token)
       .then(res => {
-        state.info = res.data
-        console.log(res)
+        state.profileinfo = res.data
+        console.log(res.data.birthDay)
+        if (state.profileinfo.birthDay == null) {
+          state.birthdayDialogOpen = true
+        }
       })
       .catch(err => {
         console.log(err)
@@ -109,24 +106,30 @@ export default {
     }
 
     const editNickname = (nickname) => {
-      state.info.nickName = nickname.nickname
+      state.profileinfo.nickName = nickname.nickname
+    }
+
+    const createBirthday = (birthday) => {
+      state.profileinfo.birthDay = birthday.birthday
     }
 
     const deleteuserId = function () {
       const token = store.getters['root/getJWTToken']
       const body = {
-        'userId': state.info.userId,
+        'userId': state.profileinfo.userId,
       }
       store.dispatch('root/deleteUser',{ 'body': body, 'token': token})
       .then(res => {
           setTimeout(() => {
                 swal({
-                  title: "회원탈퇴",
-                  text: "이용해주셔서 감사합니다.",
-                  icon: "success",
-                  button: "확인",
+                  title: '회원탈퇴',
+                  text: '이용해주셔서 감사합니다.',
+                  icon: 'success',
+                  button: '확인',
                 });
               }, 500)
+
+              console.log(res)
 
               store.commit('root/setJWTTokenReset')
               localStorage.removeItem('JWT')
@@ -143,7 +146,7 @@ export default {
         })
     }
 
-    // takeProfile()
+    takeProfile()
     // console.log(typeof(state.info))
 
     const activities = [
@@ -165,6 +168,9 @@ export default {
       state.nicknameDialogOpen = false
     }
 
+    const onCloseBirthdayDialog = function () {
+      state.birthdayDialogOpen = false
+    }
 
 
 
@@ -172,7 +178,8 @@ export default {
 
 
 
-    return { store, router, takeProfile, state, activities, onCloseNicknameDialog, editNickname, deleteuserId}
+
+    return { store, router, takeProfile, state, activities, onCloseNicknameDialog, editNickname, deleteuserId, onCloseBirthdayDialog, createBirthday}
   }
 }
 </script>

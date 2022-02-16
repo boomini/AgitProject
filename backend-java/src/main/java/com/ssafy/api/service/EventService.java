@@ -13,3 +13,4 @@ public interface EventService {
     List<EventResDto> getTeamEventListInDate(String eventDate, Long teamId);
     List<EventResDto> getTeamEventListInMonth(String eventDate, Long teamId);
 }
+
