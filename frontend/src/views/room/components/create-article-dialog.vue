@@ -148,12 +148,14 @@ export default {
     const createArticle = function () {
       const token = store.getters['root/getJWTToken']
       const writer = jwt_decode(token).sub
+      const teamId = props.info.teamId
       const teamName = props.info.teamName
       const title = props.article.title
       const content = props.article.content
       const uploadDate = state.form.uploadDate
       const nickName = store.state.root.nickName
       const payload = {
+        'teamId': teamId,
         'body': {
           'writer': writer,
           'teamName': teamName,
@@ -180,6 +182,7 @@ export default {
       })
       .catch(function (error) {
         console.log('게시글 등록 실패')
+        console.log(error.response)
       })
       handleClose()
     }
