@@ -73,7 +73,7 @@
             <i class="em em-clipboard" aria-role="presentation" aria-label="CLIPBOARD"></i>
             게시판
           </h4>
-          <div style="margin: 20px 10px 10px 10px;">
+          <div style="margin: 20px 10px 50px 10px;">
             <article-page
               :articleList = state.articleList
               @updateArticle="onUpdateArticle"

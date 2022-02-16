@@ -40,19 +40,32 @@
             @change="selectedImage"
             ref="inputImage"
           />
+          <el-form-item prop="df" style="height: 140px;">
+            <div v-if="state.form.images.length > 5">
+              <!-- <div v-for="i in 5" :key="i">
+                <img :src="state.form.images[i].preview" alt="" width=100 height=100 class="me-1">
+              </div> -->
+              <img v-for="i in 5" :key="i" :src="state.form.images[i].preview" alt="" width=100 height=100 class="me-1">
+              <p class="d-flex justify-content-center align-items-center">
+                외 {{ state.form.images.length - 5}}개의 이미지
+              </p>
+            </div>
+            <div v-else>
+              <div v-for="img in state.form.images" :key="img.name">
+                <img :src="img.preview" alt="" width=100 height=100>
+              </div>
+            </div>
+          </el-form-item>
         </el-form>
-      </div>
-      <div v-for="img in state.form.images" width=150 :key="img.name">
-        <img :src="img.preview" alt="" width=100>
       </div>
     </div>
 
     <!-- footer -->
     <template #footer>
-      <span>
+      <div>
         <el-button @click="handleClose">취소</el-button>
         <el-button type="primary" @click="uploadImage">사진등록</el-button>
-      </span>
+      </div>
     </template>
   </el-dialog>
 </template>
@@ -159,7 +172,7 @@ export default {
 <style>
 .upload-image-dialog {
   width: 700px;
-  height: 600px;
+  height: 500px !important;
 }
 img{
   float: left;

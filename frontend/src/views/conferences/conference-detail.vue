@@ -17,8 +17,10 @@
       </div>
     </div>
     <div class="d-flex-row justify-content-between my-3" v-if="state.session">
-
-        <div class="d-flex justify-content-between align-items-center offset-4" id="header">
+        <div class="d-flex justify-content-between align-items-center offset-4" id="header" data-html2canvas-ignore="true">
+          <!-- <div v-if="state.recordState">
+            <i class="fa-solid fa-camera-web" id="record-lens"></i>
+          </div> -->
           <h1 id="conference-name" class="text-center">{{ state.teamName }}'s Room</h1>
             <!-- <div class="logo" id="neon" style="width: 100%; height: 35vh;">
               <b><span>a</span><span>g</span>i<span>t</span></b>
@@ -46,7 +48,7 @@
       </div>
       <div
       :height="`80px`"
-      style="position:fixed; height:10%; bottom: 0; width: 100%; background-color: #2f3136; opacity:0.8">
+      style="position:fixed; height:10%; bottom: 0; width: 100%; background-color: #2f3136; opacity:0.8" data-html2canvas-ignore="true">
       <div class="d-flex justify-content-center align-items-center" id="btn-group" style="height:100% ">
           <!-- 비디오 토글 버튼 -->
             <div>
@@ -154,6 +156,9 @@
   </div>
 </template>
 <style>
+#conference-name {
+  text-align: center;
+}
 .join-room{
   margin-top: 20vh;
   margin-left: 29vw;
@@ -336,6 +341,11 @@
 body.edit_cursor{
   cursor: crosshair;
 }
+
+#record-lens{
+  cursor: pointer;
+  border-style: solid;
+}
 </style>
 
 <script>
@@ -345,7 +355,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/live/UserVideo.vue';
 import ChatLive from '@/views/live/ChatLive.vue';
-import CaptureImg from '@/views/live/CaptureIMG.vue'
+import CaptureImg from '@/views/live/CauptureImgTest.vue'
 import SelectBackImgDialog from '@/views/live/SelectBackImgDialog.vue';
 import axios from 'axios';
 import moment from 'moment';
@@ -397,8 +407,9 @@ export default {
       isLogin: computed(() => store.getters['root/getJWTToken']),
       backImgDialogOpen: false,
       captureImgDialogOpen: false,
-      backImg:'https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1',
+      backImg:require('@/assets/images/defaultbackimg.jpg'),
       captureImg:'',
+      recordState: true,
     });
     // 페이지 진입시 불리는 훅
     onMounted(() => {
@@ -414,6 +425,11 @@ export default {
 
     // 세션 Exit 버튼 눌렀을 때
     const closeSession = function () {
+      // publisher가 본인 ////
+      // 나머지가 subscirbers == 0//
+      if (state.subscribers.length === 0){
+        changeConfStateFalse()
+      }
       leaveSession();
       router.push({
         name: "room-board",
@@ -448,6 +464,9 @@ export default {
       }}
 
     const joinSession = function () {
+      // 팀정보 0 = > 1로 바꾸어줌
+      // vuex store에서 해당 팀에 상태 toggle (본인이 팀 추가할때마다 vuex store에 추가)
+      changeConfStateTrue()
       state.OV = new OpenVidu();
       state.session = state.OV.initSession();
       state.session.on("streamCreated", ({ stream }) => {
@@ -716,6 +735,7 @@ export default {
         }
       };
       mediaRecorder.onstop = function () {
+          state.recordState = false
           saveFile(recordedChunks);
           recordedChunks = [];
       };
@@ -760,6 +780,7 @@ export default {
     const startRecording = async function (){
       let stream = await recordScreen();
       let mimeType = 'video/mp4  '
+      state.recordState = true
       mediaRecorder = createRecorder(stream, mimeType)
     }
     // 녹화 중단
@@ -767,10 +788,16 @@ export default {
     const takeSnapshot = function(){
       html2canvas(document.getElementById('chat-container')).then(canvas=>{
         console.log(canvas)
-        var myImg = canvas.toDataURL('image/png');
-        // myImg = myImg.replace('data:image/png;base64,', '');
-        // console.log(URL.createObjectURL(myImg));
-        canvas.toBlob(function(blob){
+
+            canvas.getContext('2d').fillStyle=state.backImg;
+            var img = canvas.getContext('2d').getImageData(0, 0, 1400, 700);
+            var c = document.createElement('canvas');
+            c.width = 1400;
+            c.height = 700;
+
+            c.getContext('2d').putImageData(img, 0, 0);
+
+        c.toBlob(function(blob){
           const url = URL.createObjectURL(blob);
           console.log(blob);
           state.captureImg = url;
@@ -884,11 +911,31 @@ export default {
           state.captureImgDialogOpen=true;
       }
     }
+    // 회의실 상태 toggle
+    const changeConfStateTrue = function (){
+      console.log("도전")
+      store.dispatch('root/changeConfStateTrue', { 'teamId': route.params.conferenceId })
+      .then((res) => {
+        console.log(res)
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+
+    const changeConfStateFalse = function (){
+      store.dispatch('root/changeConfStateFalse', { 'teamId': route.params.conferenceId })
+      .then((res) => {
+        console.log(res)
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+
     getTeamInfo();
     takeProfile()
     return { state, OPENVIDU_SERVER_URL, OPENVIDU_SERVER_SECRET, instance, joinSession, leaveSession, updateMainVideoStreamManager, getToken, createSession,
       createToken, sendMessage, closeSession, takeProfile, getTeamInfo, changeVideoState, changeAudioState, onOpenBackImgDialog, onCloseBackImgDialog,
-      outSession, setBackImg, startRecording, recordScreen, saveFile,takeSnapshot, onCloseCaptureImgDialog, screenshot };
+      outSession, setBackImg, startRecording, recordScreen, saveFile,takeSnapshot, onCloseCaptureImgDialog, screenshot, changeConfStateTrue, changeConfStateFalse };
   },
 };
 </script>

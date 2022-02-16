@@ -22,7 +22,7 @@
       </template>
     </el-table-column> -->
   </el-table>
-  <el-pagination layout="prev, pager, next" :total="articleList.length" :page-size="state.perPage" @current-change="setCurrentPage" class="mt-3" hide-on-single-page></el-pagination>
+  <el-pagination layout="prev, pager, next" :total="articleList.length" :page-size="state.perPage" @current-change="setCurrentPage" class="mt-3"></el-pagination>
   <article-view-dialog
     :open="state.articleViewOpen"
     :info="state.article"

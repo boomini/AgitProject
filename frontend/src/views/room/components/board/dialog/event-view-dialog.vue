@@ -122,7 +122,7 @@ export default {
 <style>
 .event-view-dialog {
   width: 700px;
-  height: 700px;
+  height: 550px;
 }
 
 .event-view-dialog .el-overlay-dialog {
