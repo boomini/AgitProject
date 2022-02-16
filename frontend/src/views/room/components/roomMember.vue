@@ -131,6 +131,7 @@ export default {
           session: numberA+'a'+numberB ,
           userId: userId,
           nickName: nickName,
+          roomId : state.teamId,
           }
       })
     }
