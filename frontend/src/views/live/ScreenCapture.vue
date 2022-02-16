@@ -129,8 +129,8 @@ setup(){
             .then(res => {
               setTimeout(() => {
                 swal({
-                  title: '팀 게시판 영상 등록',
-                  text: '녹화된 영상이 팀 게시판에 등록 되었습니다.',
+                  title: '팀 게시판 사진 등록',
+                  text: '사진이 팀 게시판에 등록 되었습니다.',
                   icon: 'success',
                   button: '확인',
                 })

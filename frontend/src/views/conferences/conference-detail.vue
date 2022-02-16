@@ -43,7 +43,7 @@
         <div id="rec-test">
         </div>
         <div>
-          <chat-live data-html2canvas-ignore="true" :session="state.session" @sendMessage="sendMessage" />
+          <chat-live :session="state.session" @sendMessage="sendMessage" />
         </div>
       </div>
       <div
@@ -352,7 +352,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { OpenVidu } from 'openvidu-browser';
 import UserVideo from '@/views/live/UserVideo.vue';
 import ChatLive from '@/views/live/ChatLive.vue';
-import CaptureImg from '@/views/live/CaptureIMG.vue'
+import CaptureImg from '@/views/live/CauptureImgTest.vue'
 import SelectBackImgDialog from '@/views/live/SelectBackImgDialog.vue';
 import axios from 'axios';
 import moment from 'moment';
@@ -404,7 +404,7 @@ export default {
       isLogin: computed(() => store.getters['root/getJWTToken']),
       backImgDialogOpen: false,
       captureImgDialogOpen: false,
-      backImg:'https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1',
+      backImg:require('@/assets/images/defaultbackimg.jpg'),
       captureImg:'',
       recordState: true,
     });
@@ -781,10 +781,16 @@ export default {
     const takeSnapshot = function(){
       html2canvas(document.getElementById('chat-container')).then(canvas=>{
         console.log(canvas)
-        var myImg = canvas.toDataURL('image/png');
-        // myImg = myImg.replace('data:image/png;base64,', '');
-        // console.log(URL.createObjectURL(myImg));
-        canvas.toBlob(function(blob){
+
+            canvas.getContext('2d').fillStyle=state.backImg;
+            var img = canvas.getContext('2d').getImageData(0, 0, 1400, 700);
+            var c = document.createElement('canvas');
+            c.width = 1400;
+            c.height = 700;
+
+            c.getContext('2d').putImageData(img, 0, 0);
+
+        c.toBlob(function(blob){
           const url = URL.createObjectURL(blob);
           console.log(blob);
           state.captureImg = url;
