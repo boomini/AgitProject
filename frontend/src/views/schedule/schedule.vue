@@ -523,7 +523,7 @@ export default {
           state.profileinfo.profileImg = 'http://localhost:8080/api/v1/user/profileimg/'+state.profileinfo.id;
         }else {
           //저장된 이미지 없이 default img
-          state.profileinfo.profileImg = 'https://drive.google.com/uc?id=15iXUI6DkRr5Zcp0yH5uF2U47ycr-WzUY'
+          state.profileinfo.profileImg = require('@/assets/images/agit_logo.png')
           console.log(state.profileinfo.profileImg)
           console.log('디폴트');
         }

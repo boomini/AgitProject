@@ -80,7 +80,7 @@ export default {
         state.teamMembers = res.data
         for(let i=0; i<state.teamMembers.length; i++){
           if(state.teamMembers[i].profileImg==null){
-            state.teamMembers[i].profileImg = 'http://localhost:8080/api/v1/user/profileimg/0'
+            state.teamMembers[i].profileImg = require('@/assets/images/defaultuserprofile.png')
           }
         }
         console.log(state.teamMembers);

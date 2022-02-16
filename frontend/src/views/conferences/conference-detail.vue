@@ -150,6 +150,7 @@
       <capture-img
       :open="state.captureImgDialogOpen"
       :captureImg="state.captureImg"
+      :roomId="state.roomId"
       @closeCaptureImgDialog="onCloseCaptureImgDialog"/>
     </div>
 
@@ -773,7 +774,6 @@ export default {
       }).catch(err => {
         console.log(err)
       })
-
     }
 
     // 녹화 시작
@@ -800,6 +800,7 @@ export default {
         c.toBlob(function(blob){
           const url = URL.createObjectURL(blob);
           console.log(blob);
+
           state.captureImg = url;
           state.captureImgDialogOpen=true;
         })
@@ -831,8 +832,6 @@ export default {
       var selectArea = false;
       var body = document.querySelector('body');
       var test = document.querySelector('#screenshot_background');
-
-
 
       // window.addEventListener()
       const mousedown = function(e){
