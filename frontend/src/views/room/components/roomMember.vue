@@ -76,7 +76,7 @@ export default {
       }
       store.dispatch('root/takeMember', {'body': body, 'token': token})
       .then(res=> {
-        console.log(res.data)
+        console.log("takemember!!!!!!!!!!!!!!!!!!!!!!!!!"+res.data)
         state.teamMembers = res.data
         for(let i=0; i<state.teamMembers.length; i++){
           if(state.teamMembers[i].profileImg==null){

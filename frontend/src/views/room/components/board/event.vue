@@ -11,7 +11,6 @@
       <p v-if="item.dday < 0" class="ms-2">
         <img :src="require(`@/assets/images/thumbs-up.png`)" alt="" height="30">
       </p>
-
     </p>
   </div>
   <event-view-dialog

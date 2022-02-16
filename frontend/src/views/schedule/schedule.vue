@@ -384,6 +384,7 @@ export default {
         cdate: '1970-01-01',
         emailType: '',
         password: '',
+        profileImg:''
       },
     clock : {
         time: '',
@@ -403,6 +404,7 @@ export default {
     colorDialogOpen : false,
     beforeteamPicture : '',
     afterteamPicture : '',
+
     check: JSON.parse(localStorage.getItem('photoUrl')),
     isLogin: computed(() => store.getters['root/getJWTToken']),
 
@@ -506,7 +508,19 @@ export default {
       store.dispatch('root/getProfile', token)
       .then(res => {
         state.profileinfo = res.data
-        // console.log(res)
+
+
+        /*이미지 가져오기!!!!!!!!!!!! */
+        if(state.profileinfo.profileImg.slice(0,4)!='http'){
+          //구글에서가져오지 않고, 저장된 이미지가 있을때
+          state.profileinfo.profileImg = 'http://localhost:8080/api/v1/user/profileimg/'+state.profileinfo.id;
+        }else if(state.profileinfo.profileImg==null){
+          //저장된 이미지 없이 default img
+          state.profileinfo.profileImg = 'http://localhost:8080/api/v1/user/profileimg/0';
+        }
+        console.log("이런식으로 이미지 가져와!!!!")
+        console.log(state.profileinfo.profileImg);
+
         if (state.profileinfo.birthDay == null) {
           state.birthdayDialogOpen = true
         }
@@ -594,6 +608,7 @@ export default {
 
   const onClosePhotoDialog = function () {
     state.photoDialogOpen = false
+    takeProfile();
   }
 
   const onCloseColorDialog = function () {

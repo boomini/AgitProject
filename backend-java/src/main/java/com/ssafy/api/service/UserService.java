@@ -20,4 +20,6 @@ public interface UserService {
 	List<TeamDto> getTeamListUserJoined(Long userId);
 
 	User getUserById(Long userId);
+
+	void updateUserProfileByUserId(String userId, User user);
 }
