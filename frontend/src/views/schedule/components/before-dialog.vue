@@ -1,10 +1,10 @@
 <template>
   <div v-if="info">
-    <el-dialog custom-class="before-dialog" v-model="state.dialogVisible" title="이전 약속" width="30%"  @close="handleClose">
+    <el-dialog custom-class="before-dialog" v-model="state.dialogVisible" title="이전 약속" width="30%">
       <div class="card text-dark" style="margin-bottom: -20px;">
         <div v-if="teamP">
-          <img :src=teamP class="card-img" onerror="src='https://cdn.pixabay.com/photo/2017/04/10/22/28/residence-2219972_960_720.jpg'" alt="https://i6a403.p.ssafy.io/img/agit_logo.e339fd5c.png" style="opacity: 0.5;">
-          <div class="card-img-overlay" style="color: #464646; opacity: 0.7;">
+          <img :src=teamP class="card-img" onerror="src='https://cdn.pixabay.com/photo/2017/04/10/22/28/residence-2219972_960_720.jpg'" alt="https://i6a403.p.ssafy.io/img/agit_logo.e339fd5c.png" style="opacity: 0.3; max-height: 500px;">
+          <div class="card-img-overlay" style="color: #000000;">
             <h3 class="card-title">팀명: {{ info.teamName }}</h3>
             <br>
             <h5 class="card-text">약속 제목: {{ info.eventTitle }}</h5>
@@ -87,5 +87,7 @@ export default {
 </script>
 
 <style>
-
+  .before-dialog{
+    top: -80px;
+  }
 </style>
