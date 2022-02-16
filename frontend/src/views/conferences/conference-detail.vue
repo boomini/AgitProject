@@ -18,9 +18,9 @@
     </div>
     <div class="d-flex-row justify-content-between my-3" v-if="state.session">
         <div class="d-flex justify-content-between align-items-center offset-4" id="header" data-html2canvas-ignore="true">
-          <div v-if="state.recordState">
+          <!-- <div v-if="state.recordState">
             <i class="fa-solid fa-camera-web" id="record-lens"></i>
-          </div>
+          </div> -->
           <h1 id="conference-name" class="text-center">{{ state.teamName }}'s Room</h1>
             <!-- <div class="logo" id="neon" style="width: 100%; height: 35vh;">
               <b><span>a</span><span>g</span>i<span>t</span></b>
