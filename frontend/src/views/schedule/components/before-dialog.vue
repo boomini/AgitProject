@@ -87,7 +87,4 @@ export default {
 </script>
 
 <style>
-  .before-dialog{
-    top: -80px;
-  }
 </style>

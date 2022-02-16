@@ -116,8 +116,5 @@ export default {
 </script>
 
 <style>
-  .after-dialog{
-    top: -80px;
 
-  }
 </style>
