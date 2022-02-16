@@ -37,9 +37,11 @@
 }
 
 .el-dialog {
+  transform: translateY(-50%) !important;
+  top: 50%;
   border-radius: 15px;
   border: 1px solid #808080;
-  margin-top: 20vh;
+  /* margin-top: 20vh; */
   background-color: white !important;
 }
 

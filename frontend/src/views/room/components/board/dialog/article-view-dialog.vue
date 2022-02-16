@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <div style="border-top: 1px solid black; padding-top: 1.5rem; height: 370px;">
+      <div style="border-top: 1px solid black; padding-top: 1.5rem; height: 230px;">
         <p style="font-size: 20px;">
           {{ info.content }}
         </p>
@@ -126,7 +126,7 @@ export default {
 <style>
 .article-view-dialog {
   width: 700px;
-  height: 700px;
+  height: 550px;
 }
 
 .article-view-dialog .el-overlay-dialog {
@@ -147,8 +147,8 @@ export default {
 .article-view-dialog .el-dialog__footer {
   background-color: transparent;
 }
-
-/* .el-dialog__footer {
+/*
+.el-dialog__footer {
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   background-color: white !important;
