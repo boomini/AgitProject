@@ -72,6 +72,7 @@ public class ImageController {
             ImageDto imageDto = new ImageDto();
             String originalFileName = mfile.getOriginalFilename();
             if(!originalFileName.isEmpty()){
+                System.out.println("checkcheck" + originalFileName);
                 String saveFileName = UUID.randomUUID().toString() + originalFileName.substring(originalFileName.lastIndexOf('.'));
                 //유일한 식별자를 생성한다.
                 imageDto.setFilePath(ccurday);

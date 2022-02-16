@@ -263,6 +263,7 @@ export default {
   z-index: 10;
   background-color: white;
   width: 122.7%;
+
   /* background: #112; */
   /* background-image: url("https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1"); */
   background-size:cover;

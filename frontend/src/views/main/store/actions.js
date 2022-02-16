@@ -215,7 +215,8 @@ export function getCategoryCount({ state }, payload) {
 export function addArticle ({ state }, payload) {
   console.log('게시글 작성 함수')
   console.log(payload)
-  const url = '/article'
+  const teamId = payload.teamId
+  const url = `/article/${teamId}`
   const body = payload.body
   return $axios({
     method: 'post',
