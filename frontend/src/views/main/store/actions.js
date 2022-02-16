@@ -160,6 +160,20 @@ export function takeMember ({ state }, payload) {
   return $axios({ method: 'get', url: url})
 }
 
+// 회의실 상태 변경
+export function changeConfStateTrue({ state }, payload){
+  const teamId = payload.teamId
+  const url = `/team/${teamId}/confState/true`
+
+  return $axios({ method: 'post', url: url})
+}
+
+export function changeConfStateFalse({ state }, payload){
+  const teamId = payload.teamId
+  const url = `/team/${teamId}/confState/false`
+
+  return $axios({ method: 'post', url: url})
+}
 
 // 게시판
 // 특정 달의 달력 개요(일정) 가져오기
@@ -276,6 +290,15 @@ export function getListImage ({state}, payload){
     url: url
   })
 }
+// 업로드 이미지
+export function changeUserProfileImage ({state}, payload){
+  const header = {
+    Authorization : `Bearer ${payload.token}`,
+    'Content-Type' : 'multipart/form-data',
+  }
+  return $axios({ method: 'post', url: '/user/image', data: payload.formData, headers: header})
+}
+
 
 // 비디오
 // 업로드 비디오

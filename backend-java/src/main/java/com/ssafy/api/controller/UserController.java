@@ -29,6 +29,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.web.multipart.MultipartFile;
 import retrofit2.http.Path;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -38,6 +39,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -195,6 +197,48 @@ public class UserController {
 			}
 		}
 		return ResponseEntity.status(200).body(returnValue);
+	}
+
+	@PostMapping("/image")
+	@ApiOperation(value = "유저 프로필 이미지 생성", notes = "유저 프로필 이미지 변경")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증실패"),
+	})
+
+	public ResponseEntity<? extends BaseResponseBody> register (
+			@RequestParam(value="upfile", required = false) MultipartFile file, @ApiIgnore Authentication authentication) throws Exception {
+		UserDto userDto = new UserDto();
+		String userId = "";
+		User user=null;
+		try{
+			SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+			userId = userDetails.getUsername();
+			user = userService.getUserByUserId(userId);
+		}catch (DataIntegrityViolationException e) {
+			//회원중복시 예외처리
+			throw new CUserDuplicateException();
+		} catch(Exception e){
+			//잘못된 접근일때
+			throw new CTokenForbiddenException();
+		}
+
+		String realPath = System.getProperty("user.home") + "\\files" + "\\userProfile";
+		String saveFolder = realPath;
+
+		File folder = new File(saveFolder);
+		if(!folder.exists()) folder.mkdirs();
+
+		String originalFileName = file.getOriginalFilename();
+		String saveFileName = UUID.randomUUID().toString().replace("-", "") + originalFileName.substring(originalFileName.lastIndexOf('.'));
+		System.out.println(saveFileName);
+
+		user.setProfileImg(saveFileName);
+		file.transferTo(new File(folder, saveFileName));
+
+		userService.updateUserProfileByUserId(userId, user);
+
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
 	@GetMapping("/teamList")

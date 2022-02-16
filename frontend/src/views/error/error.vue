@@ -15,7 +15,6 @@ export default {
 </script>
 
 <style>
-@import url(https://fonts.googleapis.com/css?family=Tangerine);
         .errorbody{
                 background: #33cc99;
                 color:#fff;
@@ -92,21 +91,5 @@ export default {
                 width: 420px;
                 height:10px;
                 z-index: -10;
-            }
-
-
-
-
-            @-webkit-keyframes moveclouds {
-                0% {margin-left: 1000px;}
-                100% {margin-left: -1000px;}
-            }
-            @-moz-keyframes moveclouds {
-                0% {margin-left: 1000px;}
-                100% {margin-left: -1000px;}
-            }
-            @-o-keyframes moveclouds {
-                0% {margin-left: 1000px;}
-                100% {margin-left: -1000px;}
             }
 </style>

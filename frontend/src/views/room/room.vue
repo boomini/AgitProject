@@ -12,6 +12,32 @@
               <h3>{{ state.team.teamName }}</h3>
               <p>{{ state.team.teamDescription }}</p>
             </div>
+            <div>
+              <div v-if="state.team.confState" id="agit-on" class="d-flex justify-content-center align-items-center" @click="joinConference(state.team.teamId)">
+              <el-tooltip
+                class="box-item"
+                effect="dark"
+                content="아지트 참석"
+                placement="top"
+              >
+                <div>
+                  어서 드루와~
+                </div>
+              </el-tooltip>
+              </div>
+              <div v-else id="agit-off" class="d-flex justify-content-center align-items-center" @click="joinConference(state.team.teamId)">
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  content="아지트 참석"
+                  placement="top"
+                >
+                <div>
+                 아무도 없어요
+                </div>
+                </el-tooltip>
+              </div>
+            </div>
           </div>
 
           <div class="d-flex flex-column">
@@ -605,6 +631,14 @@ export default {
 
     }
 
+    const joinConference = function (roomId) {
+      router.push({
+        name: 'conference-detail',
+        params: {
+          conferenceId: roomId
+        }
+      })
+    }
     // const getTeamDetail = function(){
     //   store.dispatch('root/getTeamInfoDetail', state.team.teamId)
     //   .then(function(result){
@@ -699,7 +733,7 @@ export default {
     })
 
     return { clickOnDate, state, selectDate, calendar, onCloseInviteDialog, onCloseCreateScheduleDialog, onCloseUploadImageDialog, onCloseUploadVideoDialog, onCloseCreateArticleDialog, onCloseBoard, onCreateEvent,
-            onOpenCreateArticleDialog, onUpdateArticle, reloadBoardData, onOpenCreateScheduleDialog, onOpenUploadImageDialog, onOpenUploadVideoDialog }
+            onOpenCreateArticleDialog, onUpdateArticle, reloadBoardData, onOpenCreateScheduleDialog, onOpenUploadImageDialog, onOpenUploadVideoDialog, joinConference }
   }
 
 }
@@ -880,5 +914,25 @@ export default {
 .el-dropdown:hover {
   background-color: #cbced4;
   color: #ffffff;
+}
+#agit-on{
+  border-style: solid;
+  border-radius: 20px;
+  font-size: 12px;
+  width: 80px;
+  height: 30px;
+  background-color: #f56c6c;
+  margin-left: 1.5vh;
+  cursor: pointer;
+}
+#agit-off{
+  border-style: solid;
+  border-radius: 20px;
+  font-size: 12px;
+  width: 80px;
+  height: 30px;
+  background-color: #717275;
+  margin-left: 1.5vh;
+  cursor: pointer;
 }
 </style>

@@ -18,12 +18,15 @@ public class TeamDto {
     String teamPicture; //팀썸네일
     String teamBoss; //팀장 이름
 
+    Boolean confState;
+
     public Team toEntity(){ //직접 프론트 단에서 적히는 정보를 toentity를 이용해서 DB에 넣어준다.
         Team build = Team.builder()
                 .teamName(teamName)
                 .teamDescription(teamDescription)
                 .teamBoss(teamBoss)
                 .teamPicture(teamPicture)
+                .confState(confState)
                 .build();
         return build;
     }
@@ -36,6 +39,7 @@ public class TeamDto {
         this.teamDescription = team.getTeamDescription();
         this.teamPicture = team.getTeamPicture();
         this.teamBoss = team.getTeamBoss();
+        this.confState = team.getConfState();
     }
 
 }

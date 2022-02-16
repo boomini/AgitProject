@@ -24,6 +24,8 @@ public class QTeam extends EntityPathBase<Team> {
 
     public final ListPath<Article, QArticle> articles = this.<Article, QArticle>createList("articles", Article.class, QArticle.class, PathInits.DIRECT2);
 
+    public final BooleanPath confState = createBoolean("confState");
+
     public final ListPath<Event, QEvent> events = this.<Event, QEvent>createList("events", Event.class, QEvent.class, PathInits.DIRECT2);
 
     //inherited
