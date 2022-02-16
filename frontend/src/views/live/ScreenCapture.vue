@@ -79,15 +79,14 @@ setup(){
       // }).catch(err => {
       //   console.log(err)
       // })
-
     }
+
      // 녹화 시작
     const startRecording = async function (){
       let stream = await recordScreen();
       let mimeType = 'video/mp4  '
       mediaRecorder = createRecorder(stream, mimeType)
     }
-
 
     const startCapture = async function() {
 

@@ -130,10 +130,10 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     @Override
-    public Article addArticle(ArticleDto articleDto) {
+    public Article addArticle(ArticleDto articleDto, Long teamId) {
         Article article = articleDto.toEntity();
         Optional<User> user = userRepositorySupport.findUserByUserId(article.getWriter());
-        Optional<Team> team = teamRepositorySupport.findTeamByTeamName(article.getTeamName());
+        Optional<Team> team = teamRepositorySupport.findTeamByTeamId(teamId);
         // user ,  team FK 값 입력
         article.setUser(user.get());
         article.setTeam(team.get());

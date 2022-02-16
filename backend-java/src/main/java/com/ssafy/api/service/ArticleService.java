@@ -21,7 +21,7 @@ public interface ArticleService {
     // 특정 team이 특정 달에 작성한 게시글의 갯수
     Long getTeamsArticleCountAtMonth(String cDate, Long teamId);
 
-    Article addArticle(ArticleDto articleDto);
+    Article addArticle(ArticleDto articleDto, Long teamId);
     Article getArticleDetailById(Long id);
     boolean updateArticleDetailById(Long id, ArticleDto articleDto);
     boolean deleteArticleDetailById(Long id);
