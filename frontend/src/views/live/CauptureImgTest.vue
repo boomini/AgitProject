@@ -16,7 +16,7 @@
       <div class="source">
         <p>Canvas:</p>
         <vue-drawing-canvas
-          ref="VueCanvasDrawing"
+          ref="vueCanvasDrawing"
           v-model:image="image"
           :stroke-type="strokeType"
           :fill-shape="fillShape"
@@ -24,7 +24,7 @@
           :lineWidth="line"
           :color="color"
           :background-color="backgroundColor"
-          :background-image="backgroundImage"
+          :background-image="captureImg"
           :watermark="watermark"
           saveAs="jpeg"
           :styles="{
@@ -34,28 +34,28 @@
           @mousemove="getCoordinate($event)"
         />
         <div class="button-container">
-          <button type="button" @click.prevent="$refs.VueCanvasDrawing.undo()">
+          <button type="button" @click.prevent="$refs.vueCanvasDrawing.undo()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
               <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
             </svg>
             Undo
           </button>
-          <button type="button" @click.prevent="$refs.VueCanvasDrawing.redo()">
+          <button type="button" @click.prevent="$refs.vueCanvasDrawing.redo()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
               <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
             </svg>
             Redo
           </button>
-          <button type="button" @click.prevent="$refs.VueCanvasDrawing.redraw()">
+          <button type="button" @click.prevent="$refs.vueCanvasDrawing.redraw()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
               <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
               <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
             </svg>
             Refresh
           </button>
-          <button type="button" @click.prevent="$refs.VueCanvasDrawing.reset()">
+          <button type="button" @click.prevent="$refs.vueCanvasDrawing.reset()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16">
               <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
             </svg>
@@ -114,7 +114,7 @@
 </template>
 
 <script>
-import { reactive, computed, onMounted} from 'vue'
+import { reactive, computed, onMounted, ref} from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import VueDrawingCanvas from 'vue-drawing-canvas';
@@ -132,6 +132,9 @@ export default {
     },
     captureImg:{
       type:String
+    },
+    roomId:{
+      type:Number,
     }
   },
 data() {
@@ -146,7 +149,7 @@ data() {
       color: '#000000',
       strokeType: 'dash',
       backgroundColor: '#FFFFFF',
-      backgroundImage: computed(()=> this.captureImg),
+      backgroundImage: computed(() => this.captureImg),
       watermark: null
     }
   },
@@ -154,7 +157,7 @@ data() {
     async setImage(event) {
       let URL = window.URL;
       this.backgroundImage = URL.createObjectURL(event.target.files[0]);
-      await this.$refs.VueCanvasDrawing.redraw();
+      await this.$refs.vueCanvasDrawing.redraw();
     },
     async setWatermarkImage(event) {
       let URL = window.URL;
@@ -168,10 +171,10 @@ data() {
           height: 400
         }
       }
-      await this.$refs.VueCanvasDrawing.redraw();
+      await this.$refs.vueCanvasDrawing.redraw();
     },
     getCoordinate(event) {
-      let coordinates = this.$refs.VueCanvasDrawing.getCoordinates(event);
+      let coordinates = this.$refs.vueCanvasDrawing.getCoordinates(event);
       this.x = coordinates.x;
       this.y = coordinates.y;
     },
@@ -183,17 +186,23 @@ data() {
   },
   setup(props, { emit }) {
     const store = useStore();
+    const vueCanvasDrawing = ref()
     const state = reactive({
       dialogVisible: computed(() => props.open),
       formLabelWidth: '120px',
       captureImg: computed(()=> props.captureImg),
       isLogin: computed(() => store.getters['root/getJWTToken']),
+      roomId: computed(()=> props.roomId),
     })
 
     onMounted(() => {
       // console.log(loginForm.value)
     })
     const handleClose = function (){
+      vueCanvasDrawing.value.reset()
+
+      state.image = ''
+
       emit('closeCaptureImgDialog')
     }
     function dataURLtoFile(dataurl, filename) {
@@ -215,7 +224,7 @@ data() {
        let formData = new FormData()
             var file = dataURLtoFile(image,"test.png");
             formData.append('upfile', file)
-            formData.append('teamId', 1)
+            formData.append('teamId', state.roomId)
             const today = new Date()
             const year = today.getFullYear()
             const month = ('0' + (today.getMonth() + 1)).slice(-2)
@@ -245,7 +254,7 @@ data() {
 
 
 
-    return { state, handleClose, save }
+    return { state, handleClose, save, vueCanvasDrawing }
   }
 }
 </script>

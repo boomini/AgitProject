@@ -239,14 +239,14 @@ export default {
         for(let i=0; i<store.state.root.userTeams.length; i++){
           console.log(userTeams[i]);
           if(store.state.root.userTeams[i].teamPicture==null){
-            userTeams[i].teamPicture = 'https://i6a403.p.ssafy.io/img/agit_logo.e339fd5c.png'
+            userTeams[i].teamPicture = require('@/assets/images/agit_logo.png')
           }else{
              userTeams[i].teamPicture = 'http://localhost:8080/api/v1/team/profileimg/'+userTeams[i].id;
           }
         }
         return userTeams;
       } ),
-      circleUrl: 'https://i6a403.p.ssafy.io/img/agit_logo.e339fd5c.png',
+      circleUrl: require('@/assets/images/agit_logo.png'),
 
 
       selectedIndex:-1,

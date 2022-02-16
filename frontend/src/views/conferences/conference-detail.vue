@@ -150,6 +150,7 @@
       <capture-img
       :open="state.captureImgDialogOpen"
       :captureImg="state.captureImg"
+      :roomId="state.roomId"
       @closeCaptureImgDialog="onCloseCaptureImgDialog"/>
     </div>
 
