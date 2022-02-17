@@ -1,5 +1,6 @@
 <template>
   <div id="container">
+    <img :src="require('../../assets/images/agit_logo.png')" id="intro-logo">
     <div class="hello">
       <!-- 회원가입, 로그인 버튼 -->
       <div class="d-flex justify-content-end" style="margin-right: 250px;">
@@ -253,16 +254,23 @@ export default {
 </script>
 
 <style scoped>
+#intro-logo{
+  margin-top: 4px;
+  position: absolute;
+  margin-left: 60px;
+  width: 85px;
+  height: 65px;
+}
 @import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&family=Noto+Sans+KR:wght@300&display=swap');
 #container {
   position: absolute;
   top: -90px;
-  left: -260px;
+  left: -90px;
   margin-left: 0;
   margin-top: 0;
   z-index: 10;
   background-color: white;
-  width: 122.7%;
+  width: 111.1%;
 
   /* background: #112; */
   /* background-image: url("https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1"); */

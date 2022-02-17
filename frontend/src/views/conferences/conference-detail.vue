@@ -17,10 +17,9 @@
       </div>
     </div>
     <div class="d-flex-row justify-content-between my-3" v-if="state.session">
-        <div class="d-flex justify-content-between align-items-center offset-4" id="header" data-html2canvas-ignore="true">
-          <!-- <div v-if="state.recordState">
-            <i class="fa-solid fa-camera-web" id="record-lens"></i>
-          </div> -->
+        <div class="d-flex justify-content-between align-items-center" id="header" data-html2canvas-ignore="true">
+          <div>
+	  </div>
           <h1 id="conference-name" class="text-center">{{ state.teamName }}'s Room</h1>
             <!-- <div class="logo" id="neon" style="width: 100%; height: 35vh;">
               <b><span>a</span><span>g</span>i<span>t</span></b>
@@ -188,29 +187,25 @@
 #chat-container {
   position: absolute;
   top: -90px;
-  left: -100px;
-  margin-left: 0;
+  left: -90px;
   margin-top: 0;
   z-index: 10;
   background-color: #36393f;
-  width: 100vw;
+  width: 111.1%;
   height: 100vh;
   background-size:cover;
 }
-#conference-name{
-  transform: translate(0, 0);
-}
 #close-btn {
-  transform: translate(0, 0);
-  font-size: 5vh;
-  width: 4.5vw;
-  height: 7vh;
+  font-size: 45px;
+  width: 80px;
+  height: 65px;
   background-color: #b53638;
   border-style: solid;
   border-color: black;
-  border-radius: 3vh;
-  border-width: 0.6vh;
+  border-radius: 25px;
+  border-width: 5px;
   cursor: pointer;
+  margin-right: 2vw;
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
 }
 #close-btn:hover{
@@ -250,7 +245,7 @@
   background-color: rgb(44, 43, 43);
 }
 #header{
-  width: 132vh;
+  width: 100vw;
   margin-bottom: 2vh;
 }
 #header h1{
