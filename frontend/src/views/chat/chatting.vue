@@ -148,6 +148,9 @@ export default {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+  width: 32vw;
+  text-align: center;
+  margin: auto;
 }
 
 .view {

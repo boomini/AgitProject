@@ -22,8 +22,8 @@ public class EmailServiceImpl implements EmailService{
     @Autowired
     UserRepositorySupport userRepositorySupport;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+//    @Autowired
+//    PasswordEncoder passwordEncoder;
 
     @Autowired
     JavaMailSender mailSender;
@@ -39,16 +39,16 @@ public class EmailServiceImpl implements EmailService{
         return false;
     }
 
-    @Override
-    public MailDto createMailAndChangePassword(String userEmail, String userName) {
-        String str = getTempPassword();
-        MailDto dto = new MailDto();
-        dto.setAddress(userEmail);
-        dto.setTitle(userName+"님의 임시 비밀번호 안내 이메일");
-        dto.setMessage("임시 비밀번호 안내 이메일 입니다."+ "[" + userName + "]" + "님의 임시 비밀 번호는" + str + "입니다.");
-        updatePassword(str, userEmail);
-        return dto;
-    }
+//    @Override
+//    public MailDto createMailAndChangePassword(String userEmail, String userName) {
+//        String str = getTempPassword();
+//        MailDto dto = new MailDto();
+//        dto.setAddress(userEmail);
+//        dto.setTitle(userName+"님의 임시 비밀번호 안내 이메일");
+//        dto.setMessage("임시 비밀번호 안내 이메일 입니다."+ "[" + userName + "]" + "님의 임시 비밀 번호는" + str + "입니다.");
+//        updatePassword(str, userEmail);
+//        return dto;
+//    }
 
     @Override
     public MailDto sendAuthEmail(String userEmail) {
@@ -71,17 +71,17 @@ public class EmailServiceImpl implements EmailService{
         return dto;
     }
 
-    @Override
-    public void updatePassword(String str, String userId) {
-        User user = new User();
-        String pw = passwordEncoder.encode(str);
-        if(userRepositorySupport.findUserByUserId(userId).isPresent()) {
-            user = userRepositorySupport.findUserByUserId(userId).get();
-        }
-        user.setPassword(pw);
-        userRepository.save(user);
-
-    }
+//    @Override
+//    public void updatePassword(String str, String userId) {
+//        User user = new User();
+//        String pw = passwordEncoder.encode(str);
+//        if(userRepositorySupport.findUserByUserId(userId).isPresent()) {
+//            user = userRepositorySupport.findUserByUserId(userId).get();
+//        }
+//        user.setPassword(pw);
+//        userRepository.save(user);
+//
+//    }
 
     @Override
     public String getTempPassword() {
