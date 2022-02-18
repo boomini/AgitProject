@@ -23,9 +23,6 @@ public class EmailServiceImpl implements EmailService{
     UserRepositorySupport userRepositorySupport;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
     JavaMailSender mailSender;
 
     private static final String FROM_ADDRESS = "yhy0818@gmail.com";
@@ -39,16 +36,16 @@ public class EmailServiceImpl implements EmailService{
         return false;
     }
 
-    @Override
-    public MailDto createMailAndChangePassword(String userEmail, String userName) {
-        String str = getTempPassword();
-        MailDto dto = new MailDto();
-        dto.setAddress(userEmail);
-        dto.setTitle(userName+"님의 임시 비밀번호 안내 이메일");
-        dto.setMessage("임시 비밀번호 안내 이메일 입니다."+ "[" + userName + "]" + "님의 임시 비밀 번호는" + str + "입니다.");
-        updatePassword(str, userEmail);
-        return dto;
-    }
+//    @Override
+//    public MailDto createMailAndChangePassword(String userEmail, String userName) {
+//        String str = getTempPassword();
+//        MailDto dto = new MailDto();
+//        dto.setAddress(userEmail);
+//        dto.setTitle(userName+"님의 임시 비밀번호 안내 이메일");
+//        dto.setMessage("임시 비밀번호 안내 이메일 입니다."+ "[" + userName + "]" + "님의 임시 비밀 번호는" + str + "입니다.");
+//        updatePassword(str, userEmail);
+//        return dto;
+//    }
 
     @Override
     public MailDto sendAuthEmail(String userEmail) {
@@ -64,24 +61,24 @@ public class EmailServiceImpl implements EmailService{
     @Override
     public MailDto sendTeamAddEmail(String userEmail,Long teamId) {
         MailDto dto = new MailDto();
-        String teamurl = "http://localhost:8083/room/"+teamId;
+        String teamurl = "https://i6a403.p.ssafy.io/room/"+teamId;
         dto.setAddress(userEmail);
         dto.setTitle("Agit 방추가 안내 이메일");
         dto.setMessage("방추가 안내이메일 입니다. 해당 링크를 통해 접속 후 수락해주세요\n"+teamurl);
         return dto;
     }
 
-    @Override
-    public void updatePassword(String str, String userId) {
-        User user = new User();
-        String pw = passwordEncoder.encode(str);
-        if(userRepositorySupport.findUserByUserId(userId).isPresent()) {
-            user = userRepositorySupport.findUserByUserId(userId).get();
-        }
-        user.setPassword(pw);
-        userRepository.save(user);
-
-    }
+//    @Override
+//    public void updatePassword(String str, String userId) {
+//        User user = new User();
+//        String pw = passwordEncoder.encode(str);
+//        if(userRepositorySupport.findUserByUserId(userId).isPresent()) {
+//            user = userRepositorySupport.findUserByUserId(userId).get();
+//        }
+//        user.setPassword(pw);
+//        userRepository.save(user);
+//
+//    }
 
     @Override
     public String getTempPassword() {

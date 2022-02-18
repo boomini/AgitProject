@@ -19,3 +19,19 @@ export function getJWTToken (state) {
 export function getTeams (state) {
   return state.userTeams
 }
+
+// 메시지 정보 가져오기
+export function getMessages (state) {
+  return state.messages
+}
+
+export function getSecretName (state) {
+  return state.secretName
+}
+
+// 채팅방 아이디 가져오기
+export function getChattingRoomId (state) {
+  return state.chattingRoomId
+}
+
+

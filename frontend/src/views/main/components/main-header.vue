@@ -3,23 +3,32 @@
     class="main-header"
     :gutter="10"
     :style="{ 'height': height }">
-    <div class="hide-on-small">
-      <div class="logo-wrapper" @click="clickLogo"><div class="ic ic-logo"/></div>
+    <div class="hide-on-small mb-3">
+      <div class="d-flex align-items-center" @click="clickLogo">
+        <div class="logo-wrapper"><div class="ic ic-logo"/></div>
+        <p id="logo-text">Agit</p>
+        <p id="logo-sub">our secret space</p>
+      </div>
       <div class="tool-wrapper">
-        <div class="search-field">
+        <!-- <div class="search-field">
           <el-input
             placeholder="검색"
             prefix-icon="el-icon-search"
             v-model="state.searchValue">
           </el-input>
-        </div>
+        </div> -->
         <div v-if="state.isLogin === null" class="button-wrapper">
-          <el-button type="success" @click="clickSignup">회원가입</el-button>
-          <el-button type="primary" @click="clickLogin">로그인</el-button>
+          <p class="text-center" @click="clickSignup">회원가입</p>
+          <p class="text-center" @click="clickLogin">로그인</p>
         </div>
+          <!-- <el-button type="danger" @click="clickIntro">소개페이지</el-button> -->
+          <!-- <el-button type="warning" @click="clickCenter">고객센터</el-button> -->
+          <!-- <el-button type="info" @click="clickSchedule">일정관리</el-button> -->
+          <!-- <el-button type="success" @click="clickProfile">마이 페이지</el-button> -->
         <div v-else class="button-wrapper">
-          <el-button type="success" @click="clickProfile">마이 페이지</el-button>
-          <el-button type="primary" @click="clickLogout">로그아웃</el-button>
+          <p class="text-center" @click="clickSchedule">마이페이지</p>
+          <p class="text-center" @click="clickLogout">로그아웃</p>
+          <!-- <el-button type="primary" @click="clickLogout">로그아웃</el-button> -->
         </div>
       </div>
 
@@ -152,8 +161,9 @@ export default {
       store.commit('root/setJWTTokenReset')
       localStorage.removeItem('JWT')
       store.commit('root/setMenuActive', 0)
+      store.commit('root/setUserTeam', [])
       router.push({
-        name: 'home',
+        name: 'Intro',
       })
     }
 
@@ -172,11 +182,41 @@ export default {
       })
     }
 
+    const clickIntro = function () {
+      const getMenus = store.getters['root/getMenus'];
+      const commonMenuKeys = Object.keys(getMenus)
+      router.push({
+        name: commonMenuKeys[0]
+      })
+    }
+
+    const clickCenter = function () {
+      const getMenus = store.getters['root/getMenus'];
+      const commonMenuKeys = Object.keys(getMenus)
+      router.push({
+        name: commonMenuKeys[1]
+      })
+    }
+
+    const clickSchedule = function () {
+      const getMenus = store.getters['root/getMenus'];
+      const commonMenuKeys = Object.keys(getMenus)
+      router.push({
+        name: commonMenuKeys[2]
+      })
+    }
+
+    const clickChat = function () {
+      router.push({
+        name: 'chatting'
+      })
+    }
+
     const changeCollapse = () => {
       state.isCollapse = !state.isCollapse
     }
 
-    return { state, menuSelect, clickLogo, clickLogin, clickSignup, changeCollapse, clickLogout, clickProfile }
+    return { state, clickChat, menuSelect, clickLogo, clickLogin, clickSignup, changeCollapse, clickLogout, clickProfile, clickIntro, clickCenter, clickSchedule }
   }
 }
 </script>
@@ -220,7 +260,7 @@ export default {
   .mobile-sidebar-wrapper .mobile-sidebar .mobile-sidebar-tool-wrapper {
     padding-bottom: 20px;
   }
-  .mobile-sidebar-wrapper .mobile-sidebar .mobile-sidebar-btn {
+  .mobile-sidebar-wrapper .mobile-sidebar .mobile-sidebar-wn {
     display: block;
     margin: 0 auto;
     margin-top: 25px;
@@ -261,9 +301,14 @@ export default {
   }
 
   /*Desktop - Need to add Class if Need*/
+  .hide-on-small{
+    width: 100vw;
+    display: flex;
+  }
+
   .main-header .hide-on-small .logo-wrapper {
+    width: 6vw;
     cursor: pointer;
-    display: inline-block;
   }
   .main-header .hide-on-small .logo-wrapper .ic.ic-logo {
     width: 70px;
@@ -273,18 +318,30 @@ export default {
     background-image: url('../../../assets/images/agit_logo.png');
   }
   .main-header .hide-on-small .tool-wrapper {
-    width: 50%;
-    float: right;
+    width: 80%;
+    display: flex;
+    justify-content: end;
   }
   .main-header .hide-on-small .tool-wrapper .button-wrapper {
-    width: 45%;
     float: right;
+    display: flex;
   }
-  .main-header .hide-on-small .tool-wrapper .button-wrapper .el-button {
-    width: 45%;
+  /* .main-header .hide-on-small .tool-wrapper .button-wrapper .el-button {
+    width: 120px;
     height: 50px;
     cursor: pointer;
     margin-right: 1%;
+  } */
+  .main-header .hide-on-small .tool-wrapper .button-wrapper p {
+    width: 90px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 15px;
+    transform: translate(-40%);
+  }
+  .main-header .hide-on-small .tool-wrapper .button-wrapper p:hover {
+    transform: translate(-40%) scale(0.96);
+    color: #3bb8b8;
   }
   .main-header .hide-on-small .tool-wrapper .search-field {
     width: 50%;
@@ -312,6 +369,24 @@ export default {
     animation: unfoldIn 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
   }
 
+  .select{
+    color: #3bb8b8;
+  }
+  #logo-text{
+    font-weight: bold;
+    font-size: 35px;
+    color: #78ccbb;
+    text-shadow: 1px 1px 2px #162d42;
+    transform: translate(0, -5%);
+    cursor: pointer;
+  }
+  #logo-sub{
+    font-size: 12px;
+    color: #78ccbb;
+    text-shadow: 0.8px 0.8px 1px #162d42;
+    transform: translate(0, 50%);
+    cursor: pointer;
+  }
   /* .el-overlay .el-overlay-dialog {
     background-color: white;
   } */

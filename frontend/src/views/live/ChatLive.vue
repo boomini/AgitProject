@@ -1,50 +1,50 @@
 <template>
-    <div class="chat-panel">
-    <div class="chat-box p-2 d-flex flex-column h-100">
-      <div class="header text-left">
+    <div>
+    <div class="chat-box p-2 d-flex flex-column mt-1">
+      <div class="header text-left d-flex justify-content-center align-items-center">
         <span class="title">
           채팅
         </span>
-        <button
-          class="btn close-btn"
+        <!-- <button
+          class="btn close-btn m-3"
           @click="toggleChatPanel"
         >
           <i class="fas fa-times"></i>
-        </button>
+        </button> -->
       </div>
       <!-- 채팅 내역 -->
       <div
         id="chat-area"
-        :height="chatHeight"
+        :height="state.form.chatHeight"
       >
         <div
-          class="mt-2 text-left message"
-          v-for="(message, i) of messages"
+          class="mt-2 mx-2 text-left message"
+          v-for="(message, i) of state.messages"
           :key="i"
         >
           <div class="message-title">
-            <span class="mr-2 message-header">{{ message.sender }}</span>
-            <span class="message-header">{{ message.time }}</span>
+            <span class="mr-2 message-header">{{ message.sender }} :</span>
+            <span class="m-3 message-header">{{ message.time }}</span>
           </div>
           <div>
             {{ message.message }}
           </div>
         </div>
       </div>
-      <div class="footer d-flex mt-auto">
-        <div class="col-10 px-1 py-0">
+      <div class="d-flex mt-auto text-center">
+        <div class="mx-1">
           <input
             class="text-box"
-            v-model="message"
+            v-model="state.form.message"
             @keyup.enter="clickSendMessage"
           >
         </div>
-        <div class="col-2 p-0">
+        <div class="mx-1">
           <button
             class="send-btn"
             @click="clickSendMessage"
           >
-            <i class="fas fa-paper-plane"></i>
+            <i class="fas fa-paper-plane color-g text-center"></i>
           </button>
         </div>
       </div>
@@ -53,97 +53,96 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { reactive, computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
 export default {
   name: "ChatLive",
-  data() {
-    return {
+
+  setup( props , { emit }){
+  const store = useStore()
+
+
+  const state = reactive({
+    form:{
       message: "",
-      chatHeight: "33vh",
-      messages: []
-    };
-  },
-  watch: {
-    messages() {
-      setTimeout(() => {
-        var chatDiv = document.getElementById("chat-area");
-        chatDiv.scrollTo({
-          top: chatDiv.scrollHeight - chatDiv.clientHeight,
-          behavior: 'smooth'
-        })
-      }, 50);
+      chatHeight: "30vh",
     },
-    currentMode() {
-      if (this.currentMode === "") {
-        this.chatHeight = "80vh"
-      } else {
-        this.chatHeight="40vh"
-      }
-    }
-  },
-  // 여기 연결 시켜야 함
-  computed: {
+    messages: computed(() => store.getters['root/getMessages']),
+  })
 
-  },
-  methods: {
-    ...mapActions("", [
-      "toggleChatPanel",
-      "sendMessage",
-    ]),
-    clickSendMessage() {
-      // 공백이 없으면 메시지 전송
-      if (this.message.trim()) {
-        this.sendMessage(this.message)
-        this.message = ""
-      }
+  const clickSendMessage = function (){
+    if (state.form.message.trim()){
+      emit("sendMessage", state.form.message)
+      state.form.message = ""
+      setTimeout(() => {
+        let chatDiv = document.getElementById("chat-area")
+        chatDiv.scrollTo(0, chatDiv.scrollHeight)
+      }, 50)
+     }
     }
-  },
-};
+
+    return {state, clickSendMessage}
+
+  }
+}
 </script>
-
 <style scoped>
 .chat-box {
-  height: 100%;
+  width: 23vw;
+  height: 72vh;
+  margin-right: 2vw;
+  border-radius: 15px;
+  border-width: 0.35vh;
+  border-style: solid;
+  border-color: black;
+  background-color: rgb(85, 174, 121);
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.25);
+}
+.color-g{
+  color: #323f45;
 }
 
 .header {
   position: relative;
-}
-
-.close-btn {
-  position: absolute;
-  color: white;
-  top: 3px;
-  right: 10px;
+  background-color: rgb(70, 148, 101);
 }
 
 .text-box {
-  background-color: #D1D1D1;
-  width: 100%;
-  border-radius: 20px;
+  background-color: #a7a6a6;
+  width: 18vw;
+  border-radius: 12px;
   color: black;
-  padding-left: 10px;
+  padding-left: 0.8vw;
+  height: 4.8vh;
 }
 
 .text-box:focus {
   outline: none;
 }
 
+.send-btn {
+  border-radius: 1.5vh;
+  height: 4.8vh;
+  width: 2.5vw;
+  color: #f6f6f6;
+}
+
 .title {
   padding-left: 5%;
   font-family: 'Jua' !important;
   font-size: 1.0rem !important;
-  color: white;
+  color: black;
 }
 
 .header {
   width: 100%;
   border-radius: 20px;
-  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.3);
+  box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.45);
   height: 4vh;
 }
 .message-title {
-
   font-size: 0.8rem;
 }
 
@@ -152,12 +151,9 @@ export default {
 }
 
 .message {
-  color: white;
+  color: black;
 }
 
-.send-btn {
-  color: white;
-}
 
 #chat-area {
   overflow-y: auto;
@@ -177,12 +173,11 @@ export default {
 }
 
 #chat-area::-webkit-scrollbar-thumb {
-  background:  #b0a2c8;
+  background:  #a7a6a6;
 }
 
 #chat-area::-webkit-scrollbar-button {
   background-color: #37474F;
   height: 0;
 }
-
 </style>

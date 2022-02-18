@@ -38,3 +38,11 @@ export function clearMessages(state){
 export function setSecretName(state, value){
   state.scretName = value
 }
+
+export function setChattingRoomId(state, value){
+  state.chattingRoomId = value
+}
+
+export function setNickName (state, value) {
+  state.nickName = value
+}

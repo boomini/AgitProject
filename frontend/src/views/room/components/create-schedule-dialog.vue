@@ -4,6 +4,7 @@
     v-model="state.dialogVisible"
     @close="handleClose"
     width="30%"
+    :destroy-on-close="true"
   >
     <!-- header -->
     <template #title>
@@ -19,33 +20,34 @@
       </div>
       <div>
         <el-form :model="state.form" :rules="state.rules" ref="createScheduleForm" :label-position="state.form.align">
-          <el-form-item prop="startdate" label="시작일자">
+          <!-- <el-form-item prop="startdate" label="시작일자">
             <el-date-picker
               style="width: 100%;"
-              v-model="state.form.startdate"
+              v-model="registerDate"
               type="date"
               value-format="YYYY-MM-DD"
               placeholder="일자를 선택해주세요."
             >
             </el-date-picker>
-          </el-form-item>
-          <el-form-item prop="enddate" label="종료일자">
+          </el-form-item> -->
+          <el-form-item prop="enddate" label="날짜">
             <el-date-picker
               style="width: 100%;"
               v-model="state.form.enddate"
               type="date"
               value-format="YYYY-MM-DD"
               placeholder="일자를 선택해주세요."
+              disabled
             >
             </el-date-picker>
           </el-form-item>
           <el-form-item prop="title" label="제목">
             <el-input
               v-model="state.form.title"
-              maxlength="20"
+              maxlength="12"
               placeholder="약속의 제목을 입력해주세요."
               show-word-limit
-              rows="2"
+              rows="1"
               type="textarea"
               resize="none"
             >
@@ -54,10 +56,10 @@
           <el-form-item prop="content" label="내용">
             <el-input
               v-model="state.form.content"
-              maxlength="500"
+              maxlength="100"
               placeholder="약속의 내용을 입력해주세요."
               show-word-limit
-              rows="10"
+              rows="5"
               type="textarea"
               resize="none"
             >
@@ -73,9 +75,9 @@
         <el-button @click="handleClose">취소</el-button>
         <el-button type="primary" @click="createSchedule">약속잡기</el-button>
       </span>
-      <span>
+      <!-- <span>
         {{ info.teamId }}
-      </span>
+      </span> -->
     </template>
   </el-dialog>
 </template>
@@ -97,6 +99,10 @@ export default {
       type: Object,
       required: true,
     },
+    registerDate: {
+      type: String,
+      default: '1970-01-01'
+    }
   },
 
   setup(props, { emit }) {
@@ -108,8 +114,8 @@ export default {
       form: {
         align: 'left',
         content: '',
-        startdate: '',
-        enddate: '',
+        startdate: computed(() => props.registerDate),
+        enddate: computed(() => props.registerDate),
         title: '',
         teamId: '',
       },
@@ -133,8 +139,7 @@ export default {
     const handleClose = function () {
       state.form.content = ''
       state.form.title = ''
-      state.form.startdate = ''
-      state.form.enddate = ''
+      // state.form.enddate = ''
       emit('closeCreateScheduleDialog')
     }
 
@@ -148,26 +153,28 @@ export default {
         'endDate': state.form.enddate
       }
       const teamId = props.info.teamId
+      const uploadDate = state.form.startdate.slice(0, -3)
       // const teamId = props.info.teamId
       store.dispatch('root/createSchedule',{ 'body': body, 'token': token, 'teamId': teamId})
       .then(res => {
-          setTimeout(() => {
-                swal({
-                  title: "약속 등록",
-                  text: "약속이 일정에 등록되었습니다.",
-                  icon: "success",
-                  button: "확인",
-                });
-              }, 500)
+        setTimeout(() => {
+          swal({
+            title: '약속 등록',
+            text: '약속이 일정에 등록되었습니다.',
+            icon: 'success',
+            button: '확인',
+          });
+        }, 500)
 
-              // router.go(router.currentRoute)
-
-
-              handleClose()
-        })
-        .catch(err => {
-          console.log(err)
-        })
+        // router.go(router.currentRoute)
+        console.log(res)
+        // console.log(swal)
+        emit('createSchedule')
+        handleClose()
+      })
+      .catch(err => {
+        console.log(err)
+      })
 
       handleClose()
     }
@@ -182,6 +189,8 @@ export default {
 <style>
 .create-schedule-dialog {
   width: 700px;
-  height: 800px;
+  height: 450px !important;
 }
+
+
 </style>

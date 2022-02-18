@@ -1,18 +1,23 @@
 <template>
   <div id="container">
+    <img :src="require('../../assets/images/agit_logo.png')" id="intro-logo">
     <div class="hello">
       <!-- 회원가입, 로그인 버튼 -->
-      <div class="d-flex justify-content-end" style="margin-top:20px; margin-right: 250px;">
+      <div class="d-flex justify-content-end" style="margin-right: 250px;">
         <el-row :gutter="20">
           <!-- v-if문으로 수정 예정 -->
-          <div v-if="state.isLogin === null" class="button-wrapper d-flex flex-row" style="position:fixed;right:200px">
-            <el-button @click="clickSignup" style="background-color:#112; color: white;">회원가입</el-button>
-            <el-button @click="clickAuth" style="background-color:#112; color: white;">인증</el-button>
-            <el-button @click="clickLogin " style="background-color:#112; color: white;">로그인</el-button>
+          <div v-if="state.isLogin === null" class="button-wrapper d-flex flex-row" style="position:fixed; top:35px; right:70px">
+            <!-- <el-button @click="clickSignup" style="background-color:#112; color: white;">회원가입</el-button> -->
+            <!--<el-button @click="clickAuth" style="background-color:#112; color: white;">인증w</el-button>-->
+            <!-- <el-button @click="clickLogin" style="background-color:#112; color: white;">로그인</el-button> -->
+            <p @click="clickSignup" class="intro-btn">회원가입</p>
+            <p @click="clickLogin" class="intro-btn">로그인</p>
           </div>
-          <div v-else class="button-wrapper d-flex flex-row" style="position:fixed">
-            <el-button @click="clickProfile" style="background-color:#112; color: white;">마이 페이지</el-button>
-            <el-button @click="clickLogout" style="background-color:#112; color: white;">로그아웃</el-button>
+          <div v-else class="button-wrapper d-flex flex-row" style="position:fixed;top:35px; right:70px">
+            <p @click="clickHome" class="intro-btn">홈으로</p>
+            <p @click="clickLogout" class="intro-btn">로그아웃</p>
+            <!-- <el-button @click="clickHome" style="background-color:#112; color: white;">홈으로</el-button>
+            <el-button @click="clickLogout" style="background-color:#112; color: white;">로그아웃</el-button> -->
           </div>
          </el-row>
       <!-- 로고(네온사인)!! -->
@@ -60,20 +65,7 @@
           <p class="card-text" style="color: #808080">
             나의 스케줄을 한 눈에 확인 해보세요.
           </p>
-          <div class="demo-collapse">
-            <el-collapse v-model="activeName" accordion>
-              <el-collapse-item title="누르면 실제 서비스 스샷" name="1">
-                <div>
-                  Consistent within interface: all elements should be consistent, such
-                  as: design style, icons and texts, position of elements, etc.
-                </div>
-                <div>
-                  Consistent within interface: all elements should be consistent, such
-                  as: design style, icons and texts, position of elements, etc.
-                </div>
-              </el-collapse-item>
-            </el-collapse>
-          </div>
+
 
         </div>
         <img
@@ -104,20 +96,6 @@
           <p class="card-text" style="color: #808080; width:100%;">
             화상으로 반가운 얼굴들을 만날 수 있습니다.
           </p>
-          <div class="demo-collapse">
-            <el-collapse v-model="activeName" accordion>
-              <el-collapse-item title="누르면 실제 서비스 스샷" name="1">
-                <div>
-                  Consistent within interface: all elements should be consistent, such
-                  as: design style, icons and texts, position of elements, etc.
-                </div>
-                <div>
-                  Consistent within interface: all elements should be consistent, such
-                  as: design style, icons and texts, position of elements, etc.
-                </div>
-              </el-collapse-item>
-            </el-collapse>
-          </div>
 
 
         </div>
@@ -138,20 +116,7 @@
             사진, 동영상, 일정 등을 앨범에 담아보세요.
           </p>
 
-          <div class="demo-collapse">
-            <el-collapse v-model="activeName" accordion>
-              <el-collapse-item title="누르면 실제 서비스 스샷" name="1">
-                <div>
-                  Consistent within interface: all elements should be consistent, such
-                  as: design style, icons and texts, position of elements, etc.
-                </div>
-                <div>
-                  Consistent within interface: all elements should be consistent, such
-                  as: design style, icons and texts, position of elements, etc.
-                </div>
-              </el-collapse-item>
-            </el-collapse>
-          </div>
+
 
         </div>
         <img
@@ -258,43 +223,56 @@ export default {
           });
       store.commit('root/setJWTTokenReset')
       localStorage.removeItem('JWT')
-      store.commit('root/setMenuActive', 0)
+      store.commit('root/setMenuActive', 2)
       router.push({
-        name: 'home',
+        name: 'Intro',
       })
     }
 
-    const clickProfile = function () {
-      const token = store.getters['root/getJWTToken']
-      store.dispatch('root/getProfile', token)
-      .then(res => {
-        console.log('정보가져오기')
-        console.log(res)
+    const clickHome = function () {
+      router.push({
+        name: 'schedule',
       })
-      .catch(err => {
-        console.log(err)
-      })
+      // const token = store.getters['root/getJWTToken']
+      // store.dispatch('root/getProfile', token)
+      // .then(res => {
+      //   console.log('정보가져오기')
+      //   console.log(res)
+      // })
+      // .catch(err => {
+      //   console.log(err)
+      // })
     }
-
-
-
-    return { state, clickLogin, clickSignup, clickAuth, clickLogout, clickProfile }
+    // 인트로 페이지 방문시 최상단으로 스크롤 이동
+    const scrollTop = function (){
+      window.scrollTo(0, 0)
+    }
+    scrollTop()
+    return { state, clickLogin, clickSignup, clickAuth, clickLogout, clickHome, scrollTop}
   }
 }
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&family=Noto+Sans+KR:wght@300&display=swap');
+#intro-logo{
+  margin-top: 4px;
+  position: absolute;
+  margin-left: 60px;
+  width: 85px;
+  height: 65px;
+}
 
+@import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&family=Noto+Sans+KR:wght@300&display=swap');
 #container {
   position: absolute;
   top: -90px;
-  left: -260px;
+  left: -90px;
   margin-left: 0;
   margin-top: 0;
   z-index: 10;
   background-color: white;
-  width: 125%;
+  width: 111.1%;
+
   /* background: #112; */
   /* background-image: url("https://www.dropbox.com/s/2ct0i6kc61vp0bh/wall.jpg?raw=1"); */
   background-size:cover;
@@ -327,6 +305,16 @@ html,body{
   margin:0;
   z-index: -3;
 } */
+.intro-btn{
+  font-size: 17px;
+  width: 5.5vw;
+  transform: translate(0, -50%);
+  cursor: pointer;
+}
+.intro-btn:hover{
+  color: #3bb8b8;
+  transform: scale(0.95) translate(0, -50%);
+}
 .logo {
   text-align: center;
   width: 65%;

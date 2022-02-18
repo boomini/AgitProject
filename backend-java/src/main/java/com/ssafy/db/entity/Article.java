@@ -21,8 +21,10 @@ import java.time.LocalDateTime;
 public class Article extends BaseEntity{
     @Column(columnDefinition="varchar(100)")
     String title;
+    @Column(columnDefinition="varchar(1000)")
     String content;
     String writer;
+    String nickName;
     String teamName;
     // 등록일
     LocalDate uploadDate;
@@ -59,10 +61,11 @@ public class Article extends BaseEntity{
     public Article(){}
 
     @Builder
-    public Article(Long id, String title, String content, String writer, String teamName, LocalDate uploadDate){
+    public Article(Long id, String title, String content, String writer, String nickName, String teamName, LocalDate uploadDate){
         this.id = id;
         this.title = title;
         this.content = content;
+        this.nickName = nickName;
         // 작성자 아이디
         this.writer = writer;
         // Team 이름

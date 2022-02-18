@@ -5,6 +5,7 @@ import com.ssafy.api.dto.ImageDto;
 import com.ssafy.db.entity.Image;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ImageService {
 
@@ -17,4 +18,6 @@ public interface ImageService {
     List<DayCountDto> getTeamImagesCountByMonth(String uploadDate, Long teamId);
 
     boolean deleteNotice(Long no, String path);
+
+    Optional<Image> findById(Long no);
 }

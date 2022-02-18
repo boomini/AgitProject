@@ -26,6 +26,7 @@ public class UserDto {
     LocalDateTime cDate;
     String password;
 
+    String profileImg;
     public User toEntity(){
         User build = User.builder()
                 .userId(userId)
@@ -33,13 +34,14 @@ public class UserDto {
                 .nickName(nickName)
                 .birthDay(birthDay)
                 .password(password)
+                .profileImg(profileImg)
                 .emailType(emailType)
                 .build();
         return build;
     }
 
     @Builder
-    public UserDto(Long id, String userId, String name, String nickName, LocalDate birthDay , LocalDateTime cDate, String password, EmailType emailType){
+    public UserDto(Long id, String userId, String name, String nickName, LocalDate birthDay , LocalDateTime cDate, String password, EmailType emailType,String profileImg){
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -48,6 +50,7 @@ public class UserDto {
         this.cDate = cDate;
         this.password = password;
         this.emailType = emailType;
+        this.profileImg = profileImg;
     }
 
     @Builder
@@ -60,5 +63,6 @@ public class UserDto {
         this.cDate = user.getCDate();
         this.password = user.getPassword();
         this.emailType = user.getEmailType();
+        this.profileImg = user.getProfileImg();
     }
 }

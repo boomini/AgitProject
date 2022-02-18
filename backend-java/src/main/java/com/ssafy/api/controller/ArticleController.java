@@ -24,13 +24,14 @@ public class ArticleController {
     ArticleService articleService;
 
 
-    @PostMapping()
+    @PostMapping("/{teamId}")
     @ApiOperation(value = "게시글 작성", notes = "<strong>글 제목과 글 내용</strong>를 통해 회원가입 한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<? extends BaseResponseBody> addArticle (@RequestBody @ApiParam(value="로그인 정보", required = true) ArticleDto articleDto) throws Exception {
-        Article article = articleService.addArticle(articleDto);
+    public ResponseEntity<? extends BaseResponseBody> addArticle (@RequestBody @ApiParam(value="로그인 정보", required = true) ArticleDto articleDto,
+                                                                  @ApiParam(value = "userId", required = true) @PathVariable("teamId") Long teamId) throws Exception {
+        Article article = articleService.addArticle(articleDto, teamId);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
 
@@ -120,7 +121,8 @@ public class ArticleController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
     })
-    public ResponseEntity<? extends  BaseResponseBody> updateArticleDetail(@ApiParam(value = "id", required = true) @PathVariable("id") Long id, ArticleDto articleDto){
+    public ResponseEntity<? extends  BaseResponseBody> updateArticleDetail(@ApiParam(value = "id", required = true) @PathVariable("id") Long id,
+                                                                           @RequestBody @ApiParam(value="로그인 정보", required = true) ArticleDto articleDto){
         if(!articleService.updateArticleDetailById(id, articleDto)){
             // 수정하려는 글이 없으면 예외처리
             throw new CArticleNotFoundException();

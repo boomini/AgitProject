@@ -80,8 +80,11 @@ export default {
           // 'name': props.info.name,
           // 'password': props.info.password,
           // 'year': props.info.year,
+          'birthDay': props.info.birthDay,
           'nickName': state.form.inputNickname,
         }
+        console.log(body)
+        console.log("다이얼로그")
         store.dispatch('root/editProfile',{ 'body': body, 'token': token})
         // console.log(props.info.cdate)
         .then(res => {

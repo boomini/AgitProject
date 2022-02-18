@@ -44,7 +44,8 @@ public class UserTeamRepositroySupport {
                 .from(qUserTeam)
                 .join(qUser)
                 .on(qUserTeam.user.id.eq(qUser.id))
-                .where(qUserTeam.team.id.eq(id))
+                .where(qUserTeam.team.id.eq(id)
+                        .and(qUserTeam.state.eq(1)) )
                 .fetch();
 
         return Optional.ofNullable(userList);
@@ -60,6 +61,17 @@ public class UserTeamRepositroySupport {
                 .fetch();
 
         return Optional.ofNullable(teamList);
+    }
+
+    //팀유저 상태확인
+    public Optional<UserTeam> findTeamUserStateByTeamIdAndUserId(Long teamId, Long userId) {
+        UserTeam userTeam = jpaQueryFactory.select(qUserTeam)
+                .from(qUserTeam)
+                .where(qUserTeam.user.id.eq(userId)
+                        .and (qUserTeam.team.id.eq(teamId)))
+                .fetchOne();
+        
+        return Optional.ofNullable(userTeam);
     }
     // 특정 유저와 관련된 모든 유저들
 }
