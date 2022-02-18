@@ -5,23 +5,28 @@ VS code (v1.64.2)
 IntelliJ (v2021.3.21)
 Gradle
 
-2. 설치 방법
+2. 설치 및 실행 방법
 git clone https://lab.ssafy.com/s06-webmobile1-sub2/S06P12A403.git
 
-Frontend 실행
-npm frontend
-npm i
-npm run serve
-
-Backend 실행
-실행 전에 MySql로 아래와 같이 ssafy_web_db 데이터베이스 생성
+MySql로 아래와 같이 ssafy_web_db 데이터베이스 생성
 create database ssafy_web_db;
 
-그 이후 backend-java/src/main/resources위치에 application.properties 파일에서 아래와 같이 설정
+backend-java/src/main/resources위치에 application.properties 파일에서 아래와 같이 설정
 spring.datasource.hikari.username={sql 유저네임}
 spring.datasource.hikari.password={sql 패스워드}
 
-backend-java/src/main/java 위치에 GroupCallApplication 실행
+
+cd frontend
+npm frontend
+npm i
+npm run build
+
+cd ../
+cd backend-java
+./gradlew clean build
+cd build/libs
+java -jar {jar 파일명}
+
 
 
 
