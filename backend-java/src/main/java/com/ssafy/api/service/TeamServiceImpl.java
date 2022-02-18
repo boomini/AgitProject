@@ -89,7 +89,7 @@ public class TeamServiceImpl implements TeamService{
         for(User user : userList){
             UserDto userDto = new UserDto(user);
             if(userDto.getProfileImg()!=null&&!userDto.getProfileImg().substring(0,4).equals("http")){
-                String url = "https://i6a403.p.ssafy.io/api/v1/user/profileimg/"+userDto.getId();
+                String url = "http://localhost:8080/api/v1/user/profileimg/"+userDto.getId();
                 userDto.setProfileImg(url);
             }
             userDtoList.add(userDto);

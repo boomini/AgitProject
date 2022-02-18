@@ -162,7 +162,7 @@ public class VideoController {
                                                                 @ApiParam(value = "date", required = true) @PathVariable("uploadDate") String cDate){
         List<VideoDto> videoDto = videoService.getVideoListAtDateByTeamId(cDate,teamId);
 
-        String imageBasePath = "https://i6a403.p.ssafy.io/api/v1/video/";
+        String imageBasePath = "http://localhost:8080/api/v1/video/";
         List<String> pathList = new ArrayList<>();
         for(int i=0; i<videoDto.size(); i++){
             pathList.add(imageBasePath+videoDto.get(i).getId());

@@ -185,7 +185,7 @@ public class ImageController {
     public ResponseEntity<List<String>> getTeamsImageListAtDate(@ApiParam(value = "teamName", required = true) @PathVariable("teamId") Long teamId,
                                                                       @ApiParam(value = "date", required = true) @PathVariable("uploadDate") String cDate){
         List<ImageDto> imageDto = imageService.getImageListAtDateByTeamId(cDate, teamId);
-        String imageBasePath = "https://i6a403.p.ssafy.io/api/v1/image/";
+        String imageBasePath = "http://localhost:8080/api/v1/image/";
         List<String> pathList = new ArrayList<>();
         for(int i=0; i<imageDto.size(); i++){
             pathList.add(imageBasePath+imageDto.get(i).getId());
