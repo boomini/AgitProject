@@ -22,12 +22,6 @@ public class EmailServiceImpl implements EmailService{
     @Autowired
     UserRepositorySupport userRepositorySupport;
 
-<<<<<<< HEAD
-//    @Autowired
-//    PasswordEncoder passwordEncoder;
-
-=======
->>>>>>> a7f98fe92ae98ad1ba5612fbece977ac4fdfc8c8
     @Autowired
     JavaMailSender mailSender;
 
