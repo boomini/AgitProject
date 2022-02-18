@@ -138,7 +138,7 @@ export default {
       imageList: computed(function(){
         let imageList = props.data.imageList
         for ( let i=0; i<imageList.length; i++){
-          imageList[i] = 'https://i6a403.p.ssafy.io/api/v1/image/'+imageList[i].id;
+          imageList[i] = 'http://localhost:8080/api/v1/image/'+imageList[i].id;
         }
         console.log(imageList)
         return imageList;
@@ -146,7 +146,7 @@ export default {
       videoList: computed(function(){
         let videoList = props.data.videoList
         for ( let i=0; i<videoList.length; i++){
-          videoList[i] = 'https://i6a403.p.ssafy.io/api/v1/video/'+videoList[i].id;
+          videoList[i] = 'http://localhost:8080/api/v1/video/'+videoList[i].id;
         }
         console.log(videoList);
         return videoList;

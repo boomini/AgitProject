@@ -6,7 +6,7 @@
         <template #header="{ date }">
           <div class="d-flex align-items-center">
             <div class="me-2">
-              <el-avatar :size="70" v-if="state.team.teamPicture!=null" :src="`https://i6a403.p.ssafy.io/api/v1/team/profileimg/${state.team.teamId}`"></el-avatar>
+              <el-avatar :size="70" v-if="state.team.teamPicture!=null" :src="`http://localhost:8080/api/v1/team/profileimg/${state.team.teamId}`"></el-avatar>
               <el-avatar :size="70" v-else :src="require('@/assets/images/agit_logo.png')"></el-avatar>
             </div>
             <div>

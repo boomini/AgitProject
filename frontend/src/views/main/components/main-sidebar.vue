@@ -245,7 +245,7 @@ export default {
           if(store.state.root.userTeams[i].teamPicture==null){
             userTeams[i].teamPicture = require('@/assets/images/agit_logo.png')
           }else{
-             userTeams[i].teamPicture = 'https://i6a403.p.ssafy.io/api/v1/team/profileimg/'+userTeams[i].id;
+             userTeams[i].teamPicture = 'http://localhost:8080/api/v1/team/profileimg/'+userTeams[i].id;
           }
         }
         return userTeams;
