@@ -26,8 +26,8 @@
           <div class="login-title">간편로그인</div>
           <div class="login-btn-wrap">
             <button @click="handleClickSignIn" class='easy-custom-btn google-btn'></button>
-            <button @click="handleClickSignIn" class='easy-custom-btn naver-btn'></button>
-            <button @click="handleClickSignIn" class='easy-custom-btn kakao-btn'></button>
+            <button @click="tempClickSign" class='easy-custom-btn naver-btn'></button>
+            <button @click="tempClickSign" class='easy-custom-btn kakao-btn'></button>
           </div>
         </div>
       </div>
@@ -356,7 +356,16 @@ methods: {
             loading.value = false
           })
     }
-    return { loginForm, state, clickLogin, handleClose, loading,tokenVerify }
+
+    const tempClickSign = function (){
+      swal({
+          title: "향후 추가 예정입니다.",
+          text: "현재는 구글로만 가능합니다. 미안합니다 ㅠㅠ",
+          icon: "warning",
+          button: "확인",
+        })
+    }
+    return { loginForm, state, clickLogin, handleClose, loading,tokenVerify, tempClickSign }
   }
 }
 </script>
