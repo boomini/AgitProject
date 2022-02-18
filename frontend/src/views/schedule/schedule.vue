@@ -458,7 +458,7 @@ export default {
         for (var i = 0; i < state.schedulelength; i++) {
           let tempendday = state.infos[i].endDate
           let enddayday = Number(tempendday.slice(8,10))
-          if (Number(today.slice(8,10)) === enddayday) {
+          if (state.infos[i].dday == 0) {
             todayschedule.push(state.infos[i])
             console.log(todayschedule)
             console.log('확인해봐')

@@ -22,9 +22,12 @@ public class EmailServiceImpl implements EmailService{
     @Autowired
     UserRepositorySupport userRepositorySupport;
 
+<<<<<<< HEAD
 //    @Autowired
 //    PasswordEncoder passwordEncoder;
 
+=======
+>>>>>>> a7f98fe92ae98ad1ba5612fbece977ac4fdfc8c8
     @Autowired
     JavaMailSender mailSender;
 
@@ -64,7 +67,7 @@ public class EmailServiceImpl implements EmailService{
     @Override
     public MailDto sendTeamAddEmail(String userEmail,Long teamId) {
         MailDto dto = new MailDto();
-        String teamurl = "http://localhost:8083/room/"+teamId;
+        String teamurl = "https://i6a403.p.ssafy.io/room/"+teamId;
         dto.setAddress(userEmail);
         dto.setTitle("Agit 방추가 안내 이메일");
         dto.setMessage("방추가 안내이메일 입니다. 해당 링크를 통해 접속 후 수락해주세요\n"+teamurl);

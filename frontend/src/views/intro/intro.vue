@@ -1,10 +1,6 @@
 <template>
   <div id="container">
-    <div id="intro-logo" class="d-flex">
-      <img :src="require('../../assets/images/agit_logo.png')">
-      <p>Agit</p>
-      <span>our secret place</span>
-    </div>
+    <img :src="require('../../assets/images/agit_logo.png')" id="intro-logo">
     <div class="hello">
       <!-- 회원가입, 로그인 버튼 -->
       <div class="d-flex justify-content-end" style="margin-right: 250px;">
@@ -259,27 +255,13 @@ export default {
 
 <style scoped>
 #intro-logo{
-  position: absolute;
-}
-#intro-logo img{
   margin-top: 4px;
+  position: absolute;
   margin-left: 60px;
   width: 85px;
   height: 65px;
 }
-#intro-logo p{
-    font-weight: bold;
-    font-size: 35px;
-    color: #78ccbb;
-    transform: translate(25%, 10%);
-    text-shadow: 1px 1px 2px #162d42;
-}
-#intro-logo span{
-    font-size: 12px;
-    color: #78ccbb;
-    text-shadow: 0.7px 0.7px 1px #162d42;
-    transform: translate(23%, 50%);
-}
+
 @import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&family=Noto+Sans+KR:wght@300&display=swap');
 #container {
   position: absolute;

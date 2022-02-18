@@ -9,9 +9,9 @@
 
     <!-- content -->
     <el-form :model="state.form" status-icon :rules="state.rules" ref="signupForm" :label-position="state.form.align">
-      <el-form-item prop="id" label="아이디" :label-width="state.formLabelWidth">
-        <el-input v-model="state.form.id" autocomplete="off" style="width: 70%" :disabled="state.form.isValidatedId" id="id-input" placeholder="ID"></el-input>
-        <el-button size="small" style="float: right; margin-top:5px;" @click="checkDup" :disabled="state.form.isValidatedId">중복 확인</el-button>
+      <el-form-item prop="id" label="이메일" :label-width="state.formLabelWidth">
+        <el-input v-model="state.form.id" autocomplete="off" style="width: 70%" :disabled="state.form.isValidatedId" id="id-input" placeholder="email"></el-input>
+        <el-button size="small" style="float: right; margin-top:5px;" @click="checkDup" :disabled="state.form.isValidatedId" v-loading.fullscreen="loading">중복 확인</el-button>
         <!-- <el-button size="small" style="float: right; margin-top:5px;" @click="sendAuthEmail" :disabled="state.form.isValidatedAuth">인증 번호 전송</el-button> -->
 
       </el-form-item>
@@ -383,16 +383,16 @@ export default {
           });
         state.form.isPossibleId = false
       } else {
-
+        loading.value = true
         store.dispatch('root/checkDupId', { userId: state.form.id })
         .then(res => {
-          state.form.isValidatedId = true
-          swal({
-              title: "사용가능한 아이디입니다.",
-              icon: "success",
-              button: "확인",
-            });
-            document.getElementById("auth-number").focus()
+         // state.form.isValidated = true
+        //  swal({
+          //    title: "사용가능한 아이디입니다.",
+            //  icon: "success",
+            //  button: "확인",
+         //   });
+         //   document.getElementById("auth-number").focus()
             sendAuthEmail();
         })
         .catch(err => {
@@ -401,6 +401,7 @@ export default {
               icon: "error",
               button: "확인",
             });
+          loading.value = false
         })
       }
     }
@@ -416,6 +417,7 @@ export default {
               icon: "success",
               button: "확인",
             });
+	  loading.value = false
         })
         .catch(err => {
           swal({
@@ -423,6 +425,7 @@ export default {
               icon: "error",
               button: "확인",
             });
+  	   loading.value = false
         })
 
     }

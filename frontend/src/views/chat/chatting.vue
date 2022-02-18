@@ -19,7 +19,7 @@
   <!-- <div class="view chat" v-else> -->
   <div class="view chat" style="margin-bottom: 130px" >
     <header>
-      <button class="logout" @click="Logout">채팅방 나가기</button>
+     <button class="logout" @click="Logout">채팅방 나가기</button>
       <h1>Welcome, {{ state.nickName }}</h1>
     </header>
 
@@ -148,9 +148,9 @@ export default {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-  width: 32vw;
-  text-align: center;
-  margin: auto;
+	width: 32vw;
+	text-align: center;
+	margin: auto;
 }
 
 .view {

@@ -188,6 +188,7 @@
   position: absolute;
   top: -90px;
   left: -90px;
+  margin-top: 0;
   z-index: 10;
   background-color: #36393f;
   width: 111.1%;
@@ -198,13 +199,13 @@
   font-size: 45px;
   width: 80px;
   height: 65px;
-  margin-right: 0;
   background-color: #b53638;
   border-style: solid;
   border-color: black;
   border-radius: 25px;
   border-width: 5px;
   cursor: pointer;
+  margin-right: 2vw;
   box-shadow: 3px 3px 3px rgb(0, 0, 0, 0.2);
   margin-right: 2vw;
 }
